@@ -62,29 +62,47 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 {modules.map((module) => {
-                  const planned = module.status === "planned";
-                  const target = module.status === "available" ? module.basePath : `/modules/${module.id}`;
+                  const planned = module.status !== "available";
+                  const target = planned ? `/modules/${module.id}` : module.basePath;
+                  const label = (
+                    <>
+                      <module.icon className="size-4 shrink-0" aria-hidden />
+                      {!collapsed ? (
+                        <span className="flex flex-1 items-center justify-between gap-2">
+                          <span className="truncate">{module.name}</span>
+                          {planned ? (
+                            <span
+                              className={cn(
+                                "rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider",
+                                "bg-sidebar-accent text-sidebar-foreground/70",
+                              )}
+                            >
+                              Soon
+                            </span>
+                          ) : null}
+                        </span>
+                      ) : null}
+                    </>
+                  );
                   return (
                     <SidebarMenuItem key={module.id}>
                       <SidebarMenuButton asChild isActive={isActive(target)} tooltip={module.name}>
-                        <Link to={target} className="flex items-center gap-2">
-                          <module.icon className="size-4 shrink-0" aria-hidden />
-                          {!collapsed ? (
-                            <span className="flex flex-1 items-center justify-between gap-2">
-                              <span className="truncate">{module.name}</span>
-                              {planned ? (
-                                <span
-                                  className={cn(
-                                    "rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider",
-                                    "bg-sidebar-accent text-sidebar-foreground/70",
-                                  )}
-                                >
-                                  Soon
-                                </span>
-                              ) : null}
-                            </span>
-                          ) : null}
-                        </Link>
+                        {planned ? (
+                          <Link
+                            to="/modules/$moduleId"
+                            params={{ moduleId: module.id }}
+                            className="flex items-center gap-2"
+                          >
+                            {label}
+                          </Link>
+                        ) : (
+                          <Link
+                            to={module.basePath === "/settings" ? "/settings" : "/"}
+                            className="flex items-center gap-2"
+                          >
+                            {label}
+                          </Link>
+                        )}
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );
