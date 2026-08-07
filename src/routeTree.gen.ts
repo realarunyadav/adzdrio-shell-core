@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
+import { Route as ModulesActivationRouteImport } from './routes/modules.activation'
 import { Route as ModulesCrmRouteImport } from './routes/modules.crm'
 import { Route as ModulesEmployeesRouteImport } from './routes/modules.employees'
 import { Route as ModulesFinanceRouteImport } from './routes/modules.finance'
@@ -21,6 +22,7 @@ import { Route as ModulesLeadsRouteImport } from './routes/modules.leads'
 import { Route as ModulesOrganizationRouteImport } from './routes/modules.organization'
 import { Route as ModulesProjectsRouteImport } from './routes/modules.projects'
 import { Route as ModulesRolesRouteImport } from './routes/modules.roles'
+import { Route as ModulesSupportRouteImport } from './routes/modules.support'
 import { Route as ModulesUsersRouteImport } from './routes/modules.users'
 import { Route as ModulesCrmProspectRouteImport } from './routes/modules/crm/prospect'
 
@@ -37,6 +39,11 @@ const SettingsRoute = SettingsRouteImport.update({
 const ModulesModuleIdRoute = ModulesModuleIdRouteImport.update({
   id: '/modules/$moduleId',
   path: '/modules/$moduleId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModulesActivationRoute = ModulesActivationRouteImport.update({
+  id: '/modules/activation',
+  path: '/modules/activation',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ModulesCrmRoute = ModulesCrmRouteImport.update({
@@ -84,6 +91,11 @@ const ModulesRolesRoute = ModulesRolesRouteImport.update({
   path: '/modules/roles',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModulesSupportRoute = ModulesSupportRouteImport.update({
+  id: '/modules/support',
+  path: '/modules/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ModulesUsersRoute = ModulesUsersRouteImport.update({
   id: '/modules/users',
   path: '/modules/users',
@@ -99,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/settings': typeof SettingsRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
+  '/modules/activation': typeof ModulesActivationRoute
   '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
@@ -108,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/projects': typeof ModulesProjectsRoute
   '/modules/roles': typeof ModulesRolesRoute
+  '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
 }
@@ -115,6 +129,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/settings': typeof SettingsRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
+  '/modules/activation': typeof ModulesActivationRoute
   '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
@@ -124,6 +139,7 @@ export interface FileRoutesByTo {
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/projects': typeof ModulesProjectsRoute
   '/modules/roles': typeof ModulesRolesRoute
+  '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
 }
@@ -132,6 +148,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/settings': typeof SettingsRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
+  '/modules/activation': typeof ModulesActivationRoute
   '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
@@ -141,6 +158,7 @@ export interface FileRoutesById {
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/projects': typeof ModulesProjectsRoute
   '/modules/roles': typeof ModulesRolesRoute
+  '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
 }
@@ -150,6 +168,7 @@ export interface FileRouteTypes {
     | '/'
     | '/settings'
     | '/modules/$moduleId'
+    | '/modules/activation'
     | '/modules/crm'
     | '/modules/employees'
     | '/modules/finance'
@@ -159,6 +178,7 @@ export interface FileRouteTypes {
     | '/modules/organization'
     | '/modules/projects'
     | '/modules/roles'
+    | '/modules/support'
     | '/modules/users'
     | '/modules/crm/prospect'
   fileRoutesByTo: FileRoutesByTo
@@ -166,6 +186,7 @@ export interface FileRouteTypes {
     | '/'
     | '/settings'
     | '/modules/$moduleId'
+    | '/modules/activation'
     | '/modules/crm'
     | '/modules/employees'
     | '/modules/finance'
@@ -175,6 +196,7 @@ export interface FileRouteTypes {
     | '/modules/organization'
     | '/modules/projects'
     | '/modules/roles'
+    | '/modules/support'
     | '/modules/users'
     | '/modules/crm/prospect'
   id:
@@ -182,6 +204,7 @@ export interface FileRouteTypes {
     | '/'
     | '/settings'
     | '/modules/$moduleId'
+    | '/modules/activation'
     | '/modules/crm'
     | '/modules/employees'
     | '/modules/finance'
@@ -191,6 +214,7 @@ export interface FileRouteTypes {
     | '/modules/organization'
     | '/modules/projects'
     | '/modules/roles'
+    | '/modules/support'
     | '/modules/users'
     | '/modules/crm/prospect'
   fileRoutesById: FileRoutesById
@@ -199,6 +223,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SettingsRoute: typeof SettingsRoute
   ModulesModuleIdRoute: typeof ModulesModuleIdRoute
+  ModulesActivationRoute: typeof ModulesActivationRoute
   ModulesCrmRoute: typeof ModulesCrmRouteWithChildren
   ModulesEmployeesRoute: typeof ModulesEmployeesRoute
   ModulesFinanceRoute: typeof ModulesFinanceRoute
@@ -208,6 +233,7 @@ export interface RootRouteChildren {
   ModulesOrganizationRoute: typeof ModulesOrganizationRoute
   ModulesProjectsRoute: typeof ModulesProjectsRoute
   ModulesRolesRoute: typeof ModulesRolesRoute
+  ModulesSupportRoute: typeof ModulesSupportRoute
   ModulesUsersRoute: typeof ModulesUsersRoute
 }
 
@@ -232,6 +258,13 @@ declare module '@tanstack/react-router' {
       path: '/modules/$moduleId'
       fullPath: '/modules/$moduleId'
       preLoaderRoute: typeof ModulesModuleIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/modules/activation': {
+      id: '/modules/activation'
+      path: '/modules/activation'
+      fullPath: '/modules/activation'
+      preLoaderRoute: typeof ModulesActivationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/modules/crm': {
@@ -297,6 +330,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesRolesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/modules/support': {
+      id: '/modules/support'
+      path: '/modules/support'
+      fullPath: '/modules/support'
+      preLoaderRoute: typeof ModulesSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/modules/users': {
       id: '/modules/users'
       path: '/modules/users'
@@ -330,6 +370,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SettingsRoute: SettingsRoute,
   ModulesModuleIdRoute: ModulesModuleIdRoute,
+  ModulesActivationRoute: ModulesActivationRoute,
   ModulesCrmRoute: ModulesCrmRouteWithChildren,
   ModulesEmployeesRoute: ModulesEmployeesRoute,
   ModulesFinanceRoute: ModulesFinanceRoute,
@@ -339,6 +380,7 @@ const rootRouteChildren: RootRouteChildren = {
   ModulesOrganizationRoute: ModulesOrganizationRoute,
   ModulesProjectsRoute: ModulesProjectsRoute,
   ModulesRolesRoute: ModulesRolesRoute,
+  ModulesSupportRoute: ModulesSupportRoute,
   ModulesUsersRoute: ModulesUsersRoute,
 }
 export const routeTree = rootRouteImport
