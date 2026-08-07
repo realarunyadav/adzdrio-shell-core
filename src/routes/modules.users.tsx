@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 
+import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { StatusBadge } from "@/components/shared/StatusBadge";
@@ -104,10 +105,10 @@ function UserManagementModule() {
       />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatsCard title="Total Users" value="0" icon={UsersIcon} />
-        <StatsCard title="Active" value="0" icon={CheckCircle2} />
-        <StatsCard title="Pending" value="0" icon={Clock} />
-        <StatsCard title="Locked/Suspended" value="0" icon={Ban} />
+        <StatsCard title="Total Users" value="156" icon={UsersIcon} />
+        <StatsCard title="Active" value="142" icon={CheckCircle2} />
+        <StatsCard title="Pending" value="12" icon={Clock} />
+        <StatsCard title="Locked/Suspended" value="2" icon={Ban} />
       </div>
 
       <SectionCard
@@ -171,18 +172,51 @@ function UserManagementModule() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {/* Production-ready empty state within table */}
-              <TableRow>
-                <TableCell colSpan={6} className="h-[400px]">
-                  <EmptyState
-                    icon={UsersIcon}
-                    title="No users found"
-                    description="Invite users to grant them access to the ABOS ecosystem."
-                    className="surface-none border-none shadow-none"
-                    action={<InviteUserDialog />}
-                  />
-                </TableCell>
-              </TableRow>
+              {[
+                { name: "Amit Jain", email: "amit.jain@adzdrio.com", role: "Super Admin", status: "Active", dept: "Engineering", location: "Bangalore HQ" },
+                { name: "Sarah Williams", email: "s.williams@adzdrio.com", role: "Executive Manager", status: "Active", dept: "Operations", location: "Mumbai Hub" },
+                { name: "Rajesh Kumar", email: "r.kumar@adzdrio.com", role: "Member", status: "Pending", dept: "Sales", location: "Bangalore HQ" },
+                { name: "David Chen", email: "d.chen@adzdrio.com", role: "Viewer", status: "Locked", dept: "Finance", location: "Remote" },
+              ].map((user) => (
+                <TableRow key={user.email} className="hover:bg-muted/5 group cursor-pointer">
+                  <TableCell>
+                    <Checkbox />
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <Avatar className="size-8 border border-border/40">
+                        <AvatarFallback className="text-[10px] bg-primary/10 text-primary font-bold">
+                          {user.name.split(' ').map(n => n[0]).join('')}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="text-xs font-bold group-hover:text-primary transition-colors">{user.name}</p>
+                        <p className="text-[10px] text-muted-foreground">{user.email}</p>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <StatusBadge tone={user.status === "Active" ? "success" : user.status === "Pending" ? "warning" : "danger"}>
+                      {user.status}
+                    </StatusBadge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="space-y-1">
+                      <p className="text-xs font-bold">{user.role}</p>
+                      <p className="text-[10px] text-muted-foreground">{user.dept} · {user.location}</p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Shield className={cn("size-3.5", user.status === "Active" ? "text-success" : "text-muted-foreground")} />
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">MFA Enabled</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="ghost" size="icon" className="size-8"><MoreHorizontal className="size-4" /></Button>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>

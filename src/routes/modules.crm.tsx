@@ -132,10 +132,10 @@ function SalesCRMModule() {
 
         <TabsContent value="dashboard" className="mt-0 space-y-6 outline-none">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <DashboardKpiCard title="Today's Revenue" value="₹0.00" trend="+0%" icon={DollarSign} />
-            <DashboardKpiCard title="Today's Follow-ups" value="0" trend="0 pending" icon={Clock} trendNeutral />
-            <DashboardKpiCard title="New Leads" value="0" trend="+0%" icon={Target} />
-            <DashboardKpiCard title="Deals Won" value="0" trend="+0%" icon={Star} />
+            <DashboardKpiCard title="Today's Revenue" value="₹12,45,000" trend="+14.2%" icon={DollarSign} />
+            <DashboardKpiCard title="Today's Follow-ups" value="24" trend="3 pending" icon={Clock} trendNeutral />
+            <DashboardKpiCard title="New Leads" value="18" trend="+8%" icon={Target} />
+            <DashboardKpiCard title="Deals Won" value="4" trend="+2" icon={Star} />
           </div>
 
           <div className="grid gap-6 lg:grid-cols-12">
