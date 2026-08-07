@@ -22,6 +22,7 @@ import { Route as ModulesLeadsRouteImport } from './routes/modules.leads'
 import { Route as ModulesOrganizationRouteImport } from './routes/modules.organization'
 import { Route as ModulesProjectsRouteImport } from './routes/modules.projects'
 import { Route as ModulesRolesRouteImport } from './routes/modules.roles'
+import { Route as ModulesSupportRouteImport } from './routes/modules.support'
 import { Route as ModulesUsersRouteImport } from './routes/modules.users'
 import { Route as ModulesCrmProspectRouteImport } from './routes/modules/crm/prospect'
 
@@ -90,6 +91,11 @@ const ModulesRolesRoute = ModulesRolesRouteImport.update({
   path: '/modules/roles',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModulesSupportRoute = ModulesSupportRouteImport.update({
+  id: '/modules/support',
+  path: '/modules/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ModulesUsersRoute = ModulesUsersRouteImport.update({
   id: '/modules/users',
   path: '/modules/users',
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/projects': typeof ModulesProjectsRoute
   '/modules/roles': typeof ModulesRolesRoute
+  '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
 }
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/projects': typeof ModulesProjectsRoute
   '/modules/roles': typeof ModulesRolesRoute
+  '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
 }
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/projects': typeof ModulesProjectsRoute
   '/modules/roles': typeof ModulesRolesRoute
+  '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
 }
@@ -169,6 +178,7 @@ export interface FileRouteTypes {
     | '/modules/organization'
     | '/modules/projects'
     | '/modules/roles'
+    | '/modules/support'
     | '/modules/users'
     | '/modules/crm/prospect'
   fileRoutesByTo: FileRoutesByTo
@@ -186,6 +196,7 @@ export interface FileRouteTypes {
     | '/modules/organization'
     | '/modules/projects'
     | '/modules/roles'
+    | '/modules/support'
     | '/modules/users'
     | '/modules/crm/prospect'
   id:
@@ -203,6 +214,7 @@ export interface FileRouteTypes {
     | '/modules/organization'
     | '/modules/projects'
     | '/modules/roles'
+    | '/modules/support'
     | '/modules/users'
     | '/modules/crm/prospect'
   fileRoutesById: FileRoutesById
@@ -221,6 +233,7 @@ export interface RootRouteChildren {
   ModulesOrganizationRoute: typeof ModulesOrganizationRoute
   ModulesProjectsRoute: typeof ModulesProjectsRoute
   ModulesRolesRoute: typeof ModulesRolesRoute
+  ModulesSupportRoute: typeof ModulesSupportRoute
   ModulesUsersRoute: typeof ModulesUsersRoute
 }
 
@@ -317,6 +330,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesRolesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/modules/support': {
+      id: '/modules/support'
+      path: '/modules/support'
+      fullPath: '/modules/support'
+      preLoaderRoute: typeof ModulesSupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/modules/users': {
       id: '/modules/users'
       path: '/modules/users'
@@ -360,6 +380,7 @@ const rootRouteChildren: RootRouteChildren = {
   ModulesOrganizationRoute: ModulesOrganizationRoute,
   ModulesProjectsRoute: ModulesProjectsRoute,
   ModulesRolesRoute: ModulesRolesRoute,
+  ModulesSupportRoute: ModulesSupportRoute,
   ModulesUsersRoute: ModulesUsersRoute,
 }
 export const routeTree = rootRouteImport
