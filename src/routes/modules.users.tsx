@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import * as React from "react";
 
+import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { StatusBadge } from "@/components/shared/StatusBadge";

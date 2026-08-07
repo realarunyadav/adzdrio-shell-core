@@ -292,12 +292,34 @@ function OrganizationModule() {
               description="Manage functional areas of the business."
               actions={<AddDepartmentDialog />}
             >
-              <EmptyState
-                icon={Building2}
-                title="No departments found"
-                description="Start by creating departments to organize your workforce."
-                className="py-8 surface-none border-none shadow-none"
-              />
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Department</TableHead>
+                    <TableHead>Head</TableHead>
+                    <TableHead>Staff</TableHead>
+                    <TableHead className="text-right"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {[
+                    { name: "Engineering", head: "Amit Jain", staff: 42 },
+                    { name: "Operations", head: "Sarah Williams", staff: 28 },
+                    { name: "Sales & Marketing", head: "Rajesh Kumar", staff: 35 },
+                    { name: "Finance", head: "David Chen", staff: 12 },
+                    { name: "Human Resources", head: "Priya Sharma", staff: 7 },
+                  ].map((dept) => (
+                    <TableRow key={dept.name} className="hover:bg-muted/5 group cursor-pointer">
+                      <TableCell className="font-bold text-xs">{dept.name}</TableCell>
+                      <TableCell className="text-[10px] font-medium text-muted-foreground">{dept.head}</TableCell>
+                      <TableCell className="text-[10px] font-bold">{dept.staff}</TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="ghost" size="icon" className="size-7"><ChevronRight className="size-3" /></Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </SectionCard>
 
             <SectionCard 
@@ -349,12 +371,26 @@ function OrganizationModule() {
             actions={<AddBranchDialog />}
           >
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <EmptyState
-                icon={Map}
-                title="No branches active"
-                description="Configure your headquarters and regional offices here."
-                className="col-span-full py-12 surface-none border-none shadow-none"
-              />
+              {[
+                { name: "Headquarters", location: "Bengaluru, KA", type: "Corporate", status: "Primary" },
+                { name: "Mumbai Hub", location: "Mumbai, MH", type: "Regional", status: "Active" },
+                { name: "Delhi Node", location: "New Delhi, DL", type: "Satellite", status: "Active" },
+              ].map((branch) => (
+                <Card key={branch.name} className="p-4 border border-border/40 hover:border-primary/20 transition-colors">
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <Building className="size-4 text-primary" />
+                    </div>
+                    <Badge variant="outline" className="text-[9px] font-black uppercase tracking-widest">{branch.status}</Badge>
+                  </div>
+                  <h4 className="font-bold text-sm">{branch.name}</h4>
+                  <p className="text-[10px] text-muted-foreground font-medium mb-3">{branch.location}</p>
+                  <div className="flex items-center justify-between pt-3 border-t">
+                    <span className="text-[9px] font-bold text-muted-foreground uppercase">{branch.type}</span>
+                    <Button variant="ghost" size="sm" className="h-6 px-2 text-[9px] font-bold">Manage</Button>
+                  </div>
+                </Card>
+              ))}
             </div>
           </SectionCard>
 
