@@ -136,7 +136,9 @@ function RootComponent() {
             {/* Required: nested routes render here. */}
             <Outlet />
           </AppShell>
+          <GlobalCommandPalette />
           <Toaster />
+
         </RbacProvider>
       </ThemeProvider>
     </QueryClientProvider>
