@@ -148,13 +148,25 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border">
+      <SidebarFooter className="border-t border-sidebar-border p-4 bg-sidebar-accent/10">
         {!collapsed ? (
-          <p className="px-2 py-1 text-[11px] text-sidebar-foreground/50">
-            v{appConfig.version} · Internal
-          </p>
-        ) : null}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-sidebar-foreground/40 font-bold uppercase">System Status</span>
+              <span className="size-1.5 rounded-full bg-success animate-pulse" />
+            </div>
+            <p className="text-[10px] text-sidebar-foreground/50 leading-relaxed">
+              v{appConfig.version} · Stable Release<br />
+              Secure Enterprise Environment
+            </p>
+          </div>
+        ) : (
+          <div className="flex justify-center">
+            <span className="size-2 rounded-full bg-success" />
+          </div>
+        )}
       </SidebarFooter>
+
     </Sidebar>
   );
 }
