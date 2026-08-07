@@ -21,7 +21,8 @@ import {
   ShieldCheck,
   Building2,
   Box,
-  Heart
+  Heart,
+  UserPlus
 } from "lucide-react";
 
 import { PageHeader } from "@/components/shared/PageHeader";
