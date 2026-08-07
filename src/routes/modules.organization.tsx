@@ -3,7 +3,7 @@ import {
   Building2, 
   Calendar, 
   Globe, 
-  Hierarchy, 
+  GitGraph, 
   Image as ImageIcon, 
   Layout, 
   MapPin, 
