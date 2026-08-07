@@ -317,7 +317,7 @@ function SalesCRMModule() {
               <div className="flex items-center gap-6">
                  {[
                    { label: "Prospect", icon: User, active: true },
-                   { label: "Qualification", icon: CheckCircle, active: true },
+                   { label: "Qualification", icon: CheckCircle2, active: true },
                    { label: "Callback", icon: Phone },
                    { label: "Follow-up", icon: History },
                    { label: "Payment", icon: DollarSign },
