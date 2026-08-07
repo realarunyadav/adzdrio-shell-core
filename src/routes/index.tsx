@@ -33,7 +33,8 @@ function Index() {
   const { can, principal } = useRbac();
   const modules = moduleRegistry
     .list()
-    .filter((module) => module.id !== "overview" && (!module.permission || can(module.permission)));
+    .filter((module) => module.id !== "overview" && module.id !== "settings" && (!module.permission || can(module.permission)));
+
 
   return (
     <>
