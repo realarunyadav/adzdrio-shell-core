@@ -33,7 +33,7 @@ export const appConfig: AppConfig = {
   productName: "Adzdrio Business Operating System",
   productShortName: "ABOS",
   organization: "Adzdrio India Services Pvt. Ltd.",
-  version: "0.1.0",
+  version: "1.0.0",
   tenant: {
     enabled: false,
     resolutionStrategy: "single",
