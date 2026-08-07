@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Bell, Moon, Search, Sun } from "lucide-react";
+import { Bell, Command as CommandIcon, Moon, Search, Sun, Zap } from "lucide-react";
 
 import { appConfig } from "@/config/app.config";
 import { moduleRegistry } from "@/core/modules/registry";
@@ -8,9 +8,11 @@ import { useTheme } from "@/core/theme/ThemeProvider";
 import { roleMap } from "@/core/rbac/roles.config";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { SearchBar } from "@/components/shared/SearchBar";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
