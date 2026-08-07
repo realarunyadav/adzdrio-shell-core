@@ -6,6 +6,9 @@ import {
   GitGraph, 
   Image as ImageIcon, 
   LayoutGrid, 
+  Grid,
+  Layers,
+
   MapPin, 
   Paintbrush, 
   Plus, 
