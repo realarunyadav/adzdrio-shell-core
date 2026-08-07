@@ -301,32 +301,11 @@ function SalesCRMModule() {
         </TabsContent>
 
         <TabsContent value="customers" className="mt-0 outline-none">
-           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              <div className="space-y-6">
-                 <SectionCard title="Customer Insights">
-                    <div className="space-y-4">
-                       <div className="p-3 rounded-lg glass-surface border border-border/40">
-                          <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Total Active Customers</p>
-                          <p className="text-lg font-black tracking-tighter">0</p>
-                       </div>
-                       <div className="p-3 rounded-lg glass-surface border border-border/40">
-                          <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Customer Retention</p>
-                          <p className="text-lg font-black tracking-tighter">0%</p>
-                       </div>
-                    </div>
-                 </SectionCard>
-              </div>
-              <div className="lg:col-span-3">
-                 <SectionCard title="Customer 360 Directory">
-                    <EmptyState 
-                      icon={Users} 
-                      title="No customers yet" 
-                      description="Customers will appear here once leads are converted." 
-                      className="py-24 border-none shadow-none surface-none"
-                    />
-                 </SectionCard>
-              </div>
-           </div>
+          <Customer360View />
+        </TabsContent>
+
+        <TabsContent value="renewals" className="mt-0 outline-none">
+          <RenewalCenter />
         </TabsContent>
 
         <TabsContent value="activities" className="mt-0 outline-none">
