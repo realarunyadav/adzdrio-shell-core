@@ -526,8 +526,8 @@ function Customer360View() {
             <h3 className="text-lg font-black tracking-tight">Deemand Solutions</h3>
             <p className="text-xs text-muted-foreground font-medium">Subscription: Premium Enterprise</p>
             <div className="flex justify-center gap-2 mt-4">
-              <UniversalTag tone="emerald">Active</UniversalTag>
-              <UniversalTag tone="blue">High Value</UniversalTag>
+              <UniversalTag label="Active" color="emerald" />
+              <UniversalTag label="High Value" color="blue" />
             </div>
           </div>
           <div className="p-4 space-y-4">
@@ -573,7 +573,7 @@ function Customer360View() {
             </div>
             
             <SectionCard title="Recent Activity" actions={<Button variant="ghost" size="sm">Log Note</Button>}>
-               <UniversalComments />
+               <UniversalComments comments={[]} />
             </SectionCard>
           </TabsContent>
 
@@ -648,7 +648,7 @@ function Customer360View() {
                       <p className="text-xs text-muted-foreground font-medium max-w-sm">This visual workflow represents the conversion of sales successes into recognized financial growth.</p>
                    </div>
                    
-                   <UniversalAuditLog />
+                   <UniversalAuditLog entries={[]} />
                 </div>
              </SectionCard>
           </TabsContent>
@@ -695,7 +695,7 @@ function RenewalCenter() {
               <TableCell className="font-bold">Deemand Solutions</TableCell>
               <TableCell className="text-xs font-medium">Dec 12, 2026</TableCell>
               <TableCell><Badge variant="outline" className="text-[9px] font-black border-primary/30">GOLD-ULTRA</Badge></TableCell>
-              <TableCell><UniversalTag tone="rose">Critical</UniversalTag></TableCell>
+              <TableCell><UniversalTag label="Critical" color="rose" /></TableCell>
               <TableCell className="text-xs">Alex Salesman</TableCell>
               <TableCell><StatusBadge tone="success">Sent</StatusBadge></TableCell>
               <TableCell className="text-right">
@@ -706,7 +706,7 @@ function RenewalCenter() {
               <TableCell className="font-bold">Acme Corp</TableCell>
               <TableCell className="text-xs font-medium">Aug 12, 2026</TableCell>
               <TableCell><Badge variant="outline" className="text-[9px] font-black border-slate-300">STANDARD</Badge></TableCell>
-              <TableCell><UniversalTag tone="amber">Medium</UniversalTag></TableCell>
+              <TableCell><UniversalTag label="Medium" color="amber" /></TableCell>
               <TableCell className="text-xs">Sara Manager</TableCell>
               <TableCell><StatusBadge tone="warning">Pending</StatusBadge></TableCell>
               <TableCell className="text-right">
