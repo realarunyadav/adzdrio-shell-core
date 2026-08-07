@@ -79,19 +79,25 @@ export function AppHeader() {
 
       <div className="ml-auto flex items-center gap-2">
         {appConfig.shell.showGlobalSearch ? (
-          <div className="relative hidden lg:block">
-            <Search
-              className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-              aria-hidden
-            />
-            <Input
-              type="search"
-              placeholder="Search ABOS"
-              aria-label="Search"
-              className="h-9 w-64 pl-8"
+          <div className="hidden lg:block">
+            <SearchBar 
+              placeholder="Search ABOS (⌘K)" 
+              className="h-9 w-64"
             />
           </div>
         ) : null}
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label="Quick Actions">
+                <Zap className="size-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Quick Actions</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
 
         {allowUserToggle ? (
           <Button
