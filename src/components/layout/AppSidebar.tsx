@@ -64,11 +64,12 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="scrollbar-thin">
         {tree.map(({ group, modules }) => (
-          <SidebarGroup key={group.id}>
-            <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.16em] text-sidebar-foreground/50">
+          <SidebarGroup key={group.id} className="py-2">
+            <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.16em] text-sidebar-foreground/40 font-bold px-4">
               {group.label}
+
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
