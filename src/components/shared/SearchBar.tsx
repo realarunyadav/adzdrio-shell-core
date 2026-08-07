@@ -22,13 +22,9 @@ export function SearchBar({ className, onSearch, onChange, ...props }: SearchBar
         onChange={handleChange}
         {...props}
       />
-      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none hidden sm:flex items-center gap-1 opacity-40 group-focus-within:opacity-0 transition-opacity">
-        <kbd className="h-5 min-w-[20px] items-center justify-center rounded border bg-muted px-1.5 font-sans text-[10px] font-medium text-muted-foreground flex">
-          ⌘
-        </kbd>
-        <kbd className="h-5 min-w-[20px] items-center justify-center rounded border bg-muted px-1.5 font-sans text-[10px] font-medium text-muted-foreground flex">
-          K
-        </kbd>
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none hidden sm:flex items-center gap-1 opacity-60 group-focus-within:opacity-0 transition-opacity">
+        <kbd>⌘</kbd>
+        <kbd>K</kbd>
       </div>
     </div>
   );

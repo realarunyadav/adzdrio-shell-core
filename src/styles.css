@@ -275,4 +275,8 @@
   ::-webkit-scrollbar-thumb:hover {
     background: var(--color-muted-foreground);
   }
+
+  kbd {
+    @apply inline-flex items-center justify-center px-1.5 py-0.5 font-sans text-[10px] font-medium text-muted-foreground bg-muted border border-border/50 rounded;
+  }
 }

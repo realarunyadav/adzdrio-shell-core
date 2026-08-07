@@ -117,17 +117,17 @@ export function AppHeader() {
 
         <Separator orientation="vertical" className="hidden h-6 sm:block" />
 
-        <div className="flex items-center gap-2">
-          <Avatar className="size-8">
-            <AvatarFallback className="bg-navy text-xs font-semibold text-navy-foreground">
+        <button className="flex items-center gap-2 p-1 rounded-full hover:bg-accent/50 premium-transition border border-transparent hover:border-border/50 group">
+          <Avatar className="size-8 border border-border/40 shadow-sm">
+            <AvatarFallback className="bg-navy text-[10px] font-bold text-navy-foreground group-hover:bg-primary group-hover:text-primary-foreground premium-transition">
               {initials}
             </AvatarFallback>
           </Avatar>
-          <div className="hidden text-left leading-tight sm:block">
-            <p className="text-xs font-medium text-foreground">{principal?.displayName}</p>
-            <p className="text-[11px] text-muted-foreground">{primaryRole}</p>
+          <div className="hidden text-left leading-tight sm:block pr-2">
+            <p className="text-xs font-bold text-foreground group-hover:text-primary premium-transition">{principal?.displayName}</p>
+            <p className="text-[10px] font-medium text-muted-foreground/70">{primaryRole}</p>
           </div>
-        </div>
+        </button>
       </div>
     </header>
   );
