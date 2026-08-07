@@ -389,7 +389,8 @@ function OrganizationModule() {
                         <ImageIcon className="size-4 text-muted-foreground" />
                       </div>
                       <p className="text-xs font-medium">Favicon</p>
-                      <Button variant="outline" size="xs">Upload</Button>
+                      <Button variant="outline" size="sm">Upload</Button>
+
                     </div>
                     <div className="rounded-md border border-border p-4 text-center space-y-2">
                       <div className="flex size-10 mx-auto items-center justify-center rounded-md bg-muted">
