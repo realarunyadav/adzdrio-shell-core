@@ -5,7 +5,7 @@ import {
   Globe, 
   GitGraph, 
   Image as ImageIcon, 
-  Layout, 
+  LayoutGrid, 
   MapPin, 
   Paintbrush, 
   Plus, 
