@@ -26,6 +26,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { DataToolbar } from '@/components/shared/DataToolbar';
 import { SearchBar } from '@/components/shared/SearchBar';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { StatusBadge } from '@/components/shared/StatusBadge';
 
 export const Route = createFileRoute('/modules/finance')({
   component: FinanceWorkspace,
