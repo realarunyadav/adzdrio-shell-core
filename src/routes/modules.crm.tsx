@@ -310,16 +310,46 @@ function SalesCRMModule() {
             </div>
           </div>
           
-          <ScrollArea className="w-full pb-6">
-            <div className="flex gap-4 min-h-[600px]">
-              <KanbanColumn title="New" value="0" />
-              <KanbanColumn title="Contacted" value="0" />
-              <KanbanColumn title="Qualified" value="0" />
-              <KanbanColumn title="Proposal" value="0" />
-              <KanbanColumn title="Negotiation" value="0" />
-              <KanbanColumn title="Won" value="0" tone="success" />
+          <div className="flex flex-col gap-8">
+            <div className="p-6 rounded-2xl bg-primary/5 border border-primary/20 flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                 {[
+                   { label: "Prospect", icon: User, active: true },
+                   { label: "Qualification", icon: CheckCircle, active: true },
+                   { label: "Callback", icon: Phone },
+                   { label: "Follow-up", icon: History },
+                   { label: "Payment", icon: DollarSign },
+                   { label: "Verification", icon: FileText },
+                   { label: "Activation", icon: Zap },
+                   { label: "Customer", icon: Users }
+                 ].map((step, idx, arr) => (
+                   <React.Fragment key={step.label}>
+                     <div className="flex flex-col items-center gap-2 group cursor-default">
+                        <div className={cn(
+                          "size-10 rounded-full flex items-center justify-center transition-all border-2 shadow-sm",
+                          step.active ? "bg-primary border-primary text-primary-foreground shadow-primary/20" : "bg-background border-border text-muted-foreground"
+                        )}>
+                           <step.icon className="size-5" />
+                        </div>
+                        <span className={cn("text-[9px] font-black uppercase tracking-widest", step.active ? "text-primary" : "text-muted-foreground/60")}>{step.label}</span>
+                     </div>
+                     {idx < arr.length - 1 && <ArrowRight className="size-4 text-border mb-6" />}
+                   </React.Fragment>
+                 ))}
+              </div>
             </div>
-          </ScrollArea>
+
+            <ScrollArea className="w-full pb-6">
+              <div className="flex gap-4 min-h-[600px]">
+                <KanbanColumn title="New" value="0" />
+                <KanbanColumn title="Contacted" value="1" />
+                <KanbanColumn title="Qualified" value="1" />
+                <KanbanColumn title="Proposal" value="0" />
+                <KanbanColumn title="Negotiation" value="0" />
+                <KanbanColumn title="Won" value="0" tone="success" />
+              </div>
+            </ScrollArea>
+          </div>
         </TabsContent>
 
         <TabsContent value="customers" className="mt-0 outline-none">
