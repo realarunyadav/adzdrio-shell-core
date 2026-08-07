@@ -1,17 +1,12 @@
-import type { ReactNode } from "react";
-
 import { AppHeader } from "./AppHeader";
 import { AppSidebar } from "./AppSidebar";
 import { appConfig } from "@/config/app.config";
 import { bootstrapModules } from "@/core/modules/modules.config";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-
 bootstrapModules();
-
 /** Global application shell: navigation, header and content region. */
-export function AppShell({ children }: { children: ReactNode }) {
-  return (
-    <SidebarProvider defaultOpen={appConfig.shell.sidebarDefaultOpen}>
+export function AppShell({ children }) {
+    return (<SidebarProvider defaultOpen={appConfig.shell.sidebarDefaultOpen}>
       <div className="flex min-h-screen w-full bg-background">
         <AppSidebar />
         <SidebarInset className="min-w-0 bg-background overflow-hidden flex flex-col">
@@ -24,6 +19,5 @@ export function AppShell({ children }: { children: ReactNode }) {
         </SidebarInset>
 
       </div>
-    </SidebarProvider>
-  );
+    </SidebarProvider>);
 }

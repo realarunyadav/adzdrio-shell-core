@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Bell, Moon, Search, Sun } from "lucide-react";
+
+import { Bell, Command as CommandIcon, Moon, Search, Sun, Zap } from "lucide-react";
 
 import { appConfig } from "@/config/app.config";
 import { moduleRegistry } from "@/core/modules/registry";
@@ -8,9 +9,11 @@ import { useTheme } from "@/core/theme/ThemeProvider";
 import { roleMap } from "@/core/rbac/roles.config";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { SearchBar } from "@/components/shared/SearchBar";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -41,7 +44,7 @@ export function AppHeader() {
 
   const initials = (principal?.displayName ?? "AB")
     .split(" ")
-    .map((part) => part[0])
+    .map((part: string) => part[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();
@@ -77,19 +80,25 @@ export function AppHeader() {
 
       <div className="ml-auto flex items-center gap-2">
         {appConfig.shell.showGlobalSearch ? (
-          <div className="relative hidden lg:block">
-            <Search
-              className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-              aria-hidden
-            />
-            <Input
-              type="search"
-              placeholder="Search ABOS"
-              aria-label="Search"
-              className="h-9 w-64 pl-8"
+          <div className="hidden lg:block">
+            <SearchBar 
+              placeholder="Search ABOS (⌘K)" 
+              className="h-9 w-64"
             />
           </div>
         ) : null}
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label="Quick Actions">
+                <Zap className="size-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Quick Actions</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
 
         {allowUserToggle ? (
           <Button

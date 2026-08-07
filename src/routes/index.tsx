@@ -31,9 +31,27 @@ export const Route = createFileRoute("/")({
 function Index() {
   bootstrapModules();
   const { can, principal } = useRbac();
-  const modules = moduleRegistry
-    .list()
-    .filter((module) => module.id !== "overview" && (!module.permission || can(module.permission)));
+  const allModules = moduleRegistry.list();
+  const modules = allModules.filter(
+    (module) => 
+      module.id !== "overview" && 
+      module.id !== "settings" && 
+      (!module.permission || can(module.permission))
+  );
+
+  if (modules.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <PageHeader
+          title="Empty Workspace"
+          description="You don't have access to any business modules yet. Please contact your administrator."
+          className="text-center"
+        />
+      </div>
+    );
+  }
+
+
 
   return (
     <>
