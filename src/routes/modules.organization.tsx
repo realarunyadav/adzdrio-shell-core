@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 
 import * as React from "react";
+import { appConfig } from "@/config/app.config";
 
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
@@ -377,7 +378,7 @@ function OrganizationModule() {
                   <Label>Primary Brand Color</Label>
                   <div className="flex items-center gap-3">
                     <div className="size-10 rounded-md border border-border bg-primary shadow-sm" />
-                    <Input disabled value={appConfig.theme.primary} className="w-32" />
+                    <Input disabled value="#F5A300" className="w-32" />
                     <span className="text-xs text-muted-foreground italic">Standard Gold</span>
                   </div>
                 </div>

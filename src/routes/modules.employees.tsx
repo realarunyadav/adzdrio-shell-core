@@ -118,10 +118,10 @@ function EmployeeDirectoryView({ onSelect }: { onSelect: (id: string) => void })
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <MetricCard title="Total Employees" value="0" subValue="Active headcount" />
-        <MetricCard title="Onboarding" value="0" subValue="Probation status" />
-        <MetricCard title="Departments" value="0" subValue="Active units" />
-        <MetricCard title="Attrition" value="0%" subValue="Last 30 days" />
+        <MetricCard title="Total Employees" value="124" subValue="Active headcount" />
+        <MetricCard title="Onboarding" value="8" subValue="Probation status" />
+        <MetricCard title="Departments" value="12" subValue="Active units" />
+        <MetricCard title="Attrition" value="1.2%" subValue="Last 30 days" />
       </div>
 
       <SectionCard className="border-none bg-transparent shadow-none" contentClassName="p-0">
@@ -166,16 +166,25 @@ function EmployeeDirectoryView({ onSelect }: { onSelect: (id: string) => void })
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell colSpan={7} className="h-64 text-center">
-                  <div className="flex flex-col items-center justify-center text-muted-foreground gap-2">
-                    <Users className="size-10 opacity-20" />
-                    <p className="text-sm font-medium">No employee records found</p>
-                    <p className="text-xs">Start by adding your first enterprise employee</p>
-                    <Button variant="outline" size="sm" className="mt-4 glass-surface">
-                      Add Employee
-                    </Button>
+              <TableRow className="hover:bg-muted/5 cursor-pointer group" onClick={() => onSelect("emp-1")}>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <Avatar className="size-8 border border-border/40">
+                      <AvatarFallback className="text-[10px] bg-primary/10 text-primary font-bold">AJ</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-xs font-bold group-hover:text-primary transition-colors">Amit Jain</p>
+                      <p className="text-[10px] text-muted-foreground">EMP-2025-001</p>
+                    </div>
                   </div>
+                </TableCell>
+                <TableCell className="text-xs">Senior Software Engineer</TableCell>
+                <TableCell className="text-xs">Engineering</TableCell>
+                <TableCell className="text-xs">Bengaluru, KA</TableCell>
+                <TableCell className="text-xs">Full-time</TableCell>
+                <TableCell><StatusBadge tone="success">Active</StatusBadge></TableCell>
+                <TableCell className="text-right">
+                  <Button size="icon" variant="ghost" className="size-8"><MoreHorizontal className="size-4" /></Button>
                 </TableCell>
               </TableRow>
             </TableBody>

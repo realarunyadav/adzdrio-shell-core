@@ -26,6 +26,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { DataToolbar } from '@/components/shared/DataToolbar';
 import { SearchBar } from '@/components/shared/SearchBar';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { StatusBadge } from '@/components/shared/StatusBadge';
 
 export const Route = createFileRoute('/modules/finance')({
   component: FinanceWorkspace,
@@ -178,11 +180,44 @@ function FinanceWorkspace() {
                   </Button>
                 </div>
               </div>
-              <div className="h-[400px] flex items-center justify-center text-slate-400 bg-slate-50/30 border-2 border-dashed border-slate-100 rounded-2xl">
-                <div className="flex flex-col items-center gap-3">
-                  <FileText className="w-12 h-12 opacity-10" />
-                  <p className="text-sm font-medium">Ready for Invoice Data Stream</p>
-                </div>
+              <div className="overflow-x-auto border border-border/40 rounded-xl">
+                <Table>
+                  <TableHeader className="bg-muted/30">
+                    <TableRow>
+                      <TableHead>Invoice ID</TableHead>
+                      <TableHead>Client</TableHead>
+                      <TableHead>Description</TableHead>
+                      <TableHead>Amount</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead className="text-right">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    <TableRow className="hover:bg-muted/5 group cursor-pointer">
+                      <TableCell className="font-bold">INV-2026-001</TableCell>
+                      <TableCell className="text-xs">Deemand Solutions</TableCell>
+                      <TableCell className="text-xs font-medium">Enterprise Premium (Annual)</TableCell>
+                      <TableCell className="font-bold">₹ 4,50,000</TableCell>
+                      <TableCell><StatusBadge tone="success">Paid</StatusBadge></TableCell>
+                      <TableCell className="text-xs">Aug 10, 2026</TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="ghost" size="sm" className="h-7 text-[10px] font-black uppercase tracking-widest">Details</Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow className="hover:bg-muted/5 group cursor-pointer">
+                      <TableCell className="font-bold">INV-2026-002</TableCell>
+                      <TableCell className="text-xs">Acme Corp</TableCell>
+                      <TableCell className="text-xs font-medium">Standard Plan (Monthly)</TableCell>
+                      <TableCell className="font-bold">₹ 25,000</TableCell>
+                      <TableCell><StatusBadge tone="warning">Pending</StatusBadge></TableCell>
+                      <TableCell className="text-xs">Aug 12, 2026</TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="ghost" size="sm" className="h-7 text-[10px] font-black uppercase tracking-widest">Details</Button>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
               </div>
             </div>
           </SectionCard>
