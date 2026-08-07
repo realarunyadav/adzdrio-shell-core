@@ -30,7 +30,10 @@ import {
   PieChart,
   BarChart3,
   TrendingDown,
-  ArrowRight
+  ArrowRight,
+  Clock,
+  CheckCircle2,
+  LayoutGrid
 } from "lucide-react";
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
