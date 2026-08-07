@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 
 import * as React from "react";
+import { appConfig } from "@/config/app.config";
 
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
