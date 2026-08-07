@@ -33,7 +33,7 @@ export const Route = createFileRoute('/modules/finance')({
 
 function FinanceWorkspace() {
   return (
-    <div className="flex flex-col gap-6 p-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
+    <div className="flex flex-col gap-6 p-4 md:p-8 max-w-[1600px] mx-auto animate-in fade-in duration-500">
       <PageHeader 
         title="Finance & Accounting" 
         description="Unified enterprise financial operations, treasury, and compliance workspace."
@@ -43,7 +43,7 @@ function FinanceWorkspace() {
               <Download className="w-4 h-4 mr-2" />
               Reports
             </Button>
-            <Button className="shadow-md bg-primary hover:bg-primary/90 text-white font-medium">
+            <Button className="shadow-md font-medium">
               <Plus className="w-4 h-4 mr-2" />
               New Invoice
             </Button>
@@ -59,31 +59,31 @@ function FinanceWorkspace() {
           { label: "Net Profit", value: "₹24,30,000", change: "+18.1%", trend: "up", icon: BarChart3 },
           { label: "Cash on Hand", value: "₹55,60,000", change: "+8.3%", trend: "up", icon: CreditCard },
         ].map((stat, i) => (
-          <Card key={i} className="p-5 border-none shadow-card hover:shadow-elevated transition-all duration-300 group">
+          <Card key={i} className="p-5 border-none surface-card surface-card-hover group">
             <div className="flex justify-between items-start">
-              <div className="p-2 rounded-lg bg-slate-50 group-hover:bg-primary/5 transition-colors">
-                <stat.icon className="w-5 h-5 text-slate-500 group-hover:text-primary transition-colors" />
+              <div className="p-2 rounded-lg bg-muted/50 group-hover:bg-primary/10 transition-colors">
+                <stat.icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
               </div>
               <Badge 
                 variant={stat.trend === "up" ? "outline" : "destructive"} 
-                className={`flex gap-1 items-center px-2 py-0.5 text-[11px] font-bold ${stat.trend === 'up' ? 'border-emerald-100 text-emerald-600 bg-emerald-50/50' : ''}`}
+                className={`flex gap-1 items-center px-2 py-0.5 text-[11px] font-bold ${stat.trend === 'up' ? 'text-success bg-success/10 border-none' : ''}`}
               >
                 {stat.trend === "up" ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                 {stat.change}
               </Badge>
             </div>
             <div className="mt-4">
-              <div className="text-sm font-medium text-slate-500 mb-1">{stat.label}</div>
-              <div className="text-2xl font-bold text-slate-900 tracking-tight">{stat.value}</div>
+              <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">{stat.label}</div>
+              <div className="text-2xl font-black tracking-tight">{stat.value}</div>
             </div>
           </Card>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <Card className="lg:col-span-2 border-none shadow-card">
-          <CardHeader className="flex flex-row items-center justify-between pb-2 border-b border-slate-50">
-            <CardTitle className="text-lg font-bold text-slate-800">Financial Performance</CardTitle>
+        <Card className="lg:col-span-2 border-none surface-card">
+          <CardHeader className="flex flex-row items-center justify-between pb-2 border-b">
+            <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Financial Performance</CardTitle>
             <div className="flex gap-2">
               <Button variant="ghost" size="sm" className="text-xs font-medium">Monthly</Button>
               <Button variant="ghost" size="sm" className="text-xs font-medium text-slate-400">Quarterly</Button>
@@ -99,18 +99,18 @@ function FinanceWorkspace() {
           </CardContent>
         </Card>
 
-        <Card className="border-none shadow-card">
-          <CardHeader className="pb-2 border-b border-slate-50">
-            <CardTitle className="text-lg font-bold text-slate-800">Health Overview</CardTitle>
+        <Card className="border-none surface-card">
+          <CardHeader className="pb-2 border-b">
+            <CardTitle className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Health Overview</CardTitle>
           </CardHeader>
           <CardContent className="pt-6 space-y-6">
             <div className="space-y-2">
               <div className="flex justify-between text-sm font-medium">
-                <span className="text-slate-500">GST Summary</span>
-                <span className="text-slate-900">₹4,20,500</span>
+                <span className="text-muted-foreground">GST Summary</span>
+                <span className="font-black">₹4,20,500</span>
               </div>
-              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                <div className="bg-primary h-full rounded-full" style={{ width: '65%' }} />
+              <div className="w-full bg-muted h-1.5 rounded-full overflow-hidden">
+                <div className="bg-primary h-full rounded-full transition-all duration-1000" style={{ width: '65%' }} />
               </div>
             </div>
             <div className="space-y-2">
@@ -131,10 +131,10 @@ function FinanceWorkspace() {
                 <div className="bg-amber-500 h-full rounded-full" style={{ width: '30%' }} />
               </div>
             </div>
-            <div className="pt-4 mt-4 border-t border-slate-50 flex items-center justify-between">
+            <div className="pt-4 mt-4 border-t flex items-center justify-between">
               <div>
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Health Score</div>
-                <div className="text-xl font-bold text-emerald-600">A+ / Excellent</div>
+                <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Health Score</div>
+                <div className="text-lg font-black text-success">A+ / Excellent</div>
               </div>
               <div className="w-12 h-12 rounded-full border-4 border-emerald-100 flex items-center justify-center text-emerald-600 font-bold">
                 94
@@ -145,14 +145,14 @@ function FinanceWorkspace() {
       </div>
 
       <Tabs defaultValue="invoices" className="space-y-6">
-        <TabsList className="bg-slate-100/80 backdrop-blur-md p-1 rounded-xl border border-white/50 w-fit">
-          <TabsTrigger value="invoices" className="px-6 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm font-medium transition-all">Invoices</TabsTrigger>
-          <TabsTrigger value="expenses" className="px-6 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm font-medium transition-all">Expenses</TabsTrigger>
-          <TabsTrigger value="payments" className="px-6 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm font-medium transition-all">Payments</TabsTrigger>
-          <TabsTrigger value="accounts" className="px-6 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm font-medium transition-all">Accounts</TabsTrigger>
-          <TabsTrigger value="reports" className="px-6 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm font-medium transition-all">Reports</TabsTrigger>
-          <TabsTrigger value="tax" className="px-6 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm font-medium transition-all">Taxation</TabsTrigger>
-          <TabsTrigger value="audit" className="px-6 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm font-medium transition-all">Audit</TabsTrigger>
+        <TabsList className="bg-muted/50 p-1 rounded-xl border w-fit">
+          <TabsTrigger value="invoices" className="px-6 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm font-bold text-xs uppercase tracking-tight transition-all">Invoices</TabsTrigger>
+          <TabsTrigger value="expenses" className="px-6 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm font-bold text-xs uppercase tracking-tight transition-all">Expenses</TabsTrigger>
+          <TabsTrigger value="payments" className="px-6 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm font-bold text-xs uppercase tracking-tight transition-all">Payments</TabsTrigger>
+          <TabsTrigger value="accounts" className="px-6 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm font-bold text-xs uppercase tracking-tight transition-all">Accounts</TabsTrigger>
+          <TabsTrigger value="reports" className="px-6 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm font-bold text-xs uppercase tracking-tight transition-all">Reports</TabsTrigger>
+          <TabsTrigger value="tax" className="px-6 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm font-bold text-xs uppercase tracking-tight transition-all">Taxation</TabsTrigger>
+          <TabsTrigger value="audit" className="px-6 rounded-lg data-[state=active]:bg-card data-[state=active]:shadow-sm font-bold text-xs uppercase tracking-tight transition-all">Audit</TabsTrigger>
         </TabsList>
 
         <TabsContent value="invoices" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
@@ -164,8 +164,8 @@ function FinanceWorkspace() {
               <div className="flex items-center justify-between gap-4">
                 <div className="flex-1 max-w-sm">
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                    <Input placeholder="Search invoices, clients..." className="pl-10 h-10 border-slate-200 focus:ring-primary/20" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input placeholder="Search invoices, clients..." className="pl-10 h-10 border-border/50 focus:ring-primary/20" />
                   </div>
                 </div>
                 <div className="flex gap-2">
@@ -198,11 +198,11 @@ function FinanceWorkspace() {
                 Approval Workflow UI
               </div>
               <div className="space-y-4">
-                <Card className="border-none shadow-sm bg-slate-50/50 p-4">
-                  <h4 className="text-sm font-bold text-slate-700 mb-4">Pending Approvals</h4>
+                <Card className="border-none shadow-sm bg-muted/30 p-4">
+                  <h4 className="text-xs font-black uppercase tracking-widest text-muted-foreground mb-4">Pending Approvals</h4>
                   <div className="space-y-3">
                     {[1, 2, 3].map(i => (
-                      <div key={i} className="flex items-center justify-between p-2 bg-white rounded-lg shadow-sm border border-slate-100">
+                      <div key={i} className="flex items-center justify-between p-2 bg-card rounded-lg shadow-sm border border-border/50">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                             <Receipt className="w-4 h-4 text-primary" />
@@ -257,7 +257,7 @@ function FinanceWorkspace() {
                    { name: "Cash Flow Statement", type: "Standard" },
                    { name: "Trial Balance", type: "Accounting" }
                  ].map((report, i) => (
-                   <div key={i} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer group">
+                   <div key={i} className="flex items-center justify-between p-3 bg-muted/30 rounded-xl hover:bg-muted/50 transition-colors cursor-pointer group border border-transparent hover:border-border/50">
                      <div className="flex items-center gap-3">
                        <BarChart3 className="w-5 h-5 text-slate-400 group-hover:text-primary transition-colors" />
                        <div>
@@ -305,7 +305,7 @@ function FinanceWorkspace() {
           >
             <div className="space-y-4 mt-4">
               {[1, 2, 3, 4, 5].map(i => (
-                <div key={i} className="flex gap-4 p-4 border-b border-slate-50 last:border-none hover:bg-slate-50/50 transition-colors">
+                <div key={i} className="flex gap-4 p-4 border-b border-border/50 last:border-none hover:bg-muted/30 transition-colors">
                   <div className="flex flex-col items-center">
                     <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center">
                       <Clock className="w-4 h-4 text-slate-500" />

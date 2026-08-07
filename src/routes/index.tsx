@@ -283,7 +283,7 @@ function HealthMeter({ label, value, status }: { label: string; value: number; s
       <div className="relative size-10 flex items-center justify-center">
         <svg className="size-full -rotate-90">
           <circle cx="20" cy="20" r="18" fill="transparent" stroke="currentColor" strokeWidth="3" className="text-border/40" />
-          <circle cx="20" cy="20" r="18" fill="transparent" stroke="currentColor" strokeWidth="3" strokeDasharray={113} strokeDashoffset={113 - (113 * value) / 100} className={cn("transition-all duration-1000", status === 'neutral' ? 'text-muted-foreground/40' : toneClasses[status as keyof typeof toneClasses]?.split(' ')[1])} />
+          <circle cx="20" cy="20" r="18" fill="transparent" stroke="currentColor" strokeWidth="3" strokeDasharray={113} strokeDashoffset={113 - (113 * value) / 100} className={cn("transition-all duration-1000", status === 'neutral' ? 'text-muted-foreground/40' : toneMapClasses[status as keyof typeof toneMapClasses]?.split(' ')[1])} />
         </svg>
         <span className="absolute text-[10px] font-black">{value}%</span>
       </div>
@@ -334,7 +334,7 @@ function XIcon({ className }: { className?: string }) {
 }
 
 import { cn } from "@/lib/utils";
-const toneClasses: Record<string, string> = {
+const toneMapClasses: Record<string, string> = {
   neutral: "bg-muted text-muted-foreground",
   success: "bg-success/12 text-success",
   warning: "bg-primary-soft text-accent-foreground",
