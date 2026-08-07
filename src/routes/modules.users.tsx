@@ -59,6 +59,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -129,13 +136,13 @@ function UserManagementModule() {
             </span>
             {selectedUsers.length > 0 && (
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="xs" className="h-7 text-[10px] uppercase font-bold tracking-wider">
+                <Button variant="outline" size="sm" className="h-7 px-2 text-[10px] uppercase font-bold tracking-wider">
                   Activate
                 </Button>
-                <Button variant="outline" size="xs" className="h-7 text-[10px] uppercase font-bold tracking-wider">
+                <Button variant="outline" size="sm" className="h-7 px-2 text-[10px] uppercase font-bold tracking-wider">
                   Deactivate
                 </Button>
-                <Button variant="outline" size="xs" className="h-7 text-[10px] uppercase font-bold tracking-wider text-destructive">
+                <Button variant="outline" size="sm" className="h-7 px-2 text-[10px] uppercase font-bold tracking-wider text-destructive">
                   Delete
                 </Button>
               </div>
@@ -172,7 +179,7 @@ function UserManagementModule() {
                     title="No users found"
                     description="Invite users to grant them access to the ABOS ecosystem."
                     className="surface-none border-none shadow-none"
-                    actions={<InviteUserDialog />}
+                    action={<InviteUserDialog />}
                   />
                 </TableCell>
               </TableRow>
@@ -333,7 +340,7 @@ function UserDetailPanel({ user }: { user: any }) {
               <div className="flex items-center gap-2 text-sm">
                 <Briefcase className="size-3.5 text-muted-foreground" />
                 <span className="text-muted-foreground italic">Not linked to HRMS profile</span>
-                <Button variant="ghost" size="xs" className="h-6 text-[10px]">Link Now</Button>
+                <Button variant="ghost" size="sm" className="h-6 px-2 text-[10px]">Link Now</Button>
               </div>
             </div>
             <div className="space-y-1">
