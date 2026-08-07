@@ -147,6 +147,17 @@ export const modules: ModuleDefinition[] = [
     basePath: "/modules/ai",
   },
   {
+    id: "roles",
+    name: "Roles & Permissions",
+    description: "Define enterprise access control, permission matrices and scoping.",
+    icon: ShieldCheck,
+    group: "platform",
+    order: 105,
+    status: "available",
+    basePath: "/modules/roles",
+    permission: "platform.roles.view",
+  },
+  {
     id: "settings",
     name: "Settings",
     description: "Organisation configuration, roles and module control.",
