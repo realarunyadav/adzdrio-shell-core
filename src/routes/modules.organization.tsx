@@ -397,7 +397,7 @@ function OrganizationModule() {
                         <ImageIcon className="size-4 text-muted-foreground" />
                       </div>
                       <p className="text-xs font-medium">Secondary Logo</p>
-                      <Button variant="outline" size="xs">Upload</Button>
+                      <Button variant="outline" size="sm">Upload</Button>
                     </div>
                   </div>
                 </div>
