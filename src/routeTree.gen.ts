@@ -22,6 +22,7 @@ import { Route as ModulesOrganizationRouteImport } from './routes/modules.organi
 import { Route as ModulesProjectsRouteImport } from './routes/modules.projects'
 import { Route as ModulesRolesRouteImport } from './routes/modules.roles'
 import { Route as ModulesUsersRouteImport } from './routes/modules.users'
+import { Route as ModulesCrmProspectRouteImport } from './routes/modules/crm/prospect'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -88,12 +89,17 @@ const ModulesUsersRoute = ModulesUsersRouteImport.update({
   path: '/modules/users',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModulesCrmProspectRoute = ModulesCrmProspectRouteImport.update({
+  id: '/prospect',
+  path: '/prospect',
+  getParentRoute: () => ModulesCrmRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/settings': typeof SettingsRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
-  '/modules/crm': typeof ModulesCrmRoute
+  '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
   '/modules/hrms': typeof ModulesHrmsRoute
@@ -103,12 +109,13 @@ export interface FileRoutesByFullPath {
   '/modules/projects': typeof ModulesProjectsRoute
   '/modules/roles': typeof ModulesRolesRoute
   '/modules/users': typeof ModulesUsersRoute
+  '/modules/crm/prospect': typeof ModulesCrmProspectRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/settings': typeof SettingsRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
-  '/modules/crm': typeof ModulesCrmRoute
+  '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
   '/modules/hrms': typeof ModulesHrmsRoute
@@ -118,13 +125,14 @@ export interface FileRoutesByTo {
   '/modules/projects': typeof ModulesProjectsRoute
   '/modules/roles': typeof ModulesRolesRoute
   '/modules/users': typeof ModulesUsersRoute
+  '/modules/crm/prospect': typeof ModulesCrmProspectRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/settings': typeof SettingsRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
-  '/modules/crm': typeof ModulesCrmRoute
+  '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
   '/modules/hrms': typeof ModulesHrmsRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/modules/projects': typeof ModulesProjectsRoute
   '/modules/roles': typeof ModulesRolesRoute
   '/modules/users': typeof ModulesUsersRoute
+  '/modules/crm/prospect': typeof ModulesCrmProspectRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/modules/projects'
     | '/modules/roles'
     | '/modules/users'
+    | '/modules/crm/prospect'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/modules/projects'
     | '/modules/roles'
     | '/modules/users'
+    | '/modules/crm/prospect'
   id:
     | '__root__'
     | '/'
@@ -181,13 +192,14 @@ export interface FileRouteTypes {
     | '/modules/projects'
     | '/modules/roles'
     | '/modules/users'
+    | '/modules/crm/prospect'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SettingsRoute: typeof SettingsRoute
   ModulesModuleIdRoute: typeof ModulesModuleIdRoute
-  ModulesCrmRoute: typeof ModulesCrmRoute
+  ModulesCrmRoute: typeof ModulesCrmRouteWithChildren
   ModulesEmployeesRoute: typeof ModulesEmployeesRoute
   ModulesFinanceRoute: typeof ModulesFinanceRoute
   ModulesHrmsRoute: typeof ModulesHrmsRoute
@@ -292,14 +304,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesUsersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/modules/crm/prospect': {
+      id: '/modules/crm/prospect'
+      path: '/prospect'
+      fullPath: '/modules/crm/prospect'
+      preLoaderRoute: typeof ModulesCrmProspectRouteImport
+      parentRoute: typeof ModulesCrmRoute
+    }
   }
 }
+
+interface ModulesCrmRouteChildren {
+  ModulesCrmProspectRoute: typeof ModulesCrmProspectRoute
+}
+
+const ModulesCrmRouteChildren: ModulesCrmRouteChildren = {
+  ModulesCrmProspectRoute: ModulesCrmProspectRoute,
+}
+
+const ModulesCrmRouteWithChildren = ModulesCrmRoute._addFileChildren(
+  ModulesCrmRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SettingsRoute: SettingsRoute,
   ModulesModuleIdRoute: ModulesModuleIdRoute,
-  ModulesCrmRoute: ModulesCrmRoute,
+  ModulesCrmRoute: ModulesCrmRouteWithChildren,
   ModulesEmployeesRoute: ModulesEmployeesRoute,
   ModulesFinanceRoute: ModulesFinanceRoute,
   ModulesHrmsRoute: ModulesHrmsRoute,
