@@ -116,7 +116,7 @@ export const modules: ModuleDefinition[] = [
     icon: ShieldCheck,
     group: "finance",
     order: 60,
-    status: "planned",
+    status: "available",
     basePath: "/modules/finance",
   },
   {
