@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
 import { Route as ModulesOrganizationRouteImport } from './routes/modules.organization'
+import { Route as ModulesRolesRouteImport } from './routes/modules.roles'
 import { Route as ModulesUsersRouteImport } from './routes/modules.users'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const ModulesOrganizationRoute = ModulesOrganizationRouteImport.update({
   path: '/modules/organization',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModulesRolesRoute = ModulesRolesRouteImport.update({
+  id: '/modules/roles',
+  path: '/modules/roles',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ModulesUsersRoute = ModulesUsersRouteImport.update({
   id: '/modules/users',
   path: '/modules/users',
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/organization': typeof ModulesOrganizationRoute
+  '/modules/roles': typeof ModulesRolesRoute
   '/modules/users': typeof ModulesUsersRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/organization': typeof ModulesOrganizationRoute
+  '/modules/roles': typeof ModulesRolesRoute
   '/modules/users': typeof ModulesUsersRoute
 }
 export interface FileRoutesById {
@@ -61,6 +69,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/organization': typeof ModulesOrganizationRoute
+  '/modules/roles': typeof ModulesRolesRoute
   '/modules/users': typeof ModulesUsersRoute
 }
 export interface FileRouteTypes {
@@ -70,6 +79,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/modules/$moduleId'
     | '/modules/organization'
+    | '/modules/roles'
     | '/modules/users'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -77,6 +87,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/modules/$moduleId'
     | '/modules/organization'
+    | '/modules/roles'
     | '/modules/users'
   id:
     | '__root__'
@@ -84,6 +95,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/modules/$moduleId'
     | '/modules/organization'
+    | '/modules/roles'
     | '/modules/users'
   fileRoutesById: FileRoutesById
 }
@@ -92,6 +104,7 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   ModulesModuleIdRoute: typeof ModulesModuleIdRoute
   ModulesOrganizationRoute: typeof ModulesOrganizationRoute
+  ModulesRolesRoute: typeof ModulesRolesRoute
   ModulesUsersRoute: typeof ModulesUsersRoute
 }
 
@@ -125,6 +138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesOrganizationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/modules/roles': {
+      id: '/modules/roles'
+      path: '/modules/roles'
+      fullPath: '/modules/roles'
+      preLoaderRoute: typeof ModulesRolesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/modules/users': {
       id: '/modules/users'
       path: '/modules/users'
@@ -140,6 +160,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   ModulesModuleIdRoute: ModulesModuleIdRoute,
   ModulesOrganizationRoute: ModulesOrganizationRoute,
+  ModulesRolesRoute: ModulesRolesRoute,
   ModulesUsersRoute: ModulesUsersRoute,
 }
 export const routeTree = rootRouteImport
