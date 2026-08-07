@@ -1,4 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
+import { ChevronRight } from "lucide-react";
+
 
 import { appConfig } from "@/config/app.config";
 import { moduleRegistry } from "@/core/modules/registry";
