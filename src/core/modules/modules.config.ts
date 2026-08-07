@@ -1,16 +1,4 @@
-import {
-  Building,
-  Calendar,
-  Globe,
-  Grid,
-  Hash,
-  Layout,
-  MapPin,
-  Palette,
-  ShieldCheck,
-  Users,
-} from "lucide-react";
-
+import { Users } from "lucide-react";
 import { moduleRegistry } from "./registry";
 import type { ModuleDefinition, ModuleGroup } from "./types";
 
@@ -86,6 +74,17 @@ export const modules: ModuleDefinition[] = [
     status: "available",
     basePath: "/modules/users",
     permission: "people.users.view",
+  },
+  {
+    id: "employees",
+    name: "Employees",
+    description: "Employee records, profiles, and employment lifecycle.",
+    icon: Users,
+    group: "people",
+    order: 47,
+    status: "available",
+    basePath: "/modules/employees",
+    permission: "people.employees.view",
   },
   {
     id: "hrms",
