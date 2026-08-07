@@ -15,7 +15,8 @@ import {
   Users,
   Map,
   BadgeCheck,
-  Building
+  Building,
+  ChevronRight
 } from "lucide-react";
 
 import * as React from "react";
@@ -25,6 +26,7 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { StatusBadge } from "@/components/shared/StatusBadge";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -327,12 +329,33 @@ function OrganizationModule() {
               description="Group employees within departments."
               actions={<Button size="sm" variant="outline"><Plus className="size-3.5 mr-1" /> Team</Button>}
             >
-              <EmptyState
-                icon={Users}
-                title="No teams configured"
-                description="Create teams to manage specific workgroups and project squads."
-                className="py-8 surface-none border-none shadow-none"
-              />
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Team Name</TableHead>
+                    <TableHead>Department</TableHead>
+                    <TableHead>Members</TableHead>
+                    <TableHead className="text-right"></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {[
+                    { name: "Platform Engineering", dept: "Engineering", members: 12 },
+                    { name: "Cloud Infra", dept: "Engineering", members: 8 },
+                    { name: "Enterprise CRM", dept: "Engineering", members: 15 },
+                    { name: "Logistics Ops", dept: "Operations", members: 20 },
+                  ].map((team) => (
+                    <TableRow key={team.name} className="hover:bg-muted/5 group cursor-pointer">
+                      <TableCell className="font-bold text-xs">{team.name}</TableCell>
+                      <TableCell className="text-[10px] font-medium text-muted-foreground">{team.dept}</TableCell>
+                      <TableCell className="text-[10px] font-bold">{team.members}</TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="ghost" size="icon" className="size-7"><ChevronRight className="size-3" /></Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </SectionCard>
 
             <SectionCard 
