@@ -75,50 +75,73 @@ export function AppSidebar() {
                 {modules.map((module) => {
                   const planned = module.status !== "available";
                   const target = planned ? `/modules/${module.id}` : module.basePath;
-                  const label = (
-                    <>
-                      <module.icon className="size-4 shrink-0" aria-hidden />
-                      {!collapsed ? (
-                        <span className="flex flex-1 items-center justify-between gap-2">
-                          <span className="truncate">{module.name}</span>
-                          {planned ? (
-                            <span
-                              className={cn(
-                                "rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider",
-                                "bg-sidebar-accent text-sidebar-foreground/70",
-                              )}
-                            >
-                              Soon
-                            </span>
-                          ) : null}
-                        </span>
-                      ) : null}
-                    </>
-                  );
+                  const isActiveModule = isActive(target);
+                  
                   return (
-                    <SidebarMenuItem key={module.id}>
-                      <SidebarMenuButton asChild isActive={isActive(target)} tooltip={module.name}>
-                        {planned ? (
-                          <Link
-                            to="/modules/$moduleId"
-                            params={{ moduleId: module.id }}
-                            className="flex items-center gap-2"
+                    <Collapsible
+                      key={module.id}
+                      asChild
+                      defaultOpen={isActiveModule}
+                      className="group/collapsible"
+                    >
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton 
+                            asChild 
+                            isActive={isActiveModule} 
+                            tooltip={module.name}
                           >
-                            {label}
-                          </Link>
-                        ) : (
-                          <Link
-                            to={module.basePath === "/settings" ? "/settings" : "/"}
-                            className="flex items-center gap-2"
-                          >
-                            {label}
-                          </Link>
+                            {planned ? (
+                              <Link
+                                to="/modules/$moduleId"
+                                params={{ moduleId: module.id }}
+                                className="flex items-center gap-2"
+                              >
+                                <module.icon className="size-4 shrink-0" aria-hidden />
+                                {!collapsed ? (
+                                  <span className="flex flex-1 items-center justify-between gap-2">
+                                    <span className="truncate">{module.name}</span>
+                                    <span className="rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider bg-sidebar-accent text-sidebar-foreground/70">
+                                      Soon
+                                    </span>
+                                  </span>
+                                ) : null}
+                              </Link>
+                            ) : (
+                              <Link
+                                to={module.basePath === "/settings" ? "/settings" : "/"}
+                                className="flex items-center gap-2"
+                              >
+                                <module.icon className="size-4 shrink-0" aria-hidden />
+                                {!collapsed ? (
+                                  <span className="flex flex-1 items-center justify-between gap-2">
+                                    <span className="truncate">{module.name}</span>
+                                    <ChevronRight className="ml-auto size-3 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                  </span>
+                                ) : null}
+                              </Link>
+                            )}
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        {!collapsed && !planned && (
+                          <CollapsibleContent>
+                            <SidebarMenuSub>
+                              <SidebarMenuSubItem>
+                                <SidebarMenuSubButton asChild>
+                                  <span className="text-[11px] text-sidebar-foreground/60 px-2 py-1 italic">
+                                    No sub-modules
+                                  </span>
+                                </SidebarMenuSubButton>
+                              </SidebarMenuSubItem>
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
                         )}
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
+                      </SidebarMenuItem>
+                    </Collapsible>
                   );
                 })}
               </SidebarMenu>
+
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
