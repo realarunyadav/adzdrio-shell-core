@@ -33,7 +33,13 @@ import {
   ArrowRight,
   Clock,
   CheckCircle2,
-  LayoutGrid
+  LayoutGrid,
+  Mail,
+  Heart,
+  AlertCircle,
+  AlertTriangle,
+  Send,
+  ArrowLeft
 } from "lucide-react";
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
