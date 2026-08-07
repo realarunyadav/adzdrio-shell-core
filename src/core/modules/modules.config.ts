@@ -101,12 +101,13 @@ export const modules: ModuleDefinition[] = [
   {
     id: "hrms",
     name: "HRMS",
-    description: "Employee lifecycle, attendance and performance.",
+    description: "Employee lifecycle, payroll, performance and recruitment.",
     icon: ShieldCheck,
     group: "people",
     order: 50,
-    status: "planned",
+    status: "available",
     basePath: "/modules/hrms",
+    permission: "people.hrms.view",
   },
   {
     id: "finance",
