@@ -498,3 +498,310 @@ function AddLeadDialog() {
   );
 }
 
+function Customer360View() {
+  const [selectedCustomer, setSelectedCustomer] = React.useState<string | null>("cust-1");
+
+  if (!selectedCustomer) {
+    return (
+      <SectionCard title="Customer Directory">
+        <EmptyState 
+          icon={Users} 
+          title="No customer selected" 
+          description="Select a customer from the directory to view their 360 overview." 
+          className="py-24 border-none shadow-none surface-none"
+        />
+      </SectionCard>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="lg:col-span-3 space-y-6">
+        <SectionCard title="Customer Identity" contentClassName="p-0">
+          <div className="p-6 text-center border-b border-border/40">
+            <Avatar className="size-20 mx-auto mb-4 border-2 border-primary/20 p-1">
+              <AvatarImage src="" />
+              <AvatarFallback className="text-xl font-black bg-primary/10 text-primary">DS</AvatarFallback>
+            </Avatar>
+            <h3 className="text-lg font-black tracking-tight">Deemand Solutions</h3>
+            <p className="text-xs text-muted-foreground font-medium">Subscription: Premium Enterprise</p>
+            <div className="flex justify-center gap-2 mt-4">
+              <UniversalTag tone="emerald">Active</UniversalTag>
+              <UniversalTag tone="blue">High Value</UniversalTag>
+            </div>
+          </div>
+          <div className="p-4 space-y-4">
+             <InfoItem label="Customer ID" value="CUST-8829" />
+             <InfoItem label="Industry" value="Media & Entertainment" />
+             <InfoItem label="Location" value="Mumbai, MH" />
+             <InfoItem label="Joined" value="Jan 12, 2025" />
+          </div>
+        </SectionCard>
+
+        <SectionCard title="Subscription Lifecycle" contentClassName="p-4 space-y-4">
+           <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Current Plan</span>
+                <Badge variant="outline" className="text-[10px] font-black border-primary/30 text-primary bg-primary/5">GOLD-ULTRA</Badge>
+              </div>
+              <InfoItem label="Expiry Date" value="Jan 12, 2027" />
+              <InfoItem label="Renewal Date" value="Dec 12, 2026" />
+              <InfoItem label="Devices" value="15 / 20 Used" />
+              <div className="pt-2 border-t border-border/40 space-y-2">
+                 <Button variant="outline" size="sm" className="w-full text-[10px] h-8 font-black uppercase tracking-widest glass-surface">Upgrade / Downgrade</Button>
+                 <Button variant="ghost" size="sm" className="w-full text-[10px] h-8 font-black uppercase tracking-widest opacity-60">Disable Auto-Renewal</Button>
+              </div>
+           </div>
+        </SectionCard>
+      </div>
+
+      <div className="lg:col-span-9 space-y-6">
+        <Tabs defaultValue="overview" className="w-full">
+          <TabsList className="bg-transparent border-b border-border/40 w-full justify-start rounded-none p-0 mb-6 gap-6 overflow-x-auto">
+            <TabsTrigger value="overview" className="rounded-none border-b-2 border-transparent px-1 pb-3 text-[10px] font-black uppercase tracking-widest data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none opacity-60 data-[state=active]:opacity-100 transition-all">Overview</TabsTrigger>
+            <TabsTrigger value="timeline" className="rounded-none border-b-2 border-transparent px-1 pb-3 text-[10px] font-black uppercase tracking-widest data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none opacity-60 data-[state=active]:opacity-100 transition-all">Timeline</TabsTrigger>
+            <TabsTrigger value="communication" className="rounded-none border-b-2 border-transparent px-1 pb-3 text-[10px] font-black uppercase tracking-widest data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none opacity-60 data-[state=active]:opacity-100 transition-all">Communication</TabsTrigger>
+            <TabsTrigger value="docs" className="rounded-none border-b-2 border-transparent px-1 pb-3 text-[10px] font-black uppercase tracking-widest data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none opacity-60 data-[state=active]:opacity-100 transition-all">Documents</TabsTrigger>
+            <TabsTrigger value="billing" className="rounded-none border-b-2 border-transparent px-1 pb-3 text-[10px] font-black uppercase tracking-widest data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none opacity-60 data-[state=active]:opacity-100 transition-all">Billing</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-6 outline-none">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+               <DashboardKpiCard title="LTV" value="₹ 4,50,000" trend="+12%" icon={DollarSign} />
+               <DashboardKpiCard title="Support Tickets" value="2" trend="Pending" icon={AlertCircle} trendNeutral />
+               <DashboardKpiCard title="NPS Score" value="9.2" trend="Excellent" icon={Heart} />
+            </div>
+            
+            <SectionCard title="Recent Activity" actions={<Button variant="ghost" size="sm">Log Note</Button>}>
+               <UniversalComments />
+            </SectionCard>
+          </TabsContent>
+
+          <TabsContent value="timeline" className="outline-none">
+            <SectionCard title="Customer Journey Timeline">
+               <UniversalActivityTimeline items={mockTimelineItems} />
+            </SectionCard>
+          </TabsContent>
+
+          <TabsContent value="communication" className="outline-none">
+             <SectionCard title="Interaction History">
+                <div className="space-y-4">
+                   <div className="p-4 rounded-xl border border-border/40 glass-surface flex items-start gap-4">
+                      <div className="size-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
+                         <Phone className="size-4" />
+                      </div>
+                      <div className="space-y-1">
+                         <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Call Log</span>
+                            <span className="text-[10px] text-muted-foreground">• 2 days ago</span>
+                         </div>
+                         <p className="text-sm font-bold">Quarterly Business Review Call</p>
+                         <p className="text-xs text-muted-foreground">Discussed expansion of subscription seats for the next quarter. Client requested a demo of the new AI features.</p>
+                      </div>
+                   </div>
+                   <div className="p-4 rounded-xl border border-border/40 glass-surface flex items-start gap-4">
+                      <div className="size-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
+                         <Mail className="size-4" />
+                      </div>
+                      <div className="space-y-1">
+                         <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Email</span>
+                            <span className="text-[10px] text-muted-foreground">• Last Week</span>
+                         </div>
+                         <p className="text-sm font-bold">New Policy Updates Acknowledged</p>
+                         <p className="text-xs text-muted-foreground">Confirmed receipt of the updated enterprise service level agreement.</p>
+                      </div>
+                   </div>
+                </div>
+             </SectionCard>
+          </TabsContent>
+
+          <TabsContent value="docs" className="outline-none">
+             <UniversalFileManager />
+          </TabsContent>
+
+          <TabsContent value="billing" className="outline-none">
+             <SectionCard title="Financial Workflow & History">
+                <div className="space-y-6">
+                   <div className="p-6 rounded-2xl bg-primary/5 border border-primary/20 flex flex-col items-center justify-center gap-4 text-center">
+                      <div className="flex items-center gap-4">
+                         <div className="flex flex-col items-center gap-1">
+                            <div className="size-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-lg"><Star className="size-5" /></div>
+                            <span className="text-[9px] font-black uppercase">Deal Won</span>
+                         </div>
+                         <ArrowRight className="size-4 text-primary opacity-40" />
+                         <div className="flex flex-col items-center gap-1">
+                            <div className="size-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-lg"><FileText className="size-5" /></div>
+                            <span className="text-[9px] font-black uppercase">Invoice</span>
+                         </div>
+                         <ArrowRight className="size-4 text-primary opacity-40" />
+                         <div className="flex flex-col items-center gap-1">
+                            <div className="size-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-lg"><DollarSign className="size-5" /></div>
+                            <span className="text-[9px] font-black uppercase">Payment</span>
+                         </div>
+                         <ArrowRight className="size-4 text-primary opacity-40" />
+                         <div className="flex flex-col items-center gap-1">
+                            <div className="size-10 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg"><TrendingUp className="size-5" /></div>
+                            <span className="text-[9px] font-black uppercase">Revenue</span>
+                         </div>
+                      </div>
+                      <p className="text-xs text-muted-foreground font-medium max-w-sm">This visual workflow represents the conversion of sales successes into recognized financial growth.</p>
+                   </div>
+                   
+                   <UniversalAuditLog />
+                </div>
+             </SectionCard>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+}
+
+function RenewalCenter() {
+  return (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <RenewalKpiCard title="Upcoming (30d)" value="12" tone="info" />
+        <RenewalKpiCard title="Renewing Today" value="2" tone="warning" />
+        <RenewalKpiCard title="Expired (Last 7d)" value="1" tone="danger" />
+        <RenewalKpiCard title="Renewal Revenue" value="₹ 8,40,000" tone="success" />
+      </div>
+
+      <SectionCard 
+        title="Renewal Queue" 
+        description="Manage upcoming customer subscription renewals and priority engagement."
+        contentClassName="p-0"
+        actions={
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" className="h-8 text-[10px] font-black uppercase tracking-widest glass-surface">Export List</Button>
+          </div>
+        }
+      >
+        <Table>
+          <TableHeader className="bg-muted/30">
+            <TableRow>
+              <TableHead className="w-[200px]">Customer</TableHead>
+              <TableHead>Renewal Date</TableHead>
+              <TableHead>Plan</TableHead>
+              <TableHead>Priority</TableHead>
+              <TableHead>Sales Executive</TableHead>
+              <TableHead>Reminder Status</TableHead>
+              <TableHead className="text-right">Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow className="hover:bg-muted/5 group">
+              <TableCell className="font-bold">Deemand Solutions</TableCell>
+              <TableCell className="text-xs font-medium">Dec 12, 2026</TableCell>
+              <TableCell><Badge variant="outline" className="text-[9px] font-black border-primary/30">GOLD-ULTRA</Badge></TableCell>
+              <TableCell><UniversalTag tone="rose">Critical</UniversalTag></TableCell>
+              <TableCell className="text-xs">Alex Salesman</TableCell>
+              <TableCell><StatusBadge tone="success">Sent</StatusBadge></TableCell>
+              <TableCell className="text-right">
+                <Button variant="ghost" size="sm" className="h-7 text-[10px] font-black uppercase tracking-widest">Process</Button>
+              </TableCell>
+            </TableRow>
+            <TableRow className="hover:bg-muted/5 group">
+              <TableCell className="font-bold">Acme Corp</TableCell>
+              <TableCell className="text-xs font-medium">Aug 12, 2026</TableCell>
+              <TableCell><Badge variant="outline" className="text-[9px] font-black border-slate-300">STANDARD</Badge></TableCell>
+              <TableCell><UniversalTag tone="amber">Medium</UniversalTag></TableCell>
+              <TableCell className="text-xs">Sara Manager</TableCell>
+              <TableCell><StatusBadge tone="warning">Pending</StatusBadge></TableCell>
+              <TableCell className="text-right">
+                <Button variant="ghost" size="sm" className="h-7 text-[10px] font-black uppercase tracking-widest">Process</Button>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </SectionCard>
+    </div>
+  );
+}
+
+function RenewalKpiCard({ title, value, tone }: { title: string; value: string; tone: "info" | "warning" | "danger" | "success" }) {
+  const tones = {
+    info: "bg-blue-500/10 text-blue-500 border-blue-500/20",
+    warning: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+    danger: "bg-rose-500/10 text-rose-500 border-rose-500/20",
+    success: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+  };
+
+  return (
+    <div className={cn("p-4 rounded-2xl border glass-surface", tones[tone])}>
+      <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-1">{title}</p>
+      <p className="text-xl font-black tracking-tight">{value}</p>
+    </div>
+  );
+}
+
+function InfoItem({ label, value }: { label: string; value: string | React.ReactNode }) {
+  return (
+    <div className="flex justify-between items-center py-1">
+      <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{label}</span>
+      <span className="text-xs font-bold">{value}</span>
+    </div>
+  );
+}
+
+const mockTimelineItems: TimelineItem[] = [
+  {
+    id: "1",
+    type: "LEAD_CREATED",
+    title: "converted to Enterprise Lead",
+    description: "Lead entity registered via LinkedIn marketing campaign.",
+    timestamp: "Jan 01, 2025",
+    user: { name: "System Admin", initials: "SA" },
+    category: "crm"
+  },
+  {
+    id: "2",
+    type: "FOLLOW_UP",
+    title: "Discovery Call Completed",
+    description: "Initial discovery call with CTO regarding digital transformation goals.",
+    timestamp: "Jan 05, 2025",
+    user: { name: "Alex Salesman", initials: "AS" },
+    category: "crm"
+  },
+  {
+    id: "3",
+    type: "PROPOSAL",
+    title: "Enterprise Proposal Sent",
+    description: "Proposal version 1.2 sent for internal review by client board.",
+    timestamp: "Jan 08, 2025",
+    user: { name: "Alex Salesman", initials: "AS" },
+    category: "crm"
+  },
+  {
+    id: "4",
+    type: "INVOICE",
+    title: "First Installment Invoiced",
+    description: "Invoice #INV-2025-001 generated for activation fee.",
+    timestamp: "Jan 10, 2025",
+    user: { name: "Finance System", initials: "FS" },
+    category: "finance"
+  },
+  {
+    id: "5",
+    type: "PAYMENT",
+    title: "Payment Received",
+    description: "Full payment for invoice #INV-2025-001 confirmed via NEFT.",
+    timestamp: "Jan 12, 2025",
+    user: { name: "Finance System", initials: "FS" },
+    category: "finance"
+  },
+  {
+    id: "6",
+    type: "ACTIVATION",
+    title: "Subscription Activated",
+    description: "Enterprise workspace activated for 20 seats.",
+    timestamp: "Jan 12, 2025",
+    user: { name: "Provisioning Bot", initials: "PB" },
+    category: "system"
+  }
+];
+
+import { Heart, Mail, AlertCircle } from "lucide-react";
+
+
