@@ -16,6 +16,7 @@ import { Route as ModulesCrmRouteImport } from './routes/modules.crm'
 import { Route as ModulesEmployeesRouteImport } from './routes/modules.employees'
 import { Route as ModulesFinanceRouteImport } from './routes/modules.finance'
 import { Route as ModulesHrmsRouteImport } from './routes/modules.hrms'
+import { Route as ModulesInventoryRouteImport } from './routes/modules.inventory'
 import { Route as ModulesLeadsRouteImport } from './routes/modules.leads'
 import { Route as ModulesOrganizationRouteImport } from './routes/modules.organization'
 import { Route as ModulesRolesRouteImport } from './routes/modules.roles'
@@ -56,6 +57,11 @@ const ModulesHrmsRoute = ModulesHrmsRouteImport.update({
   path: '/modules/hrms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModulesInventoryRoute = ModulesInventoryRouteImport.update({
+  id: '/modules/inventory',
+  path: '/modules/inventory',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ModulesLeadsRoute = ModulesLeadsRouteImport.update({
   id: '/modules/leads',
   path: '/modules/leads',
@@ -85,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
   '/modules/hrms': typeof ModulesHrmsRoute
+  '/modules/inventory': typeof ModulesInventoryRoute
   '/modules/leads': typeof ModulesLeadsRoute
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/roles': typeof ModulesRolesRoute
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
   '/modules/hrms': typeof ModulesHrmsRoute
+  '/modules/inventory': typeof ModulesInventoryRoute
   '/modules/leads': typeof ModulesLeadsRoute
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/roles': typeof ModulesRolesRoute
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
   '/modules/hrms': typeof ModulesHrmsRoute
+  '/modules/inventory': typeof ModulesInventoryRoute
   '/modules/leads': typeof ModulesLeadsRoute
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/roles': typeof ModulesRolesRoute
@@ -127,6 +136,7 @@ export interface FileRouteTypes {
     | '/modules/employees'
     | '/modules/finance'
     | '/modules/hrms'
+    | '/modules/inventory'
     | '/modules/leads'
     | '/modules/organization'
     | '/modules/roles'
@@ -140,6 +150,7 @@ export interface FileRouteTypes {
     | '/modules/employees'
     | '/modules/finance'
     | '/modules/hrms'
+    | '/modules/inventory'
     | '/modules/leads'
     | '/modules/organization'
     | '/modules/roles'
@@ -153,6 +164,7 @@ export interface FileRouteTypes {
     | '/modules/employees'
     | '/modules/finance'
     | '/modules/hrms'
+    | '/modules/inventory'
     | '/modules/leads'
     | '/modules/organization'
     | '/modules/roles'
@@ -167,6 +179,7 @@ export interface RootRouteChildren {
   ModulesEmployeesRoute: typeof ModulesEmployeesRoute
   ModulesFinanceRoute: typeof ModulesFinanceRoute
   ModulesHrmsRoute: typeof ModulesHrmsRoute
+  ModulesInventoryRoute: typeof ModulesInventoryRoute
   ModulesLeadsRoute: typeof ModulesLeadsRoute
   ModulesOrganizationRoute: typeof ModulesOrganizationRoute
   ModulesRolesRoute: typeof ModulesRolesRoute
@@ -224,6 +237,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesHrmsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/modules/inventory': {
+      id: '/modules/inventory'
+      path: '/modules/inventory'
+      fullPath: '/modules/inventory'
+      preLoaderRoute: typeof ModulesInventoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/modules/leads': {
       id: '/modules/leads'
       path: '/modules/leads'
@@ -263,6 +283,7 @@ const rootRouteChildren: RootRouteChildren = {
   ModulesEmployeesRoute: ModulesEmployeesRoute,
   ModulesFinanceRoute: ModulesFinanceRoute,
   ModulesHrmsRoute: ModulesHrmsRoute,
+  ModulesInventoryRoute: ModulesInventoryRoute,
   ModulesLeadsRoute: ModulesLeadsRoute,
   ModulesOrganizationRoute: ModulesOrganizationRoute,
   ModulesRolesRoute: ModulesRolesRoute,

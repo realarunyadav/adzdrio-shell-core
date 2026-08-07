@@ -73,7 +73,7 @@ export const modules: ModuleDefinition[] = [
     icon: Grid,
     group: "operations",
     order: 40,
-    status: "planned",
+    status: "available",
     basePath: "/modules/inventory",
   },
   {
