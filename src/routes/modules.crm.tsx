@@ -519,4 +519,3 @@ function AddLeadDialog() {
   );
 }
 
-import { ScrollArea } from "@/components/ui/scroll-area";
