@@ -85,36 +85,36 @@ function ExecutiveDashboard() {
       {/* Primary KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <KPICard 
-          title="Monthly Revenue" 
-          value="₹ 0.00" 
-          trend="+0%" 
+          title="Monthly Recurring Revenue" 
+          value="₹ 12.4L" 
+          trend="+14.2%" 
           trendUp={true} 
           icon={DollarSign}
-          subtext="Target: ₹ 0.00"
+          subtext="Target: ₹ 15.0L"
         />
         <KPICard 
-          title="Active Projects" 
-          value="0" 
-          trend="+0%" 
+          title="Active Subscriptions" 
+          value="1,284" 
+          trend="+8.1%" 
           trendUp={true} 
-          icon={Briefcase}
-          subtext="2 ending this week"
+          icon={ShieldCheck}
+          subtext="12 renewals due today"
         />
         <KPICard 
-          title="Total Workforce" 
-          value="0" 
-          trend="0" 
+          title="Collection Rate" 
+          value="98.2%" 
+          trend="+2.4%" 
           trendUp={true} 
-          icon={Users}
-          subtext="1 new joiner today"
+          icon={BarChart3}
+          subtext="Avg. 2.1 days early"
         />
         <KPICard 
-          title="Client Satisfaction" 
-          value="0.0" 
-          trend="+0%" 
+          title="Organization Health" 
+          value="94%" 
+          trend="Excellent" 
           trendUp={true} 
           icon={Heart}
-          subtext="NPS Score"
+          subtext="Stable Growth"
         />
       </div>
 
@@ -140,36 +140,37 @@ function ExecutiveDashboard() {
 
           <SectionCard title="Organization Health Index">
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-               <HealthMeter label="Sales" value={0} status="neutral" />
-               <HealthMeter label="HR" value={0} status="neutral" />
-               <HealthMeter label="Finance" value={0} status="neutral" />
-               <HealthMeter label="Ops" value={0} status="neutral" />
-               <HealthMeter label="Marketing" value={0} status="neutral" />
-               <HealthMeter label="AI" value={0} status="neutral" />
-               <HealthMeter label="Legal" value={0} status="neutral" />
+               <HealthMeter label="Sales" value={92} status="success" />
+               <HealthMeter label="HR" value={88} status="success" />
+               <HealthMeter label="Finance" value={96} status="success" />
+               <HealthMeter label="Ops" value={84} status="success" />
+               <HealthMeter label="Marketing" value={78} status="warning" />
+               <HealthMeter label="AI" value={91} status="success" />
+               <HealthMeter label="Legal" value={100} status="success" />
             </div>
           </SectionCard>
 
           <SectionCard title="Executive Feed" actions={<Button variant="ghost" size="sm">View All</Button>}>
             <div className="space-y-4">
               <FeedItem 
-                icon={ShieldCheck} 
-                title="New Policy Acknowledgment" 
-                time="2m ago" 
-                description="Employee Handbook v2.0 was broadcasted to all departments."
+                icon={TrendingUp} 
+                title="Significant Collection Realized" 
+                time="12m ago" 
+                description="Final payment received for Deemand Solutions Enterprise Renewal."
+                tone="success"
               />
               <FeedItem 
-                icon={TrendingUp} 
-                title="Quarterly Target Achieved" 
+                icon={ShieldCheck} 
+                title="Subscription Renewed" 
                 time="1h ago" 
-                description="Engineering team successfully completed Phase 1 of the infrastructure migration."
+                description="Acme Corp has successfully renewed their Standard Plan for another 12 months."
                 tone="success"
               />
               <FeedItem 
                 icon={AlertCircle} 
-                title="Critical System Update" 
+                title="High Value Renewal Warning" 
                 time="3h ago" 
-                description="Planned maintenance scheduled for this Sunday at 02:00 AM IST."
+                description="Global Media Group's subscription expires in 7 days. Escalating to Account Executive."
                 tone="warning"
               />
             </div>
