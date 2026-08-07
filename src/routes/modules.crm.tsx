@@ -87,7 +87,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { UniversalActivityTimeline, TimelineItem } from "@/components/shared/UniversalActivityTimeline";
+import { UniversalFileManager } from "@/components/shared/UniversalFileManager";
+import { UniversalComments } from "@/components/shared/UniversalComments";
+import { UniversalAuditLog } from "@/components/shared/UniversalAuditLog";
+import { UniversalTag } from "@/components/shared/UniversalTag";
 
 export const Route = createFileRoute("/modules/crm")({
   component: SalesCRMModule,
