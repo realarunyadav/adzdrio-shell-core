@@ -47,8 +47,8 @@ export function AppSidebar() {
     path === "/" ? pathname === "/" : pathname === path || pathname.startsWith(`${path}/`);
 
   return (
-    <Sidebar collapsible="icon" className="border-sidebar-border">
-      <SidebarHeader className="border-b border-sidebar-border">
+    <Sidebar collapsible="icon" className="border-r border-sidebar-border/50 bg-sidebar/95 backdrop-blur-xl">
+      <SidebarHeader className="border-b border-sidebar-border/30 h-16 flex items-center">
         <div className="flex items-center gap-2.5 px-1.5 py-1.5">
           <span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-sidebar-primary text-sm font-bold text-sidebar-primary-foreground">
             A
@@ -91,6 +91,10 @@ export function AppSidebar() {
                             asChild 
                             isActive={isActiveModule} 
                             tooltip={module.name}
+                            className={cn(
+                              "premium-transition hover:bg-sidebar-accent/50",
+                              isActiveModule && "bg-sidebar-primary shadow-lg shadow-sidebar-primary/20 text-sidebar-primary-foreground"
+                            )}
                           >
                             {planned ? (
                               <Link
