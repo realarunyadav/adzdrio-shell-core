@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 
 import { Bell, Command as CommandIcon, Moon, Search, Sun, Zap } from "lucide-react";
@@ -13,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { SearchBar } from "@/components/shared/SearchBar";
+import { GlobalNotificationCenter } from "@/components/shared/GlobalNotificationCenter";
 
 import {
   Breadcrumb,
@@ -40,6 +42,7 @@ export function AppHeader() {
   const { principal, roles } = useRbac();
   const { resolvedMode, toggle, allowUserToggle } = useTheme();
   const crumbs = useBreadcrumbs();
+  const [notificationsOpen, setNotificationsOpen] = React.useState(false);
   const primaryRole = roles[0] ? roleMap[roles[0]]?.name : undefined;
 
   const initials = (principal?.displayName ?? "AB")
@@ -111,9 +114,11 @@ export function AppHeader() {
           </Button>
         ) : null}
 
-        <Button variant="ghost" size="icon" aria-label="Notifications">
+        <Button variant="ghost" size="icon" aria-label="Notifications" onClick={() => setNotificationsOpen(true)}>
           <Bell className="size-4" />
         </Button>
+
+        <GlobalNotificationCenter open={notificationsOpen} onOpenChange={setNotificationsOpen} />
 
         <Separator orientation="vertical" className="hidden h-6 sm:block" />
 
