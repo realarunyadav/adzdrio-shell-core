@@ -89,7 +89,7 @@ function OrganizationModule() {
         <HealthCard title="Departments" value="--" icon={Building2} />
         <HealthCard title="Teams" value="--" icon={Grid} />
         <HealthCard title="Employees" value="--" icon={Users} />
-        <HealthCard title="Active Modules" value="--" icon={Layout} />
+        <HealthCard title="Active Modules" value="--" icon={Layers} />
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
