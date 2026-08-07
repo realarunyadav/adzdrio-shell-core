@@ -21,22 +21,25 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "surface-card flex flex-col items-center justify-center gap-3 px-6 py-14 text-center",
+        "surface-card border-dashed flex flex-col items-center justify-center gap-6 px-8 py-20 text-center bg-card/30 backdrop-blur-[2px]",
         className,
       )}
     >
       {Icon ? (
-        <span className="flex size-11 items-center justify-center rounded-md bg-primary-soft text-accent-foreground">
-          <Icon className="size-5" aria-hidden />
-        </span>
+        <div className="relative">
+          <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-150 animate-pulse" />
+          <span className="relative flex size-16 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20 text-primary-foreground shadow-sm shadow-primary/5">
+            <Icon className="size-8 text-primary" aria-hidden />
+          </span>
+        </div>
       ) : null}
-      <div className="space-y-1">
-        <h3 className="text-base font-semibold text-foreground">{title}</h3>
+      <div className="space-y-2 max-w-sm">
+        <h3 className="text-xl font-bold text-foreground tracking-tight">{title}</h3>
         {description ? (
-          <p className="mx-auto max-w-md text-sm text-muted-foreground">{description}</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
         ) : null}
       </div>
-      {action}
+      {action && <div className="mt-2 animate-in fade-in slide-in-from-bottom-2 duration-500">{action}</div>}
     </div>
   );
 }
