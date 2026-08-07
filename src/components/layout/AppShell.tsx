@@ -14,12 +14,15 @@ export function AppShell({ children }: { children: ReactNode }) {
     <SidebarProvider defaultOpen={appConfig.shell.sidebarDefaultOpen}>
       <div className="flex min-h-screen w-full bg-background">
         <AppSidebar />
-        <SidebarInset className="min-w-0 bg-background">
+        <SidebarInset className="min-w-0 bg-background overflow-hidden flex flex-col">
           <AppHeader />
-          <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
-            <div className="mx-auto w-full max-w-[1400px] space-y-6">{children}</div>
+          <main className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
+            <div className="mx-auto w-full max-w-[1400px] space-y-6 animate-in fade-in duration-300">
+              {children}
+            </div>
           </main>
         </SidebarInset>
+
       </div>
     </SidebarProvider>
   );
