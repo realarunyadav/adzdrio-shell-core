@@ -110,7 +110,7 @@ export function AppSidebar() {
                               </Link>
                             ) : (
                               <Link
-                                to={module.basePath === "/settings" ? "/settings" : "/"}
+                                to={module.basePath as any}
                                 className="flex items-center gap-2"
                               >
                                 <module.icon className="size-4 shrink-0" aria-hidden />
