@@ -15,6 +15,8 @@ import { AppShell } from "@/components/layout/AppShell";
 import { RbacProvider } from "@/core/rbac/RbacProvider";
 import { ThemeProvider } from "@/core/theme/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { GlobalCommandPalette } from "@/components/shared/GlobalCommandPalette";
+
 
 function NotFoundComponent() {
   return (
