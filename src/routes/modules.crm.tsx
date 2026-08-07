@@ -39,7 +39,9 @@ import {
   AlertCircle,
   AlertTriangle,
   Send,
-  ArrowLeft
+  ArrowLeft,
+  User,
+  Zap
 } from "lucide-react";
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
