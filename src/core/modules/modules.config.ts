@@ -88,6 +88,17 @@ export const modules: ModuleDefinition[] = [
     permission: "people.users.view",
   },
   {
+    id: "employees",
+    name: "Employees",
+    description: "Employee records, profiles, and employment lifecycle.",
+    icon: Users,
+    group: "people",
+    order: 47,
+    status: "available",
+    basePath: "/modules/employees",
+    permission: "people.employees.view",
+  },
+  {
     id: "hrms",
     name: "HRMS",
     description: "Employee lifecycle, attendance and performance.",
