@@ -144,10 +144,10 @@ function HRDashboard() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <MetricCard title="Present Today" value="0" subValue="98% Daily Avg" />
-        <MetricCard title="Leave Requests" value="0" subValue="Pending approval" />
-        <MetricCard title="Open Positions" value="0" subValue="Recruitment active" />
-        <MetricCard title="Training Hours" value="0" subValue="Completed this month" />
+        <MetricCard title="Present Today" value="118" subValue="98% Daily Avg" />
+        <MetricCard title="Leave Requests" value="3" subValue="Pending approval" />
+        <MetricCard title="Open Positions" value="6" subValue="Recruitment active" />
+        <MetricCard title="Training Hours" value="450" subValue="Completed this month" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
