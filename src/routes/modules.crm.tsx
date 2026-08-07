@@ -234,19 +234,19 @@ function SalesCRMModule() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow className="hover:bg-muted/5 cursor-pointer group">
+                  <TableRow className="hover:bg-muted/5 cursor-pointer group" onClick={() => window.location.href = "/modules/crm/prospect"}>
                     <TableCell>
-                      <Link to="/modules/leads" className="flex items-center gap-3">
-                         <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center font-bold text-primary text-[10px]">AC</div>
+                      <div className="flex items-center gap-3">
+                         <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center font-bold text-primary text-[10px]">DS</div>
                          <div>
-                            <p className="text-xs font-bold group-hover:text-primary transition-colors">Acme Corp</p>
-                            <p className="text-[10px] text-muted-foreground">John Doe · LinkedIn</p>
+                            <p className="text-xs font-bold group-hover:text-primary transition-colors">Deemand Solutions</p>
+                            <p className="text-[10px] text-muted-foreground">Sarah Manager · Website Inquiry</p>
                          </div>
-                      </Link>
+                      </div>
                     </TableCell>
-                    <TableCell><StatusBadge tone="info">Contacted</StatusBadge></TableCell>
+                    <TableCell><StatusBadge tone="info">Qualified</StatusBadge></TableCell>
                     <TableCell><Badge variant="secondary" className="text-[9px] font-black uppercase">High</Badge></TableCell>
-                    <TableCell className="font-medium text-xs">₹ 50,00,000</TableCell>
+                    <TableCell className="font-medium text-xs">₹ 12,45,000</TableCell>
                     <TableCell>
                        <div className="flex items-center gap-2">
                           <span className="text-xs font-black">85</span>
@@ -260,14 +260,30 @@ function SalesCRMModule() {
                        <Button size="icon" variant="ghost" className="size-7"><MoreHorizontal className="size-3.5" /></Button>
                     </TableCell>
                   </TableRow>
-                  <TableRow>
-                    <TableCell colSpan={7} className="h-64">
-                      <EmptyState 
-                        icon={Target} 
-                        title="Search yields no results" 
-                        description="Try adjusting your filters or adding a new lead." 
-                        className="surface-none border-none shadow-none py-12"
-                      />
+                  <TableRow className="hover:bg-muted/5 cursor-pointer group">
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                         <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center font-bold text-primary text-[10px]">AC</div>
+                         <div>
+                            <p className="text-xs font-bold group-hover:text-primary transition-colors">Acme Corp</p>
+                            <p className="text-[10px] text-muted-foreground">John Doe · LinkedIn</p>
+                         </div>
+                      </div>
+                    </TableCell>
+                    <TableCell><StatusBadge tone="info">Contacted</StatusBadge></TableCell>
+                    <TableCell><Badge variant="secondary" className="text-[9px] font-black uppercase">Medium</Badge></TableCell>
+                    <TableCell className="font-medium text-xs">₹ 50,00,000</TableCell>
+                    <TableCell>
+                       <div className="flex items-center gap-2">
+                          <span className="text-xs font-black">65</span>
+                          <div className="w-12 h-1.5 bg-muted rounded-full overflow-hidden">
+                             <div className="h-full bg-warning w-[65%]" />
+                          </div>
+                       </div>
+                    </TableCell>
+                    <TableCell className="text-xs font-medium">Aug 14, 2026</TableCell>
+                    <TableCell className="text-right">
+                       <Button size="icon" variant="ghost" className="size-7"><MoreHorizontal className="size-3.5" /></Button>
                     </TableCell>
                   </TableRow>
                 </TableBody>
