@@ -15,6 +15,7 @@ import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
 import { Route as ModulesCrmRouteImport } from './routes/modules.crm'
 import { Route as ModulesEmployeesRouteImport } from './routes/modules.employees'
 import { Route as ModulesHrmsRouteImport } from './routes/modules.hrms'
+import { Route as ModulesLeadsRouteImport } from './routes/modules.leads'
 import { Route as ModulesOrganizationRouteImport } from './routes/modules.organization'
 import { Route as ModulesRolesRouteImport } from './routes/modules.roles'
 import { Route as ModulesUsersRouteImport } from './routes/modules.users'
@@ -49,6 +50,11 @@ const ModulesHrmsRoute = ModulesHrmsRouteImport.update({
   path: '/modules/hrms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModulesLeadsRoute = ModulesLeadsRouteImport.update({
+  id: '/modules/leads',
+  path: '/modules/leads',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ModulesOrganizationRoute = ModulesOrganizationRouteImport.update({
   id: '/modules/organization',
   path: '/modules/organization',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/modules/crm': typeof ModulesCrmRoute
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/hrms': typeof ModulesHrmsRoute
+  '/modules/leads': typeof ModulesLeadsRoute
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/roles': typeof ModulesRolesRoute
   '/modules/users': typeof ModulesUsersRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/modules/crm': typeof ModulesCrmRoute
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/hrms': typeof ModulesHrmsRoute
+  '/modules/leads': typeof ModulesLeadsRoute
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/roles': typeof ModulesRolesRoute
   '/modules/users': typeof ModulesUsersRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/modules/crm': typeof ModulesCrmRoute
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/hrms': typeof ModulesHrmsRoute
+  '/modules/leads': typeof ModulesLeadsRoute
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/roles': typeof ModulesRolesRoute
   '/modules/users': typeof ModulesUsersRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/modules/crm'
     | '/modules/employees'
     | '/modules/hrms'
+    | '/modules/leads'
     | '/modules/organization'
     | '/modules/roles'
     | '/modules/users'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/modules/crm'
     | '/modules/employees'
     | '/modules/hrms'
+    | '/modules/leads'
     | '/modules/organization'
     | '/modules/roles'
     | '/modules/users'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/modules/crm'
     | '/modules/employees'
     | '/modules/hrms'
+    | '/modules/leads'
     | '/modules/organization'
     | '/modules/roles'
     | '/modules/users'
@@ -142,6 +154,7 @@ export interface RootRouteChildren {
   ModulesCrmRoute: typeof ModulesCrmRoute
   ModulesEmployeesRoute: typeof ModulesEmployeesRoute
   ModulesHrmsRoute: typeof ModulesHrmsRoute
+  ModulesLeadsRoute: typeof ModulesLeadsRoute
   ModulesOrganizationRoute: typeof ModulesOrganizationRoute
   ModulesRolesRoute: typeof ModulesRolesRoute
   ModulesUsersRoute: typeof ModulesUsersRoute
@@ -191,6 +204,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesHrmsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/modules/leads': {
+      id: '/modules/leads'
+      path: '/modules/leads'
+      fullPath: '/modules/leads'
+      preLoaderRoute: typeof ModulesLeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/modules/organization': {
       id: '/modules/organization'
       path: '/modules/organization'
@@ -222,6 +242,7 @@ const rootRouteChildren: RootRouteChildren = {
   ModulesCrmRoute: ModulesCrmRoute,
   ModulesEmployeesRoute: ModulesEmployeesRoute,
   ModulesHrmsRoute: ModulesHrmsRoute,
+  ModulesLeadsRoute: ModulesLeadsRoute,
   ModulesOrganizationRoute: ModulesOrganizationRoute,
   ModulesRolesRoute: ModulesRolesRoute,
   ModulesUsersRoute: ModulesUsersRoute,
