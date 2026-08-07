@@ -9,6 +9,8 @@ import {
   Palette,
   ShieldCheck,
   Users,
+  Rocket,
+  LifeBuoy
 } from "lucide-react";
 
 import { moduleRegistry } from "./registry";
@@ -55,6 +57,28 @@ export const modules: ModuleDefinition[] = [
     status: "available",
     basePath: "/modules/crm",
     permission: "operations.crm.view",
+  },
+  {
+    id: "activation",
+    name: "Activation",
+    description: "Enterprise activation queue, SLA management and service onboarding.",
+    icon: Rocket,
+    group: "operations",
+    order: 21,
+    status: "available",
+    basePath: "/modules/activation",
+    permission: "operations.activation.view",
+  },
+  {
+    id: "support",
+    name: "Support",
+    description: "Ticket management, internal notes and service level agreements.",
+    icon: LifeBuoy,
+    group: "operations",
+    order: 22,
+    status: "available",
+    basePath: "/modules/support",
+    permission: "operations.support.view",
   },
   {
     id: "projects",
