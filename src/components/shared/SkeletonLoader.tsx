@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 export function SkeletonLoader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("animate-pulse rounded-md bg-muted", className)}
+      className={cn("animate-pulse rounded-md bg-muted/60 dark:bg-muted/20", className)}
       {...props}
     />
   );
@@ -11,7 +11,7 @@ export function SkeletonLoader({ className, ...props }: React.HTMLAttributes<HTM
 
 export function SkeletonCard() {
   return (
-    <div className="surface-card p-5 space-y-4">
+    <div className="surface-card p-6 space-y-4 shadow-sm border-border/40">
       <div className="flex items-center gap-3">
         <SkeletonLoader className="size-10 rounded-full" />
         <div className="space-y-2">

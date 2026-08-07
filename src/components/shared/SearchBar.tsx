@@ -14,14 +14,18 @@ export function SearchBar({ className, onSearch, onChange, ...props }: SearchBar
   };
 
   return (
-    <div className={cn("relative w-full", className)}>
-      <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
+    <div className={cn("relative group w-full", className)}>
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
       <Input
         type="search"
-        className="pl-9 bg-muted/50 border-transparent focus:bg-background transition-all"
+        className="pl-10 h-10 bg-background/50 border-border/50 backdrop-blur-sm shadow-sm ring-offset-background transition-all focus:bg-background focus:ring-2 focus:ring-primary/20"
         onChange={handleChange}
         {...props}
       />
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none hidden sm:flex items-center gap-1 opacity-60 group-focus-within:opacity-0 transition-opacity">
+        <kbd>⌘</kbd>
+        <kbd>K</kbd>
+      </div>
     </div>
   );
 }

@@ -286,17 +286,17 @@ function CRMTabTrigger({ value, label, icon: Icon }: { value: string; label: str
 
 function KpiCard({ title, value, trend, icon: Icon }: { title: string; value: string; trend: string; icon: any }) {
   return (
-    <Card className="surface-sunken">
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex size-8 items-center justify-center rounded-md bg-background border border-border">
-            <Icon className="size-4 text-muted-foreground" />
+    <Card className="border-border/40 shadow-sm glass-surface hover:shadow-md premium-transition overflow-hidden group">
+      <CardContent className="p-5">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 group-hover:scale-110 transition-transform">
+            <Icon className="size-5 text-primary" />
           </div>
-          <Badge variant="outline" className="text-[10px] font-bold text-success border-success/30 bg-success/5">{trend}</Badge>
+          <Badge variant="outline" className="text-[10px] font-bold text-success border-success/30 bg-success/5 px-2">{trend}</Badge>
         </div>
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{title}</p>
-          <p className="text-xl font-bold tracking-tight mt-1">{value}</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/80">{title}</p>
+          <p className="text-2xl font-extrabold tracking-tight mt-1 text-foreground">{value}</p>
         </div>
       </CardContent>
     </Card>
@@ -305,16 +305,16 @@ function KpiCard({ title, value, trend, icon: Icon }: { title: string; value: st
 
 function PipelineColumn({ title, value }: { title: string; value: string }) {
   return (
-    <div className="flex flex-col gap-4 rounded-xl bg-muted/40 p-3 border border-border/50">
+    <div className="flex flex-col gap-4 rounded-2xl bg-muted/20 p-4 border border-border/40 glass-surface">
       <div className="flex items-center justify-between px-1">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">{title}</h4>
-        <Badge variant="outline" className="text-[10px] bg-background">{value}</Badge>
+        <h4 className="text-[11px] font-bold uppercase tracking-[0.1em] text-muted-foreground">{title}</h4>
+        <Badge variant="secondary" className="text-[10px] bg-background/50 backdrop-blur-sm px-2">{value}</Badge>
       </div>
-      <div className="flex-1 flex flex-col items-center justify-center border border-dashed border-border/60 rounded-lg p-6 text-center">
-        <div className="size-10 rounded-full bg-background flex items-center justify-center mb-2">
-          <Plus className="size-4 text-muted-foreground/40" />
+      <div className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-border/30 rounded-xl p-8 text-center bg-card/20 group hover:border-primary/20 transition-colors">
+        <div className="size-12 rounded-2xl bg-background/50 flex items-center justify-center mb-3 shadow-sm group-hover:bg-primary/5 transition-colors">
+          <Plus className="size-5 text-muted-foreground/30 group-hover:text-primary transition-colors" />
         </div>
-        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tight">Empty Stage</p>
+        <p className="text-[11px] text-muted-foreground/60 font-bold uppercase tracking-tight">Empty Stage</p>
       </div>
     </div>
   );

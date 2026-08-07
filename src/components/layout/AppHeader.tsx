@@ -50,7 +50,7 @@ export function AppHeader() {
     .toUpperCase();
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-card px-3 sm:px-4">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border/50 glass-effect px-4 sm:px-6 premium-transition">
       <SidebarTrigger className="text-muted-foreground" />
       <Separator orientation="vertical" className="hidden h-5 sm:block" />
 
@@ -83,7 +83,7 @@ export function AppHeader() {
           <div className="hidden lg:block">
             <SearchBar 
               placeholder="Search ABOS (⌘K)" 
-              className="h-9 w-64"
+              className="h-10 w-72 glass-surface"
             />
           </div>
         ) : null}
@@ -117,17 +117,17 @@ export function AppHeader() {
 
         <Separator orientation="vertical" className="hidden h-6 sm:block" />
 
-        <div className="flex items-center gap-2">
-          <Avatar className="size-8">
-            <AvatarFallback className="bg-navy text-xs font-semibold text-navy-foreground">
+        <button className="flex items-center gap-2 p-1 rounded-full hover:bg-accent/50 premium-transition border border-transparent hover:border-border/50 group">
+          <Avatar className="size-8 border border-border/40 shadow-sm">
+            <AvatarFallback className="bg-navy text-[10px] font-bold text-navy-foreground group-hover:bg-primary group-hover:text-primary-foreground premium-transition">
               {initials}
             </AvatarFallback>
           </Avatar>
-          <div className="hidden text-left leading-tight sm:block">
-            <p className="text-xs font-medium text-foreground">{principal?.displayName}</p>
-            <p className="text-[11px] text-muted-foreground">{primaryRole}</p>
+          <div className="hidden text-left leading-tight sm:block pr-2">
+            <p className="text-xs font-bold text-foreground group-hover:text-primary premium-transition">{principal?.displayName}</p>
+            <p className="text-[10px] font-medium text-muted-foreground/70">{primaryRole}</p>
           </div>
-        </div>
+        </button>
       </div>
     </header>
   );
