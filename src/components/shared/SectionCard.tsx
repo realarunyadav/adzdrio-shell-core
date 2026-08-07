@@ -23,23 +23,23 @@ export function SectionCard({
   children,
 }: SectionCardProps) {
   return (
-    <section className={cn("surface-card overflow-hidden", className)}>
+    <section className={cn("surface-card surface-card-hover overflow-hidden shadow-card border-border/40", className)}>
       {title || actions ? (
-        <header className="flex flex-wrap items-start justify-between gap-3 border-b border-border px-5 py-4">
-          <div className="space-y-0.5">
+        <header className="flex flex-wrap items-center justify-between gap-4 border-b border-border/40 bg-muted/5 px-6 py-4">
+          <div className="space-y-1">
             {title ? (
-              <h2 className="text-sm font-semibold text-foreground">{title}</h2>
+              <h2 className="text-sm font-bold text-foreground tracking-tight">{title}</h2>
             ) : null}
             {description ? (
-              <p className="text-xs text-muted-foreground">{description}</p>
+              <p className="text-[11px] text-muted-foreground leading-relaxed">{description}</p>
             ) : null}
           </div>
           {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
         </header>
       ) : null}
-      <div className={cn("px-5 py-4", contentClassName)}>{children}</div>
+      <div className={cn("px-6 py-5", contentClassName)}>{children}</div>
       {footer ? (
-        <footer className="border-t border-border bg-muted/40 px-5 py-3 text-xs text-muted-foreground">
+        <footer className="border-t border-border/40 bg-muted/20 px-6 py-4 text-[11px] text-muted-foreground/80 font-medium">
           {footer}
         </footer>
       ) : null}

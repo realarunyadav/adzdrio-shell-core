@@ -15,22 +15,22 @@ export function PageHeader({ title, description, eyebrow, actions, className }: 
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between",
+        "flex flex-col gap-5 border-b border-border/40 pb-8 sm:flex-row sm:items-end sm:justify-between",
         className,
       )}
     >
-      <div className="space-y-1">
+      <div className="space-y-2">
         {eyebrow ? (
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/80">
             {eyebrow}
           </p>
         ) : null}
-        <h1 className="text-2xl font-semibold text-foreground">{title}</h1>
+        <h1 className="text-3xl font-extrabold text-foreground tracking-tight m-0">{title}</h1>
         {description ? (
-          <p className="max-w-2xl text-sm text-muted-foreground">{description}</p>
+          <p className="max-w-2xl text-[15px] text-muted-foreground leading-relaxed">{description}</p>
         ) : null}
       </div>
-      {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
+      {actions ? <div className="flex flex-wrap items-center gap-3 animate-in fade-in slide-in-from-right-2 duration-500">{actions}</div> : null}
     </div>
   );
 }
