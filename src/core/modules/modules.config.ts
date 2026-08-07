@@ -1,4 +1,16 @@
-import { Users } from "lucide-react";
+import {
+  Building,
+  Calendar,
+  Globe,
+  Grid,
+  Hash,
+  Layout,
+  MapPin,
+  Palette,
+  ShieldCheck,
+  Users,
+} from "lucide-react";
+
 import { moduleRegistry } from "./registry";
 import type { ModuleDefinition, ModuleGroup } from "./types";
 
