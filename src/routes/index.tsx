@@ -88,9 +88,10 @@ function Index() {
               "block bg-card p-4 transition-colors hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
             return module.status === "available" ? (
-              <Link key={module.id} to="/settings" className={className}>
+              <Link key={module.id} to={module.basePath as any} className={className}>
                 {body}
               </Link>
+
             ) : (
               <Link
                 key={module.id}
