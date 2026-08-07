@@ -52,8 +52,9 @@ export const modules: ModuleDefinition[] = [
     icon: Building,
     group: "operations",
     order: 20,
-    status: "planned",
+    status: "available",
     basePath: "/modules/crm",
+    permission: "operations.crm.view",
   },
   {
     id: "projects",
