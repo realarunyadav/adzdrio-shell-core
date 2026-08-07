@@ -89,7 +89,7 @@ export function GlobalCommandPalette() {
           <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/modules/projects" }))}>
             <Briefcase className="mr-2 h-4 w-4" />
             <span>Enterprise PMO</span>
-          </GroupItem>
+          </CommandItem>
           <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/settings" }))}>
             <Settings className="mr-2 h-4 w-4" />
             <span>Platform Settings</span>
