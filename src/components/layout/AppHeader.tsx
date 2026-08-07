@@ -50,7 +50,7 @@ export function AppHeader() {
     .toUpperCase();
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-card px-3 sm:px-4">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border/50 glass-effect px-4 sm:px-6 premium-transition">
       <SidebarTrigger className="text-muted-foreground" />
       <Separator orientation="vertical" className="hidden h-5 sm:block" />
 
@@ -83,7 +83,7 @@ export function AppHeader() {
           <div className="hidden lg:block">
             <SearchBar 
               placeholder="Search ABOS (⌘K)" 
-              className="h-9 w-64"
+              className="h-10 w-72 glass-surface"
             />
           </div>
         ) : null}
