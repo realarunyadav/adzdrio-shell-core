@@ -43,7 +43,7 @@ export function AppHeader() {
 
   const initials = (principal?.displayName ?? "AB")
     .split(" ")
-    .map((part) => part[0])
+    .map((part: string) => part[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();
