@@ -808,6 +808,6 @@ const mockTimelineItems: TimelineItem[] = [
   }
 ];
 
-import { Heart, Mail, AlertCircle } from "lucide-react";
+// (Removed redundant duplicate imports)
 
 
