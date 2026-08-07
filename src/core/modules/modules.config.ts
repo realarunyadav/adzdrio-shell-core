@@ -1,25 +1,19 @@
 import {
-  BarChart3,
-  Boxes,
-  Building2,
-  Cpu,
-  FolderKanban,
-  LayoutDashboard,
-  Megaphone,
-  Settings,
+  Building,
+  Calendar,
+  Globe,
+  Grid,
+  Hash,
+  Layout,
+  MapPin,
+  Palette,
+  ShieldCheck,
   Users,
-  Wallet,
-  Workflow,
 } from "lucide-react";
 
 import { moduleRegistry } from "./registry";
 import type { ModuleDefinition, ModuleGroup } from "./types";
 
-/**
- * Module manifest. Registration metadata only — no business functionality is
- * implemented here. Modules flip from "planned" to "available" once their
- * routes exist.
- */
 export const moduleGroups: ModuleGroup[] = [
   { id: "platform", label: "Platform", order: 10 },
   { id: "operations", label: "Operations", order: 20 },
@@ -33,7 +27,7 @@ export const modules: ModuleDefinition[] = [
     id: "overview",
     name: "Overview",
     description: "Workspace entry point for the operating system.",
-    icon: LayoutDashboard,
+    icon: Layout,
     group: "platform",
     order: 10,
     status: "available",
@@ -41,10 +35,21 @@ export const modules: ModuleDefinition[] = [
     permission: "platform.dashboard.view",
   },
   {
+    id: "organization",
+    name: "Organization",
+    description: "Configure business foundation, hierarchy and branding.",
+    icon: Building,
+    group: "platform",
+    order: 15,
+    status: "available",
+    basePath: "/modules/organization",
+    permission: "platform.organization.view",
+  },
+  {
     id: "crm",
     name: "CRM",
     description: "Customer relationships, pipeline and revenue operations.",
-    icon: Building2,
+    icon: Building,
     group: "operations",
     order: 20,
     status: "planned",
@@ -54,7 +59,7 @@ export const modules: ModuleDefinition[] = [
     id: "projects",
     name: "Projects",
     description: "Delivery planning, execution and resource allocation.",
-    icon: FolderKanban,
+    icon: Grid,
     group: "operations",
     order: 30,
     status: "planned",
@@ -64,7 +69,7 @@ export const modules: ModuleDefinition[] = [
     id: "inventory",
     name: "Inventory",
     description: "Stock, procurement and asset tracking.",
-    icon: Boxes,
+    icon: Grid,
     group: "operations",
     order: 40,
     status: "planned",
@@ -84,7 +89,7 @@ export const modules: ModuleDefinition[] = [
     id: "finance",
     name: "Finance",
     description: "Accounting, invoicing and financial controls.",
-    icon: Wallet,
+    icon: ShieldCheck,
     group: "finance",
     order: 60,
     status: "planned",
@@ -94,7 +99,7 @@ export const modules: ModuleDefinition[] = [
     id: "marketing",
     name: "Marketing",
     description: "Campaign planning, channels and attribution.",
-    icon: Megaphone,
+    icon: Globe,
     group: "operations",
     order: 70,
     status: "planned",
@@ -104,7 +109,7 @@ export const modules: ModuleDefinition[] = [
     id: "analytics",
     name: "Analytics",
     description: "Cross-module reporting and business intelligence.",
-    icon: BarChart3,
+    icon: Hash,
     group: "intelligence",
     order: 80,
     status: "planned",
@@ -114,7 +119,7 @@ export const modules: ModuleDefinition[] = [
     id: "automation",
     name: "Automation",
     description: "Workflow orchestration and business rules.",
-    icon: Workflow,
+    icon: Calendar,
     group: "intelligence",
     order: 90,
     status: "planned",
@@ -124,7 +129,7 @@ export const modules: ModuleDefinition[] = [
     id: "ai",
     name: "AI Studio",
     description: "Assistants, agents and AI-native operations.",
-    icon: Cpu,
+    icon: Palette,
     group: "intelligence",
     order: 100,
     status: "planned",
@@ -134,7 +139,7 @@ export const modules: ModuleDefinition[] = [
     id: "settings",
     name: "Settings",
     description: "Organisation configuration, roles and module control.",
-    icon: Settings,
+    icon: Palette,
     group: "platform",
     order: 110,
     status: "available",
@@ -145,7 +150,6 @@ export const modules: ModuleDefinition[] = [
 
 let bootstrapped = false;
 
-/** Idempotent registration entry point, invoked once by the app shell. */
 export function bootstrapModules(): void {
   if (bootstrapped) return;
   bootstrapped = true;
