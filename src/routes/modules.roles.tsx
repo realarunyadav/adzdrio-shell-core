@@ -96,9 +96,9 @@ function RolesManagementModule() {
       />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <StatsCard title="Total Roles" value="0" icon={Shield} />
-        <StatsCard title="System Roles" value="0" icon={Lock} />
-        <StatsCard title="Custom Roles" value="0" icon={Layers} />
+        <StatsCard title="Total Roles" value="8" icon={Shield} />
+        <StatsCard title="System Roles" value="4" icon={Lock} />
+        <StatsCard title="Custom Roles" value="4" icon={Layers} />
       </div>
 
       <SectionCard
@@ -132,17 +132,23 @@ function RolesManagementModule() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow>
-                <TableCell colSpan={5} className="h-[400px]">
-                  <EmptyState
-                    icon={ShieldCheck}
-                    title="No roles defined"
-                    description="Roles allow you to group permissions and assign them to users."
-                    className="surface-none border-none shadow-none"
-                    action={<CreateRoleDialog />}
-                  />
-                </TableCell>
-              </TableRow>
+              {[
+                { name: "Super Administrator", status: "Active", type: "System", users: 2 },
+                { name: "Executive Manager", status: "Active", type: "System", users: 5 },
+                { name: "Department Head", status: "Active", type: "System", users: 12 },
+                { name: "Standard Member", status: "Active", type: "System", users: 84 },
+                { name: "External Vendor", status: "Active", type: "Custom", users: 15 },
+              ].map((role) => (
+                <TableRow key={role.name} className="hover:bg-muted/5 group cursor-pointer">
+                  <TableCell className="font-bold">{role.name}</TableCell>
+                  <TableCell><StatusBadge tone="success">{role.status}</StatusBadge></TableCell>
+                  <TableCell><Badge variant="outline" className="rounded-sm font-bold text-[10px] uppercase">{role.type}</Badge></TableCell>
+                  <TableCell className="text-xs font-medium">{role.users} Users</TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="ghost" size="icon" className="size-8"><MoreHorizontal className="size-4" /></Button>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>

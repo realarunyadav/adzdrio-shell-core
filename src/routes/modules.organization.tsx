@@ -86,11 +86,11 @@ function OrganizationModule() {
 
       {/* Organization Health Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        <HealthCard title="Branches" value="--" icon={MapPin} />
-        <HealthCard title="Departments" value="--" icon={Building2} />
-        <HealthCard title="Teams" value="--" icon={Grid} />
-        <HealthCard title="Employees" value="--" icon={Users} />
-        <HealthCard title="Active Modules" value="--" icon={Layers} />
+        <HealthCard title="Branches" value="1" icon={MapPin} />
+        <HealthCard title="Departments" value="5" icon={Building2} />
+        <HealthCard title="Teams" value="12" icon={Grid} />
+        <HealthCard title="Employees" value="124" icon={Users} />
+        <HealthCard title="Active Modules" value="8" icon={Layers} />
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
@@ -273,10 +273,10 @@ function OrganizationModule() {
                   <div className="space-y-1.5">
                     <div className="flex justify-between text-[11px]">
                       <span className="text-muted-foreground">User Licenses</span>
-                      <span>0 / 50</span>
+                      <span>124 / 500</span>
                     </div>
                     <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
-                      <div className="h-full w-0 bg-primary" />
+                      <div className="h-full bg-primary" style={{ width: '25%' }} />
                     </div>
                   </div>
                 </div>
