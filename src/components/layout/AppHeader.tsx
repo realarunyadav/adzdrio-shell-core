@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 
 import { Bell, Command as CommandIcon, Moon, Search, Sun, Zap } from "lucide-react";
