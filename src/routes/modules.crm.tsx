@@ -104,6 +104,8 @@ import { UniversalFileManager } from "@/components/shared/UniversalFileManager";
 import { UniversalComments } from "@/components/shared/UniversalComments";
 import { UniversalAuditLog } from "@/components/shared/UniversalAuditLog";
 import { UniversalTag } from "@/components/shared/UniversalTag";
+import { Customer360View } from "@/components/crm/Customer360View";
+import { RapidConfirmationManager } from "@/components/crm/RapidConfirmationManager";
 import { leadsService } from "@/lib/api/services";
 
 export const Route = createFileRoute("/modules/crm")({
@@ -356,6 +358,10 @@ function SalesCRMModule() {
           <Customer360View />
         </TabsContent>
 
+        <TabsContent value="rapid-leads" className="mt-0 outline-none">
+          <RapidConfirmationManager />
+        </TabsContent>
+
         <TabsContent value="renewals" className="mt-0 outline-none">
           <RenewalCenter />
         </TabsContent>
@@ -550,7 +556,7 @@ function AddLeadDialog() {
   );
 }
 
-function Customer360View() {
+function OldCustomer360View() {
   const [selectedCustomer, setSelectedCustomer] = React.useState<string | null>("cust-1");
 
   if (!selectedCustomer) {
@@ -854,6 +860,6 @@ const mockTimelineItems: TimelineItem[] = [
   }
 ];
 
-// (Removed redundant duplicate imports)
+// Components moved to separate files for better maintainability.
 
 

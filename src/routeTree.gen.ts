@@ -38,6 +38,7 @@ import { Route as SettingsAuditRouteImport } from './routes/settings.audit'
 import { Route as SettingsSecurityRouteImport } from './routes/settings.security'
 import { Route as ModulesCrmProspectRouteImport } from './routes/modules/crm/prospect'
 import { Route as ModulesHrmsEmployeeRouteImport } from './routes/modules/hrms/employee'
+import { Route as PublicConfirmationsTokenRouteImport } from './routes/public.confirmations.$token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -184,6 +185,12 @@ const ModulesHrmsEmployeeRoute = ModulesHrmsEmployeeRouteImport.update({
   path: '/employee',
   getParentRoute: () => ModulesHrmsRoute,
 } as any)
+const PublicConfirmationsTokenRoute =
+  PublicConfirmationsTokenRouteImport.update({
+    id: '/public/confirmations/$token',
+    path: '/public/confirmations/$token',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -215,6 +222,7 @@ export interface FileRoutesByFullPath {
   '/settings/security': typeof SettingsSecurityRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
+  '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -246,6 +254,7 @@ export interface FileRoutesByTo {
   '/settings/security': typeof SettingsSecurityRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
+  '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -278,6 +287,7 @@ export interface FileRoutesById {
   '/settings/security': typeof SettingsSecurityRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
+  '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -311,6 +321,7 @@ export interface FileRouteTypes {
     | '/settings/security'
     | '/modules/crm/prospect'
     | '/modules/hrms/employee'
+    | '/public/confirmations/$token'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -342,6 +353,7 @@ export interface FileRouteTypes {
     | '/settings/security'
     | '/modules/crm/prospect'
     | '/modules/hrms/employee'
+    | '/public/confirmations/$token'
   id:
     | '__root__'
     | '/'
@@ -373,6 +385,7 @@ export interface FileRouteTypes {
     | '/settings/security'
     | '/modules/crm/prospect'
     | '/modules/hrms/employee'
+    | '/public/confirmations/$token'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -401,6 +414,7 @@ export interface RootRouteChildren {
   PlatformActivityRoute: typeof PlatformActivityRoute
   PlatformAutomationRoute: typeof PlatformAutomationRoute
   PlatformDataCenterRoute: typeof PlatformDataCenterRoute
+  PublicConfirmationsTokenRoute: typeof PublicConfirmationsTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -608,6 +622,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesHrmsEmployeeRouteImport
       parentRoute: typeof ModulesHrmsRoute
     }
+    '/public/confirmations/$token': {
+      id: '/public/confirmations/$token'
+      path: '/public/confirmations/$token'
+      fullPath: '/public/confirmations/$token'
+      preLoaderRoute: typeof PublicConfirmationsTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -675,6 +696,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlatformActivityRoute: PlatformActivityRoute,
   PlatformAutomationRoute: PlatformAutomationRoute,
   PlatformDataCenterRoute: PlatformDataCenterRoute,
+  PublicConfirmationsTokenRoute: PublicConfirmationsTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
