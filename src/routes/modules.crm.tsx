@@ -356,6 +356,10 @@ function SalesCRMModule() {
           <Customer360View />
         </TabsContent>
 
+        <TabsContent value="rapid-leads" className="mt-0 outline-none">
+          <RapidConfirmationManager />
+        </TabsContent>
+
         <TabsContent value="renewals" className="mt-0 outline-none">
           <RenewalCenter />
         </TabsContent>
