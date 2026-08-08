@@ -200,7 +200,7 @@ export const customerService = {
 };
 
 export const subscriptionService = {
-  getAll: (customerId?: string) => api.get<Subscription[]>(`/subscriptions`, customerId ? { params: { customerId } } : undefined),
+  getAll: (customerId?: string) => api.get<Subscription[]>(`/subscriptions${customerId ? `?customerId=${customerId}` : ''}`),
   getRenewalOffers: (subscriptionId: string) => api.get<any[]>(`/subscriptions/${subscriptionId}/renewal-offers`),
   processRenewal: (data: Partial<Renewal>) => api.post<Renewal>("/renewals", data),
 };
