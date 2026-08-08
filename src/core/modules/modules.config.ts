@@ -26,6 +26,17 @@ export const moduleGroups: ModuleGroup[] = [
 
 export const modules: ModuleDefinition[] = [
   {
+    id: "founder",
+    name: "Founder OS",
+    description: "Executive cockpit for real-time strategic intelligence.",
+    icon: ShieldCheck,
+    group: "platform",
+    order: 5,
+    status: "available",
+    basePath: "/modules/founder",
+    permission: "platform.founder.view",
+  },
+  {
     id: "overview",
     name: "Overview",
     description: "Workspace entry point for the operating system.",

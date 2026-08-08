@@ -18,6 +18,7 @@ import { Route as ModulesAiRouteImport } from './routes/modules.ai'
 import { Route as ModulesCrmRouteImport } from './routes/modules.crm'
 import { Route as ModulesEmployeesRouteImport } from './routes/modules.employees'
 import { Route as ModulesFinanceRouteImport } from './routes/modules.finance'
+import { Route as ModulesFounderRouteImport } from './routes/modules.founder'
 import { Route as ModulesHrmsRouteImport } from './routes/modules.hrms'
 import { Route as ModulesInventoryRouteImport } from './routes/modules.inventory'
 import { Route as ModulesLeadsRouteImport } from './routes/modules.leads'
@@ -72,6 +73,11 @@ const ModulesEmployeesRoute = ModulesEmployeesRouteImport.update({
 const ModulesFinanceRoute = ModulesFinanceRouteImport.update({
   id: '/modules/finance',
   path: '/modules/finance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModulesFounderRoute = ModulesFounderRouteImport.update({
+  id: '/modules/founder',
+  path: '/modules/founder',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ModulesHrmsRoute = ModulesHrmsRouteImport.update({
@@ -135,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
+  '/modules/founder': typeof ModulesFounderRoute
   '/modules/hrms': typeof ModulesHrmsRouteWithChildren
   '/modules/inventory': typeof ModulesInventoryRoute
   '/modules/leads': typeof ModulesLeadsRoute
@@ -156,6 +163,7 @@ export interface FileRoutesByTo {
   '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
+  '/modules/founder': typeof ModulesFounderRoute
   '/modules/hrms': typeof ModulesHrmsRouteWithChildren
   '/modules/inventory': typeof ModulesInventoryRoute
   '/modules/leads': typeof ModulesLeadsRoute
@@ -178,6 +186,7 @@ export interface FileRoutesById {
   '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
+  '/modules/founder': typeof ModulesFounderRoute
   '/modules/hrms': typeof ModulesHrmsRouteWithChildren
   '/modules/inventory': typeof ModulesInventoryRoute
   '/modules/leads': typeof ModulesLeadsRoute
@@ -201,6 +210,7 @@ export interface FileRouteTypes {
     | '/modules/crm'
     | '/modules/employees'
     | '/modules/finance'
+    | '/modules/founder'
     | '/modules/hrms'
     | '/modules/inventory'
     | '/modules/leads'
@@ -222,6 +232,7 @@ export interface FileRouteTypes {
     | '/modules/crm'
     | '/modules/employees'
     | '/modules/finance'
+    | '/modules/founder'
     | '/modules/hrms'
     | '/modules/inventory'
     | '/modules/leads'
@@ -243,6 +254,7 @@ export interface FileRouteTypes {
     | '/modules/crm'
     | '/modules/employees'
     | '/modules/finance'
+    | '/modules/founder'
     | '/modules/hrms'
     | '/modules/inventory'
     | '/modules/leads'
@@ -265,6 +277,7 @@ export interface RootRouteChildren {
   ModulesCrmRoute: typeof ModulesCrmRouteWithChildren
   ModulesEmployeesRoute: typeof ModulesEmployeesRoute
   ModulesFinanceRoute: typeof ModulesFinanceRoute
+  ModulesFounderRoute: typeof ModulesFounderRoute
   ModulesHrmsRoute: typeof ModulesHrmsRouteWithChildren
   ModulesInventoryRoute: typeof ModulesInventoryRoute
   ModulesLeadsRoute: typeof ModulesLeadsRoute
@@ -338,6 +351,13 @@ declare module '@tanstack/react-router' {
       path: '/modules/finance'
       fullPath: '/modules/finance'
       preLoaderRoute: typeof ModulesFinanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/modules/founder': {
+      id: '/modules/founder'
+      path: '/modules/founder'
+      fullPath: '/modules/founder'
+      preLoaderRoute: typeof ModulesFounderRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/modules/hrms': {
@@ -447,6 +467,7 @@ const rootRouteChildren: RootRouteChildren = {
   ModulesCrmRoute: ModulesCrmRouteWithChildren,
   ModulesEmployeesRoute: ModulesEmployeesRoute,
   ModulesFinanceRoute: ModulesFinanceRoute,
+  ModulesFounderRoute: ModulesFounderRoute,
   ModulesHrmsRoute: ModulesHrmsRouteWithChildren,
   ModulesInventoryRoute: ModulesInventoryRoute,
   ModulesLeadsRoute: ModulesLeadsRoute,
@@ -459,13 +480,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
