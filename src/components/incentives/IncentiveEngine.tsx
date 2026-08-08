@@ -30,7 +30,7 @@ export function IncentiveEngine() {
   if (!activeProgram || !myAchievement) return null;
   
   // Calculate progress
-  const target = activeProgram.rules[0].target;
+  const target = activeProgram.rules[0]?.target || 0;
   const current = myAchievement.value;
   const progress = Math.min((current / target) * 100, 100);
   const remaining = Math.max(target - current, 0);
@@ -136,7 +136,7 @@ export function IncentiveEngine() {
                 <div className="space-y-4 pt-6">
                   <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Incentive Rules Matrix</h4>
                   <div className="space-y-2">
-                    {activeProgram.rules[0].thresholds.map((t, idx) => (
+                    {activeProgram.rules[0]?.thresholds.map((t, idx) => (
                       <div key={idx} className={cn(
                         "flex items-center justify-between p-3 rounded-lg border transition-all",
                         current >= t.min ? "bg-success/5 border-success/20" : "bg-muted/5 border-border/40 opacity-60"
