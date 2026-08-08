@@ -16,7 +16,7 @@ export function PaymentManagement() {
     switch (status.toLowerCase()) {
       case 'verified': return 'success';
       case 'pending': return 'warning';
-      case 'rejected': return 'destructive';
+      case 'rejected': return 'danger';
       default: return 'neutral';
     }
   };
