@@ -88,7 +88,7 @@ export const BusinessBrief: React.FC = () => {
       <div className="lg:col-span-4">
         <SectionCard 
           title="AI Executive Interpretation"
-          icon={<Sparkles className="size-4 text-primary" />}
+          actions={<Sparkles className="size-4 text-primary" />}
           className="h-full border-primary/20"
         >
           <div className="space-y-6">
