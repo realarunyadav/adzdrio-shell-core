@@ -104,6 +104,8 @@ import { UniversalFileManager } from "@/components/shared/UniversalFileManager";
 import { UniversalComments } from "@/components/shared/UniversalComments";
 import { UniversalAuditLog } from "@/components/shared/UniversalAuditLog";
 import { UniversalTag } from "@/components/shared/UniversalTag";
+import { Customer360View } from "@/components/crm/Customer360View";
+import { RapidConfirmationManager } from "@/components/crm/RapidConfirmationManager";
 import { leadsService } from "@/lib/api/services";
 
 export const Route = createFileRoute("/modules/crm")({
