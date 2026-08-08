@@ -32,6 +32,7 @@ import { Route as ModulesRolesRouteImport } from './routes/modules.roles'
 import { Route as ModulesSupportRouteImport } from './routes/modules.support'
 import { Route as ModulesUsersRouteImport } from './routes/modules.users'
 import { Route as PlatformActivityRouteImport } from './routes/platform.activity'
+import { Route as PlatformDataCenterRouteImport } from './routes/platform.data-center'
 import { Route as SettingsAuditRouteImport } from './routes/settings.audit'
 import { Route as SettingsSecurityRouteImport } from './routes/settings.security'
 import { Route as ModulesCrmProspectRouteImport } from './routes/modules/crm/prospect'
@@ -152,6 +153,11 @@ const PlatformActivityRoute = PlatformActivityRouteImport.update({
   path: '/platform/activity',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlatformDataCenterRoute = PlatformDataCenterRouteImport.update({
+  id: '/platform/data-center',
+  path: '/platform/data-center',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsAuditRoute = SettingsAuditRouteImport.update({
   id: '/audit',
   path: '/audit',
@@ -197,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/platform/activity': typeof PlatformActivityRoute
+  '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
@@ -226,6 +233,7 @@ export interface FileRoutesByTo {
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/platform/activity': typeof PlatformActivityRoute
+  '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
@@ -256,6 +264,7 @@ export interface FileRoutesById {
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/platform/activity': typeof PlatformActivityRoute
+  '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
@@ -287,6 +296,7 @@ export interface FileRouteTypes {
     | '/modules/support'
     | '/modules/users'
     | '/platform/activity'
+    | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
     | '/modules/crm/prospect'
@@ -316,6 +326,7 @@ export interface FileRouteTypes {
     | '/modules/support'
     | '/modules/users'
     | '/platform/activity'
+    | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
     | '/modules/crm/prospect'
@@ -345,6 +356,7 @@ export interface FileRouteTypes {
     | '/modules/support'
     | '/modules/users'
     | '/platform/activity'
+    | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
     | '/modules/crm/prospect'
@@ -375,6 +387,7 @@ export interface RootRouteChildren {
   ModulesSupportRoute: typeof ModulesSupportRoute
   ModulesUsersRoute: typeof ModulesUsersRoute
   PlatformActivityRoute: typeof PlatformActivityRoute
+  PlatformDataCenterRoute: typeof PlatformDataCenterRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -540,6 +553,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlatformActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/platform/data-center': {
+      id: '/platform/data-center'
+      path: '/platform/data-center'
+      fullPath: '/platform/data-center'
+      preLoaderRoute: typeof PlatformDataCenterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings/audit': {
       id: '/settings/audit'
       path: '/audit'
@@ -633,6 +653,7 @@ const rootRouteChildren: RootRouteChildren = {
   ModulesSupportRoute: ModulesSupportRoute,
   ModulesUsersRoute: ModulesUsersRoute,
   PlatformActivityRoute: PlatformActivityRoute,
+  PlatformDataCenterRoute: PlatformDataCenterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
