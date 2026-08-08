@@ -556,7 +556,7 @@ function AddLeadDialog() {
   );
 }
 
-function Customer360View() {
+function OldCustomer360View() {
   const [selectedCustomer, setSelectedCustomer] = React.useState<string | null>("cust-1");
 
   if (!selectedCustomer) {
