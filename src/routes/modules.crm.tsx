@@ -860,6 +860,6 @@ const mockTimelineItems: TimelineItem[] = [
   }
 ];
 
-// (Removed redundant duplicate imports)
+// Components moved to separate files for better maintainability.
 
 
