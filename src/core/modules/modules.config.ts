@@ -195,6 +195,17 @@ export const modules: ModuleDefinition[] = [
     permission: "platform.roles.view",
   },
   {
+    id: "admin",
+    name: "Admin Studio",
+    description: "Centralized no-code configuration, module management and workflows.",
+    icon: ShieldCheck,
+    group: "platform",
+    order: 106,
+    status: "available",
+    basePath: "/modules/admin",
+    permission: "platform.admin.view",
+  },
+  {
     id: "settings",
     name: "Settings",
     description: "Organisation configuration, roles and module control.",
