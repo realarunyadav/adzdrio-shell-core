@@ -19,7 +19,7 @@ export function InvoiceManagement() {
     switch (status.toLowerCase()) {
       case 'paid': return 'success';
       case 'pending': return 'warning';
-      case 'overdue': return 'destructive';
+      case 'overdue': return 'danger';
       case 'sent': return 'info';
       default: return 'neutral';
     }
