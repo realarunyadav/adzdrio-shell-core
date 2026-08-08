@@ -19,7 +19,7 @@ function RapidConfirmationPage() {
   const [loading, setLoading] = React.useState(true);
   const [submitting, setSubmitting] = React.useState(false);
   const [lead, setLead] = React.useState<RapidLead | null>(null);
-  const [policies, setPolicies] = React.useState<{ tc?: PolicyVersion; refund?: PolicyVersion }>({});
+  const [policies, setPolicies] = React.useState<{ tc?: PolicyVersion | undefined; refund?: PolicyVersion | undefined }>({});
   const [error, setError] = React.useState<string | null>(null);
   const [status, setStatus] = React.useState<'idle' | 'success' | 'declined'>('idle');
   const [declineReason, setDeclineReason] = React.useState('');
@@ -390,4 +390,4 @@ function RapidConfirmationPage() {
 }
 
 // Re-using Tabs from UI for the public page to avoid duplication, assuming they are available
-import { TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
