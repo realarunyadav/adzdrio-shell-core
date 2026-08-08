@@ -272,6 +272,17 @@ export const modules: ModuleDefinition[] = [
     basePath: "/settings/security",
     permission: "platform.security.view",
   },
+  {
+    id: "communication",
+    name: "Comm Center",
+    description: "Enterprise communication hub: Email, Templates, and Mailbox management.",
+    icon: Mail,
+    group: "platform",
+    order: 140,
+    status: "available",
+    basePath: "/communication",
+    permission: "communication.view",
+  },
 ];
 
 let bootstrapped = false;
