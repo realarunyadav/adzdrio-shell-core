@@ -12,7 +12,8 @@ import {
   Rocket,
   LifeBuoy,
   RefreshCw,
-  UserCircle
+  UserCircle,
+  Mail
 } from "lucide-react";
 
 import { moduleRegistry } from "./registry";
@@ -271,6 +272,17 @@ export const modules: ModuleDefinition[] = [
     status: "available",
     basePath: "/settings/security",
     permission: "platform.security.view",
+  },
+  {
+    id: "communication",
+    name: "Comm Center",
+    description: "Enterprise communication hub: Email, Templates, and Mailbox management.",
+    icon: Mail,
+    group: "platform",
+    order: 140,
+    status: "available",
+    basePath: "/communication",
+    permission: "communication.view",
   },
 ];
 

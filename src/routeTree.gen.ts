@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CommunicationRouteImport } from './routes/communication'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as CustomerPortalRouteImport } from './routes/customer.portal'
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
@@ -38,6 +39,11 @@ import { Route as ModulesHrmsEmployeeRouteImport } from './routes/modules/hrms/e
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunicationRoute = CommunicationRouteImport.update({
+  id: '/communication',
+  path: '/communication',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -163,6 +169,7 @@ const ModulesHrmsEmployeeRoute = ModulesHrmsEmployeeRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/communication': typeof CommunicationRoute
   '/settings': typeof SettingsRouteWithChildren
   '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/communication': typeof CommunicationRoute
   '/settings': typeof SettingsRouteWithChildren
   '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
@@ -218,6 +226,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/communication': typeof CommunicationRoute
   '/settings': typeof SettingsRouteWithChildren
   '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
@@ -247,6 +256,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/communication'
     | '/settings'
     | '/customer/portal'
     | '/modules/$moduleId'
@@ -274,6 +284,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/communication'
     | '/settings'
     | '/customer/portal'
     | '/modules/$moduleId'
@@ -301,6 +312,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/communication'
     | '/settings'
     | '/customer/portal'
     | '/modules/$moduleId'
@@ -329,6 +341,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CommunicationRoute: typeof CommunicationRoute
   SettingsRoute: typeof SettingsRouteWithChildren
   CustomerPortalRoute: typeof CustomerPortalRoute
   ModulesModuleIdRoute: typeof ModulesModuleIdRoute
@@ -358,6 +371,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/communication': {
+      id: '/communication'
+      path: '/communication'
+      fullPath: '/communication'
+      preLoaderRoute: typeof CommunicationRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -571,6 +591,7 @@ const ModulesHrmsRouteWithChildren = ModulesHrmsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CommunicationRoute: CommunicationRoute,
   SettingsRoute: SettingsRouteWithChildren,
   CustomerPortalRoute: CustomerPortalRoute,
   ModulesModuleIdRoute: ModulesModuleIdRoute,
