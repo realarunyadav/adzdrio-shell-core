@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as CustomerPortalRouteImport } from './routes/customer.portal'
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
 import { Route as ModulesActivationRouteImport } from './routes/modules.activation'
 import { Route as ModulesAdminRouteImport } from './routes/modules.admin'
@@ -24,6 +25,7 @@ import { Route as ModulesInventoryRouteImport } from './routes/modules.inventory
 import { Route as ModulesLeadsRouteImport } from './routes/modules.leads'
 import { Route as ModulesOrganizationRouteImport } from './routes/modules.organization'
 import { Route as ModulesProjectsRouteImport } from './routes/modules.projects'
+import { Route as ModulesRenewalsRouteImport } from './routes/modules.renewals'
 import { Route as ModulesRolesRouteImport } from './routes/modules.roles'
 import { Route as ModulesSupportRouteImport } from './routes/modules.support'
 import { Route as ModulesUsersRouteImport } from './routes/modules.users'
@@ -38,6 +40,11 @@ const IndexRoute = IndexRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomerPortalRoute = CustomerPortalRouteImport.update({
+  id: '/customer/portal',
+  path: '/customer/portal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ModulesModuleIdRoute = ModulesModuleIdRouteImport.update({
@@ -105,6 +112,11 @@ const ModulesProjectsRoute = ModulesProjectsRouteImport.update({
   path: '/modules/projects',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ModulesRenewalsRoute = ModulesRenewalsRouteImport.update({
+  id: '/modules/renewals',
+  path: '/modules/renewals',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ModulesRolesRoute = ModulesRolesRouteImport.update({
   id: '/modules/roles',
   path: '/modules/roles',
@@ -134,6 +146,7 @@ const ModulesHrmsEmployeeRoute = ModulesHrmsEmployeeRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/settings': typeof SettingsRoute
+  '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
   '/modules/admin': typeof ModulesAdminRoute
@@ -147,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/modules/leads': typeof ModulesLeadsRoute
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/projects': typeof ModulesProjectsRoute
+  '/modules/renewals': typeof ModulesRenewalsRoute
   '/modules/roles': typeof ModulesRolesRoute
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
@@ -156,6 +170,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/settings': typeof SettingsRoute
+  '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
   '/modules/admin': typeof ModulesAdminRoute
@@ -169,6 +184,7 @@ export interface FileRoutesByTo {
   '/modules/leads': typeof ModulesLeadsRoute
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/projects': typeof ModulesProjectsRoute
+  '/modules/renewals': typeof ModulesRenewalsRoute
   '/modules/roles': typeof ModulesRolesRoute
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
@@ -179,6 +195,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/settings': typeof SettingsRoute
+  '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
   '/modules/admin': typeof ModulesAdminRoute
@@ -192,6 +209,7 @@ export interface FileRoutesById {
   '/modules/leads': typeof ModulesLeadsRoute
   '/modules/organization': typeof ModulesOrganizationRoute
   '/modules/projects': typeof ModulesProjectsRoute
+  '/modules/renewals': typeof ModulesRenewalsRoute
   '/modules/roles': typeof ModulesRolesRoute
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
@@ -203,6 +221,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/settings'
+    | '/customer/portal'
     | '/modules/$moduleId'
     | '/modules/activation'
     | '/modules/admin'
@@ -216,6 +235,7 @@ export interface FileRouteTypes {
     | '/modules/leads'
     | '/modules/organization'
     | '/modules/projects'
+    | '/modules/renewals'
     | '/modules/roles'
     | '/modules/support'
     | '/modules/users'
@@ -225,6 +245,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/settings'
+    | '/customer/portal'
     | '/modules/$moduleId'
     | '/modules/activation'
     | '/modules/admin'
@@ -238,6 +259,7 @@ export interface FileRouteTypes {
     | '/modules/leads'
     | '/modules/organization'
     | '/modules/projects'
+    | '/modules/renewals'
     | '/modules/roles'
     | '/modules/support'
     | '/modules/users'
@@ -247,6 +269,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/settings'
+    | '/customer/portal'
     | '/modules/$moduleId'
     | '/modules/activation'
     | '/modules/admin'
@@ -260,6 +283,7 @@ export interface FileRouteTypes {
     | '/modules/leads'
     | '/modules/organization'
     | '/modules/projects'
+    | '/modules/renewals'
     | '/modules/roles'
     | '/modules/support'
     | '/modules/users'
@@ -270,6 +294,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SettingsRoute: typeof SettingsRoute
+  CustomerPortalRoute: typeof CustomerPortalRoute
   ModulesModuleIdRoute: typeof ModulesModuleIdRoute
   ModulesActivationRoute: typeof ModulesActivationRoute
   ModulesAdminRoute: typeof ModulesAdminRoute
@@ -283,6 +308,7 @@ export interface RootRouteChildren {
   ModulesLeadsRoute: typeof ModulesLeadsRoute
   ModulesOrganizationRoute: typeof ModulesOrganizationRoute
   ModulesProjectsRoute: typeof ModulesProjectsRoute
+  ModulesRenewalsRoute: typeof ModulesRenewalsRoute
   ModulesRolesRoute: typeof ModulesRolesRoute
   ModulesSupportRoute: typeof ModulesSupportRoute
   ModulesUsersRoute: typeof ModulesUsersRoute
@@ -302,6 +328,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customer/portal': {
+      id: '/customer/portal'
+      path: '/customer/portal'
+      fullPath: '/customer/portal'
+      preLoaderRoute: typeof CustomerPortalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/modules/$moduleId': {
@@ -395,6 +428,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesProjectsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/modules/renewals': {
+      id: '/modules/renewals'
+      path: '/modules/renewals'
+      fullPath: '/modules/renewals'
+      preLoaderRoute: typeof ModulesRenewalsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/modules/roles': {
       id: '/modules/roles'
       path: '/modules/roles'
@@ -460,6 +500,7 @@ const ModulesHrmsRouteWithChildren = ModulesHrmsRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SettingsRoute: SettingsRoute,
+  CustomerPortalRoute: CustomerPortalRoute,
   ModulesModuleIdRoute: ModulesModuleIdRoute,
   ModulesActivationRoute: ModulesActivationRoute,
   ModulesAdminRoute: ModulesAdminRoute,
@@ -473,6 +514,7 @@ const rootRouteChildren: RootRouteChildren = {
   ModulesLeadsRoute: ModulesLeadsRoute,
   ModulesOrganizationRoute: ModulesOrganizationRoute,
   ModulesProjectsRoute: ModulesProjectsRoute,
+  ModulesRenewalsRoute: ModulesRenewalsRoute,
   ModulesRolesRoute: ModulesRolesRoute,
   ModulesSupportRoute: ModulesSupportRoute,
   ModulesUsersRoute: ModulesUsersRoute,
@@ -480,3 +522,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
