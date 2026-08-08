@@ -4,6 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminStudioHome } from "@/components/admin-studio/AdminStudioHome";
 import { ModuleManagement } from "@/components/admin-studio/ModuleManagement";
 import { CRMBuilder } from "@/components/admin-studio/CRMBuilder";
+import { WorkflowBuilder } from "@/components/admin-studio/WorkflowBuilder";
+import { BrandingBuilder } from "@/components/admin-studio/BrandingBuilder";
 import { LayoutGrid, Database, Layers, GitBranch, Settings } from "lucide-react";
 
 export const Route = createFileRoute("/modules/admin")({
@@ -48,14 +50,10 @@ function AdminStudioModule() {
           <CRMBuilder />
         </TabsContent>
         <TabsContent value="workflows" className="pt-6">
-          <div className="flex items-center justify-center h-[400px] border-2 border-dashed rounded-lg border-muted">
-            <p className="text-muted-foreground">Workflow Builder component under construction.</p>
-          </div>
+          <WorkflowBuilder />
         </TabsContent>
         <TabsContent value="branding" className="pt-6">
-          <div className="flex items-center justify-center h-[400px] border-2 border-dashed rounded-lg border-muted">
-            <p className="text-muted-foreground">Branding Builder component under construction.</p>
-          </div>
+          <BrandingBuilder />
         </TabsContent>
       </Tabs>
     </div>
