@@ -154,6 +154,7 @@ function SalesCRMModule() {
           <CRMTabTrigger value="leads" label="Leads" icon={Target} />
           <CRMTabTrigger value="pipeline" label="Pipeline" icon={Kanban} />
           <CRMTabTrigger value="customers" label="Customer 360" icon={Users} />
+          <CRMTabTrigger value="rapid-leads" label="Rapid Confirmation" icon={Zap} />
           <CRMTabTrigger value="renewals" label="Renewal Center" icon={History} />
           <CRMTabTrigger value="activities" label="Activity Hub" icon={CheckSquare} />
           <CRMTabTrigger value="performance" label="Performance" icon={TrendingUp} />
