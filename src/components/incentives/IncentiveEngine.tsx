@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Trophy, 
   Target, 
@@ -11,7 +11,9 @@ import {
   Settings,
   History,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Loader2,
+  Database
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
@@ -20,14 +22,71 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { mockPrograms, mockAchievements } from "./mockData";
 import { cn } from "@/lib/utils";
+import { incentiveService } from "@/lib/api/services";
 
 export function IncentiveEngine() {
-  const activeProgram = mockPrograms[0];
-  const myAchievement = mockAchievements[0];
+  const [programs, setPrograms] = useState<any[]>([]);
+  const [achievements, setAchievements] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        const [progData, achData] = await Promise.all([
+          incentiveService.getPrograms(),
+          incentiveService.getAchievements()
+        ]);
+        setPrograms(progData);
+        setAchievements(achData);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] text-muted-foreground animate-pulse">
+        <Loader2 className="size-8 mb-4 animate-spin opacity-20" />
+        <p className="text-sm font-medium">Accessing Incentive Records...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] p-8 text-destructive border border-destructive/20 rounded-xl bg-destructive/5">
+        <Database className="size-8 mb-4 opacity-20" />
+        <h3 className="text-lg font-bold">Backend Required</h3>
+        <p className="text-sm opacity-70 mt-2 max-w-sm text-center">
+          The Incentive Engine requires a secure connection to the NestJS backend for real-time achievement calculation.
+        </p>
+        <p className="text-[10px] font-mono mt-4 opacity-50">{error}</p>
+        <Button variant="outline" size="sm" className="mt-8" onClick={() => window.location.reload()}>
+          Retry Authentication
+        </Button>
+      </div>
+    );
+  }
+
+  const activeProgram = programs[0];
+  const myAchievement = achievements[0];
   
-  if (!activeProgram || !myAchievement) return null;
+  if (!activeProgram || !myAchievement) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] text-muted-foreground border border-dashed rounded-xl border-border/60">
+        <Trophy className="size-8 mb-4 opacity-10" />
+        <p className="text-sm font-medium">No Active Incentive Programs</p>
+        <p className="text-xs opacity-60 mt-1">Configure your first program in the Builder tab.</p>
+      </div>
+    );
+  }
   
   // Calculate progress
   const target = activeProgram.rules[0]?.target || 0;

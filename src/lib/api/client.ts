@@ -10,7 +10,7 @@ export type ApiResponse<T> = {
 };
 
 class ApiClient {
-  private baseUrl: string = import.meta.env.VITE_API_URL || "https://api.adzdrio.com";
+  private baseUrl: string = (import.meta as any).env['VITE_API_URL'] || "https://api.adzdrio.com";
 
   async get<T>(path: string): Promise<T> {
     // In the future, this will fetch from the NestJS backend
