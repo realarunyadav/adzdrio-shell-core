@@ -29,6 +29,7 @@ import { Route as ModulesRenewalsRouteImport } from './routes/modules.renewals'
 import { Route as ModulesRolesRouteImport } from './routes/modules.roles'
 import { Route as ModulesSupportRouteImport } from './routes/modules.support'
 import { Route as ModulesUsersRouteImport } from './routes/modules.users'
+import { Route as PlatformActivityRouteImport } from './routes/platform.activity'
 import { Route as ModulesCrmProspectRouteImport } from './routes/modules/crm/prospect'
 import { Route as ModulesHrmsEmployeeRouteImport } from './routes/modules/hrms/employee'
 
@@ -132,6 +133,11 @@ const ModulesUsersRoute = ModulesUsersRouteImport.update({
   path: '/modules/users',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlatformActivityRoute = PlatformActivityRouteImport.update({
+  id: '/platform/activity',
+  path: '/platform/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ModulesCrmProspectRoute = ModulesCrmProspectRouteImport.update({
   id: '/prospect',
   path: '/prospect',
@@ -164,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/modules/roles': typeof ModulesRolesRoute
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
+  '/platform/activity': typeof PlatformActivityRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
 }
@@ -188,6 +195,7 @@ export interface FileRoutesByTo {
   '/modules/roles': typeof ModulesRolesRoute
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
+  '/platform/activity': typeof PlatformActivityRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
 }
@@ -213,6 +221,7 @@ export interface FileRoutesById {
   '/modules/roles': typeof ModulesRolesRoute
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
+  '/platform/activity': typeof PlatformActivityRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
 }
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/modules/roles'
     | '/modules/support'
     | '/modules/users'
+    | '/platform/activity'
     | '/modules/crm/prospect'
     | '/modules/hrms/employee'
   fileRoutesByTo: FileRoutesByTo
@@ -263,6 +273,7 @@ export interface FileRouteTypes {
     | '/modules/roles'
     | '/modules/support'
     | '/modules/users'
+    | '/platform/activity'
     | '/modules/crm/prospect'
     | '/modules/hrms/employee'
   id:
@@ -287,6 +298,7 @@ export interface FileRouteTypes {
     | '/modules/roles'
     | '/modules/support'
     | '/modules/users'
+    | '/platform/activity'
     | '/modules/crm/prospect'
     | '/modules/hrms/employee'
   fileRoutesById: FileRoutesById
@@ -312,6 +324,7 @@ export interface RootRouteChildren {
   ModulesRolesRoute: typeof ModulesRolesRoute
   ModulesSupportRoute: typeof ModulesSupportRoute
   ModulesUsersRoute: typeof ModulesUsersRoute
+  PlatformActivityRoute: typeof PlatformActivityRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -456,6 +469,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesUsersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/platform/activity': {
+      id: '/platform/activity'
+      path: '/platform/activity'
+      fullPath: '/platform/activity'
+      preLoaderRoute: typeof PlatformActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/modules/crm/prospect': {
       id: '/modules/crm/prospect'
       path: '/prospect'
@@ -518,17 +538,8 @@ const rootRouteChildren: RootRouteChildren = {
   ModulesRolesRoute: ModulesRolesRoute,
   ModulesSupportRoute: ModulesSupportRoute,
   ModulesUsersRoute: ModulesUsersRoute,
+  PlatformActivityRoute: PlatformActivityRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
