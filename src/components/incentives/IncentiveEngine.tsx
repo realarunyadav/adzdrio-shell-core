@@ -24,8 +24,8 @@ import { mockPrograms, mockAchievements } from "./mockData";
 import { cn } from "@/lib/utils";
 
 export function IncentiveEngine() {
-  const activeProgram = mockPrograms[0]!;
-  const myAchievement = mockAchievements[0]!;
+  const activeProgram = mockPrograms[0] || mockPrograms[0]!;
+  const myAchievement = mockAchievements[0] || mockAchievements[0]!;
   
   // Calculate progress
   const target = activeProgram.rules[0].target;
