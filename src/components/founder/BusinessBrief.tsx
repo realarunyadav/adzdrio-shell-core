@@ -19,7 +19,7 @@ export const BusinessBrief: React.FC = () => {
       <div className="lg:col-span-8 space-y-6">
         <SectionCard 
           title="Today's Verified Business Facts" 
-          subtitle="Direct extraction from ABOS modules"
+          description="Direct extraction from ABOS modules"
           actions={<Badge className="bg-success/10 text-success border-none text-[10px]">Aug 8, 2026</Badge>}
         >
           <div className="space-y-4">
