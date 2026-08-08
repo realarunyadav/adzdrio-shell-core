@@ -6,7 +6,8 @@ import {
   Filter, 
   ArrowRight,
   MoreVertical,
-  CreditCard
+  CreditCard,
+  Calendar
 } from "lucide-react";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { StatusBadge } from "@/components/shared/StatusBadge";
