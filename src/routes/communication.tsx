@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { CommunicationCenter } from "@/components/communication/CommunicationCenter";
 import { MailboxManagement } from "@/components/communication/MailboxManagement";
 import { TemplateManagement } from "@/components/communication/TemplateManagement";
+import { SignatureManagement } from "@/components/communication/SignatureManagement";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Mail, Settings, Layout } from "lucide-react";
+import { Mail, Settings, Layout, PenTool } from "lucide-react";
 
 export const Route = createFileRoute("/communication")({
   component: CommunicationPage,
@@ -20,7 +21,11 @@ function CommunicationPage() {
           </TabsTrigger>
           <TabsTrigger value="templates" className="gap-2">
             <Layout className="size-3.5" />
-            Templates & Signatures
+            Templates
+          </TabsTrigger>
+          <TabsTrigger value="signatures" className="gap-2">
+            <PenTool className="size-3.5" />
+            Signatures
           </TabsTrigger>
           <TabsTrigger value="settings" className="gap-2">
             <Settings className="size-3.5" />
@@ -34,6 +39,10 @@ function CommunicationPage() {
         
         <TabsContent value="templates" className="mt-0">
           <TemplateManagement />
+        </TabsContent>
+
+        <TabsContent value="signatures" className="mt-0">
+          <SignatureManagement />
         </TabsContent>
 
         <TabsContent value="settings" className="mt-0">
