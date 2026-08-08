@@ -43,7 +43,7 @@ export function Customer360View() {
       async function fetch360() {
         try {
           setLoading(true);
-          const response = await customerService.get360(selectedCustomerId);
+          const response = await customerService.get360(selectedCustomerId!);
           setData(response as any);
         } catch (err) {
           console.error("Failed to fetch Customer 360", err);
