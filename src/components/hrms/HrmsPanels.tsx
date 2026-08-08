@@ -361,7 +361,7 @@ export function LeaveManagement({ scope = "team" }: { scope?: "team" | "employee
 /* ------------------------------------------------------------------ */
 
 export function IncentiveCenter() {
-  const current = INCENTIVE_PROGRAMS[0];
+  const current = INCENTIVE_PROGRAMS[0]!;
   const remaining = Math.max(current.target - current.achieved, 0);
   const progress = Math.min((current.achieved / current.target) * 100, 100);
 

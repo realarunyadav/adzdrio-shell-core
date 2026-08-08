@@ -63,7 +63,7 @@ function slug(tab: string) {
 }
 
 function EmployeeProfilePage() {
-  const employee = EMPLOYEES[0];
+  const employee = EMPLOYEES[0]!;
 
   return (
     <div className="flex flex-col gap-8 pb-12 animate-in fade-in duration-500">
@@ -97,7 +97,7 @@ function EmployeeProfilePage() {
         <MetricTile label="Leave Balance" value="27 d" hint="Across all types" />
       </div>
 
-      <Tabs defaultValue={slug(TABS[0])} className="w-full">
+      <Tabs defaultValue={slug(TABS[0]!)} className="w-full">
         <ScrollArea className="w-full">
           <TabsList className="w-full justify-start border-b rounded-none bg-transparent h-auto p-0 gap-6 mb-6">
             {TABS.map((tab) => (
