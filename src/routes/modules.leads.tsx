@@ -78,8 +78,21 @@ function LeadDetail() {
             </TabsContent>
             
             <TabsContent value="notes">
-               <SectionCard title="Discovery Notes">
-                  <div className="text-xs text-muted-foreground italic">No discovery notes recorded.</div>
+               <SectionCard title="Detailed Sales Qualification">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-2">
+                    <QualificationField label="Preferred Language" value="English / Hindi" />
+                    <QualificationField label="Current Service" value="Competitor X" />
+                    <QualificationField label="Current Price" value="₹ 1,200 / month" />
+                    <QualificationField label="Remaining Duration" value="45 Days" />
+                    <QualificationField label="Primary Device" value="Smart TV (Samsung)" />
+                    <QualificationField label="Number of Devices" value="3 (2 Mobile, 1 TV)" />
+                  </div>
+                  <div className="mt-6 pt-6 border-t border-border/40">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-3">Discovery Notes</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      Customer is looking for a more stable connection for high-quality streaming. Interested in the Enterprise Premium plan for multi-device support. Requested a callback on Tuesday at 4:00 PM.
+                    </p>
+                  </div>
                </SectionCard>
             </TabsContent>
           </Tabs>
@@ -113,6 +126,15 @@ function InfoRow({ label, value }: { label: string; value: React.ReactNode }) {
     <div className="flex justify-between items-center py-2 border-b border-border/40 last:border-0">
       <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">{label}</span>
       <span className="text-xs font-semibold">{value}</span>
+    </div>
+  );
+}
+
+function QualificationField({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="space-y-1">
+      <p className="text-[10px] font-black uppercase tracking-[0.1em] text-muted-foreground/60">{label}</p>
+      <p className="text-sm font-bold">{value}</p>
     </div>
   );
 }
