@@ -65,7 +65,7 @@ export function TreasuryHub() {
                   {trx.amount}
                 </TableCell>
                 <TableCell>
-                  <StatusBadge tone={trx.status === 'Completed' ? 'success' : trx.status === 'Failed' ? 'destructive' : 'warning'}>
+                  <StatusBadge tone={trx.status === 'Completed' ? 'success' : trx.status === 'Failed' ? 'danger' : 'warning'}>
                     {trx.status}
                   </StatusBadge>
                 </TableCell>
