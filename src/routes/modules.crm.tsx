@@ -41,7 +41,9 @@ import {
   Send,
   ArrowLeft,
   User,
-  Zap
+  Zap,
+  Loader2,
+  Database
 } from "lucide-react";
 import * as React from "react";
 import { Link } from "@tanstack/react-router";
@@ -102,6 +104,7 @@ import { UniversalFileManager } from "@/components/shared/UniversalFileManager";
 import { UniversalComments } from "@/components/shared/UniversalComments";
 import { UniversalAuditLog } from "@/components/shared/UniversalAuditLog";
 import { UniversalTag } from "@/components/shared/UniversalTag";
+import { leadsService } from "@/lib/api/services";
 
 export const Route = createFileRoute("/modules/crm")({
   component: SalesCRMModule,
@@ -109,6 +112,24 @@ export const Route = createFileRoute("/modules/crm")({
 
 function SalesCRMModule() {
   const [activeTab, setActiveTab] = React.useState("dashboard");
+  const [leads, setLeads] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    async function loadCRMData() {
+      try {
+        setLoading(true);
+        const data = await leadsService.getAll();
+        setLeads(data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadCRMData();
+  }, []);
 
   return (
     <div className="flex flex-col gap-6 p-6 animate-in fade-in duration-700">
@@ -236,58 +257,34 @@ function SalesCRMModule() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow className="hover:bg-muted/5 cursor-pointer group" onClick={() => window.location.href = "/modules/crm/prospect"}>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                         <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center font-bold text-primary text-[10px]">DS</div>
-                         <div>
-                            <p className="text-xs font-bold group-hover:text-primary transition-colors">Deemand Solutions</p>
-                            <p className="text-[10px] text-muted-foreground">Sarah Manager · Website Inquiry</p>
-                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell><StatusBadge tone="info">Qualified</StatusBadge></TableCell>
-                    <TableCell><Badge variant="secondary" className="text-[9px] font-black uppercase">High</Badge></TableCell>
-                    <TableCell className="font-medium text-xs">₹ 12,45,000</TableCell>
-                    <TableCell>
-                       <div className="flex items-center gap-2">
-                          <span className="text-xs font-black">85</span>
-                          <div className="w-12 h-1.5 bg-muted rounded-full overflow-hidden">
-                             <div className="h-full bg-success w-[85%]" />
-                          </div>
-                       </div>
-                    </TableCell>
-                    <TableCell className="text-xs font-medium">Aug 12, 2026</TableCell>
-                    <TableCell className="text-right">
-                       <Button size="icon" variant="ghost" className="size-7"><MoreHorizontal className="size-3.5" /></Button>
-                    </TableCell>
-                  </TableRow>
-                  <TableRow className="hover:bg-muted/5 cursor-pointer group">
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                         <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center font-bold text-primary text-[10px]">AC</div>
-                         <div>
-                            <p className="text-xs font-bold group-hover:text-primary transition-colors">Acme Corp</p>
-                            <p className="text-[10px] text-muted-foreground">John Doe · LinkedIn</p>
-                         </div>
-                      </div>
-                    </TableCell>
-                    <TableCell><StatusBadge tone="info">Contacted</StatusBadge></TableCell>
-                    <TableCell><Badge variant="secondary" className="text-[9px] font-black uppercase">Medium</Badge></TableCell>
-                    <TableCell className="font-medium text-xs">₹ 50,00,000</TableCell>
-                    <TableCell>
-                       <div className="flex items-center gap-2">
-                          <span className="text-xs font-black">65</span>
-                          <div className="w-12 h-1.5 bg-muted rounded-full overflow-hidden">
-                             <div className="h-full bg-warning w-[65%]" />
-                          </div>
-                       </div>
-                    </TableCell>
-                    <TableCell className="text-xs font-medium">Aug 14, 2026</TableCell>
-                    <TableCell className="text-right">
-                       <Button size="icon" variant="ghost" className="size-7"><MoreHorizontal className="size-3.5" /></Button>
-                    </TableCell>
-                  </TableRow>
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-40 text-center text-muted-foreground animate-pulse">
+                        <Loader2 className="size-6 mx-auto mb-2 animate-spin opacity-20" />
+                        Accessing Lead Directory...
+                      </TableCell>
+                    </TableRow>
+                  ) : error ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-40 text-center">
+                        <Database className="size-6 mx-auto mb-2 text-destructive opacity-40" />
+                        <p className="text-xs font-bold text-destructive">Backend Connection Required</p>
+                        <p className="text-[10px] text-muted-foreground mt-1">{error}</p>
+                      </TableCell>
+                    </TableRow>
+                  ) : leads.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-40 text-center text-muted-foreground italic">
+                        No active leads found in this view.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    leads.map((lead) => (
+                      <TableRow key={lead.id} className="hover:bg-muted/5 cursor-pointer group">
+                        {/* Map lead data here */}
+                      </TableRow>
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </div>

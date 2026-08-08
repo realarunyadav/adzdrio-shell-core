@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   FileUp, 
   FileDown, 
@@ -17,7 +17,8 @@ import {
   Clock,
   Trash2,
   RefreshCw,
-  Plus
+  Plus,
+  Loader2
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
@@ -31,37 +32,38 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import type { DataEntity, ImportStatus, ImportHistory, ValidationError } from "./types";
-
-const mockImportHistory: ImportHistory[] = [
-  {
-    id: "imp_1",
-    fileName: "q3_leads_export.csv",
-    entity: "prospects",
-    uploadedBy: "Rahul S.",
-    timestamp: "2026-08-05 14:30",
-    totalRows: 1250,
-    successRows: 1242,
-    failedRows: 8,
-    updatedRows: 0,
-    status: "partial"
-  },
-  {
-    id: "imp_2",
-    fileName: "annual_inventory_master.xlsx",
-    entity: "products",
-    uploadedBy: "Admin",
-    timestamp: "2026-08-01 09:15",
-    totalRows: 450,
-    successRows: 450,
-    failedRows: 0,
-    updatedRows: 12,
-    status: "success"
-  }
-];
+import { api } from "@/lib/api/client";
 
 export function DataCenter() {
   const [importStatus, setImportStatus] = useState<ImportStatus>('uploading');
   const [selectedEntity, setSelectedEntity] = useState<DataEntity>('prospects');
+  const [history, setHistory] = useState<ImportHistory[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadHistory() {
+      try {
+        setLoading(true);
+        const data = await api.get<ImportHistory[]>('/data-center/history');
+        setHistory(data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadHistory();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] animate-pulse text-muted-foreground">
+        <Loader2 className="size-8 mb-4 animate-spin opacity-20" />
+        <p className="text-sm font-medium">Accessing Enterprise Data Repository...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-8 pb-12 animate-in fade-in duration-700">
@@ -317,7 +319,7 @@ export function DataCenter() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {mockImportHistory.map((h) => (
+                  {history.map((h) => (
                     <TableRow key={h.id}>
                       <TableCell>
                         <div className="flex items-center gap-2">

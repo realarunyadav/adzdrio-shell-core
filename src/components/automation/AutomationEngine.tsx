@@ -1,16 +1,73 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Zap, Play, Filter, Plus, Clock, History, AlertCircle, CheckCircle2, ChevronRight, MoreVertical } from "lucide-react";
-import { mockWorkflows, mockExecutions } from "./mockData";
+import { Zap, Play, Filter, Plus, Clock, History, AlertCircle, CheckCircle2, ChevronRight, MoreVertical, Loader2 } from "lucide-react";
 import { TRIGGER_LABELS, ACTION_LABELS } from "./types";
 import { cn } from "@/lib/utils";
+import { automationService } from "@/lib/api/services";
 
 export function AutomationEngine() {
-  const [workflows] = useState(mockWorkflows);
-  const [executions] = useState(mockExecutions);
+  const [workflows, setWorkflows] = useState<any[]>([]);
+  const [executions, setExecutions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        const [wfData, exData] = await Promise.all([
+          automationService.getWorkflows(),
+          automationService.getExecutions()
+        ]);
+        setWorkflows(wfData);
+        setExecutions(exData);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-muted-foreground animate-pulse">
+        <Loader2 className="size-8 mb-4 animate-spin opacity-20" />
+        <p className="text-sm font-medium">Connecting to Automation Service...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-destructive border border-destructive/20 rounded-xl bg-destructive/5">
+        <AlertCircle className="size-8 mb-4" />
+        <p className="text-sm font-bold">Backend Integration Required</p>
+        <p className="text-xs opacity-70 mt-1 max-w-xs text-center">{error}</p>
+        <Button variant="outline" size="sm" className="mt-6 border-destructive/20 hover:bg-destructive/10" onClick={() => window.location.reload()}>
+          Retry Connection
+        </Button>
+      </div>
+    );
+  }
+
+  if (workflows.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-muted-foreground border border-dashed rounded-xl border-border/60">
+        <Zap className="size-8 mb-4 opacity-10" />
+        <p className="text-sm font-medium">No Workflows Configured</p>
+        <p className="text-xs opacity-60 mt-1">Start by creating your first automation workflow.</p>
+        <Button size="sm" className="mt-6 shadow-elevated">
+          <Plus className="mr-2 size-4" />
+          Create Workflow
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
