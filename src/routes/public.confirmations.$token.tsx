@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import * as React from 'react';
-import { leadsService, adminService, PolicyVersion, RapidLead } from '@/lib/api/services';
+import { leadsService, adminService } from '@/lib/api/services';
+import type { PolicyVersion, RapidLead } from '@/lib/api/services';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -218,7 +219,7 @@ function RapidConfirmationPage() {
                 <div className="space-y-3">
                   <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Included Devices</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {lead.devices.map((device, idx) => (
+                    {lead.devices.map((device: string, idx: number) => (
                       <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
                         {device.toLowerCase().includes('tv') ? <Tv className="size-4 text-slate-400" /> : 
                          device.toLowerCase().includes('phone') ? <Smartphone className="size-4 text-slate-400" /> :
