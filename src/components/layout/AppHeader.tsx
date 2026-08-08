@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { SearchBar } from "@/components/shared/SearchBar";
+import { GlobalSearch } from "@/components/search/GlobalSearch";
 import { GlobalNotificationCenter } from "@/components/shared/GlobalNotificationCenter";
 
 import {
@@ -83,11 +83,8 @@ export function AppHeader() {
 
       <div className="ml-auto flex items-center gap-2">
         {appConfig.shell.showGlobalSearch ? (
-          <div className="hidden lg:block">
-            <SearchBar 
-              placeholder="Search ABOS (⌘K)" 
-              className="h-10 w-72 glass-surface"
-            />
+          <div className="hidden lg:block w-72">
+            <GlobalSearch />
           </div>
         ) : null}
 
