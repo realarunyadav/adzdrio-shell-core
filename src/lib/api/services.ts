@@ -1,4 +1,5 @@
 import { api } from "./client";
+export * from "./services.types";
 import { 
   Customer, 
   Subscription, 

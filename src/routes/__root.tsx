@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "@/components/layout/AppShell";
 import { RbacProvider } from "@/core/rbac/RbacProvider";
+import { AuthProvider } from "@/lib/auth/AuthProvider";
 import { ThemeProvider } from "@/core/theme/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { GlobalCommandPalette } from "@/components/shared/GlobalCommandPalette";
@@ -131,15 +132,16 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <RbacProvider>
-          <AppShell>
-            {/* Required: nested routes render here. */}
-            <Outlet />
-          </AppShell>
-          <GlobalCommandPalette />
-          <Toaster />
-
-        </RbacProvider>
+        <AuthProvider>
+          <RbacProvider>
+            <AppShell>
+              {/* Required: nested routes render here. */}
+              <Outlet />
+            </AppShell>
+            <GlobalCommandPalette />
+            <Toaster />
+          </RbacProvider>
+        </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

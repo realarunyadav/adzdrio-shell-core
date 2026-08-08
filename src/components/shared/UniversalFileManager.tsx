@@ -11,20 +11,18 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
+import { storageService } from "@/lib/api/services";
+
 export interface FileItem {
   id: string;
   name: string;
   size: string;
   type: string;
   date: string;
-  category: "all" | "invoices" | "contracts" | "designs";
+  category: "all" | "payment_proof" | "call_recording" | "customer_doc" | "employee_doc" | "invoice" | "support" | "project" | "grn";
 }
 
-const DEMO_FILES: FileItem[] = [
-  { id: "1", name: "ABOS-Financial-Strategy-2026.pdf", size: "2.4 MB", type: "PDF", date: "Aug 07, 2026", category: "invoices" },
-  { id: "2", name: "Enterprise-Service-Agreement.docx", size: "1.1 MB", type: "DOCX", date: "Aug 06, 2026", category: "contracts" },
-  { id: "3", name: "Adzdrio-Identity-Assets.zip", size: "45.8 MB", type: "ZIP", date: "Aug 05, 2026", category: "designs" },
-];
+const DEMO_FILES: FileItem[] = []; // Empty now, refactored to use storageService
 
 export function UniversalFileManager() {
   return (

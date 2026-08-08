@@ -6,7 +6,7 @@
 export class ApiError extends Error {
   constructor(
     public status: number,
-    public message: string,
+    public override message: string,
     public code?: string,
     public details?: any
   ) {
@@ -105,7 +105,7 @@ class ApiClient {
     return this.request<T>(path, {
       ...options,
       method: 'POST',
-      body: body ? JSON.stringify(body) : undefined,
+      body: body ? JSON.stringify(body) : null,
     });
   }
 
@@ -113,7 +113,7 @@ class ApiClient {
     return this.request<T>(path, {
       ...options,
       method: 'PUT',
-      body: body ? JSON.stringify(body) : undefined,
+      body: body ? JSON.stringify(body) : null,
     });
   }
 
@@ -121,7 +121,7 @@ class ApiClient {
     return this.request<T>(path, {
       ...options,
       method: 'PATCH',
-      body: body ? JSON.stringify(body) : undefined,
+      body: body ? JSON.stringify(body) : null,
     });
   }
 
