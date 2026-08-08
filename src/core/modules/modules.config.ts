@@ -13,7 +13,8 @@ import {
   LifeBuoy,
   RefreshCw,
   UserCircle,
-  Mail
+  Mail,
+  Trophy
 } from "lucide-react";
 
 import { moduleRegistry } from "./registry";
@@ -283,6 +284,17 @@ export const modules: ModuleDefinition[] = [
     status: "available",
     basePath: "/communication",
     permission: "communication.view",
+  },
+  {
+    id: "incentives",
+    name: "Incentive Engine",
+    description: "Manage employee performance rewards and program versioning.",
+    icon: Trophy,
+    group: "people",
+    order: 55,
+    status: "available",
+    basePath: "/modules/incentives",
+    permission: "people.incentives.view",
   },
 ];
 

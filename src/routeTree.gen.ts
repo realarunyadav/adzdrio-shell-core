@@ -22,6 +22,7 @@ import { Route as ModulesEmployeesRouteImport } from './routes/modules.employees
 import { Route as ModulesFinanceRouteImport } from './routes/modules.finance'
 import { Route as ModulesFounderRouteImport } from './routes/modules.founder'
 import { Route as ModulesHrmsRouteImport } from './routes/modules.hrms'
+import { Route as ModulesIncentivesRouteImport } from './routes/modules.incentives'
 import { Route as ModulesInventoryRouteImport } from './routes/modules.inventory'
 import { Route as ModulesLeadsRouteImport } from './routes/modules.leads'
 import { Route as ModulesOrganizationRouteImport } from './routes/modules.organization'
@@ -99,6 +100,11 @@ const ModulesFounderRoute = ModulesFounderRouteImport.update({
 const ModulesHrmsRoute = ModulesHrmsRouteImport.update({
   id: '/modules/hrms',
   path: '/modules/hrms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModulesIncentivesRoute = ModulesIncentivesRouteImport.update({
+  id: '/modules/incentives',
+  path: '/modules/incentives',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ModulesInventoryRoute = ModulesInventoryRouteImport.update({
@@ -181,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/modules/finance': typeof ModulesFinanceRoute
   '/modules/founder': typeof ModulesFounderRoute
   '/modules/hrms': typeof ModulesHrmsRouteWithChildren
+  '/modules/incentives': typeof ModulesIncentivesRoute
   '/modules/inventory': typeof ModulesInventoryRoute
   '/modules/leads': typeof ModulesLeadsRoute
   '/modules/organization': typeof ModulesOrganizationRoute
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/modules/finance': typeof ModulesFinanceRoute
   '/modules/founder': typeof ModulesFounderRoute
   '/modules/hrms': typeof ModulesHrmsRouteWithChildren
+  '/modules/incentives': typeof ModulesIncentivesRoute
   '/modules/inventory': typeof ModulesInventoryRoute
   '/modules/leads': typeof ModulesLeadsRoute
   '/modules/organization': typeof ModulesOrganizationRoute
@@ -238,6 +246,7 @@ export interface FileRoutesById {
   '/modules/finance': typeof ModulesFinanceRoute
   '/modules/founder': typeof ModulesFounderRoute
   '/modules/hrms': typeof ModulesHrmsRouteWithChildren
+  '/modules/incentives': typeof ModulesIncentivesRoute
   '/modules/inventory': typeof ModulesInventoryRoute
   '/modules/leads': typeof ModulesLeadsRoute
   '/modules/organization': typeof ModulesOrganizationRoute
@@ -268,6 +277,7 @@ export interface FileRouteTypes {
     | '/modules/finance'
     | '/modules/founder'
     | '/modules/hrms'
+    | '/modules/incentives'
     | '/modules/inventory'
     | '/modules/leads'
     | '/modules/organization'
@@ -296,6 +306,7 @@ export interface FileRouteTypes {
     | '/modules/finance'
     | '/modules/founder'
     | '/modules/hrms'
+    | '/modules/incentives'
     | '/modules/inventory'
     | '/modules/leads'
     | '/modules/organization'
@@ -324,6 +335,7 @@ export interface FileRouteTypes {
     | '/modules/finance'
     | '/modules/founder'
     | '/modules/hrms'
+    | '/modules/incentives'
     | '/modules/inventory'
     | '/modules/leads'
     | '/modules/organization'
@@ -353,6 +365,7 @@ export interface RootRouteChildren {
   ModulesFinanceRoute: typeof ModulesFinanceRoute
   ModulesFounderRoute: typeof ModulesFounderRoute
   ModulesHrmsRoute: typeof ModulesHrmsRouteWithChildren
+  ModulesIncentivesRoute: typeof ModulesIncentivesRoute
   ModulesInventoryRoute: typeof ModulesInventoryRoute
   ModulesLeadsRoute: typeof ModulesLeadsRoute
   ModulesOrganizationRoute: typeof ModulesOrganizationRoute
@@ -455,6 +468,13 @@ declare module '@tanstack/react-router' {
       path: '/modules/hrms'
       fullPath: '/modules/hrms'
       preLoaderRoute: typeof ModulesHrmsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/modules/incentives': {
+      id: '/modules/incentives'
+      path: '/modules/incentives'
+      fullPath: '/modules/incentives'
+      preLoaderRoute: typeof ModulesIncentivesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/modules/inventory': {
@@ -603,6 +623,7 @@ const rootRouteChildren: RootRouteChildren = {
   ModulesFinanceRoute: ModulesFinanceRoute,
   ModulesFounderRoute: ModulesFounderRoute,
   ModulesHrmsRoute: ModulesHrmsRouteWithChildren,
+  ModulesIncentivesRoute: ModulesIncentivesRoute,
   ModulesInventoryRoute: ModulesInventoryRoute,
   ModulesLeadsRoute: ModulesLeadsRoute,
   ModulesOrganizationRoute: ModulesOrganizationRoute,
