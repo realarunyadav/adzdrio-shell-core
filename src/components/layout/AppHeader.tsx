@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 
-import { Bell, Command as CommandIcon, Moon, Search, Sun, Zap } from "lucide-react";
+import { Bell, Command as CommandIcon, Moon, Search, Sun, Zap, ShieldCheck } from "lucide-react";
 
 import { appConfig } from "@/config/app.config";
 import { moduleRegistry } from "@/core/modules/registry";
@@ -110,6 +110,24 @@ export function AppHeader() {
             {resolvedMode === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
           </Button>
         ) : null}
+104: 
+105:         <TooltipProvider>
+106:           <Tooltip>
+107:             <TooltipTrigger asChild>
+108:               <Button 
+109:                 variant="ghost" 
+110:                 size="icon" 
+111:                 asChild
+112:                 aria-label="Security Status"
+113:               >
+114:                 <Link to="/settings/security">
+115:                   <ShieldCheck className="size-4 text-success" />
+116:                 </Link>
+117:               </Button>
+118:             </TooltipTrigger>
+119:             <TooltipContent>Platform Security: Healthy</TooltipContent>
+120:           </Tooltip>
+121:         </TooltipProvider>
 
         <Button variant="ghost" size="icon" aria-label="Notifications" onClick={() => setNotificationsOpen(true)}>
           <Bell className="size-4" />
