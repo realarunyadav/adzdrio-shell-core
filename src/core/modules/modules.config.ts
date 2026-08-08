@@ -251,6 +251,16 @@ export const modules: ModuleDefinition[] = [
     basePath: "/settings",
     permission: "platform.settings.view",
   },
+  {
+    id: "platform-services",
+    name: "Activity Center",
+    description: "Shared platform services: Search, Notifications, and Activity Center.",
+    icon: Layout,
+    group: "platform",
+    order: 120,
+    status: "available",
+    basePath: "/platform/activity",
+  },
 ];
 
 let bootstrapped = false;

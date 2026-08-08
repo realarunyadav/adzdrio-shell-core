@@ -1,5 +1,5 @@
-import { Command } from "lucide-react";
 import * as React from "react";
+import { Command } from "lucide-react";
 import {
   CommandDialog,
   CommandEmpty,
@@ -20,7 +20,9 @@ import {
   Zap, 
   Plus, 
   History, 
-  Star 
+  Star,
+  Search,
+  Bell
 } from "lucide-react";
 import { useRouter } from "@tanstack/react-router";
 
@@ -46,30 +48,11 @@ export function GlobalCommandPalette() {
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
-      <CommandInput placeholder="Type a command or search ABOS..." />
+      <CommandInput placeholder="Search records, modules, and commands..." />
       <CommandList className="max-h-[450px]">
         <CommandEmpty>No results found.</CommandEmpty>
         
-        <CommandGroup heading="Quick Actions">
-          <CommandItem onSelect={() => runCommand(() => {})}>
-            <Plus className="mr-2 h-4 w-4" />
-            <span>Create New Lead</span>
-            <CommandShortcut>⌘L</CommandShortcut>
-          </CommandItem>
-          <CommandItem onSelect={() => runCommand(() => {})}>
-            <FileText className="mr-2 h-4 w-4" />
-            <span>Generate Invoice</span>
-            <CommandShortcut>⌘I</CommandShortcut>
-          </CommandItem>
-          <CommandItem onSelect={() => runCommand(() => {})}>
-            <Zap className="mr-2 h-4 w-4 text-amber-500" />
-            <span>Approve Pending Requests</span>
-          </CommandItem>
-        </CommandGroup>
-
-        <CommandSeparator />
-
-        <CommandGroup heading="Navigate">
+        <CommandGroup heading="Global Navigation">
           <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/" }))}>
             <Layout className="mr-2 h-4 w-4" />
             <span>Executive Dashboard</span>
@@ -82,39 +65,32 @@ export function GlobalCommandPalette() {
             <FileText className="mr-2 h-4 w-4" />
             <span>Finance & Accounts</span>
           </CommandItem>
-          <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/modules/inventory" }))}>
-            <Package className="mr-2 h-4 w-4" />
-            <span>Inventory System</span>
-          </CommandItem>
           <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/modules/projects" }))}>
             <Briefcase className="mr-2 h-4 w-4" />
             <span>Enterprise PMO</span>
           </CommandItem>
-          <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/settings" }))}>
-            <Settings className="mr-2 h-4 w-4" />
-            <span>Platform Settings</span>
+          <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/modules/inventory" }))}>
+            <Package className="mr-2 h-4 w-4" />
+            <span>Inventory System</span>
           </CommandItem>
         </CommandGroup>
 
         <CommandSeparator />
 
-        <CommandGroup heading="Recent Activity">
-          <CommandItem>
-            <History className="mr-2 h-4 w-4" />
-            <span>Modified: Invoice #INV-2024-001</span>
+        <CommandGroup heading="Quick Actions">
+          <CommandItem onSelect={() => runCommand(() => {})}>
+            <Plus className="mr-2 h-4 w-4" />
+            <span>Create New Prospect</span>
+            <CommandShortcut>⌘P</CommandShortcut>
           </CommandItem>
-          <CommandItem>
-            <History className="mr-2 h-4 w-4" />
-            <span>Viewed: Project - ABOS Framework</span>
+          <CommandItem onSelect={() => runCommand(() => {})}>
+            <FileText className="mr-2 h-4 w-4" />
+            <span>Create New Invoice</span>
+            <CommandShortcut>⌘I</CommandShortcut>
           </CommandItem>
-        </CommandGroup>
-
-        <CommandSeparator />
-
-        <CommandGroup heading="Favorites">
-          <CommandItem>
-            <Star className="mr-2 h-4 w-4 text-amber-500 fill-amber-500" />
-            <span>Lead: Global Tech Solutions</span>
+          <CommandItem onSelect={() => runCommand(() => {})}>
+            <Zap className="mr-2 h-4 w-4 text-amber-500" />
+            <span>Open AI Copilot</span>
           </CommandItem>
         </CommandGroup>
       </CommandList>
