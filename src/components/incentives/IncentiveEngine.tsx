@@ -24,8 +24,8 @@ import { mockPrograms, mockAchievements } from "./mockData";
 import { cn } from "@/lib/utils";
 
 export function IncentiveEngine() {
-  const activeProgram = mockPrograms[0];
-  const myAchievement = mockAchievements[0];
+  const activeProgram = mockPrograms[0]!;
+  const myAchievement = mockAchievements[0]!;
   
   // Calculate progress
   const target = activeProgram.rules[0].target;
@@ -96,7 +96,7 @@ export function IncentiveEngine() {
             <SectionCard 
               title="Current Program Performance" 
               className="lg:col-span-2"
-              subtitle={activeProgram.name}
+              description={activeProgram.name}
             >
               <div className="space-y-8 py-4">
                 <div className="space-y-2">
@@ -192,7 +192,7 @@ export function IncentiveEngine() {
         </TabsContent>
 
         <TabsContent value="builder">
-           <SectionCard title="Incentive Program Builder" subtitle="Create flexible reward structures without code.">
+           <SectionCard title="Incentive Program Builder" description="Create flexible reward structures without code.">
              <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
                <Settings className="size-12 mb-4 opacity-10" />
                <p className="text-sm font-medium">Program Builder Interface</p>
