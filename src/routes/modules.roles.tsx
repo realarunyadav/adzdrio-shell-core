@@ -17,7 +17,8 @@ import {
   MoreHorizontal,
   Info,
   Check,
-  AlertCircle
+  AlertCircle,
+  AlertTriangle
 } from "lucide-react";
 import * as React from "react";
 

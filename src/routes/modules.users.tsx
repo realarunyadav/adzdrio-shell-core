@@ -424,7 +424,7 @@ function UserDetailPanel({ user }: { user: any }) {
               </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm">Force Reset</Button>
-                <Button variant="danger" size="sm">Lock Account</Button>
+                <Button variant="destructive" size="sm">Lock Account</Button>
               </div>
             </div>
           </div>
