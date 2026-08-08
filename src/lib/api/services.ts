@@ -165,7 +165,7 @@ export const leadsService = {
   update: (id: string, data: Partial<RapidLead>) => api.patch<RapidLead>(`/leads/${id}`, data),
   
   // Rapid Lead specific
-  generateConfirmationLink: (leadId: string) => api.post<{ url: string }>(`/leads/${leadId}/generate-link`),
+  generateConfirmationLink: (leadId: string) => api.post<{ url: string }>(`/leads/${leadId}/generate-link`, {}),
   getConfirmationDetails: (token: string) => api.get<RapidLead>(`/public/confirmations/${token}`),
   submitConfirmation: (token: string, confirmed: boolean, data: { reason?: string; feedback?: string }) => 
     api.post(`/public/confirmations/${token}/submit`, { confirmed, ...data }),
@@ -200,7 +200,7 @@ export const customerService = {
 };
 
 export const subscriptionService = {
-  getAll: (customerId?: string) => api.get<Subscription[]>(`/subscriptions`, { params: { customerId } }),
+  getAll: (customerId?: string) => api.get<Subscription[]>(`/subscriptions`, customerId ? { params: { customerId } } : undefined),
   getRenewalOffers: (subscriptionId: string) => api.get<any[]>(`/subscriptions/${subscriptionId}/renewal-offers`),
   processRenewal: (data: Partial<Renewal>) => api.post<Renewal>("/renewals", data),
 };
@@ -211,6 +211,16 @@ export const financeService = {
   getRefundRequests: () => api.get<RefundRequest[]>("/finance/refund-requests"),
   processRefund: (id: string, action: 'approve' | 'reject', data: any) => 
     api.post(`/finance/refund-requests/${id}/${action}`, data),
+};
+
+export const incentiveService = {
+  getPrograms: () => api.get<any[]>("/incentives/programs"),
+  getAchievements: () => api.get<any[]>("/incentives/achievements"),
+};
+
+export const automationService = {
+  getWorkflows: () => api.get<any[]>("/automation/workflows"),
+  getExecutions: () => api.get<any[]>("/automation/executions"),
 };
 
 export const adminService = {
