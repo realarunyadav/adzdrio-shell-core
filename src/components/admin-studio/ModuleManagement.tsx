@@ -98,7 +98,7 @@ export function ModuleManagement() {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <StatusBadge tone={module.status === 'Active' ? 'success' : 'muted'}>
+                    <StatusBadge tone={module.status === 'Active' ? 'success' : 'neutral'}>
                       {module.status}
                     </StatusBadge>
                   </TableCell>
