@@ -1,170 +1,140 @@
 import { api } from "./client";
+import { 
+  Customer, 
+  Subscription, 
+  Device, 
+  DeviceGroup, 
+  RapidLead, 
+  Renewal, 
+  Referral, 
+  ReferralReward, 
+  RefundRequest,
+  PolicyVersion,
+  DeviceCompatibilityRule
+} from "./services.types";
 
 /**
- * CUSTOMER / DEVICE / SUBSCRIPTION DATA MODEL
+ * AUTH SERVICE
+ * Managed by NestJS Backend
  */
+export const authService = {
+  login: (credentials: any) => api.post<{ user: any; token: string }>("/auth/login", credentials),
+  logout: () => api.post("/auth/logout"),
+  getCurrentSession: () => api.get<any>("/auth/session"),
+  refreshToken: () => api.post<{ token: string }>("/auth/refresh"),
+  changePassword: (data: any) => api.post("/auth/change-password", data),
+  resetPasswordRequest: (email: string) => api.post("/auth/reset-password/request", { email }),
+  resetPasswordConfirm: (data: any) => api.post("/auth/reset-password/confirm", data),
+  listSessions: () => api.get<any[]>("/auth/sessions"),
+  revokeSession: (sessionId: string) => api.delete(`/auth/sessions/${sessionId}`),
+};
 
-export interface Customer {
+/**
+ * INVENTORY SERVICE
+ */
+export interface Product {
   id: string;
+  sku: string;
   name: string;
-  email: string;
-  phone?: string;
-  status: 'active' | 'inactive' | 'pending' | 'blocked';
-  referralCode?: string;
-  referredById?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface Subscription {
-  id: string;
-  customerId: string;
-  planId: string;
-  planName: string;
-  status: 'active' | 'expired' | 'pending' | 'cancelled' | 'suspended';
-  purchaseDate: string;
-  startDate: string;
-  endDate: string;
-  termMonths: number;
-  amount: number;
+  description?: string;
+  category: string;
+  price: number;
   currency: string;
-  autoRenew: boolean;
-  renewalPolicy: 'carry_forward' | 'forfeit_remaining' | 'manual_decision';
+  status: 'active' | 'archived';
   metadata?: Record<string, any>;
 }
 
-export interface Device {
+export interface Warehouse {
   id: string;
-  customerId: string;
-  type: string; // e.g., 'Smart TV', 'Smartphone', 'Firestick'
-  brand?: string;
-  model?: string;
-  nickname?: string;
-  macAddress?: string;
-  ipAddress?: string;
-  status: 'active' | 'standby' | 'inactive';
-  lastActiveAt?: string;
-  deviceGroupId?: string;
+  name: string;
+  location: string;
+  code: string;
 }
 
-export interface DeviceGroup {
-  id: string;
-  customerId: string;
-  name: string; // e.g., 'Living Room Group'
-  singleActiveRule: boolean; // Only one device in group can be active at a time
+export interface StockLevel {
+  productId: string;
+  warehouseId: string;
+  quantity: number;
+  reserved: number;
+  available: number;
 }
 
-export interface DeviceCompatibilityRule {
-  id: string;
-  deviceType: string;
-  compatibleTypes: string[];
-  singleActiveSessionRequired: boolean;
-}
+export const inventoryService = {
+  getProducts: () => api.get<Product[]>("/inventory/products"),
+  getProductById: (id: string) => api.get<Product>(`/inventory/products/${id}`),
+  getWarehouses: () => api.get<Warehouse[]>("/inventory/warehouses"),
+  getStockLevels: (productId?: string) => api.get<StockLevel[]>(`/inventory/stock${productId ? `?productId=${productId}` : ''}`),
+  getMovements: () => api.get<any[]>("/inventory/movements"),
+  createTransfer: (data: any) => api.post("/inventory/transfers", data),
+  getPurchaseOrders: () => api.get<any[]>("/inventory/purchase-orders"),
+  getGRNs: () => api.get<any[]>("/inventory/grns"),
+  getVendors: () => api.get<any[]>("/inventory/vendors"),
+  getAnalytics: () => api.get<any>("/inventory/analytics"),
+};
 
 /**
- * RAPID LEAD / CONFIRMATION WORKFLOW
+ * AI SERVICE
+ * Provider-agnostic gateway through backend
  */
-
-export interface RapidLead {
-  id: string;
-  salespersonId: string;
-  customerName: string;
-  customerEmail: string;
-  customerPhone?: string;
-  selectedPlanId: string;
-  price: number;
-  duration: number; // months
-  devices: string[]; // List of intended device types/names
-  referralCode?: string;
-  status: 'draft' | 'sent' | 'opened' | 'confirmed' | 'not_confirmed' | 'expired';
-  confirmationUrl: string;
-  tcVersionAccepted?: string;
-  refundPolicyVersionAccepted?: string;
-  declineReason?: string;
-  feedback?: string;
-  confirmedAt?: string;
-  expiresAt: string;
-  createdAt: string;
-}
-
-export interface PolicyVersion {
-  id: string;
-  type: 'terms_and_conditions' | 'refund_policy';
-  version: string;
-  content: string;
-  effectiveDate: string;
-  isActive: boolean;
-}
+export const aiService = {
+  chat: (message: string, context?: any) => api.post<any>("/ai/chat", { message, context }),
+  streamChat: (message: string, context?: any) => `${(import.meta as any).env['VITE_API_BASE_URL']}/ai/chat/stream?message=${encodeURIComponent(message)}`,
+  transcribe: (audioUrl: string) => api.post<any>("/ai/transcribe", { audioUrl }),
+  analyzeCall: (transcriptId: string) => api.post<any>("/ai/analyze-call", { transcriptId }),
+  getSalesCoach: (leadId: string) => api.get<any>(`/ai/sales-coach/${leadId}`),
+  knowledgeSearch: (query: string) => api.get<any>(`/ai/knowledge?q=${encodeURIComponent(query)}`),
+  getExecutiveSummary: (module: string) => api.get<any>(`/ai/summary/${module}`),
+  submitFeedback: (aiResponseId: string, feedback: any) => api.post(`/ai/feedback/${aiResponseId}`, feedback),
+};
 
 /**
- * RENEWAL & REFERRALS
+ * STORAGE SERVICE
+ * Cloudflare R2 through backend signed URLs
  */
-
-export interface Renewal {
-  id: string;
-  subscriptionId: string;
-  customerId: string;
-  previousEndDate: string;
-  newStartDate: string;
-  newEndDate: string;
-  termMonths: number;
-  amount: number;
-  adjustmentType: 'carry_forward' | 'forfeit_remaining' | 'none';
-  adjustmentReason?: string;
-  authorizedBy?: string;
-  status: 'pending' | 'completed' | 'cancelled';
-}
-
-export interface Referral {
-  id: string;
-  referrerId: string;
-  referredId: string;
-  referralCode: string;
-  status: 'pending' | 'validated' | 'reward_earned' | 'invalid';
-  rewardId?: string;
-  createdAt: string;
-}
-
-export interface ReferralReward {
-  id: string;
-  referralId: string;
-  customerId: string;
-  rewardType: 'extension' | 'discount' | 'credit';
-  value: number;
-  status: 'pending' | 'active' | 'used' | 'expired';
-  expiryDate?: string;
-}
+export const storageService = {
+  getUploadUrl: (filename: string, category: string) => 
+    api.post<{ url: string; key: string }>("/storage/upload-url", { filename, category }),
+  getDownloadUrl: (key: string) => 
+    api.get<{ url: string }>(`/storage/download-url?key=${encodeURIComponent(key)}`),
+  deleteFile: (key: string) => 
+    api.delete(`/storage/files?key=${encodeURIComponent(key)}`),
+  
+  // Frontend helper to perform actual upload to R2
+  uploadFile: async (file: File, category: string, onProgress?: (pct: number) => void) => {
+    const { url, key } = await storageService.getUploadUrl(file.name, category);
+    
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', url);
+      xhr.setRequestHeader('Content-Type', file.type);
+      
+      if (onProgress) {
+        xhr.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            onProgress(Math.round((e.loaded / e.total) * 100));
+          }
+        };
+      }
+      
+      xhr.onload = () => {
+        if (xhr.status === 200) resolve({ key });
+        else reject(new Error('Failed to upload to storage'));
+      };
+      
+      xhr.onerror = () => reject(new Error('Network error during upload'));
+      xhr.send(file);
+    });
+  }
+};
 
 /**
- * REFUNDS
+ * CRM & FINANCE (Existing Refined)
  */
-
-export interface RefundRequest {
-  id: string;
-  saleId: string;
-  subscriptionId: string;
-  customerId: string;
-  requestedAmount: number;
-  calculatedRefundAmount: number;
-  reason: string;
-  status: 'pending_review' | 'approved' | 'processed' | 'rejected';
-  policyVersionId: string;
-  reviewedBy?: string;
-  approvedBy?: string;
-  createdAt: string;
-}
-
-/**
- * API SERVICE CONTRACTS
- */
-
 export const leadsService = {
   getAll: () => api.get<RapidLead[]>("/leads"),
   getById: (id: string) => api.get<RapidLead>(`/leads/${id}`),
   create: (data: Partial<RapidLead>) => api.post<RapidLead>("/leads", data),
   update: (id: string, data: Partial<RapidLead>) => api.patch<RapidLead>(`/leads/${id}`, data),
-  
-  // Rapid Lead specific
   generateConfirmationLink: (leadId: string) => api.post<{ url: string }>(`/leads/${leadId}/generate-link`, {}),
   getConfirmationDetails: (token: string) => api.get<RapidLead>(`/public/confirmations/${token}`),
   submitConfirmation: (token: string, confirmed: boolean, data: { reason?: string; feedback?: string }) => 
@@ -184,13 +154,9 @@ export const customerService = {
     referrals: Referral[];
     refunds: RefundRequest[];
   }>(`/customers/${id}/360`),
-  
-  // Device management
   getDevices: (customerId: string) => api.get<Device[]>(`/customers/${customerId}/devices`),
   updateDeviceStatus: (deviceId: string, status: Device['status']) => 
     api.patch(`/devices/${deviceId}/status`, { status }),
-  
-  // Referrals
   getReferralStatus: (customerId: string) => api.get<{
     referralCode: string;
     successful: number;
@@ -211,16 +177,6 @@ export const financeService = {
   getRefundRequests: () => api.get<RefundRequest[]>("/finance/refund-requests"),
   processRefund: (id: string, action: 'approve' | 'reject', data: any) => 
     api.post(`/finance/refund-requests/${id}/${action}`, data),
-};
-
-export const incentiveService = {
-  getPrograms: () => api.get<any[]>("/incentives/programs"),
-  getAchievements: () => api.get<any[]>("/incentives/achievements"),
-};
-
-export const automationService = {
-  getWorkflows: () => api.get<any[]>("/automation/workflows"),
-  getExecutions: () => api.get<any[]>("/automation/executions"),
 };
 
 export const adminService = {
