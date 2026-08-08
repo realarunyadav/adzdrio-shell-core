@@ -1,5 +1,6 @@
 import * as React from "react";
-import { customerService, leadsService, Customer, Subscription, Device, DeviceGroup, RapidLead, Renewal, Referral, ReferralReward, RefundRequest } from "@/lib/api/services";
+import { customerService, leadsService } from "@/lib/api/services";
+import type { Customer, Subscription, Device, DeviceGroup, RapidLead, Renewal, Referral, ReferralReward, RefundRequest } from "@/lib/api/services";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -87,7 +88,7 @@ export function Customer360View() {
             <Avatar className="size-20 mx-auto mb-4 border-2 border-primary/20 p-1">
               <AvatarImage src="" />
               <AvatarFallback className="text-xl font-black bg-primary/10 text-primary">
-                {customer.name.split(' ').map(n => n[0]).join('')}
+                {customer.name.split(' ').map((n: string) => n[0]).join('')}
               </AvatarFallback>
             </Avatar>
             <h3 className="text-lg font-black tracking-tight">{customer.name}</h3>
