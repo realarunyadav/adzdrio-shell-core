@@ -1,19 +1,63 @@
 import React from 'react';
 import { SectionCard } from '@/components/shared/SectionCard';
-import { UniversalActivityTimeline } from '@/components/shared/UniversalActivityTimeline';
-import { UniversalApprovalCenter } from '@/components/shared/UniversalApprovalCenter';
-import { UniversalAuditLog } from '@/components/shared/UniversalAuditLog';
+import { UniversalActivityTimeline, TimelineItem } from '@/components/shared/UniversalActivityTimeline';
+import { UniversalApprovalCenter, Approval } from '@/components/shared/UniversalApprovalCenter';
+import { UniversalAuditLog, AuditLogEntry } from '@/components/shared/UniversalAuditLog';
 import { 
   ShieldCheck, 
   Lock, 
   Settings2, 
   Eye, 
   Layout,
-  Activity
+  Activity,
+  Plus
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+
+// Mock data for Founder view
+const mockApprovals: Approval[] = [
+  { id: '1', type: 'Finance', description: 'Procurement: New Server Cluster (₹ 12.4L)', user: 'Amit Sharma', amount: '₹ 12.4L' },
+  { id: '2', type: 'HR', description: 'Offer Approval: Lead AI Engineer', user: 'Priya Verma' },
+  { id: '3', type: 'Finance', description: 'Marketing Campaign Q3 Budget (₹ 8.5L)', user: 'Rahul Gupta', amount: '₹ 8.5L' }
+];
+
+const mockTimeline: TimelineItem[] = [
+  { 
+    id: '1', 
+    type: 'Sale', 
+    title: 'Enterprise Deal Closed', 
+    description: 'Deemand Solutions signed 24-month contract.', 
+    timestamp: '12m ago',
+    user: { name: 'Rajesh K', initials: 'RK' },
+    category: 'crm'
+  },
+  { 
+    id: '2', 
+    type: 'Finance', 
+    title: 'Payment Received', 
+    description: 'Acme Corp cleared invoice #INV-2026-992 (₹ 4.2L).', 
+    timestamp: '1h ago',
+    user: { name: 'System', initials: 'SY' },
+    category: 'finance'
+  },
+  { 
+    id: '3', 
+    type: 'System', 
+    title: 'Configuration Changed', 
+    description: 'Founder OS Dashboard Layout updated.', 
+    timestamp: '2h ago',
+    user: { name: 'Admin', initials: 'AD' },
+    category: 'system'
+  }
+];
+
+const mockAuditLogs: AuditLogEntry[] = [
+  { id: '1', user: 'Admin', action: 'Login', entity: 'System', timestamp: '2026-08-08 20:42' },
+  { id: '2', user: 'Rajesh K', action: 'Update', entity: 'Lead: Deemand Solutions', timestamp: '2026-08-08 20:30' },
+  { id: '3', user: 'Priya Verma', action: 'Create', entity: 'Job Post: Lead AI Engineer', timestamp: '2026-08-08 19:15' }
+];
 
 export const ExecutiveControls: React.FC = () => {
   return (
@@ -28,15 +72,15 @@ export const ExecutiveControls: React.FC = () => {
             </TabsList>
             
             <TabsContent value="approvals">
-              <UniversalApprovalCenter />
+              <UniversalApprovalCenter approvals={mockApprovals} />
             </TabsContent>
             
             <TabsContent value="activity">
-              <UniversalActivityTimeline />
+              <UniversalActivityTimeline items={mockTimeline} />
             </TabsContent>
             
             <TabsContent value="audit">
-              <UniversalAuditLog />
+              <UniversalAuditLog entries={mockAuditLogs} />
             </TabsContent>
           </Tabs>
         </div>
@@ -95,5 +139,3 @@ const ConfigButton = ({ icon: Icon, label }: any) => (
     <span className="text-[10px] font-bold uppercase tracking-tighter">{label}</span>
   </button>
 );
-
-import { Plus } from 'lucide-react';
