@@ -6,7 +6,8 @@ import { ModuleManagement } from "@/components/admin-studio/ModuleManagement";
 import { CRMBuilder } from "@/components/admin-studio/CRMBuilder";
 import { WorkflowBuilder } from "@/components/admin-studio/WorkflowBuilder";
 import { BrandingBuilder } from "@/components/admin-studio/BrandingBuilder";
-import { LayoutGrid, Database, Layers, GitBranch, Settings } from "lucide-react";
+import { AdminAuditCenter } from "@/components/admin-studio/AdminAuditCenter";
+import { LayoutGrid, Database, Layers, GitBranch, Settings, History } from "lucide-react";
 
 export const Route = createFileRoute("/modules/admin")({
   component: AdminStudioModule,
@@ -38,6 +39,9 @@ function AdminStudioModule() {
           <TabsTrigger value="branding" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent shadow-none px-4 py-2">
             <Settings className="mr-2 size-3.5" /> Branding
           </TabsTrigger>
+          <TabsTrigger value="audit" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent shadow-none px-4 py-2">
+            <History className="mr-2 size-3.5" /> Audit Center
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="home" className="pt-6">
@@ -54,6 +58,9 @@ function AdminStudioModule() {
         </TabsContent>
         <TabsContent value="branding" className="pt-6">
           <BrandingBuilder />
+        </TabsContent>
+        <TabsContent value="audit" className="pt-6">
+          <AdminAuditCenter />
         </TabsContent>
       </Tabs>
     </div>
