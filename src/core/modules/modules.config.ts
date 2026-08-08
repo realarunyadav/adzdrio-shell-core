@@ -261,6 +261,17 @@ export const modules: ModuleDefinition[] = [
     status: "available",
     basePath: "/platform/activity",
   },
+  {
+    id: "security",
+    name: "Security Center",
+    description: "Monitor authentication, authorization and identity hardening.",
+    icon: ShieldCheck,
+    group: "platform",
+    order: 130,
+    status: "available",
+    basePath: "/settings/security",
+    permission: "platform.security.view",
+  },
 ];
 
 let bootstrapped = false;

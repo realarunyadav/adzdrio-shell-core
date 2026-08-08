@@ -17,7 +17,8 @@ import {
   MoreHorizontal,
   Info,
   Check,
-  AlertCircle
+  AlertCircle,
+  AlertTriangle
 } from "lucide-react";
 import * as React from "react";
 
@@ -231,7 +232,10 @@ function CreateRoleDialog() {
                       <TableHead className="text-center">Create</TableHead>
                       <TableHead className="text-center">Edit</TableHead>
                       <TableHead className="text-center">Delete</TableHead>
-                      <TableHead className="text-center">Manage</TableHead>
+                      <TableHead className="text-center">Export</TableHead>
+                      <TableHead className="text-center">Approve</TableHead>
+                      <TableHead className="text-center">Verify</TableHead>
+                      <TableHead className="text-center">Sensitive</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -239,6 +243,7 @@ function CreateRoleDialog() {
                     <PermissionRow module="Core Platform" capability="User Management" />
                     <PermissionRow module="Core Platform" capability="Roles & Permissions" />
                     <PermissionRow module="Business Ops" capability="CRM Operations" />
+                    <PermissionRow module="Finance" capability="Financial Records" />
                     <PermissionRow module="Intelligence" capability="AI Studio Access" />
                   </TableBody>
                 </Table>
@@ -246,10 +251,10 @@ function CreateRoleDialog() {
               
               <div className="rounded-md bg-muted/30 p-4 border border-border/50">
                 <div className="flex gap-3">
-                  <Info className="size-4 text-muted-foreground shrink-0 mt-0.5" />
+                  <AlertTriangle className="size-4 text-warning shrink-0 mt-0.5" />
                   <div className="space-y-1">
-                    <p className="text-xs font-semibold uppercase tracking-wider">Custom Permissions</p>
-                    <p className="text-xs text-muted-foreground">Advanced functional permissions can be configured once specific business modules are implemented.</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider">High Impact Change</p>
+                    <p className="text-xs text-muted-foreground">Modifying role permissions affects all assigned users immediately. This action will be recorded in the security audit log.</p>
                   </div>
                 </div>
               </div>
@@ -298,7 +303,7 @@ function PermissionRow({ module, capability }: { module: string; capability: str
           <span className="text-sm font-medium mt-1">{capability}</span>
         </div>
       </TableCell>
-      {[1, 2, 3, 4, 5].map((i) => (
+      {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
         <TableCell key={i} className="text-center">
           <div className="flex justify-center">
             <Checkbox />

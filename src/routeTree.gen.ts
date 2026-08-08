@@ -30,6 +30,8 @@ import { Route as ModulesRolesRouteImport } from './routes/modules.roles'
 import { Route as ModulesSupportRouteImport } from './routes/modules.support'
 import { Route as ModulesUsersRouteImport } from './routes/modules.users'
 import { Route as PlatformActivityRouteImport } from './routes/platform.activity'
+import { Route as SettingsAuditRouteImport } from './routes/settings.audit'
+import { Route as SettingsSecurityRouteImport } from './routes/settings.security'
 import { Route as ModulesCrmProspectRouteImport } from './routes/modules/crm/prospect'
 import { Route as ModulesHrmsEmployeeRouteImport } from './routes/modules/hrms/employee'
 
@@ -138,6 +140,16 @@ const PlatformActivityRoute = PlatformActivityRouteImport.update({
   path: '/platform/activity',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsAuditRoute = SettingsAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => SettingsRoute,
+} as any)
+const SettingsSecurityRoute = SettingsSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => SettingsRoute,
+} as any)
 const ModulesCrmProspectRoute = ModulesCrmProspectRouteImport.update({
   id: '/prospect',
   path: '/prospect',
@@ -151,7 +163,7 @@ const ModulesHrmsEmployeeRoute = ModulesHrmsEmployeeRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/settings': typeof SettingsRoute
+  '/settings': typeof SettingsRouteWithChildren
   '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
@@ -171,12 +183,14 @@ export interface FileRoutesByFullPath {
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/platform/activity': typeof PlatformActivityRoute
+  '/settings/audit': typeof SettingsAuditRoute
+  '/settings/security': typeof SettingsSecurityRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/settings': typeof SettingsRoute
+  '/settings': typeof SettingsRouteWithChildren
   '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
@@ -196,13 +210,15 @@ export interface FileRoutesByTo {
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/platform/activity': typeof PlatformActivityRoute
+  '/settings/audit': typeof SettingsAuditRoute
+  '/settings/security': typeof SettingsSecurityRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/settings': typeof SettingsRoute
+  '/settings': typeof SettingsRouteWithChildren
   '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
@@ -222,6 +238,8 @@ export interface FileRoutesById {
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/platform/activity': typeof PlatformActivityRoute
+  '/settings/audit': typeof SettingsAuditRoute
+  '/settings/security': typeof SettingsSecurityRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
 }
@@ -249,6 +267,8 @@ export interface FileRouteTypes {
     | '/modules/support'
     | '/modules/users'
     | '/platform/activity'
+    | '/settings/audit'
+    | '/settings/security'
     | '/modules/crm/prospect'
     | '/modules/hrms/employee'
   fileRoutesByTo: FileRoutesByTo
@@ -274,6 +294,8 @@ export interface FileRouteTypes {
     | '/modules/support'
     | '/modules/users'
     | '/platform/activity'
+    | '/settings/audit'
+    | '/settings/security'
     | '/modules/crm/prospect'
     | '/modules/hrms/employee'
   id:
@@ -299,13 +321,15 @@ export interface FileRouteTypes {
     | '/modules/support'
     | '/modules/users'
     | '/platform/activity'
+    | '/settings/audit'
+    | '/settings/security'
     | '/modules/crm/prospect'
     | '/modules/hrms/employee'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  SettingsRoute: typeof SettingsRoute
+  SettingsRoute: typeof SettingsRouteWithChildren
   CustomerPortalRoute: typeof CustomerPortalRoute
   ModulesModuleIdRoute: typeof ModulesModuleIdRoute
   ModulesActivationRoute: typeof ModulesActivationRoute
@@ -476,6 +500,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlatformActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings/audit': {
+      id: '/settings/audit'
+      path: '/audit'
+      fullPath: '/settings/audit'
+      preLoaderRoute: typeof SettingsAuditRouteImport
+      parentRoute: typeof SettingsRoute
+    }
+    '/settings/security': {
+      id: '/settings/security'
+      path: '/security'
+      fullPath: '/settings/security'
+      preLoaderRoute: typeof SettingsSecurityRouteImport
+      parentRoute: typeof SettingsRoute
+    }
     '/modules/crm/prospect': {
       id: '/modules/crm/prospect'
       path: '/prospect'
@@ -492,6 +530,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface SettingsRouteChildren {
+  SettingsAuditRoute: typeof SettingsAuditRoute
+  SettingsSecurityRoute: typeof SettingsSecurityRoute
+}
+
+const SettingsRouteChildren: SettingsRouteChildren = {
+  SettingsAuditRoute: SettingsAuditRoute,
+  SettingsSecurityRoute: SettingsSecurityRoute,
+}
+
+const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
+  SettingsRouteChildren,
+)
 
 interface ModulesCrmRouteChildren {
   ModulesCrmProspectRoute: typeof ModulesCrmProspectRoute
@@ -519,7 +571,7 @@ const ModulesHrmsRouteWithChildren = ModulesHrmsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  SettingsRoute: SettingsRoute,
+  SettingsRoute: SettingsRouteWithChildren,
   CustomerPortalRoute: CustomerPortalRoute,
   ModulesModuleIdRoute: ModulesModuleIdRoute,
   ModulesActivationRoute: ModulesActivationRoute,
@@ -543,13 +595,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
