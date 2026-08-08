@@ -99,7 +99,6 @@ export function AppHeader() {
           </Tooltip>
         </TooltipProvider>
 
-
         {allowUserToggle ? (
           <Button
             variant="ghost"
@@ -110,24 +109,24 @@ export function AppHeader() {
             {resolvedMode === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
           </Button>
         ) : null}
-104: 
-105:         <TooltipProvider>
-106:           <Tooltip>
-107:             <TooltipTrigger asChild>
-108:               <Button 
-109:                 variant="ghost" 
-110:                 size="icon" 
-111:                 asChild
-112:                 aria-label="Security Status"
-113:               >
-114:                 <Link to="/settings/security">
-115:                   <ShieldCheck className="size-4 text-success" />
-116:                 </Link>
-117:               </Button>
-118:             </TooltipTrigger>
-119:             <TooltipContent>Platform Security: Healthy</TooltipContent>
-120:           </Tooltip>
-121:         </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                asChild
+                aria-label="Security Status"
+              >
+                <Link to="/settings/security">
+                  <ShieldCheck className="size-4 text-success" />
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Platform Security: Healthy</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
         <Button variant="ghost" size="icon" aria-label="Notifications" onClick={() => setNotificationsOpen(true)}>
           <Bell className="size-4" />
