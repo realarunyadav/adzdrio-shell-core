@@ -180,7 +180,7 @@ export const modules: ModuleDefinition[] = [
     icon: Palette,
     group: "intelligence",
     order: 100,
-    status: "planned",
+    status: "available",
     basePath: "/modules/ai",
   },
   {
