@@ -32,6 +32,7 @@ import { Route as ModulesRolesRouteImport } from './routes/modules.roles'
 import { Route as ModulesSupportRouteImport } from './routes/modules.support'
 import { Route as ModulesUsersRouteImport } from './routes/modules.users'
 import { Route as PlatformActivityRouteImport } from './routes/platform.activity'
+import { Route as PlatformAutomationRouteImport } from './routes/platform.automation'
 import { Route as PlatformDataCenterRouteImport } from './routes/platform.data-center'
 import { Route as SettingsAuditRouteImport } from './routes/settings.audit'
 import { Route as SettingsSecurityRouteImport } from './routes/settings.security'
@@ -153,6 +154,11 @@ const PlatformActivityRoute = PlatformActivityRouteImport.update({
   path: '/platform/activity',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlatformAutomationRoute = PlatformAutomationRouteImport.update({
+  id: '/platform/automation',
+  path: '/platform/automation',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlatformDataCenterRoute = PlatformDataCenterRouteImport.update({
   id: '/platform/data-center',
   path: '/platform/data-center',
@@ -203,6 +209,7 @@ export interface FileRoutesByFullPath {
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/platform/activity': typeof PlatformActivityRoute
+  '/platform/automation': typeof PlatformAutomationRoute
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
@@ -233,6 +240,7 @@ export interface FileRoutesByTo {
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/platform/activity': typeof PlatformActivityRoute
+  '/platform/automation': typeof PlatformAutomationRoute
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
@@ -264,6 +272,7 @@ export interface FileRoutesById {
   '/modules/support': typeof ModulesSupportRoute
   '/modules/users': typeof ModulesUsersRoute
   '/platform/activity': typeof PlatformActivityRoute
+  '/platform/automation': typeof PlatformAutomationRoute
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
@@ -296,6 +305,7 @@ export interface FileRouteTypes {
     | '/modules/support'
     | '/modules/users'
     | '/platform/activity'
+    | '/platform/automation'
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
@@ -326,6 +336,7 @@ export interface FileRouteTypes {
     | '/modules/support'
     | '/modules/users'
     | '/platform/activity'
+    | '/platform/automation'
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
@@ -356,6 +367,7 @@ export interface FileRouteTypes {
     | '/modules/support'
     | '/modules/users'
     | '/platform/activity'
+    | '/platform/automation'
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
@@ -387,6 +399,7 @@ export interface RootRouteChildren {
   ModulesSupportRoute: typeof ModulesSupportRoute
   ModulesUsersRoute: typeof ModulesUsersRoute
   PlatformActivityRoute: typeof PlatformActivityRoute
+  PlatformAutomationRoute: typeof PlatformAutomationRoute
   PlatformDataCenterRoute: typeof PlatformDataCenterRoute
 }
 
@@ -553,6 +566,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlatformActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/platform/automation': {
+      id: '/platform/automation'
+      path: '/platform/automation'
+      fullPath: '/platform/automation'
+      preLoaderRoute: typeof PlatformAutomationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/platform/data-center': {
       id: '/platform/data-center'
       path: '/platform/data-center'
@@ -653,8 +673,19 @@ const rootRouteChildren: RootRouteChildren = {
   ModulesSupportRoute: ModulesSupportRoute,
   ModulesUsersRoute: ModulesUsersRoute,
   PlatformActivityRoute: PlatformActivityRoute,
+  PlatformAutomationRoute: PlatformAutomationRoute,
   PlatformDataCenterRoute: PlatformDataCenterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
