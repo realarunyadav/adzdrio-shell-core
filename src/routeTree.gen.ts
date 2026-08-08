@@ -14,6 +14,7 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
 import { Route as ModulesActivationRouteImport } from './routes/modules.activation'
 import { Route as ModulesAdminRouteImport } from './routes/modules.admin'
+import { Route as ModulesAiRouteImport } from './routes/modules.ai'
 import { Route as ModulesCrmRouteImport } from './routes/modules.crm'
 import { Route as ModulesEmployeesRouteImport } from './routes/modules.employees'
 import { Route as ModulesFinanceRouteImport } from './routes/modules.finance'
@@ -51,6 +52,11 @@ const ModulesActivationRoute = ModulesActivationRouteImport.update({
 const ModulesAdminRoute = ModulesAdminRouteImport.update({
   id: '/modules/admin',
   path: '/modules/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModulesAiRoute = ModulesAiRouteImport.update({
+  id: '/modules/ai',
+  path: '/modules/ai',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ModulesCrmRoute = ModulesCrmRouteImport.update({
@@ -125,6 +131,7 @@ export interface FileRoutesByFullPath {
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
   '/modules/admin': typeof ModulesAdminRoute
+  '/modules/ai': typeof ModulesAiRoute
   '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
@@ -145,6 +152,7 @@ export interface FileRoutesByTo {
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
   '/modules/admin': typeof ModulesAdminRoute
+  '/modules/ai': typeof ModulesAiRoute
   '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
@@ -166,6 +174,7 @@ export interface FileRoutesById {
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
   '/modules/admin': typeof ModulesAdminRoute
+  '/modules/ai': typeof ModulesAiRoute
   '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
   '/modules/finance': typeof ModulesFinanceRoute
@@ -188,6 +197,7 @@ export interface FileRouteTypes {
     | '/modules/$moduleId'
     | '/modules/activation'
     | '/modules/admin'
+    | '/modules/ai'
     | '/modules/crm'
     | '/modules/employees'
     | '/modules/finance'
@@ -208,6 +218,7 @@ export interface FileRouteTypes {
     | '/modules/$moduleId'
     | '/modules/activation'
     | '/modules/admin'
+    | '/modules/ai'
     | '/modules/crm'
     | '/modules/employees'
     | '/modules/finance'
@@ -228,6 +239,7 @@ export interface FileRouteTypes {
     | '/modules/$moduleId'
     | '/modules/activation'
     | '/modules/admin'
+    | '/modules/ai'
     | '/modules/crm'
     | '/modules/employees'
     | '/modules/finance'
@@ -249,6 +261,7 @@ export interface RootRouteChildren {
   ModulesModuleIdRoute: typeof ModulesModuleIdRoute
   ModulesActivationRoute: typeof ModulesActivationRoute
   ModulesAdminRoute: typeof ModulesAdminRoute
+  ModulesAiRoute: typeof ModulesAiRoute
   ModulesCrmRoute: typeof ModulesCrmRouteWithChildren
   ModulesEmployeesRoute: typeof ModulesEmployeesRoute
   ModulesFinanceRoute: typeof ModulesFinanceRoute
@@ -297,6 +310,13 @@ declare module '@tanstack/react-router' {
       path: '/modules/admin'
       fullPath: '/modules/admin'
       preLoaderRoute: typeof ModulesAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/modules/ai': {
+      id: '/modules/ai'
+      path: '/modules/ai'
+      fullPath: '/modules/ai'
+      preLoaderRoute: typeof ModulesAiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/modules/crm': {
@@ -423,6 +443,7 @@ const rootRouteChildren: RootRouteChildren = {
   ModulesModuleIdRoute: ModulesModuleIdRoute,
   ModulesActivationRoute: ModulesActivationRoute,
   ModulesAdminRoute: ModulesAdminRoute,
+  ModulesAiRoute: ModulesAiRoute,
   ModulesCrmRoute: ModulesCrmRouteWithChildren,
   ModulesEmployeesRoute: ModulesEmployeesRoute,
   ModulesFinanceRoute: ModulesFinanceRoute,
