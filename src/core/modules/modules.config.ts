@@ -14,7 +14,8 @@ import {
   RefreshCw,
   UserCircle,
   Mail,
-  Trophy
+  Trophy,
+  Database
 } from "lucide-react";
 
 import { moduleRegistry } from "./registry";
@@ -295,6 +296,17 @@ export const modules: ModuleDefinition[] = [
     status: "available",
     basePath: "/modules/incentives",
     permission: "people.incentives.view",
+  },
+  {
+    id: "data-center",
+    name: "Data Center",
+    description: "Enterprise data import, export, mapping and validation hub.",
+    icon: Database,
+    group: "platform",
+    order: 150,
+    status: "available",
+    basePath: "/platform/data-center",
+    permission: "platform.data-center.view",
   },
 ];
 
