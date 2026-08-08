@@ -10,7 +10,9 @@ import {
   ShieldCheck,
   Users,
   Rocket,
-  LifeBuoy
+  LifeBuoy,
+  RefreshCw,
+  UserCircle
 } from "lucide-react";
 
 import { moduleRegistry } from "./registry";
@@ -68,6 +70,28 @@ export const modules: ModuleDefinition[] = [
     status: "available",
     basePath: "/modules/crm",
     permission: "operations.crm.view",
+  },
+  {
+    id: "renewals",
+    name: "Renewal Center",
+    description: "Manage subscription lifecycles, retention and renewal revenue.",
+    icon: RefreshCw,
+    group: "operations",
+    order: 20.5,
+    status: "available",
+    basePath: "/modules/renewals",
+    permission: "operations.renewals.view",
+  },
+  {
+    id: "customer-portal",
+    name: "Customer Portal",
+    description: "External-facing portal for customer subscription and support management.",
+    icon: UserCircle,
+    group: "operations",
+    order: 20.6,
+    status: "available",
+    basePath: "/customer/portal",
+    permission: "operations.customer-portal.view",
   },
   {
     id: "activation",
