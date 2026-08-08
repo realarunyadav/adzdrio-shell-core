@@ -66,7 +66,7 @@ export function SignatureManagement() {
                 </TableCell>
                 <TableCell className="text-xs">{sig.assigned}</TableCell>
                 <TableCell className="text-[10px] text-muted-foreground truncate max-w-[200px] italic">
-                  Best regards, {{sender_name}}...
+                  Best regards, {"{{"}sender_name{"}}"}...
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-1">
