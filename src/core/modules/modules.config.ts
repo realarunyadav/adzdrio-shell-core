@@ -12,7 +12,8 @@ import {
   Rocket,
   LifeBuoy,
   RefreshCw,
-  UserCircle
+  UserCircle,
+  Mail
 } from "lucide-react";
 
 import { moduleRegistry } from "./registry";
