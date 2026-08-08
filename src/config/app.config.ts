@@ -30,8 +30,8 @@ export interface AppConfig {
 }
 
 export const appConfig: AppConfig = {
-  productName: "Adzdrio Business Operating System",
-  productShortName: "ABOS",
+  productName: "ADZDRIO",
+  productShortName: "ADZDRIO",
   organization: "Adzdrio India Services Pvt. Ltd.",
   version: "1.0.0",
   tenant: {
