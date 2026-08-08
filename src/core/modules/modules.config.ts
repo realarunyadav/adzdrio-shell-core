@@ -208,8 +208,9 @@ export const modules: ModuleDefinition[] = [
     icon: Calendar,
     group: "intelligence",
     order: 90,
-    status: "planned",
-    basePath: "/modules/automation",
+    status: "available",
+    basePath: "/platform/automation",
+    permission: "platform.automation.view",
   },
   {
     id: "ai",
