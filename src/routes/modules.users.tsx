@@ -407,29 +407,54 @@ function UserDetailPanel({ user }: { user: any }) {
               <div className="flex items-center gap-3">
                 <Shield className="size-5 text-muted-foreground" />
                 <div>
-                  <p className="text-sm font-medium">Multi-Factor Authentication</p>
-                  <p className="text-xs text-muted-foreground">Extra layer of security for the account.</p>
+                  <p className="text-sm font-medium">Account Status</p>
+                  <p className="text-xs text-muted-foreground">Login status and security health.</p>
                 </div>
               </div>
-              <StatusBadge tone="warning">Disabled</StatusBadge>
+              <StatusBadge tone="success">Active</StatusBadge>
             </div>
             <Separator />
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Lock className="size-5 text-muted-foreground" />
                 <div>
-                  <p className="text-sm font-medium">Password Status</p>
-                  <p className="text-xs text-muted-foreground">Last changed 3 months ago.</p>
+                  <p className="text-sm font-medium">Identity & Authentication</p>
+                  <p className="text-xs text-muted-foreground">Employee ID: ADZ-EMP-442. Password last reset 14 days ago.</p>
                 </div>
               </div>
-              <Button variant="outline" size="sm">Reset</Button>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm">Force Reset</Button>
+                <Button variant="danger" size="sm">Lock Account</Button>
+              </div>
             </div>
           </div>
           
           <div className="space-y-2">
-            <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground px-1">Active Sessions</h4>
-            <div className="rounded-lg border border-border p-3 text-center">
-              <p className="text-xs text-muted-foreground py-4">No other active sessions detected.</p>
+            <div className="flex items-center justify-between px-1">
+              <h4 className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Active Sessions</h4>
+              <Button variant="ghost" className="h-6 text-[10px] text-danger">Revoke All</Button>
+            </div>
+            <div className="rounded-lg border border-border overflow-hidden">
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="text-xs font-medium">Chrome on Windows</TableCell>
+                    <TableCell className="text-xs text-muted-foreground">192.168.1.45 (Bangalore, IN)</TableCell>
+                    <TableCell className="text-xs text-success">Active Now</TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="icon" className="size-7"><LogOut className="size-3" /></Button>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="text-xs font-medium">Safari on iPhone 15</TableCell>
+                    <TableCell className="text-xs text-muted-foreground">172.16.0.12 (Mumbai, IN)</TableCell>
+                    <TableCell className="text-xs text-muted-foreground">2h ago</TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="icon" className="size-7 text-danger"><LogOut className="size-3" /></Button>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
             </div>
           </div>
         </TabsContent>

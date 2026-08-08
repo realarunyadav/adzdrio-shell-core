@@ -126,7 +126,7 @@ function ExecutiveDashboard() {
               <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                 <BarChart3 className="size-12 mb-4 opacity-10" />
                 <p className="text-sm font-medium">Financial data stream pending</p>
-                <p className="text-xs opacity-60 italic">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                            \n                                            Complete and production-refine the Global Search, Notification Center, Command Palette, and Universal Activity Center across ABOS.\n\nFocus ONLY on these shared platform services.</p>
+                <p className="text-xs opacity-60 italic">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                            \n                                            Perform a production-grade Security, RBAC, Identity, and Audit Hardening pass across ABOS.\n\nFocus ONLY on security, permissions, identity, sessions, and audit integrity.</p>
               </div>
             </SectionCard>
             <SectionCard title="Sales Pipeline" className="h-[320px]">
