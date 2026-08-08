@@ -180,6 +180,16 @@ export const financeService = {
     api.post(`/finance/refund-requests/${id}/${action}`, data),
 };
 
+export const incentiveService = {
+  getPrograms: () => api.get<any[]>("/incentives/programs"),
+  getAchievements: () => api.get<any[]>("/incentives/achievements"),
+};
+
+export const automationService = {
+  getWorkflows: () => api.get<any[]>("/automation/workflows"),
+  getExecutions: () => api.get<any[]>("/automation/executions"),
+};
+
 export const adminService = {
   getPolicyVersions: (type: PolicyVersion['type']) => api.get<PolicyVersion[]>(`/admin/policies/${type}`),
   updatePolicy: (type: PolicyVersion['type'], content: string) => 
