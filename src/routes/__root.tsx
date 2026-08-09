@@ -13,7 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "@/components/layout/AppShell";
 import { RbacProvider } from "@/core/rbac/RbacProvider";
-import { AuthProvider } from "@/lib/auth/AuthProvider";
+import { AuthProvider, useAuth } from "@/lib/auth/AuthProvider";
 import { ThemeProvider } from "@/core/theme/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { GlobalCommandPalette } from "@/components/shared/GlobalCommandPalette";
