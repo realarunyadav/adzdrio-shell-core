@@ -44,9 +44,10 @@ class ApiClient {
 
       // Handle specific status codes
       if (response.status === 401) {
-        // Handle unauthorized - trigger logout or refresh
+        // Handle unauthorized - trigger global logout event
         console.warn('Unauthorized request, session may have expired.');
-        // window.dispatchEvent(new CustomEvent('abos:auth:unauthorized'));
+        localStorage.removeItem('abos_auth_token');
+        window.dispatchEvent(new CustomEvent('abos:auth:unauthorized'));
       }
 
       throw new ApiError(
