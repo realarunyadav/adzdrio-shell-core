@@ -107,8 +107,10 @@ import { UniversalTag } from "@/components/shared/UniversalTag";
 import { Customer360View } from "@/components/crm/Customer360View";
 import { RapidConfirmationManager } from "@/components/crm/RapidConfirmationManager";
 import { leadsService } from "@/lib/api/services";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/modules/crm")({
+
   component: SalesCRMModule,
 });
 
@@ -565,15 +567,16 @@ function AddLeadDialog({ onSuccess }: { onSuccess?: () => void }) {
     setLoading(true);
     try {
       await leadsService.create({
-        ...formData,
+        customerName: formData.customerName,
+        customerEmail: formData.customerEmail,
         status: 'sent',
-        priority: 'Normal',
-        score: 0,
         expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
         selectedPlanId: 'standard_monthly',
         duration: 1,
-        confirmationUrl: '#'
+        confirmationUrl: '#',
+        devices: []
       });
+
       toast.success("Lead registered successfully");
       setOpen(false);
       onSuccess?.();
