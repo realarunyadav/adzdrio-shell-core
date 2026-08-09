@@ -1,4 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
+
 import { 
   LayoutGrid, 
   TrendingUp, 
@@ -70,16 +72,17 @@ function ExecutiveDashboard() {
         description={`Welcome back, ${principal?.displayName ?? "Executive"}. Here is your command center overview for today.`}
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="glass-surface h-9">
+            <Button variant="outline" size="sm" className="glass-surface h-9" onClick={() => window.print()}>
               <Calendar className="mr-2 size-4" />
               This Month
             </Button>
-            <Button size="sm" className="shadow-elevated h-9">
+            <Button size="sm" className="shadow-elevated h-9" onClick={() => toast.info("Report generation initialized")}>
               <Zap className="mr-2 size-4" />
               Generate Report
             </Button>
           </div>
         }
+
       />
 
       {/* Primary KPIs */}
@@ -181,13 +184,14 @@ function ExecutiveDashboard() {
         <div className="lg:col-span-4 space-y-6">
           <SectionCard title="Quick Actions" contentClassName="p-0">
             <div className="grid grid-cols-2 gap-px bg-border/40">
-              <ActionItem icon={UserPlus} label="Add Employee" />
-              <ActionItem icon={Plus} label="Create Lead" />
-              <ActionItem icon={DollarSign} label="New Invoice" />
-              <ActionItem icon={CheckCircle2} label="Approve Leave" />
-              <ActionItem icon={Zap} label="Start Payroll" />
-              <ActionItem icon={Briefcase} label="New Project" />
+              <ActionItem icon={UserPlus} label="Add Employee" to="/modules/employees" />
+              <ActionItem icon={Plus} label="Create Lead" to="/modules/crm" />
+              <ActionItem icon={DollarSign} label="New Invoice" to="/modules/finance" />
+              <ActionItem icon={CheckCircle2} label="Approve Leave" to="/modules/hrms" />
+              <ActionItem icon={Zap} label="Start Payroll" to="/modules/hrms" />
+              <ActionItem icon={Briefcase} label="New Project" to="/modules/projects" />
             </div>
+
           </SectionCard>
 
           <SectionCard title="Pending Approvals" footer={<Button variant="ghost" size="sm" className="w-full text-xs">Manage All Approvals</Button>}>
@@ -315,9 +319,13 @@ function FeedItem({ icon: Icon, title, time, description, tone = "neutral" }: an
   );
 }
 
-function ActionItem({ icon: Icon, label }: { icon: any, label: string }) {
+function ActionItem({ icon: Icon, label, to }: { icon: any, label: string, to?: string }) {
+  const navigate = useNavigate();
   return (
-    <button className="flex flex-col items-center justify-center gap-2 p-4 bg-card hover:bg-muted/30 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary">
+    <button 
+      onClick={() => to && navigate({ to })}
+      className="flex flex-col items-center justify-center gap-2 p-4 bg-card hover:bg-muted/30 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary"
+    >
       <div className="size-8 rounded-lg bg-primary/5 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
         <Icon className="size-4" />
       </div>
@@ -325,6 +333,7 @@ function ActionItem({ icon: Icon, label }: { icon: any, label: string }) {
     </button>
   );
 }
+
 
 function XIcon({ className }: { className?: string }) {
   return (

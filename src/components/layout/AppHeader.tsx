@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 
 import { Bell, Command as CommandIcon, Moon, Search, Sun, Zap, ShieldCheck } from "lucide-react";
 
@@ -8,6 +8,7 @@ import { moduleRegistry } from "@/core/modules/registry";
 import { useRbac } from "@/core/rbac/RbacProvider";
 import { useTheme } from "@/core/theme/ThemeProvider";
 import { roleMap } from "@/core/rbac/roles.config";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -15,6 +16,16 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { GlobalSearch } from "@/components/search/GlobalSearch";
 import { GlobalNotificationCenter } from "@/components/shared/GlobalNotificationCenter";
+import { useAuth } from "@/lib/auth/AuthProvider";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { LogOut, User, Settings as SettingsIcon } from "lucide-react";
 
 import {
   Breadcrumb,
@@ -24,6 +35,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+
 
 function useBreadcrumbs() {
   const pathname = useRouterState({ select: (router) => router.location.pathname });
@@ -43,9 +55,17 @@ export function AppHeader() {
   const { resolvedMode, toggle, allowUserToggle } = useTheme();
   const crumbs = useBreadcrumbs();
   const [notificationsOpen, setNotificationsOpen] = React.useState(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const primaryRole = roles[0] ? roleMap[roles[0]]?.name : undefined;
 
+  const handleLogout = async () => {
+    await logout();
+    navigate({ to: "/auth" });
+  };
+
   const initials = (principal?.displayName ?? "AB")
+
     .split(" ")
     .map((part: string) => part[0])
     .slice(0, 2)
@@ -136,17 +156,42 @@ export function AppHeader() {
 
         <Separator orientation="vertical" className="hidden h-6 sm:block" />
 
-        <button className="flex items-center gap-2 p-1 rounded-full hover:bg-accent/50 premium-transition border border-transparent hover:border-border/50 group">
-          <Avatar className="size-8 border border-border/40 shadow-sm">
-            <AvatarFallback className="bg-navy text-[10px] font-bold text-navy-foreground group-hover:bg-primary group-hover:text-primary-foreground premium-transition">
-              {initials}
-            </AvatarFallback>
-          </Avatar>
-          <div className="hidden text-left leading-tight sm:block pr-2">
-            <p className="text-xs font-bold text-foreground group-hover:text-primary premium-transition">{principal?.displayName}</p>
-            <p className="text-[10px] font-medium text-muted-foreground/70">{primaryRole}</p>
-          </div>
-        </button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="flex items-center gap-2 p-1 rounded-full hover:bg-accent/50 premium-transition border border-transparent hover:border-border/50 group outline-none">
+              <Avatar className="size-8 border border-border/40 shadow-sm">
+                <AvatarFallback className="bg-navy text-[10px] font-bold text-navy-foreground group-hover:bg-primary group-hover:text-primary-foreground premium-transition">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+              <div className="hidden text-left leading-tight sm:block pr-2">
+                <p className="text-xs font-bold text-foreground group-hover:text-primary premium-transition">{principal?.displayName}</p>
+                <p className="text-[10px] font-medium text-muted-foreground/70">{primaryRole}</p>
+              </div>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56 glass-surface border-border/40">
+            <DropdownMenuLabel className="font-black text-[10px] uppercase tracking-widest opacity-50">Account</DropdownMenuLabel>
+            <DropdownMenuItem asChild className="cursor-pointer font-bold text-xs uppercase tracking-tight">
+              <Link to="/settings" className="flex items-center">
+                <User className="mr-2 size-4" /> Profile Details
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild className="cursor-pointer font-bold text-xs uppercase tracking-tight">
+              <Link to="/settings" className="flex items-center">
+                <SettingsIcon className="mr-2 size-4" /> Preferences
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-border/40" />
+            <DropdownMenuItem 
+              onClick={handleLogout}
+              className="cursor-pointer font-bold text-xs uppercase tracking-tight text-destructive focus:text-destructive focus:bg-destructive/10"
+            >
+              <LogOut className="mr-2 size-4" /> Terminate Session
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
       </div>
     </header>
   );

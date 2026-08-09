@@ -1,14 +1,14 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 
 import { checkPermission, resolvePermissions } from "./permissions";
-import { defaultPrincipal } from "./roles.config";
+// import { defaultPrincipal } from "./roles.config";
 import type { Permission, PrincipalIdentity, RbacContextValue, RoleId } from "./types";
 
 const RbacContext = createContext<RbacContextValue | null>(null);
 
 export function RbacProvider({
   children,
-  principal: initialPrincipal = defaultPrincipal,
+  principal: initialPrincipal = null,
 }: {
   children: ReactNode;
   principal?: PrincipalIdentity | null;
