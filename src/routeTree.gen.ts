@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CommunicationRouteImport } from './routes/communication'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as CustomerPortalRouteImport } from './routes/customer.portal'
@@ -43,6 +44,11 @@ import { Route as PublicConfirmationsTokenRouteImport } from './routes/public.co
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CommunicationRoute = CommunicationRouteImport.update({
@@ -194,6 +200,7 @@ const PublicConfirmationsTokenRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/communication': typeof CommunicationRoute
   '/settings': typeof SettingsRouteWithChildren
   '/customer/portal': typeof CustomerPortalRoute
@@ -226,6 +233,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/communication': typeof CommunicationRoute
   '/settings': typeof SettingsRouteWithChildren
   '/customer/portal': typeof CustomerPortalRoute
@@ -259,6 +267,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/communication': typeof CommunicationRoute
   '/settings': typeof SettingsRouteWithChildren
   '/customer/portal': typeof CustomerPortalRoute
@@ -293,6 +302,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/communication'
     | '/settings'
     | '/customer/portal'
@@ -325,6 +335,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/communication'
     | '/settings'
     | '/customer/portal'
@@ -357,6 +368,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/communication'
     | '/settings'
     | '/customer/portal'
@@ -390,6 +402,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   CommunicationRoute: typeof CommunicationRoute
   SettingsRoute: typeof SettingsRouteWithChildren
   CustomerPortalRoute: typeof CustomerPortalRoute
@@ -424,6 +437,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/communication': {
@@ -672,6 +692,7 @@ const ModulesHrmsRouteWithChildren = ModulesHrmsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   CommunicationRoute: CommunicationRoute,
   SettingsRoute: SettingsRouteWithChildren,
   CustomerPortalRoute: CustomerPortalRoute,
@@ -701,3 +722,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

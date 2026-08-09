@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 
 import { Bell, Command as CommandIcon, Moon, Search, Sun, Zap, ShieldCheck } from "lucide-react";
 
@@ -8,6 +8,7 @@ import { moduleRegistry } from "@/core/modules/registry";
 import { useRbac } from "@/core/rbac/RbacProvider";
 import { useTheme } from "@/core/theme/ThemeProvider";
 import { roleMap } from "@/core/rbac/roles.config";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
