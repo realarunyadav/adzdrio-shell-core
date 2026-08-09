@@ -133,16 +133,31 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <RbacProvider>
-            <AppShell>
-              {/* Required: nested routes render here. */}
-              <Outlet />
-            </AppShell>
-            <GlobalCommandPalette />
-            <Toaster />
-          </RbacProvider>
+          <InnerRoot />
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
+  );
+}
+
+function InnerRoot() {
+  const { user } = useAuth();
+  
+  return (
+    <RbacProvider 
+      principal={user ? {
+        id: user.id,
+        displayName: user.displayName,
+        email: user.email,
+        roles: [user.role] as any, // backend user.role mapping
+        tenantId: 'adzdrio'
+      } : null}
+    >
+      <AppShell>
+        <Outlet />
+      </AppShell>
+      <GlobalCommandPalette />
+      <Toaster position="top-right" richColors closeButton />
+    </RbacProvider>
   );
 }

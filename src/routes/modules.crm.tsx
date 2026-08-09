@@ -296,7 +296,13 @@ function SalesCRMModule() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <StatusBadge status={lead.status} />
+                          <StatusBadge tone={
+                            lead.status === 'confirmed' || lead.status === 'active' ? 'success' : 
+                            lead.status === 'expired' || lead.status === 'not_confirmed' ? 'danger' : 
+                            lead.status === 'sent' || lead.status === 'opened' ? 'info' : 'neutral'
+                          }>
+                            {lead.status}
+                          </StatusBadge>
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline" className="text-[9px] uppercase tracking-tighter">
