@@ -1,10 +1,12 @@
-import { Link, useRouterState } from "@tanstack/react-router";
-import { ChevronRight } from "lucide-react";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
+import { ChevronRight, LogOut, User, Settings as SettingsIcon } from "lucide-react";
 
 
 import { appConfig } from "@/config/app.config";
 import { moduleRegistry } from "@/core/modules/registry";
 import { useRbac } from "@/core/rbac/RbacProvider";
+import { useAuth } from "@/lib/auth/AuthProvider";
+
 import {
   Sidebar,
   SidebarContent,
@@ -36,7 +38,9 @@ import { cn } from "@/lib/utils";
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
-  const { can } = useRbac();
+  const { can, principal, roles } = useRbac();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const pathname = useRouterState({ select: (router) => router.location.pathname });
 
   const tree = moduleRegistry.navigationTree((permission) =>
@@ -45,6 +49,12 @@ export function AppSidebar() {
 
   const isActive = (path: string) =>
     path === "/" ? pathname === "/" : pathname === path || pathname.startsWith(`${path}/`);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate({ to: "/auth" });
+  };
+
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border/50 bg-sidebar/95 backdrop-blur-xl">
@@ -154,22 +164,47 @@ export function AppSidebar() {
 
       <SidebarFooter className="border-t border-sidebar-border p-4 bg-sidebar-accent/10">
         {!collapsed ? (
-          <div className="space-y-3">
+          <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] text-sidebar-foreground/40 font-bold uppercase">System Status</span>
-              <span className="size-1.5 rounded-full bg-success animate-pulse" />
+              <span className="text-[10px] text-sidebar-foreground/40 font-bold uppercase tracking-wider">System Status</span>
+              <span className="flex items-center gap-1.5">
+                <span className="text-[10px] font-bold text-success uppercase">Active</span>
+                <span className="size-1.5 rounded-full bg-success animate-pulse" />
+              </span>
             </div>
-            <p className="text-[10px] text-sidebar-foreground/50 leading-relaxed">
-              v{appConfig.version} · Stable Release<br />
-              Secure Enterprise Environment
+            
+            <div className="space-y-1">
+              <button 
+                onClick={() => navigate({ to: "/settings" })}
+                className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs font-bold text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
+              >
+                <User className="size-3.5" />
+                <span>Account Profile</span>
+              </button>
+              <button 
+                onClick={handleLogout}
+                className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs font-bold text-destructive/80 hover:bg-destructive/10 hover:text-destructive transition-colors"
+              >
+                <LogOut className="size-3.5" />
+                <span>Terminate Session</span>
+              </button>
+            </div>
+
+            <p className="text-[10px] text-sidebar-foreground/40 leading-relaxed font-medium pt-2 border-t border-sidebar-border/30">
+              v{appConfig.version} · Enterprise Shell<br />
+              Encryption: AES-256-GCM
             </p>
           </div>
         ) : (
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <button onClick={handleLogout} className="text-destructive/60 hover:text-destructive transition-colors" title="Logout">
+              <LogOut className="size-4" />
+            </button>
             <span className="size-2 rounded-full bg-success" />
           </div>
         )}
       </SidebarFooter>
+
 
     </Sidebar>
   );
