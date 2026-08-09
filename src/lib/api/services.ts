@@ -19,15 +19,15 @@ import {
  * Managed by NestJS Backend
  */
 export const authService = {
-  login: (credentials: any) => api.post<{ user: any; token: string }>("/auth/login", credentials),
-  logout: () => api.post("/auth/logout"),
-  getCurrentSession: () => api.get<any>("/auth/session"),
-  refreshToken: () => api.post<{ token: string }>("/auth/refresh"),
-  changePassword: (data: any) => api.post("/auth/change-password", data),
-  resetPasswordRequest: (email: string) => api.post("/auth/reset-password/request", { email }),
-  resetPasswordConfirm: (data: any) => api.post("/auth/reset-password/confirm", data),
-  listSessions: () => api.get<any[]>("/auth/sessions"),
-  revokeSession: (sessionId: string) => api.delete(`/auth/sessions/${sessionId}`),
+  login: (credentials: any) => api.post<any>("/api/auth/login", credentials),
+  logout: () => api.post("/api/auth/logout"),
+  getCurrentSession: () => api.get<any>("/api/auth/me"),
+  refreshToken: () => api.post<{ token: string }>("/api/auth/refresh"),
+  changePassword: (data: any) => api.post("/api/auth/change-password", data),
+  resetPasswordRequest: (email: string) => api.post("/api/auth/reset-password/request", { email }),
+  resetPasswordConfirm: (data: any) => api.post("/api/auth/reset-password/confirm", data),
+  listSessions: () => api.get<any[]>("/api/auth/sessions"),
+  revokeSession: (sessionId: string) => api.delete(`/api/auth/sessions/${sessionId}`),
 };
 
 /**
@@ -132,14 +132,36 @@ export const storageService = {
  * CRM & FINANCE (Existing Refined)
  */
 export const leadsService = {
-  getAll: () => api.get<RapidLead[]>("/leads"),
-  getById: (id: string) => api.get<RapidLead>(`/leads/${id}`),
-  create: (data: Partial<RapidLead>) => api.post<RapidLead>("/leads", data),
-  update: (id: string, data: Partial<RapidLead>) => api.patch<RapidLead>(`/leads/${id}`, data),
-  generateConfirmationLink: (leadId: string) => api.post<{ url: string }>(`/leads/${leadId}/generate-link`, {}),
-  getConfirmationDetails: (token: string) => api.get<RapidLead>(`/public/confirmations/${token}`),
+  getAll: () => api.get<RapidLead[]>("/api/leads"),
+  getById: (id: string) => api.get<RapidLead>(`/api/leads/${id}`),
+  create: (data: Partial<RapidLead>) => api.post<RapidLead>("/api/leads", data),
+  update: (id: string, data: Partial<RapidLead>) => api.patch<RapidLead>(`/api/leads/${id}`, data),
+  generateConfirmationLink: (leadId: string) => api.post<{ url: string }>(`/api/leads/${leadId}/generate-link`, {}),
+  getConfirmationDetails: (token: string) => api.get<RapidLead>(`/api/public/confirmations/${token}`),
   submitConfirmation: (token: string, confirmed: boolean, data: { reason?: string; feedback?: string }) => 
-    api.post(`/public/confirmations/${token}/submit`, { confirmed, ...data }),
+    api.post(`/api/public/confirmations/${token}/submit`, { confirmed, ...data }),
+};
+
+export const accountService = {
+  getAll: () => api.get<any[]>("/api/accounts"),
+  getById: (id: string) => api.get<any>(`/api/accounts/${id}`),
+  create: (data: any) => api.post("/api/accounts", data),
+  update: (id: string, data: any) => api.patch(`/api/accounts/${id}`, data),
+};
+
+export const contactService = {
+  getAll: () => api.get<any[]>("/api/contacts"),
+  getById: (id: string) => api.get<any>(`/api/contacts/${id}`),
+  create: (data: any) => api.post("/api/contacts", data),
+  update: (id: string, data: any) => api.patch(`/api/contacts/${id}`, data),
+};
+
+export const dealService = {
+  getAll: () => api.get<any[]>("/api/deals"),
+  getById: (id: string) => api.get<any>(`/api/deals/${id}`),
+  create: (data: any) => api.post("/api/deals", data),
+  update: (id: string, data: any) => api.patch(`/api/deals/${id}`, data),
+  getPipeline: () => api.get<any>("/api/deals/pipeline"),
 };
 
 export const customerService = {

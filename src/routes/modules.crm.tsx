@@ -284,7 +284,48 @@ function SalesCRMModule() {
                   ) : (
                     leads.map((lead) => (
                       <TableRow key={lead.id} className="hover:bg-muted/5 cursor-pointer group">
-                        {/* Map lead data here */}
+                        <TableCell>
+                          <div className="flex items-center gap-3">
+                            <Avatar className="size-8">
+                              <AvatarFallback className="text-[10px]">{lead.customerName?.substring(0, 2).toUpperCase()}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="text-xs font-bold">{lead.customerName}</p>
+                              <p className="text-[10px] text-muted-foreground">{lead.customerEmail}</p>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <StatusBadge tone={
+                            lead.status === 'confirmed' || lead.status === 'active' ? 'success' : 
+                            lead.status === 'expired' || lead.status === 'not_confirmed' ? 'danger' : 
+                            lead.status === 'sent' || lead.status === 'opened' ? 'info' : 'neutral'
+                          }>
+                            {lead.status}
+                          </StatusBadge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="text-[9px] uppercase tracking-tighter">
+                            {lead.priority || 'Normal'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="font-mono text-[10px]">
+                          ₹{lead.price?.toLocaleString()}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-1">
+                            <Star className="size-3 text-warning fill-warning" />
+                            <span className="text-[10px] font-bold">{lead.score || 0}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-[10px] text-muted-foreground">
+                          {lead.nextFollowUp ? new Date(lead.nextFollowUp).toLocaleDateString() : 'Not set'}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="ghost" size="icon" className="size-7">
+                            <MoreHorizontal className="size-3.5" />
+                          </Button>
+                        </TableCell>
                       </TableRow>
                     ))
                   )}

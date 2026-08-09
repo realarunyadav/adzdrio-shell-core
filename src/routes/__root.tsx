@@ -13,7 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppShell } from "@/components/layout/AppShell";
 import { RbacProvider } from "@/core/rbac/RbacProvider";
-import { AuthProvider } from "@/lib/auth/AuthProvider";
+import { AuthProvider, useAuth } from "@/lib/auth/AuthProvider";
 import { ThemeProvider } from "@/core/theme/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { GlobalCommandPalette } from "@/components/shared/GlobalCommandPalette";
@@ -133,16 +133,31 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
-          <RbacProvider>
-            <AppShell>
-              {/* Required: nested routes render here. */}
-              <Outlet />
-            </AppShell>
-            <GlobalCommandPalette />
-            <Toaster />
-          </RbacProvider>
+          <InnerRoot />
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>
+  );
+}
+
+function InnerRoot() {
+  const { user } = useAuth();
+  
+  return (
+    <RbacProvider 
+      principal={user ? {
+        id: user.id,
+        displayName: user.displayName,
+        email: user.email,
+        roles: [user.role] as any, // backend user.role mapping
+        tenantId: 'adzdrio'
+      } : null}
+    >
+      <AppShell>
+        <Outlet />
+      </AppShell>
+      <GlobalCommandPalette />
+      <Toaster position="top-right" richColors closeButton />
+    </RbacProvider>
   );
 }

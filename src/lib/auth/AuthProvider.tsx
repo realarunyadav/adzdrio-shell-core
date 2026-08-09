@@ -30,19 +30,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     checkSession();
+
+    // Listen for global unauthorized events from ApiClient
+    const handleUnauthorized = () => {
+      setUser(null);
+      setStatus('unauthenticated');
+    };
+
+    window.addEventListener('abos:auth:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('abos:auth:unauthorized', handleUnauthorized);
   }, []);
 
   const checkSession = async () => {
+    const token = localStorage.getItem('abos_auth_token');
+    if (!token) {
+      setStatus('unauthenticated');
+      return;
+    }
+
     try {
-      const session = await authService.getCurrentSession();
-      if (session?.user) {
-        setUser(session.user);
-        setStatus('authenticated');
-      } else {
-        setStatus('unauthenticated');
-      }
+      const userData = await authService.getCurrentSession();
+      // Map backend user to frontend User type
+      const mappedUser: User = {
+        id: userData.id || userData.sub,
+        displayName: userData.displayName || userData.name || userData.username,
+        email: userData.email,
+        role: userData.role,
+        permissions: userData.permissions || [],
+      };
+      setUser(mappedUser);
+      setStatus('authenticated');
     } catch (err: any) {
-      if (err.status === 0 || err.status >= 500) {
+      if (err.status === 401) {
+        localStorage.removeItem('abos_auth_token');
+        setStatus('unauthenticated');
+      } else if (err.status === 0 || err.status >= 500) {
         setStatus('connection_error');
       } else {
         setStatus('unauthenticated');
@@ -54,9 +76,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (credentials: any) => {
     try {
       setError(null);
-      const { user, token } = await authService.login(credentials);
+      const response = await authService.login(credentials);
+      // Response expected: { accessToken, user, ... } or per requirement 5
+      const token = response.accessToken;
+      const userData = response.user;
+
       localStorage.setItem('abos_auth_token', token);
-      setUser(user);
+      
+      const mappedUser: User = {
+        id: userData.id || userData.sub,
+        displayName: userData.displayName || userData.name || userData.username,
+        email: userData.email,
+        role: userData.role,
+        permissions: userData.permissions || [],
+      };
+
+      setUser(mappedUser);
       setStatus('authenticated');
     } catch (err: any) {
       setError(err.message || 'Login failed');
