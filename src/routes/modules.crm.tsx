@@ -117,21 +117,25 @@ function SalesCRMModule() {
   const [leads, setLeads] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
+  const [isAddingLead, setIsAddingLead] = React.useState(false);
+
+  const loadCRMData = React.useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await leadsService.getAll();
+      setLeads(data);
+      setError(null);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   React.useEffect(() => {
-    async function loadCRMData() {
-      try {
-        setLoading(true);
-        const data = await leadsService.getAll();
-        setLeads(data);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    }
     loadCRMData();
-  }, []);
+  }, [loadCRMData]);
+
 
   return (
     <div className="flex flex-col gap-6 p-6 animate-in fade-in duration-700">
@@ -145,7 +149,7 @@ function SalesCRMModule() {
               <Download className="mr-2 size-3.5" />
               Import Leads
             </Button>
-            <AddLeadDialog />
+            <AddLeadDialog onSuccess={loadCRMData} />
           </div>
         }
       />
@@ -283,7 +287,7 @@ function SalesCRMModule() {
                     </TableRow>
                   ) : (
                     leads.map((lead) => (
-                      <TableRow key={lead.id} className="hover:bg-muted/5 cursor-pointer group">
+                      <TableRow key={lead.id} className="hover:bg-muted/5 cursor-pointer group" onClick={() => setActiveTab('customers')}>
                         <TableCell>
                           <div className="flex items-center gap-3">
                             <Avatar className="size-8">
@@ -322,10 +326,24 @@ function SalesCRMModule() {
                           {lead.nextFollowUp ? new Date(lead.nextFollowUp).toLocaleDateString() : 'Not set'}
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="icon" className="size-7">
-                            <MoreHorizontal className="size-3.5" />
-                          </Button>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon" className="size-7">
+                                <MoreHorizontal className="size-3.5" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="glass-surface border-border/40">
+                              <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest opacity-50">Actions</DropdownMenuLabel>
+                              <DropdownMenuItem className="text-xs font-bold" onClick={() => setActiveTab('customers')}>
+                                <User className="mr-2 size-3.5" /> View Profile
+                              </DropdownMenuItem>
+                              <DropdownMenuItem className="text-xs font-bold" onClick={() => setActiveTab('activities')}>
+                                <Clock className="mr-2 size-3.5" /> Schedule Follow-up
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </TableCell>
+
                       </TableRow>
                     ))
                   )}
@@ -531,9 +549,51 @@ function ActivityActionItem({ icon: Icon, label }: { icon: any; label: string })
   );
 }
 
-function AddLeadDialog() {
+function AddLeadDialog({ onSuccess }: { onSuccess?: () => void }) {
+  const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [formData, setFormData] = React.useState({
+    customerName: "",
+    customerEmail: "",
+    source: "web",
+    price: 0,
+    notes: ""
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await leadsService.create({
+        ...formData,
+        status: 'sent',
+        priority: 'Normal',
+        score: 0,
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        selectedPlanId: 'standard_monthly',
+        duration: 1,
+        confirmationUrl: '#'
+      });
+      toast.success("Lead registered successfully");
+      setOpen(false);
+      onSuccess?.();
+      setFormData({
+        customerName: "",
+        customerEmail: "",
+        source: "web",
+        price: 0,
+        notes: ""
+      });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to register lead");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size="sm" className="h-9 shadow-elevated">
           <UserPlus className="mr-2 size-3.5" />
@@ -541,60 +601,86 @@ function AddLeadDialog() {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl glass-surface border-border/40 shadow-elevated">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-black tracking-tight">New Enterprise Lead</DialogTitle>
-          <DialogDescription className="text-xs font-medium">
-            Register a new business opportunity into the Adzdrio Sales Ecosystem.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-6 py-6">
-          <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-            <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Lead Entity Name</Label>
-              <Input placeholder="Legal name of contact or company" className="h-10 glass-surface" />
+        <form onSubmit={handleSubmit}>
+          <DialogHeader>
+            <DialogTitle className="text-xl font-black tracking-tight">New Enterprise Lead</DialogTitle>
+            <DialogDescription className="text-xs font-medium">
+              Register a new business opportunity into the Adzdrio Sales Ecosystem.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-6 py-6">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Lead Entity Name</Label>
+                <Input 
+                  placeholder="Legal name of contact or company" 
+                  className="h-10 glass-surface" 
+                  required
+                  value={formData.customerName}
+                  onChange={(e) => setFormData(prev => ({ ...prev, customerName: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Customer Email</Label>
+                <Input 
+                  type="email"
+                  placeholder="name@company.com" 
+                  className="h-10 glass-surface" 
+                  required
+                  value={formData.customerEmail}
+                  onChange={(e) => setFormData(prev => ({ ...prev, customerEmail: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Lead Source</Label>
+                <Select 
+                  value={formData.source}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, source: value }))}
+                >
+                  <SelectTrigger className="h-10 glass-surface">
+                    <SelectValue placeholder="How did they find us?" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="web">Website Inquiry</SelectItem>
+                    <SelectItem value="linkedin">LinkedIn Ads</SelectItem>
+                    <SelectItem value="referral">Direct Referral</SelectItem>
+                    <SelectItem value="cold">Cold Outreach</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Est. Annual Value (INR)</Label>
+                <Input 
+                  type="number" 
+                  placeholder="₹ 0.00" 
+                  className="h-10 glass-surface" 
+                  required
+                  value={formData.price || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, price: Number(e.target.value) }))}
+                />
+              </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Sales Owner</Label>
-              <Select>
-                <SelectTrigger className="h-10 glass-surface">
-                  <SelectValue placeholder="Assign account owner" />
-                </SelectTrigger>
-                <SelectContent>
-                   <SelectItem value="me">Assigned to Me</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Lead Source</Label>
-              <Select>
-                <SelectTrigger className="h-10 glass-surface">
-                  <SelectValue placeholder="How did they find us?" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="web">Website Inquiry</SelectItem>
-                  <SelectItem value="linkedin">LinkedIn Ads</SelectItem>
-                  <SelectItem value="referral">Direct Referral</SelectItem>
-                  <SelectItem value="cold">Cold Outreach</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Est. Annual Value (INR)</Label>
-              <Input type="number" placeholder="₹ 0.00" className="h-10 glass-surface" />
+              <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Engagement Notes</Label>
+              <Input 
+                placeholder="Initial discovery highlights..." 
+                className="h-10 glass-surface" 
+                value={formData.notes}
+                onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+              />
             </div>
           </div>
-          <div className="space-y-2">
-            <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Engagement Notes</Label>
-            <Input placeholder="Initial discovery highlights..." className="h-10 glass-surface" />
-          </div>
-        </div>
-        <DialogFooter className="gap-2 sm:gap-0">
-          <Button variant="outline" className="h-10 glass-surface font-bold text-xs uppercase tracking-widest">Discard</Button>
-          <Button className="h-10 shadow-elevated font-bold text-xs uppercase tracking-widest">Register Lead</Button>
-        </DialogFooter>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="h-10 glass-surface font-bold text-xs uppercase tracking-widest">Discard</Button>
+            <Button type="submit" disabled={loading} className="h-10 shadow-elevated font-bold text-xs uppercase tracking-widest">
+              {loading ? <Loader2 className="size-4 animate-spin" /> : "Register Lead"}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
+
 }
 
 function OldCustomer360View() {
