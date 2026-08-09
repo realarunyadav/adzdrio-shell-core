@@ -4,10 +4,14 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
+  useNavigate,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { ShieldCheck } from "lucide-react";
+
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -141,21 +145,53 @@ function RootComponent() {
 }
 
 function InnerRoot() {
-  const { user } = useAuth();
-  
+  const { user, status } = useAuth();
+  const { location } = useRouterState();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Basic redirect gate: if unauthenticated and not on auth page, go to auth
+    if (status === 'unauthenticated' && location.pathname !== '/auth') {
+      navigate({ to: '/auth', replace: true });
+    }
+    // If authenticated and on auth page, go to dashboard
+    if (status === 'authenticated' && location.pathname === '/auth') {
+      navigate({ to: '/', replace: true });
+    }
+  }, [status, location.pathname, navigate]);
+
+  if (status === 'loading') {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-navy">
+        <div className="flex flex-col items-center gap-4">
+          <div className="size-12 rounded-xl bg-primary flex items-center justify-center animate-pulse">
+            <ShieldCheck className="size-7 text-primary-foreground" />
+          </div>
+          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/60">Initializing ABOS</span>
+        </div>
+      </div>
+    );
+  }
+
+  const isAuthPage = location.pathname === '/auth';
+
   return (
     <RbacProvider 
       principal={user ? {
         id: user.id,
         displayName: user.displayName,
         email: user.email,
-        roles: [user.role] as any, // backend user.role mapping
+        roles: [user.role] as any,
         tenantId: 'adzdrio'
       } : null}
     >
-      <AppShell>
+      {isAuthPage ? (
         <Outlet />
-      </AppShell>
+      ) : (
+        <AppShell>
+          <Outlet />
+        </AppShell>
+      )}
       <GlobalCommandPalette />
       <Toaster position="top-right" richColors closeButton />
     </RbacProvider>
