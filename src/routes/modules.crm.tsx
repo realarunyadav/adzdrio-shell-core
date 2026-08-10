@@ -1,995 +1,295 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { 
-  LayoutDashboard,
+import * as React from "react";
+import {
+  BarChart3,
+  Building2,
+  CheckCircle2,
+  ChevronRight,
+  CircleDollarSign,
+  Contact,
+  Database,
+  Edit3,
+  Filter,
+  Loader2,
+  Mail,
+  MoreHorizontal,
+  Phone,
+  Plus,
+  RefreshCw,
+  Search,
+  Target,
+  Trash2,
+  TrendingUp,
   UserPlus,
   Users,
-  Building2,
-  DollarSign,
-  Calendar,
-  CheckSquare,
-  Phone,
-  Video,
-  Plus,
-  Search,
-  Filter,
-  Kanban,
-  Table as TableIcon,
-  MoreHorizontal,
-  ArrowUpRight,
-  TrendingUp,
-  Target,
-  FileText,
-  History,
-  Tag,
-  Download,
-  Upload,
-  ChevronRight,
-  Star,
-  MessageSquare,
-  Paperclip,
-  PieChart,
-  BarChart3,
-  TrendingDown,
-  ArrowRight,
-  Clock,
-  CheckCircle2,
-  LayoutGrid,
-  Mail,
-  Heart,
-  AlertCircle,
-  AlertTriangle,
-  Send,
-  ArrowLeft,
-  User,
-  Zap,
-  Loader2,
-  Database
 } from "lucide-react";
-import * as React from "react";
-import { Link } from "@tanstack/react-router";
+import { toast } from "sonner";
 
+import { accountService, contactService, dealService, leadsService } from "@/lib/api/services";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
-import { StatusBadge } from "@/components/shared/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { EmptyState } from "@/components/shared/EmptyState";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { UniversalActivityTimeline, TimelineItem } from "@/components/shared/UniversalActivityTimeline";
-import { UniversalFileManager } from "@/components/shared/UniversalFileManager";
-import { UniversalComments } from "@/components/shared/UniversalComments";
-import { UniversalAuditLog } from "@/components/shared/UniversalAuditLog";
-import { UniversalTag } from "@/components/shared/UniversalTag";
-import { Customer360View } from "@/components/crm/Customer360View";
-import { RapidConfirmationManager } from "@/components/crm/RapidConfirmationManager";
-import { leadsService } from "@/lib/api/services";
-import { toast } from "sonner";
 
-export const Route = createFileRoute("/modules/crm")({
+export const Route = createFileRoute("/modules/crm")({ component: SalesCRMModule });
 
-  component: SalesCRMModule,
-});
+type ModalState = "lead" | "account" | "contact" | "deal" | null;
 
 function SalesCRMModule() {
-  const [activeTab, setActiveTab] = React.useState("dashboard");
+  const [tab, setTab] = React.useState("dashboard");
   const [leads, setLeads] = React.useState<any[]>([]);
+  const [accounts, setAccounts] = React.useState<any[]>([]);
+  const [contacts, setContacts] = React.useState<any[]>([]);
+  const [deals, setDeals] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const [refreshing, setRefreshing] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  const [isAddingLead, setIsAddingLead] = React.useState(false);
+  const [search, setSearch] = React.useState("");
+  const [modal, setModal] = React.useState<ModalState>(null);
+  const [editing, setEditing] = React.useState<any | null>(null);
 
-  const loadCRMData = React.useCallback(async () => {
+  const load = React.useCallback(async (silent = false) => {
     try {
-      setLoading(true);
-      const data = await leadsService.getAll();
-      setLeads(data);
+      silent ? setRefreshing(true) : setLoading(true);
       setError(null);
+      const [leadData, accountData, contactData, dealData] = await Promise.all([
+        leadsService.getAll({ page: 1, pageSize: 100 }),
+        accountService.getAll(),
+        contactService.getAll(),
+        dealService.getAll(),
+      ]);
+      setLeads(leadData ?? []);
+      setAccounts(accountData ?? []);
+      setContacts(contactData ?? []);
+      setDeals(dealData ?? []);
     } catch (err: any) {
-      setError(err.message);
+      setError(err?.message || "Unable to load CRM data");
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   }, []);
 
-  React.useEffect(() => {
-    loadCRMData();
-  }, [loadCRMData]);
+  React.useEffect(() => { void load(); }, [load]);
 
+  const filteredLeads = React.useMemo(() => filterRows(leads, search), [leads, search]);
+  const filteredAccounts = React.useMemo(() => filterRows(accounts, search), [accounts, search]);
+  const filteredContacts = React.useMemo(() => filterRows(contacts, search), [contacts, search]);
+  const filteredDeals = React.useMemo(() => filterRows(deals, search), [deals, search]);
+
+  const wonDeals = deals.filter((deal) => /won|closed_won/i.test(String(deal.stage ?? deal.status ?? "")));
+  const pipelineValue = deals.reduce((sum, deal) => sum + Number(deal.amount ?? 0), 0);
+  const wonValue = wonDeals.reduce((sum, deal) => sum + Number(deal.amount ?? 0), 0);
+
+  const openModal = (kind: ModalState, item?: any) => { setEditing(item ?? null); setModal(kind); };
+  const closeModal = () => { setModal(null); setEditing(null); };
+
+  const handleDelete = async (kind: "lead" | "account" | "contact" | "deal", id: string) => {
+    try {
+      if (kind === "lead") await leadsService.remove(id);
+      if (kind === "account") await accountService.remove(id);
+      if (kind === "contact") await contactService.remove(id);
+      if (kind === "deal") await dealService.remove(id);
+      toast.success("Record deleted");
+      await load(true);
+    } catch (err: any) {
+      toast.error(err?.message || "Delete failed");
+    }
+  };
+
+  if (loading) return <LoadingState />;
 
   return (
-    <div className="flex flex-col gap-6 p-6 animate-in fade-in duration-700">
+    <div className="flex flex-col gap-6 p-6 animate-in fade-in duration-500">
       <PageHeader
         eyebrow="Adzdrio Sales"
         title="CRM Command Center"
-        description="Unified workspace for sales acceleration, deal management, and relationship intelligence."
+        description="Live leads, accounts, contacts and deal pipeline powered by the ABOS backend."
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="glass-surface h-9">
-              <Download className="mr-2 size-3.5" />
-              Import Leads
+            <Button variant="outline" size="sm" onClick={() => void load(true)} disabled={refreshing}>
+              <RefreshCw className={cn("mr-2 size-3.5", refreshing && "animate-spin")} /> Refresh
             </Button>
-            <AddLeadDialog onSuccess={loadCRMData} />
+            <Button size="sm" onClick={() => openModal("lead")}><UserPlus className="mr-2 size-3.5" /> Add Lead</Button>
           </div>
         }
       />
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="h-auto w-full justify-start gap-6 overflow-x-auto bg-transparent p-0 border-b border-border/40 rounded-none pb-0">
-          <CRMTabTrigger value="dashboard" label="Sales Dashboard" icon={LayoutDashboard} />
-          <CRMTabTrigger value="leads" label="Leads" icon={Target} />
-          <CRMTabTrigger value="pipeline" label="Pipeline" icon={Kanban} />
-          <CRMTabTrigger value="customers" label="Customer 360" icon={Users} />
-          <CRMTabTrigger value="rapid-leads" label="Rapid Confirmation" icon={Zap} />
-          <CRMTabTrigger value="renewals" label="Renewal Center" icon={History} />
-          <CRMTabTrigger value="activities" label="Activity Hub" icon={CheckSquare} />
-          <CRMTabTrigger value="performance" label="Performance" icon={TrendingUp} />
-        </TabsList>
+      {error && (
+        <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive flex items-center justify-between gap-4">
+          <div><b>CRM backend error:</b> {error}</div>
+          <Button size="sm" variant="outline" onClick={() => void load(true)}>Retry</Button>
+        </div>
+      )}
 
-        <TabsContent value="dashboard" className="mt-0 space-y-6 outline-none">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <DashboardKpiCard title="Today's Revenue" value="₹12,45,000" trend="+14.2%" icon={DollarSign} />
-            <DashboardKpiCard title="Today's Follow-ups" value="24" trend="3 pending" icon={Clock} trendNeutral />
-            <DashboardKpiCard title="New Leads" value="18" trend="+8%" icon={Target} />
-            <DashboardKpiCard title="Deals Won" value="4" trend="+2" icon={Star} />
+      <Tabs value={tab} onValueChange={(value) => { setTab(value); setSearch(""); }} className="space-y-6">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <TabsList className="h-auto justify-start gap-2 overflow-x-auto bg-transparent p-0">
+            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+            <TabsTrigger value="leads">Leads <Count value={leads.length} /></TabsTrigger>
+            <TabsTrigger value="pipeline">Pipeline <Count value={deals.length} /></TabsTrigger>
+            <TabsTrigger value="accounts">Accounts <Count value={accounts.length} /></TabsTrigger>
+            <TabsTrigger value="contacts">Contacts <Count value={contacts.length} /></TabsTrigger>
+          </TabsList>
+          {tab !== "dashboard" && (
+            <div className="relative w-full lg:w-[300px]">
+              <Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
+              <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={`Search ${tab}...`} className="h-9 pl-9" />
+            </div>
+          )}
+        </div>
+
+        <TabsContent value="dashboard" className="space-y-6 outline-none">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <Kpi icon={Target} label="Active Leads" value={String(leads.length)} />
+            <Kpi icon={Building2} label="Accounts" value={String(accounts.length)} />
+            <Kpi icon={Contact} label="Contacts" value={String(contacts.length)} />
+            <Kpi icon={CircleDollarSign} label="Pipeline Value" value={formatMoney(pipelineValue)} />
           </div>
-
-          <div className="grid gap-6 lg:grid-cols-12">
-            <div className="lg:col-span-8 space-y-6">
-              <SectionCard title="Revenue Performance" description="Monthly progress vs target.">
-                <div className="h-[300px] flex items-center justify-center border-2 border-dashed border-border/50 rounded-xl bg-muted/5">
-                   <BarChart3 className="size-10 text-muted-foreground/20 mr-2" />
-                   <p className="text-xs text-muted-foreground italic tracking-tight">Financial metrics waiting for live data stream.</p>
-                </div>
-              </SectionCard>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <SectionCard title="Today's Agenda" actions={<Button variant="ghost" size="sm">Go to Hub</Button>}>
-                   <div className="space-y-4 py-2">
-                      <div className="flex items-center gap-3 p-2 rounded-lg bg-primary/5 border border-primary/10">
-                        <Phone className="size-3.5 text-primary" />
-                        <span className="text-xs font-medium">3 Follow-up calls pending</span>
-                      </div>
-                      <div className="flex items-center gap-3 p-2 rounded-lg bg-muted/30 border border-border/40">
-                        <Video className="size-3.5 text-muted-foreground" />
-                        <span className="text-xs font-medium">No meetings scheduled today</span>
-                      </div>
-                   </div>
-                </SectionCard>
-                <SectionCard title="Recent Won Deals">
-                   <div className="flex flex-col items-center justify-center py-6 text-muted-foreground">
-                      <TrendingUp className="size-8 opacity-10 mb-2" />
-                      <p className="text-[10px] uppercase font-bold tracking-widest">No deals won today</p>
-                   </div>
-                </SectionCard>
+          <div className="grid gap-6 lg:grid-cols-2">
+            <SectionCard title="Sales Pipeline" description="Live deal totals from the backend.">
+              <div className="space-y-4">
+                <MetricRow label="Total deals" value={String(deals.length)} />
+                <MetricRow label="Won deals" value={`${wonDeals.length} · ${formatMoney(wonValue)}`} />
+                <MetricRow label="Open pipeline" value={formatMoney(Math.max(0, pipelineValue - wonValue))} />
               </div>
-            </div>
-
-            <div className="lg:col-span-4 space-y-6">
-              <SectionCard title="Sales Leaderboard">
-                <div className="space-y-4">
-                   <p className="text-[10px] text-muted-foreground uppercase font-black mb-2">Top Performers (This Month)</p>
-                   <div className="text-center py-10 opacity-30">
-                      <Star className="size-10 mx-auto mb-2" />
-                      <p className="text-xs italic">Awaiting first conversion...</p>
-                   </div>
-                </div>
-              </SectionCard>
-
-              <SectionCard title="Win Rate Analysis">
-                <div className="flex flex-col items-center justify-center py-6">
-                   <div className="relative size-24 flex items-center justify-center mb-4">
-                      <svg className="size-full -rotate-90">
-                        <circle cx="48" cy="48" r="40" fill="transparent" stroke="currentColor" strokeWidth="6" className="text-border/40" />
-                        <circle cx="48" cy="48" r="40" fill="transparent" stroke="currentColor" strokeWidth="6" strokeDasharray={251} strokeDashoffset={251} className="text-primary" />
-                      </svg>
-                      <span className="absolute text-xl font-black">0%</span>
-                   </div>
-                   <p className="text-xs text-muted-foreground font-medium">Base Conversion Rate</p>
-                </div>
-              </SectionCard>
-            </div>
+            </SectionCard>
+            <SectionCard title="Recent Leads" description="Newest records in the organisation.">
+              <div className="space-y-2">
+                {leads.slice(0, 5).map((lead) => (
+                  <button key={lead.id} onClick={() => openModal("lead", lead)} className="w-full rounded-lg border border-border/40 p-3 text-left hover:bg-muted/30 transition-colors">
+                    <div className="flex items-center justify-between gap-3">
+                      <div><p className="text-xs font-bold">{lead.customerName}</p><p className="text-[10px] text-muted-foreground">{lead.customerEmail || "No email"}</p></div>
+                      <Badge variant="outline" className="text-[9px]">{lead.status}</Badge>
+                    </div>
+                  </button>
+                ))}
+                {!leads.length && <EmptyInline label="No leads yet" />}
+              </div>
+            </SectionCard>
           </div>
         </TabsContent>
 
-        <TabsContent value="leads" className="mt-0 space-y-6 outline-none">
-          <SectionCard
-            title="Adzdrio Lead Directory"
-            description="Premium lead tracking with AI-native scoring and status management."
-            contentClassName="p-0"
-            actions={
-              <div className="flex items-center gap-3">
-                <div className="relative group">
-                  <Search className="absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors" />
-                  <Input placeholder="Search leads..." className="w-[240px] h-9 pl-9 text-xs glass-surface" />
-                </div>
-                <Button variant="outline" size="sm" className="h-9 glass-surface">
-                  <Filter className="mr-2 size-3.5" />
-                  Advanced Filters
-                </Button>
-              </div>
-            }
-          >
-            <div className="min-h-[500px]">
-              <Table>
-                <TableHeader className="bg-muted/30">
-                  <TableRow className="hover:bg-transparent">
-                    <TableHead className="w-[280px]">Lead Entity</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Priority</TableHead>
-                    <TableHead>Expected Value</TableHead>
-                    <TableHead>Score</TableHead>
-                    <TableHead>Next Follow-up</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {loading ? (
-                    <TableRow>
-                      <TableCell colSpan={7} className="h-40 text-center text-muted-foreground animate-pulse">
-                        <Loader2 className="size-6 mx-auto mb-2 animate-spin opacity-20" />
-                        Accessing Lead Directory...
-                      </TableCell>
-                    </TableRow>
-                  ) : error ? (
-                    <TableRow>
-                      <TableCell colSpan={7} className="h-40 text-center">
-                        <Database className="size-6 mx-auto mb-2 text-destructive opacity-40" />
-                        <p className="text-xs font-bold text-destructive">Backend Connection Required</p>
-                        <p className="text-[10px] text-muted-foreground mt-1">{error}</p>
-                      </TableCell>
-                    </TableRow>
-                  ) : leads.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={7} className="h-40 text-center text-muted-foreground italic">
-                        No active leads found in this view.
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    leads.map((lead) => (
-                      <TableRow key={lead.id} className="hover:bg-muted/5 cursor-pointer group" onClick={() => setActiveTab('customers')}>
-                        <TableCell>
-                          <div className="flex items-center gap-3">
-                            <Avatar className="size-8">
-                              <AvatarFallback className="text-[10px]">{lead.customerName?.substring(0, 2).toUpperCase()}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <p className="text-xs font-bold">{lead.customerName}</p>
-                              <p className="text-[10px] text-muted-foreground">{lead.customerEmail}</p>
-                            </div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <StatusBadge tone={
-                            lead.status === 'confirmed' || lead.status === 'active' ? 'success' : 
-                            lead.status === 'expired' || lead.status === 'not_confirmed' ? 'danger' : 
-                            lead.status === 'sent' || lead.status === 'opened' ? 'info' : 'neutral'
-                          }>
-                            {lead.status}
-                          </StatusBadge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="text-[9px] uppercase tracking-tighter">
-                            {lead.priority || 'Normal'}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="font-mono text-[10px]">
-                          ₹{lead.price?.toLocaleString()}
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-1">
-                            <Star className="size-3 text-warning fill-warning" />
-                            <span className="text-[10px] font-bold">{lead.score || 0}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-[10px] text-muted-foreground">
-                          {lead.nextFollowUp ? new Date(lead.nextFollowUp).toLocaleDateString() : 'Not set'}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="size-7">
-                                <MoreHorizontal className="size-3.5" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="glass-surface border-border/40">
-                              <DropdownMenuLabel className="text-[10px] font-black uppercase tracking-widest opacity-50">Actions</DropdownMenuLabel>
-                              <DropdownMenuItem className="text-xs font-bold" onClick={() => setActiveTab('customers')}>
-                                <User className="mr-2 size-3.5" /> View Profile
-                              </DropdownMenuItem>
-                              <DropdownMenuItem className="text-xs font-bold" onClick={() => setActiveTab('activities')}>
-                                <Clock className="mr-2 size-3.5" /> Schedule Follow-up
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
+        <TabsContent value="leads" className="outline-none">
+          <SectionCard title="Lead Directory" description="Create, search, update and delete live CRM leads." actions={<Button size="sm" onClick={() => openModal("lead")}><Plus className="mr-2 size-3.5" /> New Lead</Button>} contentClassName="p-0">
+            <Table><TableHeader><TableRow><TableHead>Lead</TableHead><TableHead>Company</TableHead><TableHead>Status</TableHead><TableHead>Stage</TableHead><TableHead>Score</TableHead><TableHead>Created</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
+              <TableBody>{filteredLeads.map((lead) => <TableRow key={lead.id}>
+                <TableCell><button className="text-left hover:text-primary" onClick={() => openModal("lead", lead)}><p className="text-xs font-bold">{lead.customerName}</p><p className="text-[10px] text-muted-foreground">{lead.customerEmail || "—"}</p></button></TableCell>
+                <TableCell className="text-xs">{lead.companyName || "—"}</TableCell>
+                <TableCell><Badge variant="outline" className="text-[9px] uppercase">{lead.status}</Badge></TableCell>
+                <TableCell className="text-xs">{lead.stage || "New"}</TableCell>
+                <TableCell className="font-mono text-xs">{lead.score ?? 0}</TableCell>
+                <TableCell className="text-xs text-muted-foreground">{formatDate(lead.createdAt)}</TableCell>
+                <TableCell className="text-right"><RowMenu onEdit={() => openModal("lead", lead)} onDelete={() => void handleDelete("lead", lead.id)} /></TableCell>
+              </TableRow>)}
+              {!filteredLeads.length && <EmptyTable colSpan={7} label="No leads match this search" />}</TableBody>
+            </Table>
+          </SectionCard>
+        </TabsContent>
 
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
+        <TabsContent value="pipeline" className="outline-none">
+          <SectionCard title="Deal Pipeline" description="Live deals from the ABOS backend." actions={<Button size="sm" onClick={() => openModal("deal")}><Plus className="mr-2 size-3.5" /> New Deal</Button>}>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              {groupDeals(deals).map(([stage, items]) => (
+                <div key={stage} className="rounded-xl border border-border/40 bg-muted/10 p-3 min-h-[260px]">
+                  <div className="mb-3 flex items-center justify-between"><h3 className="text-xs font-black uppercase tracking-widest">{stage}</h3><Badge variant="secondary">{items.length}</Badge></div>
+                  <div className="space-y-2">{items.map((deal) => <button key={deal.id} onClick={() => openModal("deal", deal)} className="w-full rounded-lg border border-border/40 bg-background p-3 text-left hover:border-primary/40 transition-colors"><p className="text-xs font-bold truncate">{deal.name}</p><p className="mt-1 text-[10px] text-muted-foreground">{formatMoney(Number(deal.amount ?? 0))}</p><p className="mt-2 text-[9px] uppercase tracking-widest text-muted-foreground">{deal.probability ?? 0}% probability</p></button>)}</div>
+                </div>
+              ))}
             </div>
           </SectionCard>
         </TabsContent>
 
-        <TabsContent value="pipeline" className="mt-0 outline-none">
-          <div className="flex items-center justify-between mb-8">
-            <div className="space-y-1">
-              <h2 className="text-xl font-black tracking-tight">Visual Pipeline</h2>
-              <p className="text-xs text-muted-foreground font-medium">Standard Adzdrio Sales Stages</p>
-            </div>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="glass-surface h-9">
-                <Tag className="mr-2 size-3.5" />
-                Saved Views
-              </Button>
-              <Button size="sm" className="h-9 shadow-elevated">
-                <Plus className="mr-2 size-3.5" />
-                New Deal
-              </Button>
-            </div>
-          </div>
-          
-          <div className="flex flex-col gap-8">
-            <div className="p-6 rounded-2xl bg-primary/5 border border-primary/20 flex items-center justify-between">
-              <div className="flex items-center gap-6">
-                 {[
-                   { label: "Prospect", icon: User, active: true },
-                   { label: "Qualification", icon: CheckCircle2, active: true },
-                   { label: "Callback", icon: Phone },
-                   { label: "Follow-up", icon: History },
-                   { label: "Payment", icon: DollarSign },
-                   { label: "Verification", icon: FileText },
-                   { label: "Activation", icon: Zap },
-                   { label: "Customer", icon: Users }
-                 ].map((step, idx, arr) => (
-                   <React.Fragment key={step.label}>
-                     <div className="flex flex-col items-center gap-2 group cursor-default">
-                        <div className={cn(
-                          "size-10 rounded-full flex items-center justify-center transition-all border-2 shadow-sm",
-                          step.active ? "bg-primary border-primary text-primary-foreground shadow-primary/20" : "bg-background border-border text-muted-foreground"
-                        )}>
-                           <step.icon className="size-5" />
-                        </div>
-                        <span className={cn("text-[9px] font-black uppercase tracking-widest", step.active ? "text-primary" : "text-muted-foreground/60")}>{step.label}</span>
-                     </div>
-                     {idx < arr.length - 1 && <ArrowRight className="size-4 text-border mb-6" />}
-                   </React.Fragment>
-                 ))}
-              </div>
-            </div>
-
-            <ScrollArea className="w-full pb-6">
-              <div className="flex gap-4 min-h-[600px]">
-                <KanbanColumn title="New" value="0" />
-                <KanbanColumn title="Contacted" value="1" />
-                <KanbanColumn title="Qualified" value="1" />
-                <KanbanColumn title="Proposal" value="0" />
-                <KanbanColumn title="Negotiation" value="0" />
-                <KanbanColumn title="Won" value="0" tone="success" />
-              </div>
-            </ScrollArea>
-          </div>
+        <TabsContent value="accounts" className="outline-none">
+          <SectionCard title="Accounts" description="Organisation-level CRM accounts." actions={<Button size="sm" onClick={() => openModal("account")}><Plus className="mr-2 size-3.5" /> New Account</Button>} contentClassName="p-0">
+            <Table><TableHeader><TableRow><TableHead>Account</TableHead><TableHead>Industry</TableHead><TableHead>Email</TableHead><TableHead>Location</TableHead><TableHead>Status</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader><TableBody>
+              {filteredAccounts.map((account) => <TableRow key={account.id}><TableCell className="text-xs font-bold">{account.name}</TableCell><TableCell className="text-xs">{account.industry || "—"}</TableCell><TableCell className="text-xs">{account.email || "—"}</TableCell><TableCell className="text-xs">{[account.city, account.state].filter(Boolean).join(", ") || "—"}</TableCell><TableCell><Badge variant="outline" className="text-[9px]">{account.status || "ACTIVE"}</Badge></TableCell><TableCell className="text-right"><RowMenu onEdit={() => openModal("account", account)} onDelete={() => void handleDelete("account", account.id)} /></TableCell></TableRow>)}
+              {!filteredAccounts.length && <EmptyTable colSpan={6} label="No accounts match this search" />}
+            </TableBody></Table>
+          </SectionCard>
         </TabsContent>
 
-        <TabsContent value="customers" className="mt-0 outline-none">
-          <Customer360View />
-        </TabsContent>
-
-        <TabsContent value="rapid-leads" className="mt-0 outline-none">
-          <RapidConfirmationManager />
-        </TabsContent>
-
-        <TabsContent value="renewals" className="mt-0 outline-none">
-          <RenewalCenter />
-        </TabsContent>
-
-        <TabsContent value="activities" className="mt-0 outline-none">
-           <div className="grid lg:grid-cols-12 gap-6">
-              <div className="lg:col-span-4 space-y-6">
-                 <SectionCard title="Schedule Activity" contentClassName="p-0">
-                    <div className="divide-y divide-border/40">
-                       <ActivityActionItem icon={Phone} label="Log Call" />
-                       <ActivityActionItem icon={Video} label="Schedule Meeting" />
-                       <ActivityActionItem icon={CheckSquare} label="Create Task" />
-                       <ActivityActionItem icon={MessageSquare} label="Set Follow-up" />
-                    </div>
-                 </SectionCard>
-              </div>
-              <div className="lg:col-span-8">
-                 <SectionCard title="Agenda / Calendar View">
-                    <Tabs defaultValue="list">
-                       <TabsList className="glass-surface h-8 p-0.5 mb-6">
-                          <TabsTrigger value="list" className="text-[10px] h-7 px-3">Agenda View</TabsTrigger>
-                          <TabsTrigger value="calendar" className="text-[10px] h-7 px-3">Calendar View</TabsTrigger>
-                       </TabsList>
-                       <TabsContent value="list">
-                          <EmptyState 
-                            icon={Calendar} 
-                            title="Agenda Clear" 
-                            description="No tasks or meetings scheduled for the upcoming week." 
-                            className="py-20 border-none shadow-none surface-none"
-                          />
-                       </TabsContent>
-                    </Tabs>
-                 </SectionCard>
-              </div>
-           </div>
-        </TabsContent>
-
-        <TabsContent value="performance" className="mt-0 outline-none">
-           <SectionCard title="Sales Intelligence Hub">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                 <div className="p-6 rounded-2xl bg-primary/5 border border-primary/10 flex flex-col gap-2">
-                    <TrendingUp className="size-6 text-primary mb-2" />
-                    <h4 className="text-sm font-black">Conversion Analytics</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">AI-driven analysis of your sales funnel and lead conversion performance.</p>
-                 </div>
-                 <div className="p-6 rounded-2xl bg-success/5 border border-success/10 flex flex-col gap-2">
-                    <CheckCircle2 className="size-6 text-success mb-2" />
-                    <h4 className="text-sm font-black">Win Rate Metrics</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">Strategic tracking of won vs lost deals across different sales stages.</p>
-                 </div>
-                 <div className="p-6 rounded-2xl bg-accent/5 border border-accent/10 flex flex-col gap-2">
-                    <LayoutGrid className="size-6 text-accent-foreground mb-2" />
-                    <h4 className="text-sm font-black">Sales Velocity</h4>
-                    <p className="text-xs text-muted-foreground leading-relaxed">Measurement of how quickly deals move through your sales pipeline.</p>
-                 </div>
-              </div>
-           </SectionCard>
+        <TabsContent value="contacts" className="outline-none">
+          <SectionCard title="Contacts" description="People linked to accounts and leads." actions={<Button size="sm" onClick={() => openModal("contact")}><Plus className="mr-2 size-3.5" /> New Contact</Button>} contentClassName="p-0">
+            <Table><TableHeader><TableRow><TableHead>Contact</TableHead><TableHead>Title</TableHead><TableHead>Account</TableHead><TableHead>Email</TableHead><TableHead>Phone</TableHead><TableHead>Status</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader><TableBody>
+              {filteredContacts.map((contact) => <TableRow key={contact.id}><TableCell><p className="text-xs font-bold">{[contact.firstName, contact.lastName].filter(Boolean).join(" ")}</p><p className="text-[10px] text-muted-foreground">{contact.department || ""}</p></TableCell><TableCell className="text-xs">{contact.title || "—"}</TableCell><TableCell className="text-xs">{contact.account?.name || contact.accountName || contact.accountId || "—"}</TableCell><TableCell className="text-xs">{contact.email || "—"}</TableCell><TableCell className="text-xs">{contact.phone || "—"}</TableCell><TableCell><Badge variant="outline" className="text-[9px]">{contact.status || "ACTIVE"}</Badge></TableCell><TableCell className="text-right"><RowMenu onEdit={() => openModal("contact", contact)} onDelete={() => void handleDelete("contact", contact.id)} /></TableCell></TableRow>)}
+              {!filteredContacts.length && <EmptyTable colSpan={7} label="No contacts match this search" />}
+            </TableBody></Table>
+          </SectionCard>
         </TabsContent>
       </Tabs>
+
+      <RecordDialog kind={modal} item={editing} accounts={accounts} onClose={closeModal} onSaved={() => { closeModal(); void load(true); }} />
     </div>
   );
 }
 
-function CRMTabTrigger({ value, label, icon: Icon }: { value: string; label: string; icon: any }) {
-  return (
-    <TabsTrigger 
-      value={value} 
-      className="rounded-none border-b-2 border-transparent px-1 py-4 text-[10px] font-black uppercase tracking-widest data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none flex items-center gap-2.5 opacity-60 data-[state=active]:opacity-100 transition-all"
-    >
-      <Icon className="size-3.5" />
-      {label}
-    </TabsTrigger>
-  );
-}
+function RecordDialog({ kind, item, accounts, onClose, onSaved }: { kind: ModalState; item: any; accounts: any[]; onClose: () => void; onSaved: () => void }) {
+  const [saving, setSaving] = React.useState(false);
+  const [form, setForm] = React.useState<Record<string, any>>({});
 
-function DashboardKpiCard({ title, value, trend, icon: Icon, trendNeutral }: { title: string; value: string; trend: string; icon: any; trendNeutral?: boolean }) {
-  return (
-    <Card className="border-border/40 shadow-card glass-surface hover:shadow-elevated premium-transition overflow-hidden group border-none">
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 group-hover:scale-110 transition-transform">
-            <Icon className="size-5 text-primary" />
-          </div>
-          <Badge variant="outline" className={cn(
-            "text-[9px] font-black uppercase tracking-tighter px-2 h-5",
-            trendNeutral ? "text-muted-foreground border-border/60" : "text-success border-success/30 bg-success/5"
-          )}>{trend}</Badge>
-        </div>
-        <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">{title}</p>
-          <p className="text-2xl font-black tracking-tighter mt-1 text-foreground">{value}</p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
+  React.useEffect(() => {
+    if (!kind) return;
+    if (kind === "lead") setForm({ firstName: item?.firstName ?? "", lastName: item?.lastName ?? "", companyName: item?.companyName ?? "", email: item?.customerEmail ?? item?.email ?? "", primaryPhone: item?.customerPhone ?? item?.primaryPhone ?? "", stage: item?.stage ?? "New", source: item?.source ?? "Website", score: item?.score ?? 0, notes: item?.notes ?? "" });
+    if (kind === "account") setForm({ name: item?.name ?? "", email: item?.email ?? "", phone: item?.phone ?? "", industry: item?.industry ?? "", website: item?.website ?? "", city: item?.city ?? "", state: item?.state ?? "", country: item?.country ?? "India", status: item?.status ?? "ACTIVE", notes: item?.notes ?? "" });
+    if (kind === "contact") setForm({ firstName: item?.firstName ?? "", lastName: item?.lastName ?? "", accountId: item?.accountId ?? "", email: item?.email ?? "", phone: item?.phone ?? "", title: item?.title ?? "", department: item?.department ?? "", status: item?.status ?? "ACTIVE", source: item?.source ?? "CRM", notes: item?.notes ?? "" });
+    if (kind === "deal") setForm({ name: item?.name ?? "", accountId: item?.accountId ?? "", contactId: item?.contactId ?? "", leadId: item?.leadId ?? "", amount: item?.amount ?? 0, currency: item?.currency ?? "INR", stage: item?.stage ?? "New", probability: item?.probability ?? 10, expectedCloseDate: item?.expectedCloseDate ? String(item.expectedCloseDate).slice(0, 10) : "", source: item?.source ?? "CRM", description: item?.description ?? "" });
+  }, [kind, item]);
 
-function KanbanColumn({ title, value, tone }: { title: string; value: string; tone?: string }) {
-  return (
-    <div className="flex flex-col gap-4 w-[280px] shrink-0 rounded-2xl bg-muted/20 p-4 border border-border/40 glass-surface">
-      <div className="flex items-center justify-between px-1">
-        <h4 className="text-[11px] font-black uppercase tracking-[0.15em] text-muted-foreground/80">{title}</h4>
-        <Badge variant="secondary" className="text-[10px] font-black bg-background/80 backdrop-blur-sm px-2 h-5 ring-1 ring-border/20">{value}</Badge>
-      </div>
-      <div className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-border/30 rounded-xl p-8 text-center bg-card/10 group hover:border-primary/20 transition-all hover:bg-card/30">
-        <div className="size-12 rounded-2xl bg-background/50 flex items-center justify-center mb-4 shadow-sm group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-          <Plus className="size-5 text-muted-foreground/40 group-hover:text-inherit transition-colors" />
-        </div>
-        <p className="text-[10px] text-muted-foreground/50 font-black uppercase tracking-widest">No Active Deals</p>
-      </div>
-    </div>
-  );
-}
+  const set = (key: string, value: any) => setForm((current) => ({ ...current, [key]: value }));
+  const title = kind ? `${item ? "Edit" : "New"} ${kind.charAt(0).toUpperCase() + kind.slice(1)}` : "";
 
-function ActivityActionItem({ icon: Icon, label }: { icon: any; label: string }) {
-  return (
-    <div className="flex items-center justify-between p-4 hover:bg-muted/30 transition-all cursor-pointer group">
-      <div className="flex items-center gap-3">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-background border border-border/60 group-hover:border-primary/30 group-hover:text-primary transition-all">
-          <Icon className="size-4" />
-        </div>
-        <span className="text-xs font-bold tracking-tight">{label}</span>
-      </div>
-      <ArrowRight className="size-3.5 text-muted-foreground/30 group-hover:text-primary group-hover:translate-x-1 transition-all" />
-    </div>
-  );
-}
-
-function AddLeadDialog({ onSuccess }: { onSuccess?: () => void }) {
-  const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const [formData, setFormData] = React.useState({
-    customerName: "",
-    customerEmail: "",
-    source: "web",
-    price: 0,
-    notes: ""
-  });
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const save = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!kind) return;
+    setSaving(true);
     try {
-      await leadsService.create({
-        customerName: formData.customerName,
-        customerEmail: formData.customerEmail,
-        status: 'sent',
-        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-        selectedPlanId: 'standard_monthly',
-        duration: 1,
-        confirmationUrl: '#',
-        devices: []
-      });
-
-      toast.success("Lead registered successfully");
-      setOpen(false);
-      onSuccess?.();
-      setFormData({
-        customerName: "",
-        customerEmail: "",
-        source: "web",
-        price: 0,
-        notes: ""
-      });
+      if (kind === "lead") item ? await leadsService.update(item.id, form) : await leadsService.create(form);
+      if (kind === "account") item ? await accountService.update(item.id, form) : await accountService.create(form);
+      if (kind === "contact") item ? await contactService.update(item.id, form) : await contactService.create(form);
+      if (kind === "deal") item ? await dealService.update(item.id, form) : await dealService.create(form);
+      toast.success(`${title} saved successfully`);
+      onSaved();
     } catch (err: any) {
-      toast.error(err.message || "Failed to register lead");
-    } finally {
-      setLoading(false);
-    }
+      toast.error(err?.message || `Unable to save ${kind}`);
+    } finally { setSaving(false); }
   };
 
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button size="sm" className="h-9 shadow-elevated">
-          <UserPlus className="mr-2 size-3.5" />
-          Add Lead
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-2xl glass-surface border-border/40 shadow-elevated">
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle className="text-xl font-black tracking-tight">New Enterprise Lead</DialogTitle>
-            <DialogDescription className="text-xs font-medium">
-              Register a new business opportunity into the Adzdrio Sales Ecosystem.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-6 py-6">
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Lead Entity Name</Label>
-                <Input 
-                  placeholder="Legal name of contact or company" 
-                  className="h-10 glass-surface" 
-                  required
-                  value={formData.customerName}
-                  onChange={(e) => setFormData(prev => ({ ...prev, customerName: e.target.value }))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Customer Email</Label>
-                <Input 
-                  type="email"
-                  placeholder="name@company.com" 
-                  className="h-10 glass-surface" 
-                  required
-                  value={formData.customerEmail}
-                  onChange={(e) => setFormData(prev => ({ ...prev, customerEmail: e.target.value }))}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Lead Source</Label>
-                <Select 
-                  value={formData.source}
-                  onValueChange={(value) => setFormData(prev => ({ ...prev, source: value }))}
-                >
-                  <SelectTrigger className="h-10 glass-surface">
-                    <SelectValue placeholder="How did they find us?" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="web">Website Inquiry</SelectItem>
-                    <SelectItem value="linkedin">LinkedIn Ads</SelectItem>
-                    <SelectItem value="referral">Direct Referral</SelectItem>
-                    <SelectItem value="cold">Cold Outreach</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Est. Annual Value (INR)</Label>
-                <Input 
-                  type="number" 
-                  placeholder="₹ 0.00" 
-                  className="h-10 glass-surface" 
-                  required
-                  value={formData.price || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, price: Number(e.target.value) }))}
-                />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label className="text-[10px] font-black uppercase tracking-widest opacity-70">Engagement Notes</Label>
-              <Input 
-                placeholder="Initial discovery highlights..." 
-                className="h-10 glass-surface" 
-                value={formData.notes}
-                onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-              />
-            </div>
-          </div>
-          <DialogFooter className="gap-2 sm:gap-0">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="h-10 glass-surface font-bold text-xs uppercase tracking-widest">Discard</Button>
-            <Button type="submit" disabled={loading} className="h-10 shadow-elevated font-bold text-xs uppercase tracking-widest">
-              {loading ? <Loader2 className="size-4 animate-spin" /> : "Register Lead"}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
-  );
-
+  return <Dialog open={Boolean(kind)} onOpenChange={(open) => !open && onClose()}><DialogContent className="max-w-2xl"><form onSubmit={save}><DialogHeader><DialogTitle>{title}</DialogTitle><DialogDescription>Changes are saved directly to the ABOS backend.</DialogDescription></DialogHeader><div className="grid gap-4 py-5 sm:grid-cols-2">
+    {kind === "lead" && <><Field label="First name" value={form.firstName} onChange={(v) => set("firstName", v)} required /><Field label="Last name" value={form.lastName} onChange={(v) => set("lastName", v)} required /><Field label="Company" value={form.companyName} onChange={(v) => set("companyName", v)} /><Field label="Email" type="email" value={form.email} onChange={(v) => set("email", v)} /><Field label="Phone" value={form.primaryPhone} onChange={(v) => set("primaryPhone", v)} /><Field label="Source" value={form.source} onChange={(v) => set("source", v)} /><Field label="Stage" value={form.stage} onChange={(v) => set("stage", v)} /><Field label="Score" type="number" value={form.score} onChange={(v) => set("score", Number(v))} /><Field label="Notes" value={form.notes} onChange={(v) => set("notes", v)} className="sm:col-span-2" /></>}
+    {kind === "account" && <><Field label="Account name" value={form.name} onChange={(v) => set("name", v)} required /><Field label="Industry" value={form.industry} onChange={(v) => set("industry", v)} /><Field label="Email" type="email" value={form.email} onChange={(v) => set("email", v)} /><Field label="Phone" value={form.phone} onChange={(v) => set("phone", v)} /><Field label="Website" value={form.website} onChange={(v) => set("website", v)} /><Field label="City" value={form.city} onChange={(v) => set("city", v)} /><Field label="State" value={form.state} onChange={(v) => set("state", v)} /><Field label="Country" value={form.country} onChange={(v) => set("country", v)} /></>}
+    {kind === "contact" && <><Field label="First name" value={form.firstName} onChange={(v) => set("firstName", v)} required /><Field label="Last name" value={form.lastName} onChange={(v) => set("lastName", v)} required /><Field label="Email" type="email" value={form.email} onChange={(v) => set("email", v)} /><Field label="Phone" value={form.phone} onChange={(v) => set("phone", v)} /><Field label="Title" value={form.title} onChange={(v) => set("title", v)} /><Field label="Department" value={form.department} onChange={(v) => set("department", v)} /><div className="space-y-2 sm:col-span-2"><Label>Account</Label><Select value={form.accountId || "none"} onValueChange={(v) => set("accountId", v === "none" ? undefined : v)}><SelectTrigger><SelectValue placeholder="Select account" /></SelectTrigger><SelectContent><SelectItem value="none">No account</SelectItem>{accounts.map((account) => <SelectItem key={account.id} value={account.id}>{account.name}</SelectItem>)}</SelectContent></Select></div></>}
+    {kind === "deal" && <><Field label="Deal name" value={form.name} onChange={(v) => set("name", v)} required /><Field label="Amount" type="number" value={form.amount} onChange={(v) => set("amount", Number(v))} /><Field label="Stage" value={form.stage} onChange={(v) => set("stage", v)} /><Field label="Probability %" type="number" value={form.probability} onChange={(v) => set("probability", Number(v))} /><Field label="Expected close" type="date" value={form.expectedCloseDate} onChange={(v) => set("expectedCloseDate", v)} /><Field label="Source" value={form.source} onChange={(v) => set("source", v)} /><div className="space-y-2 sm:col-span-2"><Label>Account</Label><Select value={form.accountId || "none"} onValueChange={(v) => set("accountId", v === "none" ? undefined : v)}><SelectTrigger><SelectValue placeholder="Select account" /></SelectTrigger><SelectContent><SelectItem value="none">No account</SelectItem>{accounts.map((account) => <SelectItem key={account.id} value={account.id}>{account.name}</SelectItem>)}</SelectContent></Select></div><Field label="Description" value={form.description} onChange={(v) => set("description", v)} className="sm:col-span-2" /></>}
+  </div><DialogFooter><Button type="button" variant="outline" onClick={onClose}>Cancel</Button><Button type="submit" disabled={saving}>{saving && <Loader2 className="mr-2 size-4 animate-spin" />}{saving ? "Saving" : "Save record"}</Button></DialogFooter></form></DialogContent></Dialog>;
 }
 
-function OldCustomer360View() {
-  const [selectedCustomer, setSelectedCustomer] = React.useState<string | null>("cust-1");
-
-  if (!selectedCustomer) {
-    return (
-      <SectionCard title="Customer Directory">
-        <EmptyState 
-          icon={Users} 
-          title="No customer selected" 
-          description="Select a customer from the directory to view their 360 overview." 
-          className="py-24 border-none shadow-none surface-none"
-        />
-      </SectionCard>
-    );
-  }
-
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div className="lg:col-span-3 space-y-6">
-        <SectionCard title="Customer Identity" contentClassName="p-0">
-          <div className="p-6 text-center border-b border-border/40">
-            <Avatar className="size-20 mx-auto mb-4 border-2 border-primary/20 p-1">
-              <AvatarImage src="" />
-              <AvatarFallback className="text-xl font-black bg-primary/10 text-primary">DS</AvatarFallback>
-            </Avatar>
-            <h3 className="text-lg font-black tracking-tight">Deemand Solutions</h3>
-            <p className="text-xs text-muted-foreground font-medium">Subscription: Premium Enterprise</p>
-            <div className="flex justify-center gap-2 mt-4">
-              <UniversalTag label="Active" color="emerald" />
-              <UniversalTag label="High Value" color="blue" />
-            </div>
-          </div>
-          <div className="p-4 space-y-4">
-             <InfoItem label="Customer ID" value="CUST-8829" />
-             <InfoItem label="Industry" value="Media & Entertainment" />
-             <InfoItem label="Location" value="Mumbai, MH" />
-             <InfoItem label="Joined" value="Jan 12, 2025" />
-          </div>
-        </SectionCard>
-
-        <SectionCard title="Subscription Lifecycle" contentClassName="p-4 space-y-4">
-           <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Current Plan</span>
-                <Badge variant="outline" className="text-[10px] font-black border-primary/30 text-primary bg-primary/5">GOLD-ULTRA</Badge>
-              </div>
-              <InfoItem label="Expiry Date" value="Jan 12, 2027" />
-              <InfoItem label="Renewal Date" value="Dec 12, 2026" />
-              <InfoItem label="Devices" value="15 / 20 Used" />
-              <div className="pt-2 border-t border-border/40 space-y-2">
-                 <Button variant="outline" size="sm" className="w-full text-[10px] h-8 font-black uppercase tracking-widest glass-surface">Upgrade / Downgrade</Button>
-                 <Button variant="ghost" size="sm" className="w-full text-[10px] h-8 font-black uppercase tracking-widest opacity-60">Disable Auto-Renewal</Button>
-              </div>
-           </div>
-        </SectionCard>
-      </div>
-
-      <div className="lg:col-span-9 space-y-6">
-        <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="bg-transparent border-b border-border/40 w-full justify-start rounded-none p-0 mb-6 gap-6 overflow-x-auto">
-            <TabsTrigger value="overview" className="rounded-none border-b-2 border-transparent px-1 pb-3 text-[10px] font-black uppercase tracking-widest data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none opacity-60 data-[state=active]:opacity-100 transition-all">Overview</TabsTrigger>
-            <TabsTrigger value="timeline" className="rounded-none border-b-2 border-transparent px-1 pb-3 text-[10px] font-black uppercase tracking-widest data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none opacity-60 data-[state=active]:opacity-100 transition-all">Timeline</TabsTrigger>
-            <TabsTrigger value="communication" className="rounded-none border-b-2 border-transparent px-1 pb-3 text-[10px] font-black uppercase tracking-widest data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none opacity-60 data-[state=active]:opacity-100 transition-all">Communication</TabsTrigger>
-            <TabsTrigger value="docs" className="rounded-none border-b-2 border-transparent px-1 pb-3 text-[10px] font-black uppercase tracking-widest data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none opacity-60 data-[state=active]:opacity-100 transition-all">Documents</TabsTrigger>
-            <TabsTrigger value="billing" className="rounded-none border-b-2 border-transparent px-1 pb-3 text-[10px] font-black uppercase tracking-widest data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none opacity-60 data-[state=active]:opacity-100 transition-all">Billing</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="overview" className="space-y-6 outline-none">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-               <DashboardKpiCard title="LTV" value="₹ 4,50,000" trend="+12%" icon={DollarSign} />
-               <DashboardKpiCard title="Support Tickets" value="2" trend="Pending" icon={AlertCircle} trendNeutral />
-               <DashboardKpiCard title="NPS Score" value="9.2" trend="Excellent" icon={Heart} />
-            </div>
-            
-            <SectionCard title="Recent Activity" actions={<Button variant="ghost" size="sm">Log Note</Button>}>
-               <UniversalComments comments={[]} />
-            </SectionCard>
-          </TabsContent>
-
-          <TabsContent value="timeline" className="outline-none">
-            <SectionCard title="Customer Journey Timeline">
-               <UniversalActivityTimeline items={mockTimelineItems} />
-            </SectionCard>
-          </TabsContent>
-
-          <TabsContent value="communication" className="outline-none">
-             <SectionCard title="Interaction History">
-                <div className="space-y-4">
-                   <div className="p-4 rounded-xl border border-border/40 glass-surface flex items-start gap-4">
-                      <div className="size-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 shrink-0">
-                         <Phone className="size-4" />
-                      </div>
-                      <div className="space-y-1">
-                         <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Call Log</span>
-                            <span className="text-[10px] text-muted-foreground">• 2 days ago</span>
-                         </div>
-                         <p className="text-sm font-bold">Quarterly Business Review Call</p>
-                         <p className="text-xs text-muted-foreground">Discussed expansion of subscription seats for the next quarter. Client requested a demo of the new AI features.</p>
-                      </div>
-                   </div>
-                   <div className="p-4 rounded-xl border border-border/40 glass-surface flex items-start gap-4">
-                      <div className="size-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500 shrink-0">
-                         <Mail className="size-4" />
-                      </div>
-                      <div className="space-y-1">
-                         <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Email</span>
-                            <span className="text-[10px] text-muted-foreground">• Last Week</span>
-                         </div>
-                         <p className="text-sm font-bold">New Policy Updates Acknowledged</p>
-                         <p className="text-xs text-muted-foreground">Confirmed receipt of the updated enterprise service level agreement.</p>
-                      </div>
-                   </div>
-                </div>
-             </SectionCard>
-          </TabsContent>
-
-          <TabsContent value="docs" className="outline-none">
-             <UniversalFileManager />
-          </TabsContent>
-
-          <TabsContent value="billing" className="outline-none">
-             <SectionCard title="Financial Workflow & History">
-                <div className="space-y-6">
-                   <div className="p-6 rounded-2xl bg-primary/5 border border-primary/20 flex flex-col items-center justify-center gap-4 text-center">
-                      <div className="flex items-center gap-4">
-                         <div className="flex flex-col items-center gap-1">
-                            <div className="size-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-lg"><Star className="size-5" /></div>
-                            <span className="text-[9px] font-black uppercase">Deal Won</span>
-                         </div>
-                         <ArrowRight className="size-4 text-primary opacity-40" />
-                         <div className="flex flex-col items-center gap-1">
-                            <div className="size-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-lg"><FileText className="size-5" /></div>
-                            <span className="text-[9px] font-black uppercase">Invoice</span>
-                         </div>
-                         <ArrowRight className="size-4 text-primary opacity-40" />
-                         <div className="flex flex-col items-center gap-1">
-                            <div className="size-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-lg"><DollarSign className="size-5" /></div>
-                            <span className="text-[9px] font-black uppercase">Payment</span>
-                         </div>
-                         <ArrowRight className="size-4 text-primary opacity-40" />
-                         <div className="flex flex-col items-center gap-1">
-                            <div className="size-10 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg"><TrendingUp className="size-5" /></div>
-                            <span className="text-[9px] font-black uppercase">Revenue</span>
-                         </div>
-                      </div>
-                      <p className="text-xs text-muted-foreground font-medium max-w-sm">This visual workflow represents the conversion of sales successes into recognized financial growth.</p>
-                   </div>
-                   
-                   <UniversalAuditLog entries={[]} />
-                </div>
-             </SectionCard>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </div>
-  );
+function Field({ label, value, onChange, type = "text", required, className }: { label: string; value: any; onChange: (value: string) => void; type?: string; required?: boolean; className?: string }) {
+  return <div className={cn("space-y-2", className)}><Label>{label}</Label><Input type={type} required={required} value={value ?? ""} onChange={(e) => onChange(e.target.value)} /></div>;
 }
 
-function RenewalCenter() {
-  return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <RenewalKpiCard title="Upcoming (30d)" value="12" tone="info" />
-        <RenewalKpiCard title="Renewing Today" value="2" tone="warning" />
-        <RenewalKpiCard title="Expired (Last 7d)" value="1" tone="danger" />
-        <RenewalKpiCard title="Renewal Revenue" value="₹ 8,40,000" tone="success" />
-      </div>
-
-      <SectionCard 
-        title="Renewal Queue" 
-        description="Manage upcoming customer subscription renewals and priority engagement."
-        contentClassName="p-0"
-        actions={
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" className="h-8 text-[10px] font-black uppercase tracking-widest glass-surface">Export List</Button>
-          </div>
-        }
-      >
-        <Table>
-          <TableHeader className="bg-muted/30">
-            <TableRow>
-              <TableHead className="w-[200px]">Customer</TableHead>
-              <TableHead>Renewal Date</TableHead>
-              <TableHead>Plan</TableHead>
-              <TableHead>Priority</TableHead>
-              <TableHead>Sales Executive</TableHead>
-              <TableHead>Reminder Status</TableHead>
-              <TableHead className="text-right">Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow className="hover:bg-muted/5 group">
-              <TableCell className="font-bold">Deemand Solutions</TableCell>
-              <TableCell className="text-xs font-medium">Dec 12, 2026</TableCell>
-              <TableCell><Badge variant="outline" className="text-[9px] font-black border-primary/30">GOLD-ULTRA</Badge></TableCell>
-              <TableCell><UniversalTag label="Critical" color="rose" /></TableCell>
-              <TableCell className="text-xs">Alex Salesman</TableCell>
-              <TableCell><StatusBadge tone="success">Sent</StatusBadge></TableCell>
-              <TableCell className="text-right">
-                <Button variant="ghost" size="sm" className="h-7 text-[10px] font-black uppercase tracking-widest">Process</Button>
-              </TableCell>
-            </TableRow>
-            <TableRow className="hover:bg-muted/5 group">
-              <TableCell className="font-bold">Acme Corp</TableCell>
-              <TableCell className="text-xs font-medium">Aug 12, 2026</TableCell>
-              <TableCell><Badge variant="outline" className="text-[9px] font-black border-slate-300">STANDARD</Badge></TableCell>
-              <TableCell><UniversalTag label="Medium" color="amber" /></TableCell>
-              <TableCell className="text-xs">Sara Manager</TableCell>
-              <TableCell><StatusBadge tone="warning">Pending</StatusBadge></TableCell>
-              <TableCell className="text-right">
-                <Button variant="ghost" size="sm" className="h-7 text-[10px] font-black uppercase tracking-widest">Process</Button>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </SectionCard>
-    </div>
-  );
+function RowMenu({ onEdit, onDelete }: { onEdit: () => void; onDelete: () => void }) {
+  return <DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="size-8"><MoreHorizontal className="size-4" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={onEdit}><Edit3 className="mr-2 size-3.5" /> Edit</DropdownMenuItem><DropdownMenuItem className="text-destructive" onClick={onDelete}><Trash2 className="mr-2 size-3.5" /> Delete</DropdownMenuItem></DropdownMenuContent></DropdownMenu>;
 }
 
-function RenewalKpiCard({ title, value, tone }: { title: string; value: string; tone: "info" | "warning" | "danger" | "success" }) {
-  const tones = {
-    info: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-    warning: "bg-amber-500/10 text-amber-500 border-amber-500/20",
-    danger: "bg-rose-500/10 text-rose-500 border-rose-500/20",
-    success: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
-  };
-
-  return (
-    <div className={cn("p-4 rounded-2xl border glass-surface", tones[tone])}>
-      <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-70 mb-1">{title}</p>
-      <p className="text-xl font-black tracking-tight">{value}</p>
-    </div>
-  );
+function Kpi({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string }>; label: string; value: string }) {
+  return <Card className="border-border/40"><CardContent className="p-5"><div className="flex items-center justify-between"><div className="rounded-lg bg-primary/10 p-2.5 text-primary"><Icon className="size-5" /></div><TrendingUp className="size-4 text-muted-foreground/40" /></div><p className="mt-4 text-[10px] font-black uppercase tracking-widest text-muted-foreground">{label}</p><p className="mt-1 text-2xl font-black tracking-tight">{value}</p></CardContent></Card>;
 }
 
-function InfoItem({ label, value }: { label: string; value: string | React.ReactNode }) {
-  return (
-    <div className="flex justify-between items-center py-1">
-      <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{label}</span>
-      <span className="text-xs font-bold">{value}</span>
-    </div>
-  );
-}
-
-const mockTimelineItems: TimelineItem[] = [
-  {
-    id: "1",
-    type: "LEAD_CREATED",
-    title: "converted to Enterprise Lead",
-    description: "Lead entity registered via LinkedIn marketing campaign.",
-    timestamp: "Jan 01, 2025",
-    user: { name: "System Admin", initials: "SA" },
-    category: "crm"
-  },
-  {
-    id: "2",
-    type: "FOLLOW_UP",
-    title: "Discovery Call Completed",
-    description: "Initial discovery call with CTO regarding digital transformation goals.",
-    timestamp: "Jan 05, 2025",
-    user: { name: "Alex Salesman", initials: "AS" },
-    category: "crm"
-  },
-  {
-    id: "3",
-    type: "PROPOSAL",
-    title: "Enterprise Proposal Sent",
-    description: "Proposal version 1.2 sent for internal review by client board.",
-    timestamp: "Jan 08, 2025",
-    user: { name: "Alex Salesman", initials: "AS" },
-    category: "crm"
-  },
-  {
-    id: "4",
-    type: "INVOICE",
-    title: "First Installment Invoiced",
-    description: "Invoice #INV-2025-001 generated for activation fee.",
-    timestamp: "Jan 10, 2025",
-    user: { name: "Finance System", initials: "FS" },
-    category: "finance"
-  },
-  {
-    id: "5",
-    type: "PAYMENT",
-    title: "Payment Received",
-    description: "Full payment for invoice #INV-2025-001 confirmed via NEFT.",
-    timestamp: "Jan 12, 2025",
-    user: { name: "Finance System", initials: "FS" },
-    category: "finance"
-  },
-  {
-    id: "6",
-    type: "ACTIVATION",
-    title: "Subscription Activated",
-    description: "Enterprise workspace activated for 20 seats.",
-    timestamp: "Jan 12, 2025",
-    user: { name: "Provisioning Bot", initials: "PB" },
-    category: "system"
-  }
-];
-
-// Components moved to separate files for better maintainability.
-
-
+function MetricRow({ label, value }: { label: string; value: string }) { return <div className="flex items-center justify-between border-b border-border/30 pb-3 last:border-0 last:pb-0"><span className="text-xs text-muted-foreground">{label}</span><span className="text-sm font-black">{value}</span></div>; }
+function Count({ value }: { value: number }) { return <span className="ml-1 rounded-full bg-muted px-1.5 py-0.5 text-[9px]">{value}</span>; }
+function EmptyInline({ label }: { label: string }) { return <div className="rounded-lg border border-dashed border-border/40 p-8 text-center text-xs text-muted-foreground">{label}</div>; }
+function EmptyTable({ colSpan, label }: { colSpan: number; label: string }) { return <TableRow><TableCell colSpan={colSpan} className="h-32 text-center text-xs text-muted-foreground"><Database className="mx-auto mb-2 size-5 opacity-30" />{label}</TableCell></TableRow>; }
+function LoadingState() { return <div className="flex min-h-[70vh] items-center justify-center"><div className="flex flex-col items-center gap-3 text-muted-foreground"><Loader2 className="size-8 animate-spin text-primary" /><span className="text-xs font-black uppercase tracking-widest">Loading CRM</span></div></div>; }
+function filterRows(rows: any[], query: string) { const q = query.trim().toLowerCase(); if (!q) return rows; return rows.filter((row) => JSON.stringify(row).toLowerCase().includes(q)); }
+function groupDeals(deals: any[]) { const groups = new Map<string, any[]>(); for (const deal of deals) { const stage = String(deal.stage ?? "New"); const list = groups.get(stage) ?? []; list.push(deal); groups.set(stage, list); } return Array.from(groups.entries()).slice(0, 8); }
+function formatMoney(value: number) { return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(Number.isFinite(value) ? value : 0); }
+function formatDate(value: string | undefined) { return value ? new Date(value).toLocaleDateString("en-IN") : "—"; }
