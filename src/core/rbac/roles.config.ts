@@ -1,7 +1,7 @@
-import type { PrincipalIdentity, RoleDefinition } from "./types";
+import type { RoleDefinition } from "./types";
 
 /**
- * Role catalogue. Purely configuration — add roles here, never in features.
+ * Role catalogue. Pure configuration — feature code never hardcodes roles.
  */
 export const roleDefinitions: RoleDefinition[] = [
   {
@@ -15,14 +15,7 @@ export const roleDefinitions: RoleDefinition[] = [
     id: "admin",
     name: "Administrator",
     description: "Manages organisation-wide settings and all operational modules.",
-    permissions: [
-      "platform.settings.*", 
-      "platform.modules.*", 
-      "platform.security.view",
-      "platform.audit.view",
-      "platform.users.manage",
-      "platform.roles.manage"
-    ],
+    permissions: ["platform.settings.*", "platform.modules.*", "platform.security.view", "platform.audit.view", "platform.users.manage", "platform.roles.manage"],
     inherits: ["manager"],
     rank: 80,
   },
@@ -30,24 +23,14 @@ export const roleDefinitions: RoleDefinition[] = [
     id: "security_officer",
     name: "Security Officer",
     description: "Specialized role for monitoring security events and identity management.",
-    permissions: [
-      "platform.security.*",
-      "platform.audit.*",
-      "platform.users.view",
-      "platform.roles.view"
-    ],
+    permissions: ["platform.security.*", "platform.audit.*", "platform.users.view", "platform.roles.view"],
     rank: 75,
   },
   {
     id: "manager",
     name: "Manager",
     description: "Oversees teams and approves operational work.",
-    permissions: [
-      "platform.dashboard.view", 
-      "platform.reports.view",
-      "*.view",
-      "*.approve"
-    ],
+    permissions: ["platform.dashboard.view", "platform.reports.view", "*.view", "*.approve"],
     inherits: ["member"],
     rank: 60,
   },
@@ -70,15 +53,3 @@ export const roleDefinitions: RoleDefinition[] = [
 export const roleMap: Record<string, RoleDefinition> = Object.fromEntries(
   roleDefinitions.map((role) => [role.id, role]),
 );
-
-/**
- * Placeholder principal used until an authentication provider is wired in.
- * Replace the source of this value, not its shape.
- */
-export const defaultPrincipal: PrincipalIdentity = {
-  id: "local-principal",
-  displayName: "Amit Jain",
-  email: "amit.jain@adzdrio.com",
-  roles: ["super_admin"],
-  tenantId: "adzdrio",
-};
