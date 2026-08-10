@@ -1,20 +1,7 @@
-import { api } from "./api/client";
+import { api } from "./client";
 
-export interface LeadQueue {
-  id: string;
-  organizationId: string;
-  name: string;
-  rules: Record<string, unknown>;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type QueueRule = {
-  field: "source" | "stage" | "city" | "state" | "scoreMin" | "scoreMax";
-  operator: "equals" | "contains" | "gte" | "lte";
-  value: string;
-};
+export interface LeadQueue { id: string; organizationId: string; name: string; rules: Record<string, unknown>; isActive: boolean; createdAt: string; updatedAt: string; }
+export type QueueRule = { field: "source" | "stage" | "city" | "state" | "scoreMin" | "scoreMax"; operator: "equals" | "contains" | "gte" | "lte"; value: string; };
 
 export const leadQueueService = {
   list: () => api.get<LeadQueue[]>("/api/lead-queues"),
