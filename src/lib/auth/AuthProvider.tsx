@@ -6,7 +6,9 @@ export interface User {
   displayName: string;
   email: string;
   role: string;
+  roles: string[];
   permissions: string[];
+  organizationId?: string;
   organizationScope?: string;
   brandScope?: string;
   departmentScope?: string;
@@ -16,12 +18,44 @@ export interface User {
 interface AuthContextType {
   user: User | null;
   status: 'loading' | 'authenticated' | 'unauthenticated' | 'connection_error';
-  login: (credentials: any) => Promise<void>;
+  login: (credentials: { email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
   error: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+function normalizeList(value: unknown): string[] {
+  if (Array.isArray(value)) return value.filter((item): item is string => typeof item === 'string');
+  if (typeof value === 'string' && value.trim()) return [value.trim()];
+  return [];
+}
+
+function normalizeRole(value: unknown): string {
+  const roles = normalizeList(value).map((role) => role.toLowerCase().trim());
+  const role = roles.find((candidate) => candidate.length > 0);
+  if (!role) return 'member';
+  if (role === 'superadmin' || role === 'super-admin') return 'super_admin';
+  return role;
+}
+
+function mapBackendUser(raw: any): User {
+  const roles = normalizeList(raw?.roles ?? raw?.role).map((role) => role.toLowerCase().trim());
+  const normalizedRoles = roles.length ? roles.map((role) => (role === 'superadmin' || role === 'super-admin' ? 'super_admin' : role)) : [normalizeRole(raw?.role)];
+  return {
+    id: raw?.id ?? raw?.sub ?? '',
+    displayName: raw?.displayName ?? raw?.name ?? raw?.username ?? raw?.email ?? 'ABOS User',
+    email: raw?.email ?? '',
+    role: normalizeRole(raw?.role ?? normalizedRoles[0]),
+    roles: normalizedRoles,
+    permissions: normalizeList(raw?.permissions),
+    organizationId: raw?.organizationId,
+    organizationScope: raw?.organizationScope,
+    brandScope: raw?.brandScope,
+    departmentScope: raw?.departmentScope,
+    teamScope: raw?.teamScope,
+  };
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -29,10 +63,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    checkSession();
+    void checkSession();
 
-    // Listen for global unauthorized events from ApiClient
     const handleUnauthorized = () => {
+      localStorage.removeItem('abos_auth_token');
       setUser(null);
       setStatus('unauthenticated');
     };
@@ -49,17 +83,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const userData = await authService.getCurrentSession();
-      // Map backend user to frontend User type
-      const mappedUser: User = {
-        id: userData.id || userData.sub,
-        displayName: userData.displayName || userData.name || userData.username,
-        email: userData.email,
-        role: userData.role,
-        permissions: userData.permissions || [],
-      };
-      setUser(mappedUser);
+      const response = await authService.getCurrentSession();
+      const userData = response?.user ?? response;
+      setUser(mapBackendUser(userData));
       setStatus('authenticated');
+      setError(null);
     } catch (err: any) {
       if (err.status === 401) {
         localStorage.removeItem('abos_auth_token');
@@ -67,33 +95,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else if (err.status === 0 || err.status >= 500) {
         setStatus('connection_error');
       } else {
+        localStorage.removeItem('abos_auth_token');
         setStatus('unauthenticated');
       }
       setUser(null);
+      setError(err.message || null);
     }
   };
 
-  const login = async (credentials: any) => {
+  const login = async (credentials: { email: string; password: string }) => {
     try {
       setError(null);
       const response = await authService.login(credentials);
-      // Response expected: { accessToken, user, ... } or per requirement 5
-      const token = response.accessToken;
-      const userData = response.user;
+      if (!response?.accessToken || !response?.user) {
+        throw new Error('Authentication response was incomplete');
+      }
 
-      localStorage.setItem('abos_auth_token', token);
-      
-      const mappedUser: User = {
-        id: userData.id || userData.sub,
-        displayName: userData.displayName || userData.name || userData.username,
-        email: userData.email,
-        role: userData.role,
-        permissions: userData.permissions || [],
-      };
-
-      setUser(mappedUser);
+      localStorage.setItem('abos_auth_token', response.accessToken);
+      setUser(mapBackendUser(response.user));
       setStatus('authenticated');
     } catch (err: any) {
+      localStorage.removeItem('abos_auth_token');
+      setUser(null);
+      setStatus('unauthenticated');
       setError(err.message || 'Login failed');
       throw err;
     }
@@ -103,7 +127,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await authService.logout();
     } catch (err) {
-      console.error('Logout error', err);
+      // JWT logout is also completed locally, so a missing/failed server-side
+      // logout endpoint must never prevent the user from ending the session.
+      console.warn('Logout request failed; completing local logout.', err);
     } finally {
       localStorage.removeItem('abos_auth_token');
       setUser(null);
