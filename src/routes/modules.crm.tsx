@@ -1,19 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import * as React from "react";
 import {
-  BarChart3,
   Building2,
-  CheckCircle2,
-  ChevronRight,
   CircleDollarSign,
   Contact,
   Database,
   Edit3,
-  Filter,
+  Eye,
   Loader2,
-  Mail,
   MoreHorizontal,
-  Phone,
   Plus,
   RefreshCw,
   Search,
@@ -21,11 +16,11 @@ import {
   Trash2,
   TrendingUp,
   UserPlus,
-  Users,
 } from "lucide-react";
 import { toast } from "sonner";
 
 import { accountService, contactService, dealService, leadsService } from "@/lib/api/services";
+import { Lead360Dialog } from "@/components/crm/Lead360Dialog";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { Button } from "@/components/ui/button";
@@ -56,6 +51,7 @@ function SalesCRMModule() {
   const [search, setSearch] = React.useState("");
   const [modal, setModal] = React.useState<ModalState>(null);
   const [editing, setEditing] = React.useState<any | null>(null);
+  const [lead360Lead, setLead360Lead] = React.useState<any | null>(null);
 
   const load = React.useCallback(async (silent = false) => {
     try {
@@ -84,8 +80,6 @@ function SalesCRMModule() {
   const filteredLeads = React.useMemo(() => filterRows(leads, search), [leads, search]);
   const filteredAccounts = React.useMemo(() => filterRows(accounts, search), [accounts, search]);
   const filteredContacts = React.useMemo(() => filterRows(contacts, search), [contacts, search]);
-  const filteredDeals = React.useMemo(() => filterRows(deals, search), [deals, search]);
-
   const wonDeals = deals.filter((deal) => /won|closed_won/i.test(String(deal.stage ?? deal.status ?? "")));
   const pipelineValue = deals.reduce((sum, deal) => sum + Number(deal.amount ?? 0), 0);
   const wonValue = wonDeals.reduce((sum, deal) => sum + Number(deal.amount ?? 0), 0);
@@ -166,7 +160,7 @@ function SalesCRMModule() {
             <SectionCard title="Recent Leads" description="Newest records in the organisation.">
               <div className="space-y-2">
                 {leads.slice(0, 5).map((lead) => (
-                  <button key={lead.id} onClick={() => openModal("lead", lead)} className="w-full rounded-lg border border-border/40 p-3 text-left hover:bg-muted/30 transition-colors">
+                  <button key={lead.id} onClick={() => setLead360Lead(lead)} className="w-full rounded-lg border border-border/40 p-3 text-left hover:bg-muted/30 transition-colors">
                     <div className="flex items-center justify-between gap-3">
                       <div><p className="text-xs font-bold">{lead.customerName}</p><p className="text-[10px] text-muted-foreground">{lead.customerEmail || "No email"}</p></div>
                       <Badge variant="outline" className="text-[9px]">{lead.status}</Badge>
@@ -183,13 +177,13 @@ function SalesCRMModule() {
           <SectionCard title="Lead Directory" description="Create, search, update and delete live CRM leads." actions={<Button size="sm" onClick={() => openModal("lead")}><Plus className="mr-2 size-3.5" /> New Lead</Button>} contentClassName="p-0">
             <Table><TableHeader><TableRow><TableHead>Lead</TableHead><TableHead>Company</TableHead><TableHead>Status</TableHead><TableHead>Stage</TableHead><TableHead>Score</TableHead><TableHead>Created</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
               <TableBody>{filteredLeads.map((lead) => <TableRow key={lead.id}>
-                <TableCell><button className="text-left hover:text-primary" onClick={() => openModal("lead", lead)}><p className="text-xs font-bold">{lead.customerName}</p><p className="text-[10px] text-muted-foreground">{lead.customerEmail || "—"}</p></button></TableCell>
+                <TableCell><button className="text-left hover:text-primary" onClick={() => setLead360Lead(lead)}><p className="text-xs font-bold">{lead.customerName}</p><p className="text-[10px] text-muted-foreground">{lead.customerEmail || "—"}</p></button></TableCell>
                 <TableCell className="text-xs">{lead.companyName || "—"}</TableCell>
                 <TableCell><Badge variant="outline" className="text-[9px] uppercase">{lead.status}</Badge></TableCell>
                 <TableCell className="text-xs">{lead.stage || "New"}</TableCell>
                 <TableCell className="font-mono text-xs">{lead.score ?? 0}</TableCell>
                 <TableCell className="text-xs text-muted-foreground">{formatDate(lead.createdAt)}</TableCell>
-                <TableCell className="text-right"><RowMenu onEdit={() => openModal("lead", lead)} onDelete={() => void handleDelete("lead", lead.id)} /></TableCell>
+                <TableCell className="text-right"><RowMenu onView={() => setLead360Lead(lead)} onEdit={() => openModal("lead", lead)} onDelete={() => void handleDelete("lead", lead.id)} /></TableCell>
               </TableRow>)}
               {!filteredLeads.length && <EmptyTable colSpan={7} label="No leads match this search" />}</TableBody>
             </Table>
@@ -229,6 +223,7 @@ function SalesCRMModule() {
       </Tabs>
 
       <RecordDialog kind={modal} item={editing} accounts={accounts} onClose={closeModal} onSaved={() => { closeModal(); void load(true); }} />
+      <Lead360Dialog lead={lead360Lead} open={Boolean(lead360Lead)} onOpenChange={(open) => { if (!open) setLead360Lead(null); }} />
     </div>
   );
 }
@@ -276,8 +271,8 @@ function Field({ label, value, onChange, type = "text", required, className }: {
   return <div className={cn("space-y-2", className)}><Label>{label}</Label><Input type={type} required={required} value={value ?? ""} onChange={(e) => onChange(e.target.value)} /></div>;
 }
 
-function RowMenu({ onEdit, onDelete }: { onEdit: () => void; onDelete: () => void }) {
-  return <DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="size-8"><MoreHorizontal className="size-4" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={onEdit}><Edit3 className="mr-2 size-3.5" /> Edit</DropdownMenuItem><DropdownMenuItem className="text-destructive" onClick={onDelete}><Trash2 className="mr-2 size-3.5" /> Delete</DropdownMenuItem></DropdownMenuContent></DropdownMenu>;
+function RowMenu({ onView, onEdit, onDelete }: { onView?: () => void; onEdit: () => void; onDelete: () => void }) {
+  return <DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="size-8"><MoreHorizontal className="size-4" /></Button></DropdownMenuTrigger><DropdownMenuContent align="end">{onView && <DropdownMenuItem onClick={onView}><Eye className="mr-2 size-3.5" /> Open 360</DropdownMenuItem>}<DropdownMenuItem onClick={onEdit}><Edit3 className="mr-2 size-3.5" /> Edit</DropdownMenuItem><DropdownMenuItem className="text-destructive" onClick={onDelete}><Trash2 className="mr-2 size-3.5" /> Delete</DropdownMenuItem></DropdownMenuContent></DropdownMenu>;
 }
 
 function Kpi({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string }>; label: string; value: string }) {
