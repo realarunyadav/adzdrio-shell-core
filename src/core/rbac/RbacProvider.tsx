@@ -1,7 +1,6 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { checkPermission, resolvePermissions } from "./permissions";
-// import { defaultPrincipal } from "./roles.config";
 import type { Permission, PrincipalIdentity, RbacContextValue, RoleId } from "./types";
 
 const RbacContext = createContext<RbacContextValue | null>(null);
@@ -14,6 +13,13 @@ export function RbacProvider({
   principal?: PrincipalIdentity | null;
 }) {
   const [principal, setPrincipal] = useState<PrincipalIdentity | null>(initialPrincipal);
+
+  // Keep RBAC synchronized with the authenticated backend identity. The
+  // previous implementation only consumed the first principal and could
+  // retain a stale/null identity after login or logout.
+  useEffect(() => {
+    setPrincipal(initialPrincipal);
+  }, [initialPrincipal]);
 
   const roles = useMemo(() => principal?.roles ?? [], [principal]);
   const permissions = useMemo(() => resolvePermissions(roles), [roles]);
