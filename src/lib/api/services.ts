@@ -6,6 +6,7 @@ export const authService = {
   login: (credentials: { email: string; password: string }) => api.post<any>("/api/auth/login", credentials),
   logout: () => api.post("/api/auth/logout"),
   getCurrentSession: () => api.get<{ user: any }>("/api/auth/me"),
+  getOrganizationUsers: () => api.get<any[]>("/api/auth/users"),
 };
 
 export interface Product { id: string; sku: string; name: string; description?: string; category: string; price: number; currency: string; status: "active" | "archived"; metadata?: Record<string, any>; }
