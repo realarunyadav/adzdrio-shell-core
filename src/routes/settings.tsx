@@ -40,7 +40,8 @@ export const Route = createFileRoute("/settings")({
 
 function SettingsPage() {
   bootstrapModules();
-  const { roles, setRoles, permissions } = useRbac();
+  const { roles, principal } = useRbac();
+  const permissions = principal?.permissions ?? [];
   const { mode, setMode } = useTheme();
   const registered = moduleRegistry.list();
 
@@ -84,30 +85,22 @@ function SettingsPage() {
         </SectionCard>
 
         <SectionCard
-          title="Access role"
-          description="Frontend RBAC simulation until an identity provider is connected."
+          title="Access Identity"
+          description="Your current enterprise identity and permissions from the backend."
         >
           <div className="space-y-4">
             <div className="grid gap-2">
-              <Label htmlFor="active-role">Active role</Label>
-              <Select value={roles[0] ?? ""} onValueChange={(value) => setRoles([value])}>
-                <SelectTrigger id="active-role" className="w-full sm:w-64">
-                  <SelectValue placeholder="Select role" />
-                </SelectTrigger>
-                <SelectContent>
-                  {roleDefinitions
-                    .slice()
-                    .sort((a, b) => b.rank - a.rank)
-                    .map((role) => (
-                      <SelectItem key={role.id} value={role.id}>
-                        {role.name}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
+              <Label>Active roles</Label>
+              <div className="flex flex-wrap gap-2">
+                {roles.map(role => (
+                  <Badge key={role} variant="secondary" className="font-bold">
+                    {role}
+                  </Badge>
+                ))}
+              </div>
             </div>
             <div className="flex flex-wrap gap-1.5">
-              {permissions.map((permission) => (
+              {permissions.map((permission: string) => (
                 <code
                   key={permission}
                   className="rounded bg-muted px-1.5 py-0.5 text-[11px] text-muted-foreground"
