@@ -117,7 +117,7 @@ export function AppSidebar() {
                                   <span className="flex flex-1 items-center justify-between gap-2">
                                     <span className="truncate">{module.name}</span>
                                     <span className="rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider bg-sidebar-accent text-sidebar-foreground/70">
-                                      Soon
+                                      Phase 2
                                     </span>
                                   </span>
                                 ) : null}

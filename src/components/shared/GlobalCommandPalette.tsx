@@ -59,19 +59,19 @@ export function GlobalCommandPalette() {
           </CommandItem>
           <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/modules/crm" }))}>
             <Users className="mr-2 h-4 w-4" />
-            <span>Sales CRM</span>
+            <span>Sales CRM (Leads, Deals, Accounts)</span>
           </CommandItem>
-          <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/modules/finance" }))}>
+          <CommandItem disabled className="opacity-50">
             <FileText className="mr-2 h-4 w-4" />
-            <span>Finance & Accounts</span>
+            <span>Finance (Phase 2)</span>
           </CommandItem>
-          <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/modules/projects" }))}>
+          <CommandItem disabled className="opacity-50">
             <Briefcase className="mr-2 h-4 w-4" />
-            <span>Enterprise PMO</span>
+            <span>Enterprise PMO (Phase 2)</span>
           </CommandItem>
-          <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/modules/inventory" }))}>
+          <CommandItem disabled className="opacity-50">
             <Package className="mr-2 h-4 w-4" />
-            <span>Inventory System</span>
+            <span>Inventory System (Phase 2)</span>
           </CommandItem>
         </CommandGroup>
 
@@ -80,7 +80,7 @@ export function GlobalCommandPalette() {
         <CommandGroup heading="Quick Actions">
           <CommandItem onSelect={() => runCommand(() => {})}>
             <Plus className="mr-2 h-4 w-4" />
-            <span>Create New Prospect</span>
+            <span>New CRM Record</span>
             <CommandShortcut>⌘P</CommandShortcut>
           </CommandItem>
           <CommandItem onSelect={() => runCommand(() => {})}>

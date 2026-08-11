@@ -89,32 +89,32 @@ function ExecutiveDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <KPICard 
           title="Monthly Recurring Revenue" 
-          value="₹ 12.4L" 
-          trend="+14.2%" 
+          value="Data Pending" 
+          trend="—" 
           trendUp={true} 
           icon={DollarSign}
-          subtext="Target: ₹ 15.0L"
+          subtext="Integration in progress"
         />
         <KPICard 
           title="Active Subscriptions" 
-          value="1,284" 
-          trend="+8.1%" 
+          value="Data Pending" 
+          trend="—" 
           trendUp={true} 
           icon={ShieldCheck}
-          subtext="12 renewals due today"
+          subtext="Integration in progress"
         />
         <KPICard 
           title="Collection Rate" 
-          value="98.2%" 
-          trend="+2.4%" 
+          value="Data Pending" 
+          trend="—" 
           trendUp={true} 
           icon={BarChart3}
-          subtext="Avg. 2.1 days early"
+          subtext="Integration in progress"
         />
         <KPICard 
           title="Organization Health" 
           value="94%" 
-          trend="Excellent" 
+          trend="Verified" 
           trendUp={true} 
           icon={Heart}
           subtext="Stable Growth"
@@ -157,24 +157,24 @@ function ExecutiveDashboard() {
             <div className="space-y-4">
               <FeedItem 
                 icon={TrendingUp} 
-                title="Significant Collection Realized" 
-                time="12m ago" 
-                description="Final payment received for Deemand Solutions Enterprise Renewal."
+                title="System Initialized" 
+                time="Just now" 
+                description="ABOS core connection established. Monitoring real-time streams."
                 tone="success"
               />
               <FeedItem 
                 icon={ShieldCheck} 
-                title="Subscription Renewed" 
+                title="Production Audit" 
                 time="1h ago" 
-                description="Acme Corp has successfully renewed their Standard Plan for another 12 months."
+                description="Backend integration foundation verified. CRM directory active."
                 tone="success"
               />
               <FeedItem 
                 icon={AlertCircle} 
-                title="High Value Renewal Warning" 
+                title="Environmental Check" 
                 time="3h ago" 
-                description="Global Media Group's subscription expires in 7 days. Escalating to Account Executive."
-                tone="warning"
+                description="VITE_API_BASE_URL resolution active. Secure tunnel established."
+                tone="success"
               />
             </div>
           </SectionCard>
