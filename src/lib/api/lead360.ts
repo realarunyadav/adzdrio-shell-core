@@ -24,6 +24,14 @@ export interface LeadTask {
   updatedAt: string;
 }
 
+export interface LeadConversionResult {
+  success: boolean;
+  leadId: string;
+  contactId: string;
+  accountId: string | null;
+  message: string;
+}
+
 export const lead360Service = {
   getActivities: (leadId: string) => api.get<LeadActivity[]>(`/api/leads/${leadId}/activities`),
   addActivity: (leadId: string, data: { action: string; note?: string; details?: Record<string, unknown> }) =>
@@ -36,4 +44,6 @@ export const lead360Service = {
     api.patch<LeadTask>(`/api/leads/${leadId}/tasks/${taskId}`, data),
   deleteTask: (leadId: string, taskId: string) =>
     api.delete(`/api/leads/${leadId}/tasks/${taskId}`),
+  convert: (leadId: string, data?: { accountName?: string; contactEmail?: string }) =>
+    api.post<LeadConversionResult>(`/api/leads/${leadId}/convert`, data ?? {}),
 };
