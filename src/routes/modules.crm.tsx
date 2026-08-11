@@ -223,7 +223,18 @@ function SalesCRMModule() {
       </Tabs>
 
       <RecordDialog kind={modal} item={editing} accounts={accounts} onClose={closeModal} onSaved={() => { closeModal(); void load(true); }} />
-      <Lead360Dialog lead={lead360Lead} open={Boolean(lead360Lead)} onOpenChange={(open) => { if (!open) setLead360Lead(null); }} />
+      <Lead360Dialog 
+        lead={lead360Lead} 
+        open={Boolean(lead360Lead)} 
+        onOpenChange={(open) => { if (!open) setLead360Lead(null); }} 
+        onCreateDeal={(lead) => openModal("deal", { 
+          leadId: lead.id, 
+          accountId: lead.accountId, 
+          name: `Deal: ${lead.customerName || lead.companyName}`,
+          amount: lead.price || 0,
+          source: lead.source || "Lead Conversion"
+        })} 
+      />
     </div>
   );
 }
