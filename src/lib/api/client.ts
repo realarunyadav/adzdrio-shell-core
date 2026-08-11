@@ -20,7 +20,7 @@ export class ApiError extends Error {
 }
 
 function getApiBaseUrl(): string {
-  const configured = String((import.meta as ImportMeta & { env: Record<string, string | undefined> }).env.VITE_API_BASE_URL ?? '').trim();
+  const configured = String((import.meta as ImportMeta & { env: Record<string, string | undefined> }).env['VITE_API_BASE_URL'] ?? '').trim();
 
   if (!configured) {
     throw new ApiError(

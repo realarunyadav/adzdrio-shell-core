@@ -87,7 +87,7 @@ function LeadDuplicatesPage() {
                         <div className="flex items-start justify-between gap-3"><div><p className="font-semibold">{lead.firstName} {lead.lastName}</p><p className="text-xs text-muted-foreground">{lead.companyName || "No company"}</p></div><Badge variant={isDuplicate ? "destructive" : "outline"}>{lead.status}</Badge></div>
                         <div className="mt-3 space-y-1 text-xs text-muted-foreground"><p>Email: {lead.email || "—"}</p><p>Phone: {lead.primaryPhone || "—"}</p><p>Stage: {lead.stage || "—"}</p></div>
                         <div className="mt-4 flex gap-2">
-                          {isDuplicate ? <Button size="sm" variant="outline" onClick={() => void restore(lead.id)} disabled={busy === lead.id}>Restore</Button> : index > 0 && <Button size="sm" variant="destructive" onClick={() => void mark(lead.id, canonical.id)} disabled={busy === lead.id}>Mark Duplicate</Button>}
+                          {isDuplicate ? <Button size="sm" variant="outline" onClick={() => void restore(lead.id)} disabled={busy === lead.id}>Restore</Button> : index > 0 && canonical && <Button size="sm" variant="destructive" onClick={() => void mark(lead.id, canonical.id)} disabled={busy === lead.id}>Mark Duplicate</Button>}
                         </div>
                       </div>;
                     })}

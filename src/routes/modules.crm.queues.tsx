@@ -94,14 +94,15 @@ function LeadQueuesPage() {
     if (!value.trim()) return toast.error("Rule value is required");
     if (!selectedUsers.length) return toast.error("Select at least one active salesperson");
     const conditions: Record<string, unknown> = {};
-    if (field === "scoreMin") conditions.minScore = Number(value);
-    else if (field === "scoreMax") conditions.maxScore = Number(value);
+    if (field === "scoreMin") conditions['minScore'] = Number(value);
+    else if (field === "scoreMax") conditions['maxScore'] = Number(value);
     else conditions[field] = { value: value.trim(), operator };
     const rules = { conditions, assignmentType: strategy, userIds: selectedUsers };
     try {
       if (editing) await leadQueueService.update(editing.id, { name: name.trim(), isActive: active, rules });
       else await leadQueueService.create({ name: name.trim(), isActive: active, rules });
       toast.success(editing ? "Queue updated" : "Queue created"); setOpen(false); reset(); await load(true);
+      return;
     } catch (error: any) { toast.error(error?.message || "Unable to save queue"); }
   };
 
