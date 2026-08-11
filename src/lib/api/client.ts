@@ -25,7 +25,7 @@ function getApiBaseUrl(): string {
   if (!configured) {
     throw new ApiError(
       0,
-      'ABOS API is not configured. Set VITE_API_BASE_URL in the deployment environment.'
+      'ABOS API is not configured. Configure VITE_API_BASE_URL in Lovable environment variables.'
     );
   }
 
