@@ -7,12 +7,12 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  quality:
     runs-on: ubuntu-latest
     env:
       # CI only needs a syntactically valid endpoint to compile the browser bundle.
       # The real production URL is supplied by the hosting environment.
-      VITE_API_BASE_URL: http://localhost:3000
+      VITE_API_BASE_URL: https://ci.invalid.example
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,5 +22,7 @@ jobs:
           bun-version: latest
       - name: Install dependencies
         run: bun install --frozen-lockfile
+      - name: Lint
+        run: bun run lint
       - name: Build production bundle
         run: bun run build
