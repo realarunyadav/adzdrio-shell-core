@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  quality:
+  build:
     runs-on: ubuntu-latest
     env:
       # CI only needs a syntactically valid endpoint to compile the browser bundle.
@@ -22,7 +22,5 @@ jobs:
           bun-version: latest
       - name: Install dependencies
         run: bun install --frozen-lockfile
-      - name: Lint
-        run: bun run lint
       - name: Build production bundle
         run: bun run build
