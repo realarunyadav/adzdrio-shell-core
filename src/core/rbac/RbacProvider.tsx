@@ -1,62 +1,55 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import React, { createContext, useContext, ReactNode } from 'react';
+import { useAuth } from '@/lib/auth/AuthProvider';
 
-import { checkPermission, resolvePermissions } from "./permissions";
-import type { Permission, PrincipalIdentity, RbacContextValue, RoleId } from "./types";
-
-const RbacContext = createContext<RbacContextValue | null>(null);
-
-export function RbacProvider({
-  children,
-  principal: initialPrincipal = null,
-}: {
-  children: ReactNode;
-  principal?: PrincipalIdentity | null;
-}) {
-  const [principal, setPrincipal] = useState<PrincipalIdentity | null>(initialPrincipal);
-
-  // Keep RBAC synchronized with the authenticated backend identity. The
-  // previous implementation only consumed the first principal and could
-  // retain a stale/null identity after login or logout.
-  useEffect(() => {
-    setPrincipal(initialPrincipal);
-  }, [initialPrincipal]);
-
-  const roles = useMemo(() => principal?.roles ?? [], [principal]);
-  const permissions = useMemo(() => resolvePermissions(roles), [roles]);
-
-  const can = useCallback(
-    (required: Permission | Permission[], mode: "all" | "any" = "all") => {
-      const list = Array.isArray(required) ? required : [required];
-      if (list.length === 0) return true;
-      return mode === "all"
-        ? list.every((item) => checkPermission(permissions, item))
-        : list.some((item) => checkPermission(permissions, item));
-    },
-    [permissions],
-  );
-
-  const hasRole = useCallback(
-    (role: RoleId | RoleId[]) => {
-      const list = Array.isArray(role) ? role : [role];
-      return list.some((item) => roles.includes(item));
-    },
-    [roles],
-  );
-
-  const setRoles = useCallback((next: RoleId[]) => {
-    setPrincipal((current) => (current ? { ...current, roles: next } : current));
-  }, []);
-
-  const value = useMemo<RbacContextValue>(
-    () => ({ principal, roles, permissions, can, hasRole, setRoles }),
-    [principal, roles, permissions, can, hasRole, setRoles],
-  );
-
-  return <RbacContext.Provider value={value}>{children}</RbacContext.Provider>;
+interface RbacContextType {
+  hasPermission: (permission: string) => boolean;
+  hasRole: (role: string | string[]) => boolean;
+  isAdmin: boolean;
 }
 
-export function useRbac(): RbacContextValue {
+const RbacContext = createContext<RbacContextType | undefined>(undefined);
+
+export function RbacProvider({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
+
+  const hasPermission = (permission: string): boolean => {
+    if (!user) return false;
+    if (user.roles.includes('ADMIN')) return true;
+    return user.permissions.includes(permission);
+  };
+
+  const hasRole = (role: string | string[]): boolean => {
+    if (!user) return false;
+    const roles = Array.isArray(role) ? role : [role];
+    const upperRoles = roles.map(r => r.toUpperCase());
+    return user.roles.some(userRole => upperRoles.includes(userRole.toUpperCase()));
+  };
+
+  const isAdmin = hasRole('ADMIN');
+
+  return (
+    <RbacContext.Provider value={{ hasPermission, hasRole, isAdmin }}>
+      {children}
+    </RbacContext.Provider>
+  );
+}
+
+export function useRbac() {
   const context = useContext(RbacContext);
-  if (!context) throw new Error("useRbac must be used within <RbacProvider>.");
+  if (context === undefined) {
+    throw new Error('useRbac must be used within an RbacProvider');
+  }
   return context;
 }
+
+// Permission Constants aligned with Backend
+export const PERMISSIONS = {
+  LEADS_READ: 'leads:read',
+  LEADS_WRITE: 'leads:write',
+  LEADS_DELETE: 'leads:delete',
+  LEADS_ASSIGN: 'leads:assign',
+  LEADS_IMPORT: 'leads:import',
+  CRM_READ: 'crm:read',
+  CRM_WRITE: 'crm:write',
+  USERS_WRITE: 'users:write',
+};

@@ -1,9 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { 
-  Target, 
-  Clock, 
-  CheckCircle2, 
-  AlertCircle, 
+import { createFileRoute, redirect } from "@tanstack/react-router";
+
+export const Route = createFileRoute("/modules/leads")({
+  beforeLoad: () => {
+    throw redirect({ to: "/modules/crm" });
+  },
+});
   ArrowRight, 
   MoreHorizontal,
   Mail,
