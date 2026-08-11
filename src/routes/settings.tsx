@@ -18,6 +18,7 @@ import { moduleRegistry } from "@/core/modules/registry";
 import { roleDefinitions } from "@/core/rbac/roles.config";
 import { useRbac } from "@/core/rbac/RbacProvider";
 import { useTheme, type ThemeMode } from "@/core/theme/ThemeProvider";
+import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({

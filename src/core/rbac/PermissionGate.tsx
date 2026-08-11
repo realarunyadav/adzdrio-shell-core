@@ -1,11 +1,10 @@
 import type { ReactNode } from "react";
 
 import { useRbac } from "./RbacProvider";
-import type { Permission, RoleId } from "./types";
 
 export interface PermissionGateProps {
-  permission?: Permission | Permission[];
-  role?: RoleId | RoleId[];
+  permission?: string | string[];
+  role?: string | string[];
   /** How multiple permissions are evaluated. */
   mode?: "all" | "any";
   fallback?: ReactNode;
@@ -22,7 +21,7 @@ export function PermissionGate({
 }: PermissionGateProps) {
   const { can, hasRole } = useRbac();
 
-  const permitted = (!permission || can(permission, mode)) && (!role || hasRole(role));
+  const permitted = (!permission || can(permission as any, mode)) && (!role || hasRole(role));
 
   return <>{permitted ? children : fallback}</>;
 }
