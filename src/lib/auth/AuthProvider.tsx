@@ -32,21 +32,20 @@ function normalizeList(value: unknown): string[] {
 }
 
 function normalizeRole(value: unknown): string {
-  const roles = normalizeList(value).map((role) => role.toLowerCase().trim());
+  const roles = normalizeList(value).map((role) => role.toUpperCase().trim());
   const role = roles.find((candidate) => candidate.length > 0);
-  if (!role) return 'member';
-  if (role === 'superadmin' || role === 'super-admin') return 'super_admin';
+  if (!role) return 'VIEWER';
   return role;
 }
 
 function mapBackendUser(raw: any): User {
-  const roles = normalizeList(raw?.roles ?? raw?.role).map((role) => role.toLowerCase().trim());
-  const normalizedRoles = roles.length ? roles.map((role) => (role === 'superadmin' || role === 'super-admin' ? 'super_admin' : role)) : [normalizeRole(raw?.role)];
+  const roles = normalizeList(raw?.roles ?? raw?.role).map((role) => role.toUpperCase().trim());
+  const normalizedRoles = roles.length ? roles : [normalizeRole(raw?.role)];
   return {
     id: raw?.id ?? raw?.sub ?? '',
     displayName: raw?.displayName ?? raw?.name ?? raw?.username ?? raw?.email ?? 'ABOS User',
     email: raw?.email ?? '',
-    role: normalizeRole(raw?.role ?? normalizedRoles[0]),
+    role: normalizedRoles[0] || 'VIEWER',
     roles: normalizedRoles,
     permissions: normalizeList(raw?.permissions),
     organizationId: raw?.organizationId,

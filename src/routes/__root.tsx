@@ -153,15 +153,7 @@ function InnerRoot() {
   const isAuthPage = location.pathname === "/auth";
 
   return (
-    <RbacProvider
-      principal={user ? {
-        id: user.id,
-        displayName: user.displayName,
-        email: user.email,
-        roles: user.roles,
-        tenantId: user.organizationId ?? "adzdrio",
-      } : null}
-    >
+    <RbacProvider>
       {isAuthPage ? <Outlet /> : <AppShell><Outlet /></AppShell>}
       <GlobalCommandPalette />
       <Toaster position="top-right" richColors closeButton />
