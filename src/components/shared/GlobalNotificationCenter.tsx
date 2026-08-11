@@ -45,43 +45,12 @@ export interface Notification {
 const DEMO_NOTIFICATIONS: Notification[] = [
   {
     id: "1",
-    title: "Invoice Overdue",
-    description: "Invoice #INV-2024-001 for Acme Corp is 3 days overdue.",
-    timestamp: "2 hours ago",
-    read: false,
-    priority: "high",
-    category: "finance",
-    actionLabel: "View Invoice"
-  },
-  {
-    id: "2",
-    title: "Critical Security Alert",
-    description: "Suspicious login attempt detected from IP 192.168.1.100.",
-    timestamp: "5 hours ago",
-    read: false,
-    priority: "critical",
-    category: "security",
-    actionLabel: "Verify IP"
-  },
-  {
-    id: "3",
-    title: "Stock Alert: Low Inventory",
-    description: "Hub-01: SKU-8849 is below reorder level (8 units remaining).",
-    timestamp: "Yesterday",
-    read: true,
-    priority: "medium",
-    category: "inventory",
-    actionLabel: "Restock"
-  },
-  {
-    id: "4",
-    title: "Approval Requested",
-    description: "Manager approval required for Travel Reimbursement #EXP-992.",
-    timestamp: "Yesterday",
+    title: "Platform Connected",
+    description: "ABOS is successfully connected to the production backend.",
+    timestamp: "Just now",
     read: false,
     priority: "medium",
-    category: "hrms",
-    actionLabel: "Review"
+    category: "system",
   }
 ];
 
@@ -112,7 +81,7 @@ export function GlobalNotificationCenter({ open, onOpenChange }: NotificationCen
         <SheetHeader className="p-6 pb-2">
           <div className="flex justify-between items-center mb-2">
             <SheetTitle className="text-xl font-bold tracking-tight">Notification Center</SheetTitle>
-            <Button variant="ghost" size="sm" className="text-xs h-8 text-primary font-bold hover:bg-primary/5">Mark all as read</Button>
+            <Button variant="ghost" size="sm" className="text-xs h-8 text-primary font-bold hover:bg-primary/5 opacity-50 cursor-not-allowed" disabled>Mark all as read (Phase 2)</Button>
           </div>
           <SheetDescription className="text-sm">
             Unified platform alerts and operational business events.
@@ -121,10 +90,10 @@ export function GlobalNotificationCenter({ open, onOpenChange }: NotificationCen
 
         <div className="px-6 py-2">
           <Tabs defaultValue="all" className="w-full" onValueChange={setActiveTab}>
-            <TabsList className="bg-muted/50 p-1 w-full justify-start">
-              <TabsTrigger value="all" className="flex-1 text-xs font-bold">All</TabsTrigger>
-              <TabsTrigger value="unread" className="flex-1 text-xs font-bold">Unread</TabsTrigger>
-              <TabsTrigger value="priority" className="flex-1 text-xs font-bold">High Priority</TabsTrigger>
+            <TabsList className="bg-muted/50 p-1 w-full justify-start rounded-xl">
+              <TabsTrigger value="all" className="flex-1 text-[10px] font-black uppercase tracking-widest px-4">All</TabsTrigger>
+              <TabsTrigger value="unread" className="flex-1 text-[10px] font-black uppercase tracking-widest px-4">Unread</TabsTrigger>
+              <TabsTrigger value="priority" className="flex-1 text-[10px] font-black uppercase tracking-widest px-4">Priority</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -201,11 +170,11 @@ export function GlobalNotificationCenter({ open, onOpenChange }: NotificationCen
         </ScrollArea>
 
         <div className="p-6 border-t border-border/50 glass-effect flex gap-2">
-          <Button variant="outline" className="flex-1 font-black text-[10px] uppercase tracking-widest h-10 border-border/60">
-            Rules Engine
+          <Button variant="outline" className="flex-1 font-black text-[10px] uppercase tracking-widest h-10 border-border/60 opacity-50 cursor-not-allowed" disabled>
+            Rules Engine (Phase 2)
           </Button>
-          <Button variant="outline" className="flex-1 font-black text-[10px] uppercase tracking-widest h-10 border-border/60">
-            View All
+          <Button variant="outline" className="flex-1 font-black text-[10px] uppercase tracking-widest h-10 border-border/60 opacity-50 cursor-not-allowed" disabled>
+            View All (Phase 2)
           </Button>
         </div>
       </SheetContent>

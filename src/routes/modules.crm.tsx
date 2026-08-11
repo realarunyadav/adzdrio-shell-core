@@ -128,11 +128,11 @@ function SalesCRMModule() {
       <Tabs value={tab} onValueChange={(value) => { setTab(value); setSearch(""); }} className="space-y-6">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <TabsList className="h-auto justify-start gap-2 overflow-x-auto bg-transparent p-0">
-            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-            <TabsTrigger value="leads">Leads <Count value={leads.length} /></TabsTrigger>
-            <TabsTrigger value="pipeline">Pipeline <Count value={deals.length} /></TabsTrigger>
-            <TabsTrigger value="accounts">Accounts <Count value={accounts.length} /></TabsTrigger>
-            <TabsTrigger value="contacts">Contacts <Count value={contacts.length} /></TabsTrigger>
+            <TabsTrigger value="dashboard" className="px-4 py-2 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none shadow-none font-bold uppercase tracking-widest text-[10px]">Dashboard</TabsTrigger>
+            <TabsTrigger value="leads" className="px-4 py-2 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none shadow-none font-bold uppercase tracking-widest text-[10px]">Leads <Count value={leads.length} /></TabsTrigger>
+            <TabsTrigger value="pipeline" className="px-4 py-2 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none shadow-none font-bold uppercase tracking-widest text-[10px]">Pipeline <Count value={deals.length} /></TabsTrigger>
+            <TabsTrigger value="accounts" className="px-4 py-2 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none shadow-none font-bold uppercase tracking-widest text-[10px]">Accounts <Count value={accounts.length} /></TabsTrigger>
+            <TabsTrigger value="contacts" className="px-4 py-2 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none shadow-none font-bold uppercase tracking-widest text-[10px]">Contacts <Count value={contacts.length} /></TabsTrigger>
           </TabsList>
           {tab !== "dashboard" && (
             <div className="relative w-full lg:w-[300px]">

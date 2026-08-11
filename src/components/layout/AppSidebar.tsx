@@ -143,11 +143,36 @@ export function AppSidebar() {
                             <SidebarMenuSub>
                               <SidebarMenuSubItem>
                                 <SidebarMenuSubButton asChild>
-                                  <span className="text-[11px] text-sidebar-foreground/60 px-2 py-1 italic">
-                                    No sub-modules
-                                  </span>
+                                  <Link to={module.basePath as any} className="text-[11px] text-sidebar-foreground/60 px-2 py-1 font-medium hover:text-primary transition-colors">
+                                    {module.name} Dashboard
+                                  </Link>
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
+                              {module.id === 'crm' && (
+                                <>
+                                  <SidebarMenuSubItem>
+                                    <SidebarMenuSubButton asChild>
+                                      <Link to="/modules/crm" className="text-[11px] text-sidebar-foreground/60 px-2 py-1 font-medium hover:text-primary transition-colors">
+                                        Lead Management
+                                      </Link>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                  <SidebarMenuSubItem>
+                                    <SidebarMenuSubButton asChild>
+                                      <Link to="/modules/crm" className="text-[11px] text-sidebar-foreground/60 px-2 py-1 font-medium hover:text-primary transition-colors">
+                                        Deal Pipeline
+                                      </Link>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                  <SidebarMenuSubItem>
+                                    <SidebarMenuSubButton asChild>
+                                      <Link to="/modules/crm" className="text-[11px] text-sidebar-foreground/60 px-2 py-1 font-medium hover:text-primary transition-colors">
+                                        Account Directory
+                                      </Link>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                </>
+                              )}
                             </SidebarMenuSub>
                           </CollapsibleContent>
                         )}

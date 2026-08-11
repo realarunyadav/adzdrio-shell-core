@@ -173,10 +173,10 @@ function UserManagementModule() {
             </TableHeader>
             <TableBody>
               {[
-                { name: "Amit Jain", email: "amit.jain@adzdrio.com", role: "Super Admin", status: "Active", dept: "Engineering", location: "Bangalore HQ" },
-                { name: "Sarah Williams", email: "s.williams@adzdrio.com", role: "Executive Manager", status: "Active", dept: "Operations", location: "Mumbai Hub" },
-                { name: "Rajesh Kumar", email: "r.kumar@adzdrio.com", role: "Member", status: "Pending", dept: "Sales", location: "Bangalore HQ" },
-                { name: "David Chen", email: "d.chen@adzdrio.com", role: "Viewer", status: "Locked", dept: "Finance", location: "Remote" },
+                { name: "Amit Jain", email: "amit.jain@adzdrio.com", role: "ADMIN", status: "Active", dept: "Engineering", location: "Bangalore HQ" },
+                { name: "Sarah Williams", email: "s.williams@adzdrio.com", role: "MANAGER", status: "Active", dept: "Operations", location: "Mumbai Hub" },
+                { name: "Rajesh Kumar", email: "r.kumar@adzdrio.com", role: "SALES", status: "Pending", dept: "Sales", location: "Bangalore HQ" },
+                { name: "David Chen", email: "d.chen@adzdrio.com", role: "VIEWER", status: "Locked", dept: "Finance", location: "Remote" },
               ].map((user) => (
                 <TableRow key={user.email} className="hover:bg-muted/5 group cursor-pointer">
                   <TableCell>
@@ -319,10 +319,11 @@ function InviteUserDialog() {
                 <SelectValue placeholder="Select access role" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="admin">Administrator</SelectItem>
-                <SelectItem value="manager">Manager</SelectItem>
-                <SelectItem value="member">Member</SelectItem>
-                <SelectItem value="viewer">Viewer</SelectItem>
+                <SelectItem value="admin">ADMIN</SelectItem>
+                <SelectItem value="manager">MANAGER</SelectItem>
+                <SelectItem value="sales">SALES</SelectItem>
+                <SelectItem value="support">SUPPORT</SelectItem>
+                <SelectItem value="viewer">VIEWER</SelectItem>
               </SelectContent>
             </Select>
             <p className="text-[10px] text-muted-foreground italic">

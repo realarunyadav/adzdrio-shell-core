@@ -134,11 +134,11 @@ function RolesManagementModule() {
             </TableHeader>
             <TableBody>
               {[
-                { name: "Super Administrator", status: "Active", type: "System", users: 2 },
-                { name: "Executive Manager", status: "Active", type: "System", users: 5 },
-                { name: "Department Head", status: "Active", type: "System", users: 12 },
-                { name: "Standard Member", status: "Active", type: "System", users: 84 },
-                { name: "External Vendor", status: "Active", type: "Custom", users: 15 },
+                { name: "ADMIN", status: "Active", type: "System", users: 2 },
+                { name: "MANAGER", status: "Active", type: "System", users: 5 },
+                { name: "SALES", status: "Active", type: "System", users: 12 },
+                { name: "SUPPORT", status: "Active", type: "System", users: 84 },
+                { name: "VIEWER", status: "Active", type: "System", users: 15 },
               ].map((role) => (
                 <TableRow key={role.name} className="hover:bg-muted/5 group cursor-pointer">
                   <TableCell className="font-bold">{role.name}</TableCell>
