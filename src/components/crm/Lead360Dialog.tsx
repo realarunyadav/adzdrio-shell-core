@@ -190,7 +190,7 @@ export function Lead360Dialog({ lead, open, onOpenChange }: { lead: any | null; 
                       {(activity.details as Record<string, any> | undefined)?.['note'] && (
                         <p className="mt-2 text-xs whitespace-pre-wrap">{(activity.details as Record<string, any>)['note']}</p>
                       )}
-                      {!activity.details?.note && <p className="mt-2 text-xs text-muted-foreground">Activity recorded.</p>}
+                      {!(activity.details as Record<string, any> | undefined)?.['note'] && <p className="mt-2 text-xs text-muted-foreground">Activity recorded.</p>}
                     </div>
                   ))}
                   {!activities.length && <Empty label="No activity recorded yet" />}
