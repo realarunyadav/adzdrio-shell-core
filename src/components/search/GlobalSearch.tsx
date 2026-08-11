@@ -26,11 +26,7 @@ interface SearchResult {
 }
 
 const DEMO_RESULTS: SearchResult[] = [
-  { id: '1', type: 'customer', title: 'Acme Corporation', subtitle: 'Global Tech Partner', status: 'Active' },
-  { id: '2', type: 'employee', title: 'Jane Cooper', subtitle: 'Strategic Account Manager', metadata: { dept: 'Sales' } },
-  { id: '3', type: 'invoice', title: 'INV-2024-001', subtitle: '₹ 42,800.00', status: 'Paid' },
-  { id: '4', type: 'project', title: 'ABOS Framework', subtitle: 'Internal Infrastructure', status: 'In Progress' },
-  { id: '5', type: 'inventory', title: 'SKU-8849: Edge Gateway', subtitle: 'Hub-01 Warehouse', status: 'Low Stock' },
+  { id: '1', type: 'customer', title: 'Data Pending', subtitle: 'Search results will appear here after sync', status: 'Syncing' },
 ];
 
 export function GlobalSearch() {

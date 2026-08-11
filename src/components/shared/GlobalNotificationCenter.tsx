@@ -45,43 +45,12 @@ export interface Notification {
 const DEMO_NOTIFICATIONS: Notification[] = [
   {
     id: "1",
-    title: "Invoice Overdue",
-    description: "Invoice #INV-2024-001 for Acme Corp is 3 days overdue.",
-    timestamp: "2 hours ago",
-    read: false,
-    priority: "high",
-    category: "finance",
-    actionLabel: "View Invoice"
-  },
-  {
-    id: "2",
-    title: "Critical Security Alert",
-    description: "Suspicious login attempt detected from IP 192.168.1.100.",
-    timestamp: "5 hours ago",
-    read: false,
-    priority: "critical",
-    category: "security",
-    actionLabel: "Verify IP"
-  },
-  {
-    id: "3",
-    title: "Stock Alert: Low Inventory",
-    description: "Hub-01: SKU-8849 is below reorder level (8 units remaining).",
-    timestamp: "Yesterday",
-    read: true,
-    priority: "medium",
-    category: "inventory",
-    actionLabel: "Restock"
-  },
-  {
-    id: "4",
-    title: "Approval Requested",
-    description: "Manager approval required for Travel Reimbursement #EXP-992.",
-    timestamp: "Yesterday",
+    title: "Platform Connected",
+    description: "ABOS is successfully connected to the production backend.",
+    timestamp: "Just now",
     read: false,
     priority: "medium",
-    category: "hrms",
-    actionLabel: "Review"
+    category: "system",
   }
 ];
 
