@@ -1,4 +1,6 @@
-import { api } from "./client";
+// This module is currently a placeholder for Lead 360 sub-resources (Activities, Tasks).
+// Backend controllers for these routes are currently pending.
+// Do NOT call these endpoints in production until the corresponding routes are deployed.
 
 export interface LeadActivity {
   id: string;
@@ -24,26 +26,12 @@ export interface LeadTask {
   updatedAt: string;
 }
 
-export interface LeadConversionResult {
-  success: boolean;
-  leadId: string;
-  contactId: string;
-  accountId: string | null;
-  message: string;
-}
-
 export const lead360Service = {
-  getActivities: (leadId: string) => api.get<LeadActivity[]>(`/api/leads/${leadId}/activities`),
-  addActivity: (leadId: string, data: { action: string; note?: string; details?: Record<string, unknown> }) =>
-    api.post<LeadActivity>(`/api/leads/${leadId}/activities`, data),
-  getTasks: (leadId: string, includeCompleted = true) =>
-    api.get<LeadTask[]>(`/api/leads/${leadId}/tasks?includeCompleted=${includeCompleted}`),
-  createTask: (leadId: string, data: Partial<LeadTask> & { title: string }) =>
-    api.post<LeadTask>(`/api/leads/${leadId}/tasks`, data),
-  updateTask: (leadId: string, taskId: string, data: Partial<LeadTask>) =>
-    api.patch<LeadTask>(`/api/leads/${leadId}/tasks/${taskId}`, data),
-  deleteTask: (leadId: string, taskId: string) =>
-    api.delete(`/api/leads/${leadId}/tasks/${taskId}`),
-  convert: (leadId: string, data?: { accountName?: string; contactEmail?: string }) =>
-    api.post<LeadConversionResult>(`/api/leads/${leadId}/convert`, data ?? {}),
+  // Routes disabled - backend controllers not yet implemented
+  getActivities: async (_leadId: string): Promise<LeadActivity[]> => [],
+  addActivity: async (_leadId: string, _data: any) => { throw new Error("Activity tracking is coming in next phase"); },
+  getTasks: async (_leadId: string) => [],
+  createTask: async (_leadId: string, _data: any) => { throw new Error("Task management is coming in next phase"); },
+  updateTask: async (_leadId: string, _taskId: string, _data: any) => { throw new Error("Task management is coming in next phase"); },
+  deleteTask: async (_leadId: string, _taskId: string) => { throw new Error("Task management is coming in next phase"); },
 };
