@@ -90,9 +90,18 @@ function LeadQueuesPage() {
   const toggleUser = (id: string) => setSelectedUsers((current) => current.includes(id) ? current.filter((value) => value !== id) : [...current, id]);
 
   const save = async () => {
-    if (!name.trim()) return toast.error("Queue name is required");
-    if (!value.trim()) return toast.error("Rule value is required");
-    if (!selectedUsers.length) return toast.error("Select at least one active salesperson");
+    if (!name.trim()) {
+      toast.error("Queue name is required");
+      return;
+    }
+    if (!value.trim()) {
+      toast.error("Rule value is required");
+      return;
+    }
+    if (!selectedUsers.length) {
+      toast.error("Select at least one active salesperson");
+      return;
+    }
     const conditions: Record<string, unknown> = {};
     if (field === "scoreMin") conditions['minScore'] = Number(value);
     else if (field === "scoreMax") conditions['maxScore'] = Number(value);
@@ -101,9 +110,13 @@ function LeadQueuesPage() {
     try {
       if (editing) await leadQueueService.update(editing.id, { name: name.trim(), isActive: active, rules });
       else await leadQueueService.create({ name: name.trim(), isActive: active, rules });
-      toast.success(editing ? "Queue updated" : "Queue created"); setOpen(false); reset(); await load(true);
-      return;
-    } catch (error: any) { toast.error(error?.message || "Unable to save queue"); }
+      toast.success(editing ? "Queue updated" : "Queue created"); 
+      setOpen(false); 
+      reset(); 
+      await load(true);
+    } catch (error: any) { 
+      toast.error(error?.message || "Unable to save queue"); 
+    }
   };
 
   const toggle = async (queue: LeadQueue) => {
