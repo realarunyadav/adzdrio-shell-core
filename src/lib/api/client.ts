@@ -1,6 +1,10 @@
 /**
  * Centralized API client for ABOS.
- * Target Backend: NestJS on Render
+ * Target backend: production NestJS deployment.
+ *
+ * The API base URL must be supplied through VITE_API_BASE_URL. We intentionally
+ * do not fall back to localhost because a published build must never silently
+ * send production traffic to a developer machine.
  */
 
 export class ApiError extends Error {
@@ -8,44 +12,54 @@ export class ApiError extends Error {
     public status: number,
     public override message: string,
     public code?: string,
-    public details?: any
+    public details?: unknown
   ) {
     super(message);
     this.name = 'ApiError';
   }
 }
 
+function getApiBaseUrl(): string {
+  const configured = String((import.meta as ImportMeta & { env: Record<string, string | undefined> }).env.VITE_API_BASE_URL ?? '').trim();
+
+  if (!configured) {
+    throw new ApiError(
+      0,
+      'ABOS API is not configured. Set VITE_API_BASE_URL in the deployment environment.'
+    );
+  }
+
+  return configured.replace(/\/+$/, '');
+}
+
 class ApiClient {
   private get baseUrl(): string {
-    return (import.meta as any).env['VITE_API_BASE_URL'] || "http://localhost:3000";
+    return getApiBaseUrl();
   }
 
   private get headers(): HeadersInit {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
     };
-    
+
     const token = localStorage.getItem('abos_auth_token');
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
-    
+
     return headers;
   }
 
   private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
-      let errorData;
+      let errorData: { message?: string; code?: string; details?: unknown };
       try {
         errorData = await response.json();
-      } catch (e) {
+      } catch {
         errorData = { message: response.statusText };
       }
 
-      // Handle specific status codes
       if (response.status === 401) {
-        // Handle unauthorized - trigger global logout event
-        console.warn('Unauthorized request, session may have expired.');
         localStorage.removeItem('abos_auth_token');
         window.dispatchEvent(new CustomEvent('abos:auth:unauthorized'));
       }
@@ -68,10 +82,9 @@ class ApiClient {
   private async request<T>(
     path: string,
     options: RequestInit = {},
-    timeoutMs: number = 30000
+    timeoutMs = 30000
   ): Promise<T> {
     const url = `${this.baseUrl}${path.startsWith('/') ? '' : '/'}${path}`;
-    
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -84,17 +97,16 @@ class ApiClient {
         },
         signal: controller.signal,
       });
-      clearTimeout(id);
       return await this.handleResponse<T>(response);
-    } catch (error: any) {
-      clearTimeout(id);
-      if (error.name === 'AbortError') {
+    } catch (error: unknown) {
+      if (error instanceof ApiError) throw error;
+      if (error instanceof DOMException && error.name === 'AbortError') {
         throw new ApiError(408, 'Request timeout');
       }
-      if (error instanceof ApiError) {
-        throw error;
-      }
-      throw new ApiError(0, error.message || 'Network failure');
+      const message = error instanceof Error ? error.message : 'Network failure';
+      throw new ApiError(0, message);
+    } finally {
+      clearTimeout(id);
     }
   }
 
@@ -102,27 +114,27 @@ class ApiClient {
     return this.request<T>(path, { ...options, method: 'GET' });
   }
 
-  async post<T>(path: string, body?: any, options?: RequestInit): Promise<T> {
+  async post<T>(path: string, body?: unknown, options?: RequestInit): Promise<T> {
     return this.request<T>(path, {
       ...options,
       method: 'POST',
-      body: body ? JSON.stringify(body) : null,
+      body: body === undefined ? null : JSON.stringify(body),
     });
   }
 
-  async put<T>(path: string, body?: any, options?: RequestInit): Promise<T> {
+  async put<T>(path: string, body?: unknown, options?: RequestInit): Promise<T> {
     return this.request<T>(path, {
       ...options,
       method: 'PUT',
-      body: body ? JSON.stringify(body) : null,
+      body: body === undefined ? null : JSON.stringify(body),
     });
   }
 
-  async patch<T>(path: string, body?: any, options?: RequestInit): Promise<T> {
+  async patch<T>(path: string, body?: unknown, options?: RequestInit): Promise<T> {
     return this.request<T>(path, {
       ...options,
       method: 'PATCH',
-      body: body ? JSON.stringify(body) : null,
+      body: body === undefined ? null : JSON.stringify(body),
     });
   }
 
