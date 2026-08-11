@@ -37,7 +37,11 @@ import { Route as PlatformAutomationRouteImport } from './routes/platform.automa
 import { Route as PlatformDataCenterRouteImport } from './routes/platform.data-center'
 import { Route as SettingsAuditRouteImport } from './routes/settings.audit'
 import { Route as SettingsSecurityRouteImport } from './routes/settings.security'
+import { Route as ModulesCrmAssignmentsRouteImport } from './routes/modules.crm.assignments'
+import { Route as ModulesCrmDuplicatesRouteImport } from './routes/modules.crm.duplicates'
+import { Route as ModulesCrmForecastRouteImport } from './routes/modules.crm.forecast'
 import { Route as ModulesCrmProspectRouteImport } from './routes/modules/crm/prospect'
+import { Route as ModulesCrmQueuesRouteImport } from './routes/modules.crm.queues'
 import { Route as ModulesHrmsEmployeeRouteImport } from './routes/modules/hrms/employee'
 import { Route as PublicConfirmationsTokenRouteImport } from './routes/public.confirmations.$token'
 
@@ -181,9 +185,29 @@ const SettingsSecurityRoute = SettingsSecurityRouteImport.update({
   path: '/security',
   getParentRoute: () => SettingsRoute,
 } as any)
+const ModulesCrmAssignmentsRoute = ModulesCrmAssignmentsRouteImport.update({
+  id: '/assignments',
+  path: '/assignments',
+  getParentRoute: () => ModulesCrmRoute,
+} as any)
+const ModulesCrmDuplicatesRoute = ModulesCrmDuplicatesRouteImport.update({
+  id: '/duplicates',
+  path: '/duplicates',
+  getParentRoute: () => ModulesCrmRoute,
+} as any)
+const ModulesCrmForecastRoute = ModulesCrmForecastRouteImport.update({
+  id: '/forecast',
+  path: '/forecast',
+  getParentRoute: () => ModulesCrmRoute,
+} as any)
 const ModulesCrmProspectRoute = ModulesCrmProspectRouteImport.update({
   id: '/prospect',
   path: '/prospect',
+  getParentRoute: () => ModulesCrmRoute,
+} as any)
+const ModulesCrmQueuesRoute = ModulesCrmQueuesRouteImport.update({
+  id: '/queues',
+  path: '/queues',
   getParentRoute: () => ModulesCrmRoute,
 } as any)
 const ModulesHrmsEmployeeRoute = ModulesHrmsEmployeeRouteImport.update({
@@ -227,7 +251,11 @@ export interface FileRoutesByFullPath {
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
+  '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
+  '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
+  '/modules/crm/forecast': typeof ModulesCrmForecastRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
+  '/modules/crm/queues': typeof ModulesCrmQueuesRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
   '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
 }
@@ -260,7 +288,11 @@ export interface FileRoutesByTo {
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
+  '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
+  '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
+  '/modules/crm/forecast': typeof ModulesCrmForecastRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
+  '/modules/crm/queues': typeof ModulesCrmQueuesRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
   '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
 }
@@ -294,7 +326,11 @@ export interface FileRoutesById {
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
+  '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
+  '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
+  '/modules/crm/forecast': typeof ModulesCrmForecastRoute
   '/modules/crm/prospect': typeof ModulesCrmProspectRoute
+  '/modules/crm/queues': typeof ModulesCrmQueuesRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
   '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
 }
@@ -329,7 +365,11 @@ export interface FileRouteTypes {
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
+    | '/modules/crm/assignments'
+    | '/modules/crm/duplicates'
+    | '/modules/crm/forecast'
     | '/modules/crm/prospect'
+    | '/modules/crm/queues'
     | '/modules/hrms/employee'
     | '/public/confirmations/$token'
   fileRoutesByTo: FileRoutesByTo
@@ -362,7 +402,11 @@ export interface FileRouteTypes {
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
+    | '/modules/crm/assignments'
+    | '/modules/crm/duplicates'
+    | '/modules/crm/forecast'
     | '/modules/crm/prospect'
+    | '/modules/crm/queues'
     | '/modules/hrms/employee'
     | '/public/confirmations/$token'
   id:
@@ -395,7 +439,11 @@ export interface FileRouteTypes {
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
+    | '/modules/crm/assignments'
+    | '/modules/crm/duplicates'
+    | '/modules/crm/forecast'
     | '/modules/crm/prospect'
+    | '/modules/crm/queues'
     | '/modules/hrms/employee'
     | '/public/confirmations/$token'
   fileRoutesById: FileRoutesById
@@ -628,11 +676,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsSecurityRouteImport
       parentRoute: typeof SettingsRoute
     }
+    '/modules/crm/assignments': {
+      id: '/modules/crm/assignments'
+      path: '/assignments'
+      fullPath: '/modules/crm/assignments'
+      preLoaderRoute: typeof ModulesCrmAssignmentsRouteImport
+      parentRoute: typeof ModulesCrmRoute
+    }
+    '/modules/crm/duplicates': {
+      id: '/modules/crm/duplicates'
+      path: '/duplicates'
+      fullPath: '/modules/crm/duplicates'
+      preLoaderRoute: typeof ModulesCrmDuplicatesRouteImport
+      parentRoute: typeof ModulesCrmRoute
+    }
+    '/modules/crm/forecast': {
+      id: '/modules/crm/forecast'
+      path: '/forecast'
+      fullPath: '/modules/crm/forecast'
+      preLoaderRoute: typeof ModulesCrmForecastRouteImport
+      parentRoute: typeof ModulesCrmRoute
+    }
     '/modules/crm/prospect': {
       id: '/modules/crm/prospect'
       path: '/prospect'
       fullPath: '/modules/crm/prospect'
       preLoaderRoute: typeof ModulesCrmProspectRouteImport
+      parentRoute: typeof ModulesCrmRoute
+    }
+    '/modules/crm/queues': {
+      id: '/modules/crm/queues'
+      path: '/queues'
+      fullPath: '/modules/crm/queues'
+      preLoaderRoute: typeof ModulesCrmQueuesRouteImport
       parentRoute: typeof ModulesCrmRoute
     }
     '/modules/hrms/employee': {
@@ -667,11 +743,19 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 )
 
 interface ModulesCrmRouteChildren {
+  ModulesCrmAssignmentsRoute: typeof ModulesCrmAssignmentsRoute
+  ModulesCrmDuplicatesRoute: typeof ModulesCrmDuplicatesRoute
+  ModulesCrmForecastRoute: typeof ModulesCrmForecastRoute
   ModulesCrmProspectRoute: typeof ModulesCrmProspectRoute
+  ModulesCrmQueuesRoute: typeof ModulesCrmQueuesRoute
 }
 
 const ModulesCrmRouteChildren: ModulesCrmRouteChildren = {
+  ModulesCrmAssignmentsRoute: ModulesCrmAssignmentsRoute,
+  ModulesCrmDuplicatesRoute: ModulesCrmDuplicatesRoute,
+  ModulesCrmForecastRoute: ModulesCrmForecastRoute,
   ModulesCrmProspectRoute: ModulesCrmProspectRoute,
+  ModulesCrmQueuesRoute: ModulesCrmQueuesRoute,
 }
 
 const ModulesCrmRouteWithChildren = ModulesCrmRoute._addFileChildren(
@@ -722,13 +806,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

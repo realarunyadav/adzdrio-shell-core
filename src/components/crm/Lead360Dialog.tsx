@@ -75,11 +75,11 @@ export function Lead360Dialog({ lead, open, onOpenChange }: { lead: any | null; 
     try {
       await lead360Service.createTask(lead.id, {
         title: taskTitle.trim(),
-        description: taskDescription.trim() || undefined,
+        description: taskDescription.trim() || null,
         taskType,
         priority: taskPriority,
-        dueAt: taskDueAt ? new Date(taskDueAt).toISOString() : undefined,
-      });
+        dueAt: taskDueAt ? new Date(taskDueAt).toISOString() : null,
+      } as any);
       setTaskTitle("");
       setTaskDescription("");
       setTaskDueAt("");
@@ -118,8 +118,8 @@ export function Lead360Dialog({ lead, open, onOpenChange }: { lead: any | null; 
     setConverting(true);
     try {
       const result = await lead360Service.convert(lead.id, {
-        accountName: accountName.trim() || undefined,
-        contactEmail: contactEmail.trim() || undefined,
+        accountName: accountName.trim() || "",
+        contactEmail: contactEmail.trim() || "",
       });
       toast.success(result.accountId ? "Lead converted to CRM account + contact" : "Lead converted to CRM contact");
       setConvertOpen(false);
@@ -187,7 +187,7 @@ export function Lead360Dialog({ lead, open, onOpenChange }: { lead: any | null; 
                   {activities.map((activity) => (
                     <div key={activity.id} className="rounded-xl border border-border/40 p-4">
                       <div className="flex items-start justify-between gap-3"><div className="flex items-center gap-2"><MessageSquare className="size-4 text-primary" /><Badge variant="outline">{activity.action}</Badge></div><span className="text-[10px] text-muted-foreground">{formatDateTime(activity.createdAt)}</span></div>
-                      {activity.details?.note && <p className="mt-2 text-xs whitespace-pre-wrap">{activity.details.note}</p>}
+                      {activity.details?.['note'] && <p className="mt-2 text-xs whitespace-pre-wrap">{activity.details['note']}</p>}
                       {!activity.details?.note && <p className="mt-2 text-xs text-muted-foreground">Activity recorded.</p>}
                     </div>
                   ))}
