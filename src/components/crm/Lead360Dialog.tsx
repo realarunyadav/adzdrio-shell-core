@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CheckCircle2, Clock3, Loader2, MessageSquare, Plus, RefreshCw, Trash2, UserRoundCheck } from "lucide-react";
+import { CheckCircle2, Clock3, Loader2, MessageSquare, Plus, RefreshCw, Trash2, UserRoundCheck, Briefcase } from "lucide-react";
 import { toast } from "sonner";
 
 import { lead360Service, type LeadActivity, type LeadTask } from "@/lib/api/lead360";
@@ -13,7 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
-export function Lead360Dialog({ lead, open, onOpenChange }: { lead: any | null; open: boolean; onOpenChange: (open: boolean) => void }) {
+export function Lead360Dialog({ lead, open, onOpenChange, onCreateDeal }: { lead: any | null; open: boolean; onOpenChange: (open: boolean) => void; onCreateDeal?: (lead: any) => void }) {
   const [activities, setActivities] = React.useState<LeadActivity[]>([]);
   const [tasks, setTasks] = React.useState<LeadTask[]>([]);
   const [loading, setLoading] = React.useState(false);
@@ -113,23 +113,10 @@ export function Lead360Dialog({ lead, open, onOpenChange }: { lead: any | null; 
     }
   };
 
-  const convertLead = async () => {
-    if (!lead?.id) return;
-    setConverting(true);
-    try {
-      const result = await lead360Service.convert(lead.id, {
-        accountName: accountName.trim() || "",
-        contactEmail: contactEmail.trim() || "",
-      });
-      toast.success(result.accountId ? "Lead converted to CRM account + contact" : "Lead converted to CRM contact");
-      setConvertOpen(false);
-      onOpenChange(false);
-      window.setTimeout(() => window.location.reload(), 350);
-    } catch (error: any) {
-      toast.error(error?.message || "Unable to convert lead");
-    } finally {
-      setConverting(false);
-    }
+  const handleCreateDeal = () => {
+    if (!lead?.id || !onCreateDeal) return;
+    onCreateDeal(lead);
+    onOpenChange(false);
   };
 
   const alreadyConverted = /won|converted/i.test(`${lead?.status ?? ""} ${lead?.stage ?? ""}`);
@@ -159,9 +146,9 @@ export function Lead360Dialog({ lead, open, onOpenChange }: { lead: any | null; 
                 <Info label="Score" value={String(lead?.score ?? 0)} />
                 {lead?.notes && <div><p className="text-[10px] text-muted-foreground">Notes</p><p className="text-xs whitespace-pre-wrap mt-1">{lead.notes}</p></div>}
               </div>
-              {!alreadyConverted && (
-                <Button className="w-full" onClick={() => setConvertOpen(true)}>
-                  <UserRoundCheck className="mr-2 size-4" /> Convert to CRM
+              {!alreadyConverted && onCreateDeal && (
+                <Button className="w-full h-11 shadow-md" onClick={handleCreateDeal}>
+                  <Briefcase className="mr-2 size-4" /> Create Deal
                 </Button>
               )}
               <Button variant="outline" size="sm" className="w-full" onClick={() => void load()} disabled={loading}>
@@ -231,23 +218,6 @@ export function Lead360Dialog({ lead, open, onOpenChange }: { lead: any | null; 
         </DialogContent>
       </Dialog>
 
-      <Dialog open={convertOpen} onOpenChange={setConvertOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Convert lead to CRM</DialogTitle>
-            <DialogDescription>This will create or reuse the CRM account/contact, mark the lead as Converted, and record an audit activity.</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div className="space-y-2"><Label>Account / Company</Label><Input value={accountName} onChange={(event) => setAccountName(event.target.value)} placeholder="Company name (optional)" /></div>
-            <div className="space-y-2"><Label>Contact email</Label><Input type="email" value={contactEmail} onChange={(event) => setContactEmail(event.target.value)} placeholder="Contact email (optional)" /></div>
-            <div className="rounded-lg border border-border/40 bg-muted/20 p-3 text-xs text-muted-foreground">Duplicate contacts and existing accounts are matched before creating new CRM records.</div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setConvertOpen(false)} disabled={converting}>Cancel</Button>
-            <Button onClick={() => void convertLead()} disabled={converting}>{converting ? <Loader2 className="mr-2 size-4 animate-spin" /> : <UserRoundCheck className="mr-2 size-4" />} Convert</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }
