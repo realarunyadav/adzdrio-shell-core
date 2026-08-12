@@ -131,7 +131,168 @@ function ExecutiveDashboard() {
                 <p className="text-sm font-medium">Financial data stream pending</p>
                 <p className="text-xs opacity-60 italic">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                             
-                                            hi</p>
+                                            
+                                            ABOS FINAL ENTERPRISE UI/UX + CRM COMPLETENESS AUDIT
+
+IMPORTANT:
+
+Do NOT change, reinterpret, remove, or invent any existing business rule.
+
+Do NOT introduce any new workflow or business logic.
+
+All previously approved business rules, navigation decisions, module decisions, permissions, terminology, and flows are FINAL and must remain unchanged.
+
+This task is an AUDIT + COMPLETENESS pass only.
+
+Review the entire current ABOS application and make sure that every existing module and dashboard has the common enterprise/CRM functionality expected for a production-ready platform wherever applicable.
+
+CHECK ALL EXISTING DASHBOARDS AND MODULES FOR:
+
+1. Notifications
+
+- Global notification center
+
+- Unread/read state
+
+- Notification count/badge
+
+- Relevant existing system events surfaced correctly
+
+- No fake notification data
+
+2. Search
+
+- Module-level search where applicable
+
+- Global search where already intended
+
+- Search should work with the existing real data structure
+
+- Do not create a new business rule for search
+
+3. Filters
+
+- Status filters
+
+- Date filters where applicable
+
+- User/owner/assignee filters where applicable
+
+- Module-specific existing filters
+
+- Clear/reset filters
+
+- Preserve current approved filter logic
+
+4. Tables / Lists
+
+- Sorting
+
+- Pagination or appropriate loading
+
+- Empty states
+
+- Loading states
+
+- Error states
+
+- Row actions
+
+- Bulk actions where already part of the approved workflow
+
+- Responsive behavior
+
+5. CRM Productivity
+
+- Activity timeline
+
+- Tasks/follow-ups
+
+- Comments/notes where applicable
+
+- Tags where applicable
+
+- File/document handling where applicable
+
+- Assignment/owner visibility
+
+- Status/stage visibility
+
+- Audit/history visibility
+
+6. UX CONSISTENCY
+
+Check every dashboard for:
+
+- Consistent page headers
+
+- Consistent action placement
+
+- Consistent filters
+
+- Consistent search behavior
+
+- Consistent tables/cards
+
+- Consistent dialogs
+
+- Consistent confirmation states
+
+- Consistent toast/error messages
+
+- Consistent loading/empty/error states
+
+- Responsive desktop/tablet/mobile behavior
+
+7. DATA INTEGRITY
+
+Do not add mock/demo data.
+
+Do not create fake records just to make the UI look populated.
+
+Keep the existing data contracts and backend structure.
+
+Reuse existing backend capabilities instead of creating duplicate systems.
+
+8. PERMISSIONS
+
+Verify that existing role/permission boundaries are respected throughout the UI.
+
+Do not invent new roles or permissions.
+
+Do not bypass existing authorization logic.
+
+9. FINAL AUDIT
+
+Identify anything that is visibly incomplete, inconsistent, broken, duplicated, or missing from the current approved implementation.
+
+Fix ONLY completeness/UX/implementation issues that do not alter approved business rules.
+
+Do NOT redesign the product.
+
+Do NOT add new business workflows.
+
+Do NOT change navigation.
+
+Do NOT change terminology that has already been approved.
+
+Do NOT add speculative features.
+
+Goal:
+
+Make the CURRENT approved ABOS product feel complete, consistent, enterprise-grade, and production-ready without changing what the product has already been decided to do.
+
+After completing the audit, report:
+
+1. What was already complete
+
+2. What was missing
+
+3. What was fixed
+
+4. Any remaining blockers before backend integration/final deployment
+
+5. Confirm that no existing business rules were changed</p>
               </div>
             </SectionCard>
             <SectionCard title="Sales Pipeline" className="h-[320px]">
