@@ -59,19 +59,19 @@ export function GlobalCommandPalette() {
           </CommandItem>
           <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/modules/crm" }))}>
             <Users className="mr-2 h-4 w-4" />
-            <span>Sales CRM (Leads, Deals, Accounts)</span>
+            <span>Sales CRM & Lead Center</span>
           </CommandItem>
-          <CommandItem disabled className="opacity-50">
+          <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/modules/finance" }))}>
             <FileText className="mr-2 h-4 w-4" />
-            <span>Finance (Phase 2)</span>
+            <span>Finance & Revenue Ops</span>
           </CommandItem>
-          <CommandItem disabled className="opacity-50">
+          <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/modules/projects" }))}>
             <Briefcase className="mr-2 h-4 w-4" />
-            <span>Enterprise PMO (Phase 2)</span>
+            <span>Enterprise PMO & Projects</span>
           </CommandItem>
-          <CommandItem disabled className="opacity-50">
+          <CommandItem onSelect={() => runCommand(() => router.navigate({ to: "/modules/inventory" }))}>
             <Package className="mr-2 h-4 w-4" />
-            <span>Inventory System (Phase 2)</span>
+            <span>Inventory & Supply Chain</span>
           </CommandItem>
         </CommandGroup>
 
