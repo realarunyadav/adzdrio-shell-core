@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Building2, Check, Filter, RefreshCw, Search, UserPlus, Users, X } from "lucide-react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { Building2, Check, RefreshCw, Search, UserPlus, Users, X } from "lucide-react";
 
 import { hrService, type EmployeeRecord } from "@/lib/api/hr.service";
 import { ApiError } from "@/lib/api/client";
@@ -141,29 +141,13 @@ export function EmployeeDirectoryLive() {
           <div className="flex min-w-0 flex-1 flex-col gap-2 md:flex-row">
             <div className="relative min-w-0 flex-1 md:max-w-xl">
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder="Search by name, email, employee code or department..."
-                className="pl-9"
-                aria-label="Search employees"
-              />
+              <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search by name, email, employee code or department..." className="pl-9" aria-label="Search employees" />
             </div>
-            <select
-              value={departmentFilter}
-              onChange={(event) => { setDepartmentFilter(event.target.value); setPage(1); }}
-              className="h-10 rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-              aria-label="Filter by department"
-            >
+            <select value={departmentFilter} onChange={(event) => { setDepartmentFilter(event.target.value); setPage(1); }} className="h-10 rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" aria-label="Filter by department">
               <option value="all">All departments</option>
               {departments.map((department) => <option key={department} value={department}>{department}</option>)}
             </select>
-            <select
-              value={statusFilter}
-              onChange={(event) => { setStatusFilter(event.target.value); setPage(1); }}
-              className="h-10 rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
-              aria-label="Filter by status"
-            >
+            <select value={statusFilter} onChange={(event) => { setStatusFilter(event.target.value); setPage(1); }} className="h-10 rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring" aria-label="Filter by status">
               <option value="all">All statuses</option>
               <option value="active">Active</option>
               <option value="inactive">Inactive</option>
@@ -202,27 +186,18 @@ export function EmployeeDirectoryLive() {
                     <TableHead className="text-[10px] font-bold uppercase tracking-widest">Designation</TableHead>
                     <TableHead className="text-[10px] font-bold uppercase tracking-widest">Department</TableHead>
                     <TableHead className="text-[10px] font-bold uppercase tracking-widest">Team</TableHead>
-                    <TableHead className="text-[10px] font-bold uppercase tracking-widest">Type / Status</TableHead>
+                    <TableHead className="text-[10px] font-bold uppercase tracking-widest">Status</TableHead>
                     <TableHead className="text-[10px] font-bold uppercase tracking-widest">Training</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {visibleEmployees.map((employee) => (
                     <TableRow key={employee.id} className="text-xs transition-colors hover:bg-muted/20">
-                      <TableCell className="pl-5">
-                        <p className="font-semibold text-foreground">{employee.userName}</p>
-                        <p className="mt-0.5 text-[11px] text-muted-foreground">{employee.userEmail}</p>
-                        <p className="mt-0.5 font-mono text-[10px] text-muted-foreground/70">{employee.employeeCode}</p>
-                      </TableCell>
+                      <TableCell className="pl-5"><p className="font-semibold text-foreground">{employee.userName}</p><p className="mt-0.5 text-[11px] text-muted-foreground">{employee.userEmail}</p><p className="mt-0.5 font-mono text-[10px] text-muted-foreground/70">{employee.employeeCode}</p></TableCell>
                       <TableCell>{employee.designation ?? "—"}</TableCell>
                       <TableCell>{employee.department ?? "—"}</TableCell>
                       <TableCell>{employee.team ?? "—"}</TableCell>
-                      <TableCell>
-                        <div className="flex flex-col items-start gap-1">
-                          <StatusBadge tone={statusTone(employee.employmentStatus)}>{employee.employmentStatus}</StatusBadge>
-                          <span className="text-[10px] text-muted-foreground">{employee.userStatus}</span>
-                        </div>
-                      </TableCell>
+                      <TableCell><div className="flex flex-col items-start gap-1"><StatusBadge tone={statusTone(employee.employmentStatus)}>{employee.employmentStatus}</StatusBadge><span className="text-[10px] text-muted-foreground">{employee.userStatus}</span></div></TableCell>
                       <TableCell><StatusBadge tone={statusTone(employee.trainingStatus)}>{employee.trainingStatus}</StatusBadge></TableCell>
                     </TableRow>
                   ))}
@@ -231,11 +206,7 @@ export function EmployeeDirectoryLive() {
             </div>
             <div className="flex flex-col gap-3 border-t border-border/60 px-5 py-3 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
               <span>Showing {((page - 1) * pageSize) + 1}–{Math.min(page * pageSize, filteredEmployees.length)} of {filteredEmployees.length}</span>
-              <div className="flex items-center gap-1">
-                <Button size="sm" variant="outline" disabled={page === 1} onClick={() => setPage((value) => Math.max(1, value - 1))}>Previous</Button>
-                <span className="px-2 font-medium">{page} / {pageCount}</span>
-                <Button size="sm" variant="outline" disabled={page === pageCount} onClick={() => setPage((value) => Math.min(pageCount, value + 1))}>Next</Button>
-              </div>
+              <div className="flex items-center gap-1"><Button size="sm" variant="outline" disabled={page === 1} onClick={() => setPage((value) => Math.max(1, value - 1))}>Previous</Button><span className="px-2 font-medium">{page} / {pageCount}</span><Button size="sm" variant="outline" disabled={page === pageCount} onClick={() => setPage((value) => Math.min(pageCount, value + 1))}>Next</Button></div>
             </div>
           </>
         )}
@@ -244,16 +215,8 @@ export function EmployeeDirectoryLive() {
       {createOpen ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="create-employee-title">
           <div className="glass-surface w-full max-w-2xl rounded-2xl border border-border/60 bg-card p-5 shadow-2xl sm:p-6">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h2 id="create-employee-title" className="text-xl font-bold">Add employee</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Creates the employee record through the existing HR API.</p>
-              </div>
-              <Button variant="ghost" size="icon" onClick={() => setCreateOpen(false)} aria-label="Close"><X className="size-4" /></Button>
-            </div>
-
+            <div className="flex items-start justify-between gap-4"><div><h2 id="create-employee-title" className="text-xl font-bold">Add employee</h2><p className="mt-1 text-sm text-muted-foreground">Creates the employee record through the existing HR API.</p></div><Button variant="ghost" size="icon" onClick={() => setCreateOpen(false)} aria-label="Close"><X className="size-4" /></Button></div>
             {createError ? <div className="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive">{createError}</div> : null}
-
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               <Field label="User ID *"><Input value={form.userId} onChange={(event) => updateForm("userId", event.target.value)} placeholder="Existing user ID" /></Field>
               <Field label="Employee code *"><Input value={form.employeeCode} onChange={(event) => updateForm("employeeCode", event.target.value)} placeholder="EMP-001" /></Field>
@@ -265,11 +228,7 @@ export function EmployeeDirectoryLive() {
               <Field label="Training status"><select value={form.trainingStatus} onChange={(event) => updateForm("trainingStatus", event.target.value)} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"><option value="pending">Pending</option><option value="in progress">In progress</option><option value="completed">Completed</option></select></Field>
               <Field label="Joining date"><Input type="date" value={form.joiningDate} onChange={(event) => updateForm("joiningDate", event.target.value)} /></Field>
             </div>
-
-            <div className="mt-6 flex justify-end gap-2 border-t border-border/60 pt-4">
-              <Button variant="outline" onClick={() => setCreateOpen(false)} disabled={creating}>Cancel</Button>
-              <Button onClick={() => void handleCreate()} disabled={creating}>{creating ? "Creating…" : "Create employee"}</Button>
-            </div>
+            <div className="mt-6 flex justify-end gap-2 border-t border-border/60 pt-4"><Button variant="outline" onClick={() => setCreateOpen(false)} disabled={creating}>Cancel</Button><Button onClick={() => void handleCreate()} disabled={creating}>{creating ? "Creating…" : "Create employee"}</Button></div>
           </div>
         </div>
       ) : null}
@@ -277,19 +236,11 @@ export function EmployeeDirectoryLive() {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, children }: { label: string; children: ReactNode }) {
   return <label className="space-y-1.5 text-xs font-medium text-muted-foreground"><span>{label}</span>{children}</label>;
 }
 
-function Metric({ label, value, icon, tone = "info" }: { label: string; value: number; icon: React.ReactNode; tone?: "info" | "success" | "warning" }) {
+function Metric({ label, value, icon, tone = "info" }: { label: string; value: number; icon: ReactNode; tone?: "info" | "success" | "warning" }) {
   const toneClass = tone === "success" ? "text-success bg-success/10" : tone === "warning" ? "text-warning bg-warning/10" : "text-info bg-info/10";
-  return (
-    <div className="surface-card p-4">
-      <div className="flex items-center justify-between gap-3">
-        <span className="text-xs font-medium text-muted-foreground">{label}</span>
-        <span className={`flex size-8 items-center justify-center rounded-lg ${toneClass}`}>{icon}</span>
-      </div>
-      <p className="mt-3 text-2xl font-bold tracking-tight">{value}</p>
-    </div>
-  );
+  return <div className="surface-card p-4"><div className="flex items-center justify-between gap-3"><span className="text-xs font-medium text-muted-foreground">{label}</span><span className={`flex size-8 items-center justify-center rounded-lg ${toneClass}`}>{icon}</span></div><p className="mt-3 text-2xl font-bold tracking-tight">{value}</p></div>;
 }
