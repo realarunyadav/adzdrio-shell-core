@@ -18,7 +18,7 @@ export interface TimelineItem {
   id: string;
   type: string;
   content: string;
-  user: string;
+  user: string | { name: string; initials: string };
   timestamp: string;
   metadata?: Record<string, any>;
   // Legacy fields for backward compatibility during transition
@@ -48,8 +48,17 @@ export function UniversalActivityTimeline({ items, className }: UniversalActivit
         items.map((item) => {
           const Icon = typeIcons[item.type] || Activity;
           const displayContent = item.content || (item.title ? `${item.title}: ${item.description}` : item.description);
-          const userName = typeof item.user === 'string' ? item.user : (item.user as any)?.name || "Unknown User";
-          const userInitials = typeof item.user === 'string' ? item.user.substring(0, 2).toUpperCase() : (item.user as any)?.initials || "??";
+          
+          let userName = "Unknown User";
+          let userInitials = "??";
+          
+          if (typeof item.user === 'string') {
+            userName = item.user;
+            userInitials = item.user.substring(0, 2).toUpperCase();
+          } else if (item.user && typeof item.user === 'object') {
+            userName = item.user.name || "Unknown User";
+            userInitials = item.user.initials || "??";
+          }
 
           return (
             <div key={item.id} className="relative flex items-start gap-6 group">
@@ -67,7 +76,7 @@ export function UniversalActivityTimeline({ items, className }: UniversalActivit
                   <span className="text-[10px] font-bold text-muted-foreground/60 tabular-nums uppercase">{item.timestamp}</span>
                 </div>
                 <p className="text-xs font-medium text-muted-foreground leading-relaxed group-hover:text-foreground/90 transition-colors">{displayContent}</p>
-                {item.metadata?.type === "email" && (
+                {item.metadata?.['type'] === "email" && (
                   <div className="mt-2 flex items-center gap-2">
                      <div className="rounded-full bg-info/10 p-1">
                         <Mail className="size-3 text-info" />
