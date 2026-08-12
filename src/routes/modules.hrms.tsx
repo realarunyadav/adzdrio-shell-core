@@ -1,5 +1,5 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { Briefcase, Download, Plus, UserPlus } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { Briefcase, Download, Plus } from "lucide-react";
 import { useState } from "react";
 
 import {
@@ -11,24 +11,15 @@ import {
   MetricTile,
   OrganizationChart,
   PerformanceDashboard,
-  statusTone,
 } from "@/components/hrms/HrmsPanels";
-import { EMPLOYEES, EMPLOYEE_AUDIT, EMPLOYEE_TIMELINE } from "@/components/hrms/hrms-data";
+import { EMPLOYEE_AUDIT, EMPLOYEE_TIMELINE } from "@/components/hrms/hrms-data";
+import { EmployeeDirectoryLive } from "@/components/hrms/EmployeeDirectoryLive";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
-import { StatusBadge } from "@/components/shared/StatusBadge";
 import { UniversalActivityTimeline } from "@/components/shared/UniversalActivityTimeline";
 import { UniversalAuditLog } from "@/components/shared/UniversalAuditLog";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const Route = createFileRoute("/modules/hrms")({
@@ -100,7 +91,7 @@ function HRMSPage() {
         </TabsContent>
 
         <TabsContent value="directory" className="m-0 outline-none">
-          <EmployeeDirectory />
+          <EmployeeDirectoryLive />
         </TabsContent>
 
         <TabsContent value="attendance" className="m-0 outline-none">
@@ -169,57 +160,6 @@ function HRDashboard() {
         <UniversalAuditLog entries={EMPLOYEE_AUDIT} />
       </SectionCard>
     </div>
-  );
-}
-
-function EmployeeDirectory() {
-  return (
-    <SectionCard
-      title="Employee Directory"
-      description="Open any employee to access the full 360 profile."
-      actions={
-        <Button size="sm" className="shadow-elevated">
-          <UserPlus className="mr-2 size-3.5" /> Add Employee
-        </Button>
-      }
-      contentClassName="p-0"
-    >
-      <Table>
-        <TableHeader className="bg-muted/30">
-          <TableRow>
-            <TableHead className="text-[10px] font-bold uppercase tracking-widest">Employee</TableHead>
-            <TableHead className="text-[10px] font-bold uppercase tracking-widest">Code</TableHead>
-            <TableHead className="text-[10px] font-bold uppercase tracking-widest">Department</TableHead>
-            <TableHead className="text-[10px] font-bold uppercase tracking-widest">Reports To</TableHead>
-            <TableHead className="text-[10px] font-bold uppercase tracking-widest">Location</TableHead>
-            <TableHead className="text-[10px] font-bold uppercase tracking-widest">Status</TableHead>
-            <TableHead />
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {EMPLOYEES.map((employee) => (
-            <TableRow key={employee.id} className="text-xs hover:bg-muted/30">
-              <TableCell>
-                <p className="font-bold">{employee.name}</p>
-                <p className="text-[10px] text-muted-foreground">{employee.designation}</p>
-              </TableCell>
-              <TableCell className="font-mono text-[11px]">{employee.code}</TableCell>
-              <TableCell>{employee.department}</TableCell>
-              <TableCell className="text-muted-foreground">{employee.reportsTo}</TableCell>
-              <TableCell>{employee.location}</TableCell>
-              <TableCell>
-                <StatusBadge tone={statusTone(employee.status)}>{employee.status}</StatusBadge>
-              </TableCell>
-              <TableCell className="text-right">
-                <Button asChild variant="ghost" size="sm" className="text-[10px] font-bold">
-                  <Link to="/modules/hrms/employee">Open 360</Link>
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </SectionCard>
   );
 }
 
