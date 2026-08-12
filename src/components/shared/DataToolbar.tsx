@@ -22,15 +22,15 @@ export function DataToolbar({
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 py-3 sm:flex-row sm:items-center sm:justify-between",
+        "flex flex-col gap-4 px-6 py-4 border-b border-border/40 bg-background/30 backdrop-blur-[2px] premium-transition sm:flex-row sm:items-center sm:justify-between",
         className
       )}
     >
       <div className="flex flex-1 items-center gap-4">
         {title || Icon ? (
-          <div className="flex items-center gap-2 pr-4 border-r border-border hidden lg:flex">
-            {Icon && <Icon className="size-4 text-muted-foreground" />}
-            {title && <h3 className="text-sm font-medium">{title}</h3>}
+          <div className="flex items-center gap-2 pr-4 border-r border-border/40 hidden lg:flex">
+            {Icon && <Icon className="size-4 text-muted-foreground/70" />}
+            {title && <h3 className="text-sm font-black uppercase tracking-widest">{title}</h3>}
           </div>
         ) : null}
         <div className="flex flex-1 items-center gap-2 max-w-md">

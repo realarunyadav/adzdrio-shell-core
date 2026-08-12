@@ -6,88 +6,72 @@ import {
   User, 
   Activity, 
   ArrowRight,
-  ChevronRight
+  ChevronRight,
+  MessageSquare,
+  Phone,
+  Mail,
+  UserPlus
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export interface TimelineItem {
   id: string;
-  type: string;
-  title: string;
-  description: string;
+  type: "comment" | "system" | "status" | "assignment" | "communication" | "activity";
+  content: string;
+  user: string;
   timestamp: string;
-  user: {
-    name: string;
-    initials: string;
-  };
-  category: "crm" | "finance" | "hrms" | "inventory" | "projects" | "users" | "system";
-  meta?: React.ReactNode;
+  metadata?: Record<string, any>;
 }
+
+const typeIcons = {
+  comment: MessageSquare,
+  system: Clock,
+  status: Circle,
+  assignment: UserPlus,
+  communication: Phone,
+  activity: Activity,
+};
 
 interface UniversalActivityTimelineProps {
   items: TimelineItem[];
   className?: string;
-  compact?: boolean;
 }
 
-export function UniversalActivityTimeline({ items, className, compact = false }: UniversalActivityTimelineProps) {
+export function UniversalActivityTimeline({ items, className }: UniversalActivityTimelineProps) {
   return (
-    <div className={cn("space-y-6 relative before:absolute before:left-[17px] before:top-2 before:bottom-2 before:w-px before:bg-border/60", className)}>
-      {items.map((item) => (
-        <div key={item.id} className="relative pl-12 group">
-          {/* Node */}
-          <div className="absolute left-0 top-1 p-1.5 rounded-full bg-background border-2 border-border shadow-sm group-hover:border-primary premium-transition z-10">
-            <div className={cn(
-              "size-2.5 rounded-full",
-              item.category === 'finance' ? "bg-emerald-500" :
-              item.category === 'inventory' ? "bg-amber-500" :
-              item.category === 'projects' ? "bg-blue-500" :
-              "bg-primary"
-            )} />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{item.timestamp}</span>
-              <span className="size-1 rounded-full bg-border" />
-              <Badge variant="outline" className="text-[9px] font-bold py-0 h-4 border-muted-foreground/20">
-                {item.category}
-              </Badge>
-            </div>
-            
-            <div className="flex gap-3">
-              <Avatar className="size-8 border border-border/40 shadow-sm">
-                <AvatarFallback className="text-[10px] font-bold bg-muted text-muted-foreground">
-                  {item.user.initials}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex-1">
-                <p className="text-sm font-bold text-foreground leading-tight">
-                  <span className="text-primary hover:underline cursor-pointer">{item.user.name}</span>
-                  {" "}{item.title}
-                </p>
-                <p className="text-xs text-muted-foreground/80 mt-1 leading-relaxed">
-                  {item.description}
-                </p>
-                {item.meta && (
-                  <div className="mt-3 p-3 rounded-xl bg-muted/30 border border-border/40 text-xs text-muted-foreground">
-                    {item.meta}
+    <div className={cn("relative space-y-6 before:absolute before:inset-0 before:ml-4 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-border/80 before:via-border/40 before:to-transparent animate-in fade-in duration-500", className)}>
+      {items.length > 0 ? (
+        items.map((item) => {
+          const Icon = typeIcons[item.type] || Activity;
+          return (
+            <div key={item.id} className="relative flex items-start gap-6 group">
+              <div className="absolute left-0 flex size-8 items-center justify-center rounded-xl bg-background border border-border/60 shadow-elevated-sm premium-transition group-hover:border-primary/40 group-hover:scale-110 z-10">
+                <Icon className="size-3.5 text-primary/80 group-hover:text-primary transition-colors" />
+              </div>
+              <div className="flex-1 pt-1 pb-4 border-b border-border/20 last:border-0 ml-8">
+                <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                  <span className="text-xs font-black text-foreground uppercase tracking-tight">{item.user}</span>
+                  <span className="text-[10px] font-bold text-muted-foreground/60 tabular-nums uppercase">{item.timestamp}</span>
+                </div>
+                <p className="text-xs font-medium text-muted-foreground leading-relaxed group-hover:text-foreground/90 transition-colors">{item.content}</p>
+                {item.metadata?.type === "email" && (
+                  <div className="mt-2 flex items-center gap-2">
+                     <div className="rounded-full bg-info/10 p-1">
+                        <Mail className="size-3 text-info" />
+                     </div>
+                     <span className="text-[10px] font-bold text-info uppercase">Email Sent</span>
                   </div>
                 )}
               </div>
             </div>
-          </div>
+          );
+        })
+      ) : (
+        <div className="py-20 flex flex-col items-center justify-center text-center opacity-30 italic">
+          <Activity className="size-8 mb-3" />
+          <p className="text-[10px] font-black uppercase tracking-widest">No activity log found</p>
         </div>
-      ))}
-    </div>
-  );
-}
-
-// Helper components for the Timeline
-function Badge({ children, variant, className }: { children: React.ReactNode, variant?: any, className?: string }) {
-  return (
-    <div className={cn("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2", className)}>
-      {children}
+      )}
     </div>
   );
 }
