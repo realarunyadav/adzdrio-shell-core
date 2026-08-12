@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Building2, Check, RefreshCw, Search, UserPlus, Users, X } from "lucide-react";
 
-import { hrService, type EmployeeRecord } from "@/lib/api/hr.service";
+import { hrService, type EmployeeRecord, type CreateEmployeePayload } from "@/lib/api/hr.service";
 import { ApiError } from "@/lib/api/client";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { StatusBadge } from "@/components/shared/StatusBadge";
@@ -106,7 +106,7 @@ export function EmployeeDirectoryLive() {
 
     setCreating(true);
     try {
-      await hrService.createEmployee({
+      const payload: CreateEmployeePayload = {
         userId: form.userId.trim(),
         employeeCode: form.employeeCode.trim(),
         designation: form.designation.trim() || undefined,
@@ -116,7 +116,8 @@ export function EmployeeDirectoryLive() {
         employmentStatus: form.employmentStatus || undefined,
         joiningDate: form.joiningDate || undefined,
         trainingStatus: form.trainingStatus || undefined,
-      });
+      };
+      await hrService.createEmployee(payload);
       setCreateOpen(false);
       setForm(initialForm);
       await loadEmployees(true);
