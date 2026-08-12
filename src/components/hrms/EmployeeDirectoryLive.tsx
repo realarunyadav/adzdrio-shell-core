@@ -106,7 +106,7 @@ export function EmployeeDirectoryLive() {
 
     setCreating(true);
     try {
-      await hrService.createEmployee({
+      const payload: CreateEmployeePayload = {
         userId: form.userId.trim(),
         employeeCode: form.employeeCode.trim(),
         designation: form.designation.trim() || undefined,
@@ -116,7 +116,8 @@ export function EmployeeDirectoryLive() {
         employmentStatus: form.employmentStatus || undefined,
         joiningDate: form.joiningDate || undefined,
         trainingStatus: form.trainingStatus || undefined,
-      });
+      };
+      await hrService.createEmployee(payload);
       setCreateOpen(false);
       setForm(initialForm);
       await loadEmployees(true);
