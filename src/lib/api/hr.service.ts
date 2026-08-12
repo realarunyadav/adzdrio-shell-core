@@ -23,13 +23,13 @@ export interface EmployeeRecord {
 export interface CreateEmployeePayload {
   userId: string;
   employeeCode: string;
-  designation?: string;
-  department?: string;
-  team?: string;
-  managerUserId?: string;
-  employmentStatus?: string;
-  joiningDate?: string;
-  trainingStatus?: string;
+  designation?: string | undefined;
+  department?: string | undefined;
+  team?: string | undefined;
+  managerUserId?: string | undefined;
+  employmentStatus?: string | undefined;
+  joiningDate?: string | undefined;
+  trainingStatus?: string | undefined;
 }
 
 export type UpdateEmployeePayload = Partial<Omit<CreateEmployeePayload, "userId">>;
