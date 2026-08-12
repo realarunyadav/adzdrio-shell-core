@@ -16,14 +16,18 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export interface TimelineItem {
   id: string;
-  type: "comment" | "system" | "status" | "assignment" | "communication" | "activity";
+  type: string;
   content: string;
   user: string;
   timestamp: string;
   metadata?: Record<string, any>;
+  // Legacy fields for backward compatibility during transition
+  title?: string;
+  description?: string;
+  category?: string;
 }
 
-const typeIcons = {
+const typeIcons: Record<string, any> = {
   comment: MessageSquare,
   system: Clock,
   status: Circle,
@@ -39,10 +43,14 @@ interface UniversalActivityTimelineProps {
 
 export function UniversalActivityTimeline({ items, className }: UniversalActivityTimelineProps) {
   return (
-    <div className={cn("relative space-y-6 before:absolute before:inset-0 before:ml-4 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-border/80 before:via-border/40 before:to-transparent animate-in fade-in duration-500", className)}>
+    <div className={cn("relative space-y-6 before:absolute before:inset-0 before:ml-4 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-border/80 before:via-border/40 before:to-transparent animate-in fade-in duration-700", className)}>
       {items.length > 0 ? (
         items.map((item) => {
           const Icon = typeIcons[item.type] || Activity;
+          const displayContent = item.content || (item.title ? `${item.title}: ${item.description}` : item.description);
+          const userName = typeof item.user === 'string' ? item.user : (item.user as any)?.name || "Unknown User";
+          const userInitials = typeof item.user === 'string' ? item.user.substring(0, 2).toUpperCase() : (item.user as any)?.initials || "??";
+
           return (
             <div key={item.id} className="relative flex items-start gap-6 group">
               <div className="absolute left-0 flex size-8 items-center justify-center rounded-xl bg-background border border-border/60 shadow-elevated-sm premium-transition group-hover:border-primary/40 group-hover:scale-110 z-10">
@@ -50,10 +58,15 @@ export function UniversalActivityTimeline({ items, className }: UniversalActivit
               </div>
               <div className="flex-1 pt-1 pb-4 border-b border-border/20 last:border-0 ml-8">
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
-                  <span className="text-xs font-black text-foreground uppercase tracking-tight">{item.user}</span>
+                  <div className="flex items-center gap-2">
+                    <Avatar className="size-5 border border-border/40">
+                      <AvatarFallback className="text-[8px] font-black">{userInitials}</AvatarFallback>
+                    </Avatar>
+                    <span className="text-xs font-black text-foreground uppercase tracking-tight">{userName}</span>
+                  </div>
                   <span className="text-[10px] font-bold text-muted-foreground/60 tabular-nums uppercase">{item.timestamp}</span>
                 </div>
-                <p className="text-xs font-medium text-muted-foreground leading-relaxed group-hover:text-foreground/90 transition-colors">{item.content}</p>
+                <p className="text-xs font-medium text-muted-foreground leading-relaxed group-hover:text-foreground/90 transition-colors">{displayContent}</p>
                 {item.metadata?.type === "email" && (
                   <div className="mt-2 flex items-center gap-2">
                      <div className="rounded-full bg-info/10 p-1">
