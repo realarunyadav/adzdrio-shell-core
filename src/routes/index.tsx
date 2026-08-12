@@ -132,167 +132,147 @@ function ExecutiveDashboard() {
                 <p className="text-xs opacity-60 italic">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                             
                                             
-                                            ABOS FINAL ENTERPRISE UI/UX + CRM COMPLETENESS AUDIT
+                                            PROCEED WITH THIS PLAN, BUT APPLY THESE NON-NEGOTIABLE CONSTRAINTS:
 
-IMPORTANT:
+1. BUSINESS LOGIC IS FROZEN.
 
-Do NOT change, reinterpret, remove, or invent any existing business rule.
+Do not create, modify, remove, reinterpret, or invent any business rule.
 
-Do NOT introduce any new workflow or business logic.
+Do not change any previously approved workflow, role, permission, navigation, terminology, or process.
 
-All previously approved business rules, navigation decisions, module decisions, permissions, terminology, and flows are FINAL and must remain unchanged.
+2. This is a COMPLETENESS + BUG-FIX + INTEGRATION pass.
 
-This task is an AUDIT + COMPLETENESS pass only.
+Do not redesign the product.
 
-Review the entire current ABOS application and make sure that every existing module and dashboard has the common enterprise/CRM functionality expected for a production-ready platform wherever applicable.
+Do not introduce speculative features.
 
-CHECK ALL EXISTING DASHBOARDS AND MODULES FOR:
+3. GLOBAL NOTIFICATIONS:
 
-1. Notifications
+Keep the existing notification architecture.
 
-- Global notification center
+Do not invent a new "Clear All" business behavior.
 
-- Unread/read state
+Only implement notification actions that are already supported by the existing backend/API.
 
-- Notification count/badge
+If an action is not backend-supported, show an appropriate disabled/unavailable state instead of pretending it works.
 
-- Relevant existing system events surfaced correctly
+4. GLOBAL SEARCH:
 
-- No fake notification data
+Improve usability only where it fits the existing search architecture.
 
-2. Search
+Do not introduce new business rules or data access rules.
 
-- Module-level search where applicable
+Respect existing RBAC and data visibility.
 
-- Global search where already intended
+5. ERP / PHASE 2:
 
-- Search should work with the existing real data structure
+Do not hide or remove existing approved modules/navigation.
 
-- Do not create a new business rule for search
+Only clearly mark functionality as Phase 2 / unavailable when it is genuinely not implemented.
 
-3. Filters
+Do not create fake functionality.
 
-- Status filters
+6. CRM:
 
-- Date filters where applicable
+Complete existing Lead 360 Activity and Tasks using the existing backend capabilities.
 
-- User/owner/assignee filters where applicable
+Reuse existing LeadActivity / LeadTask APIs/models where available.
 
-- Module-specific existing filters
+Do not create duplicate activity/task systems.
 
-- Clear/reset filters
+7. COMMON CRM UX:
 
-- Preserve current approved filter logic
+Audit and fix all applicable:
 
-4. Tables / Lists
+- Search
+
+- Filters
 
 - Sorting
 
-- Pagination or appropriate loading
-
-- Empty states
+- Pagination
 
 - Loading states
 
+- Skeletons
+
+- Empty states
+
 - Error states
 
-- Row actions
+- Toasts
 
-- Bulk actions where already part of the approved workflow
+- Modals
 
-- Responsive behavior
+- Dropdowns
 
-5. CRM Productivity
+- Tabs
 
-- Activity timeline
+- Notifications
+
+- Activity history
 
 - Tasks/follow-ups
 
-- Comments/notes where applicable
+- Notes/comments
 
-- Tags where applicable
+- File/document UI
 
-- File/document handling where applicable
+- Assignment visibility
 
-- Assignment/owner visibility
+- Status badges
 
-- Status/stage visibility
+- Responsive behavior
 
-- Audit/history visibility
+- Permission visibility
 
-6. UX CONSISTENCY
+8. MOCK DATA:
 
-Check every dashboard for:
+Remove misleading mock/demo business data wherever the real API is intended.
 
-- Consistent page headers
+Never invent records to make the dashboard look populated.
 
-- Consistent action placement
+If real data is unavailable, show a proper empty/data-pending state.
 
-- Consistent filters
+9. RBAC:
 
-- Consistent search behavior
+Use ONLY the existing approved role and permission model.
 
-- Consistent tables/cards
+Do not create new roles or permissions.
 
-- Consistent dialogs
+10. DATA:
 
-- Consistent confirmation states
+Use the current production backend/API contracts.
 
-- Consistent toast/error messages
+Do not change backend business rules from the frontend.
 
-- Consistent loading/empty/error states
+11. IMPORTANT:
 
-- Responsive desktop/tablet/mobile behavior
+Before modifying anything, inspect the current implementation and existing API services.
 
-7. DATA INTEGRITY
+Reuse existing components and services wherever possible.
 
-Do not add mock/demo data.
+12. AFTER COMPLETION:
 
-Do not create fake records just to make the UI look populated.
+Provide a detailed report containing:
 
-Keep the existing data contracts and backend structure.
+- Files changed
 
-Reuse existing backend capabilities instead of creating duplicate systems.
+- Components changed
 
-8. PERMISSIONS
+- Bugs fixed
 
-Verify that existing role/permission boundaries are respected throughout the UI.
+- Common CRM features verified
 
-Do not invent new roles or permissions.
+- Backend APIs used
 
-Do not bypass existing authorization logic.
+- Mock data removed
 
-9. FINAL AUDIT
+- Features still unavailable because backend support is missing
 
-Identify anything that is visibly incomplete, inconsistent, broken, duplicated, or missing from the current approved implementation.
+- Any deployment blockers
 
-Fix ONLY completeness/UX/implementation issues that do not alter approved business rules.
-
-Do NOT redesign the product.
-
-Do NOT add new business workflows.
-
-Do NOT change navigation.
-
-Do NOT change terminology that has already been approved.
-
-Do NOT add speculative features.
-
-Goal:
-
-Make the CURRENT approved ABOS product feel complete, consistent, enterprise-grade, and production-ready without changing what the product has already been decided to do.
-
-After completing the audit, report:
-
-1. What was already complete
-
-2. What was missing
-
-3. What was fixed
-
-4. Any remaining blockers before backend integration/final deployment
-
-5. Confirm that no existing business rules were changed</p>
+- Confirmation that NO business rules were changed</p>
               </div>
             </SectionCard>
             <SectionCard title="Sales Pipeline" className="h-[320px]">
