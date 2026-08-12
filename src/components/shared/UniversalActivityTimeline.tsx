@@ -17,7 +17,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 export interface TimelineItem {
   id: string;
   type: string;
-  content: string;
+  content?: string;
   user: string | { name: string; initials: string };
   timestamp: string;
   metadata?: Record<string, any>;
