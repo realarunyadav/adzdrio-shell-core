@@ -12,18 +12,24 @@ bootstrapModules();
 export function AppShell({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider defaultOpen={appConfig.shell.sidebarDefaultOpen}>
-      <div className="flex min-h-screen w-full bg-background/95 selection:bg-primary/20">
+      <div className="abos-shell flex min-h-screen w-full bg-background selection:bg-primary/20">
         <AppSidebar />
-        <SidebarInset className="min-w-0 bg-transparent overflow-hidden flex flex-col relative">
-          <div className="absolute inset-0 bg-grid-slate-200 [mask-image:linear-gradient(0deg,transparent,black)] pointer-events-none opacity-[0.03] dark:bg-grid-slate-800" />
+        <SidebarInset className="abos-shell__inset min-w-0 overflow-hidden flex flex-col relative bg-transparent">
+          <div
+            aria-hidden="true"
+            className="abos-shell__ambient pointer-events-none absolute inset-0 overflow-hidden"
+          >
+            <div className="abos-shell__orb abos-shell__orb--one" />
+            <div className="abos-shell__orb abos-shell__orb--two" />
+            <div className="abos-shell__grid" />
+          </div>
           <AppHeader />
-          <main className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
-            <div className="mx-auto w-full max-w-[1400px] space-y-6 animate-in fade-in duration-300">
+          <main className="abos-main relative flex-1 overflow-y-auto px-3 py-4 sm:px-5 sm:py-5 lg:px-7 lg:py-6">
+            <div className="abos-content mx-auto w-full max-w-[1600px] space-y-6">
               {children}
             </div>
           </main>
         </SidebarInset>
-
       </div>
     </SidebarProvider>
   );
