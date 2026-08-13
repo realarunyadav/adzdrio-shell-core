@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AdminStudioHome } from "@/components/admin-studio/AdminStudioHome";
@@ -16,8 +16,19 @@ export const Route = createFileRoute("/modules/admin")({
 });
 
 function AdminStudioModule() {
+  const { location } = useRouterState();
+  const isBaseRoute = location.pathname === "/modules/admin" || location.pathname === "/modules/admin/";
+
+  if (!isBaseRoute) {
+    return (
+      <div className="p-6 pb-20 max-w-[1600px] mx-auto animate-in fade-in duration-500">
+        <Outlet />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col gap-6 p-6 pb-20 max-w-[1600px] mx-auto">
+    <div className="flex flex-col gap-6 p-6 pb-20 max-w-[1600px] mx-auto animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <PageHeader
           eyebrow="PLATFORM GOVERNANCE"
