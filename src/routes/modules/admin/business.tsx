@@ -6,20 +6,31 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { demoBusinesses } from "@/lib/mock/workspace.demo";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Building2, Plus, ArrowUpRight, ShieldCheck, MoreVertical } from "lucide-react";
+import { Building2, Plus, ArrowUpRight, ShieldCheck, MoreVertical, Edit2 } from "lucide-react";
+import { useState } from "react";
+import { BusinessModal } from "@/components/admin-studio/BusinessModal";
 
 export const Route = createFileRoute("/modules/admin/business")({
-  component: () => (
-    <div className="space-y-6">
-      <div className="flex justify-between items-end">
-        <PageHeader
-          title="Business Management"
-          description="Manage brands, business legal entities, and operational domains across the enterprise."
-        />
-        <Button className="h-10 text-[10px] font-black uppercase tracking-widest gap-2 bg-primary shadow-lg shadow-primary/20">
-          <Plus className="size-4" /> Add New Business
-        </Button>
-      </div>
+  component: () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedBiz, setSelectedBiz] = useState<any>(null);
+
+    const openModal = (biz?: any) => {
+      setSelectedBiz(biz || null);
+      setIsModalOpen(true);
+    };
+
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-end">
+          <PageHeader
+            title="Business Management"
+            description="Manage brands, business legal entities, and operational domains across the enterprise."
+          />
+          <Button onClick={() => openModal()} className="h-10 text-[10px] font-black uppercase tracking-widest gap-2 bg-primary shadow-lg shadow-primary/20">
+            <Plus className="size-4" /> Add New Business
+          </Button>
+        </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <BusinessSummaryCard label="Total Entities" value="03" icon={Building2} />
@@ -68,15 +79,23 @@ export const Route = createFileRoute("/modules/admin/business")({
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button variant="ghost" size="icon" className="size-8"><MoreVertical className="size-4" /></Button>
+                  <div className="flex justify-end gap-1">
+                    <Button variant="ghost" size="icon" className="size-8" onClick={() => openModal(biz)}><Edit2 className="size-3.5" /></Button>
+                    <Button variant="ghost" size="icon" className="size-8"><MoreVertical className="size-4" /></Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        <BusinessModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          business={selectedBiz}
+        />
       </div>
-    </div>
-  ),
+    );
+  },
 });
 
 function BusinessSummaryCard({ label, value, icon: Icon, tone = "default" }: any) {
