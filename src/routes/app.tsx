@@ -174,10 +174,26 @@ function OwnerDashboard() {
                </Button>
              </DropdownMenuTrigger>
              <DropdownMenuContent align="end" className="w-56 glass-surface border-border/40">
-                <DropdownMenuItem className="text-xs font-bold gap-2"><UserPlus className="size-4" /> Add Employee</DropdownMenuItem>
-                <DropdownMenuItem className="text-xs font-bold gap-2"><Building2 className="size-4" /> Create Business</DropdownMenuItem>
-                <DropdownMenuItem className="text-xs font-bold gap-2"><Briefcase className="size-4" /> Open Admin Studio</DropdownMenuItem>
-                <DropdownMenuItem className="text-xs font-bold gap-2"><BarChart3 className="size-4" /> Generate Report</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/modules/admin/employees" className="flex items-center w-full text-xs font-bold gap-2">
+                    <UserPlus className="size-4" /> Add Employee
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/modules/admin/business" className="flex items-center w-full text-xs font-bold gap-2">
+                    <Building2 className="size-4" /> Create Business
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/modules/admin" className="flex items-center w-full text-xs font-bold gap-2">
+                    <Briefcase className="size-4" /> Open Admin Studio
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/modules/admin/data" className="flex items-center w-full text-xs font-bold gap-2">
+                    <BarChart3 className="size-4" /> Generate Report
+                  </Link>
+                </DropdownMenuItem>
              </DropdownMenuContent>
            </DropdownMenu>
         </div>
