@@ -45,9 +45,14 @@ import { Route as AppCrmFollowUpsRouteImport } from './routes/app/crm/follow-ups
 import { Route as AppCrmLeadPoolRouteImport } from './routes/app/crm/lead-pool'
 import { Route as AppCrmMyLeadsRouteImport } from './routes/app/crm/my-leads'
 import { Route as AppFinanceIndexRouteImport } from './routes/app/finance/index'
+import { Route as AppFinanceExpensesRouteImport } from './routes/app/finance/expenses'
 import { Route as AppFinanceInvoicesRouteImport } from './routes/app/finance/invoices'
 import { Route as AppFinancePaymentsRouteImport } from './routes/app/finance/payments'
+import { Route as AppFinancePayrollRouteImport } from './routes/app/finance/payroll'
+import { Route as AppFinanceReconciliationRouteImport } from './routes/app/finance/reconciliation'
 import { Route as AppFinanceRefundsRouteImport } from './routes/app/finance/refunds'
+import { Route as AppFinanceReportsRouteImport } from './routes/app/finance/reports'
+import { Route as AppFinanceRevenueRouteImport } from './routes/app/finance/revenue'
 import { Route as AppFinanceTransactionsRouteImport } from './routes/app/finance/transactions'
 import { Route as AppSalesIndexRouteImport } from './routes/app/sales/index'
 import { Route as AppSalesDealsRouteImport } from './routes/app/sales/deals'
@@ -244,6 +249,11 @@ const AppFinanceIndexRoute = AppFinanceIndexRouteImport.update({
   path: '/finance/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFinanceExpensesRoute = AppFinanceExpensesRouteImport.update({
+  id: '/finance/expenses',
+  path: '/finance/expenses',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFinanceInvoicesRoute = AppFinanceInvoicesRouteImport.update({
   id: '/finance/invoices',
   path: '/finance/invoices',
@@ -254,9 +264,30 @@ const AppFinancePaymentsRoute = AppFinancePaymentsRouteImport.update({
   path: '/finance/payments',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFinancePayrollRoute = AppFinancePayrollRouteImport.update({
+  id: '/finance/payroll',
+  path: '/finance/payroll',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceReconciliationRoute =
+  AppFinanceReconciliationRouteImport.update({
+    id: '/finance/reconciliation',
+    path: '/finance/reconciliation',
+    getParentRoute: () => AppRoute,
+  } as any)
 const AppFinanceRefundsRoute = AppFinanceRefundsRouteImport.update({
   id: '/finance/refunds',
   path: '/finance/refunds',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceReportsRoute = AppFinanceReportsRouteImport.update({
+  id: '/finance/reports',
+  path: '/finance/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinanceRevenueRoute = AppFinanceRevenueRouteImport.update({
+  id: '/finance/revenue',
+  path: '/finance/revenue',
   getParentRoute: () => AppRoute,
 } as any)
 const AppFinanceTransactionsRoute = AppFinanceTransactionsRouteImport.update({
@@ -371,9 +402,14 @@ export interface FileRoutesByFullPath {
   '/app/crm/follow-ups': typeof AppCrmFollowUpsRoute
   '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
   '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
+  '/app/finance/expenses': typeof AppFinanceExpensesRoute
   '/app/finance/invoices': typeof AppFinanceInvoicesRoute
   '/app/finance/payments': typeof AppFinancePaymentsRoute
+  '/app/finance/payroll': typeof AppFinancePayrollRoute
+  '/app/finance/reconciliation': typeof AppFinanceReconciliationRoute
   '/app/finance/refunds': typeof AppFinanceRefundsRoute
+  '/app/finance/reports': typeof AppFinanceReportsRoute
+  '/app/finance/revenue': typeof AppFinanceRevenueRoute
   '/app/finance/transactions': typeof AppFinanceTransactionsRoute
   '/app/sales/deals': typeof AppSalesDealsRoute
   '/app/sales/invoices': typeof AppSalesInvoicesRoute
@@ -427,9 +463,14 @@ export interface FileRoutesByTo {
   '/app/crm/follow-ups': typeof AppCrmFollowUpsRoute
   '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
   '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
+  '/app/finance/expenses': typeof AppFinanceExpensesRoute
   '/app/finance/invoices': typeof AppFinanceInvoicesRoute
   '/app/finance/payments': typeof AppFinancePaymentsRoute
+  '/app/finance/payroll': typeof AppFinancePayrollRoute
+  '/app/finance/reconciliation': typeof AppFinanceReconciliationRoute
   '/app/finance/refunds': typeof AppFinanceRefundsRoute
+  '/app/finance/reports': typeof AppFinanceReportsRoute
+  '/app/finance/revenue': typeof AppFinanceRevenueRoute
   '/app/finance/transactions': typeof AppFinanceTransactionsRoute
   '/app/sales/deals': typeof AppSalesDealsRoute
   '/app/sales/invoices': typeof AppSalesInvoicesRoute
@@ -484,9 +525,14 @@ export interface FileRoutesById {
   '/app/crm/follow-ups': typeof AppCrmFollowUpsRoute
   '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
   '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
+  '/app/finance/expenses': typeof AppFinanceExpensesRoute
   '/app/finance/invoices': typeof AppFinanceInvoicesRoute
   '/app/finance/payments': typeof AppFinancePaymentsRoute
+  '/app/finance/payroll': typeof AppFinancePayrollRoute
+  '/app/finance/reconciliation': typeof AppFinanceReconciliationRoute
   '/app/finance/refunds': typeof AppFinanceRefundsRoute
+  '/app/finance/reports': typeof AppFinanceReportsRoute
+  '/app/finance/revenue': typeof AppFinanceRevenueRoute
   '/app/finance/transactions': typeof AppFinanceTransactionsRoute
   '/app/sales/deals': typeof AppSalesDealsRoute
   '/app/sales/invoices': typeof AppSalesInvoicesRoute
@@ -542,9 +588,14 @@ export interface FileRouteTypes {
     | '/app/crm/follow-ups'
     | '/app/crm/lead-pool'
     | '/app/crm/my-leads'
+    | '/app/finance/expenses'
     | '/app/finance/invoices'
     | '/app/finance/payments'
+    | '/app/finance/payroll'
+    | '/app/finance/reconciliation'
     | '/app/finance/refunds'
+    | '/app/finance/reports'
+    | '/app/finance/revenue'
     | '/app/finance/transactions'
     | '/app/sales/deals'
     | '/app/sales/invoices'
@@ -598,9 +649,14 @@ export interface FileRouteTypes {
     | '/app/crm/follow-ups'
     | '/app/crm/lead-pool'
     | '/app/crm/my-leads'
+    | '/app/finance/expenses'
     | '/app/finance/invoices'
     | '/app/finance/payments'
+    | '/app/finance/payroll'
+    | '/app/finance/reconciliation'
     | '/app/finance/refunds'
+    | '/app/finance/reports'
+    | '/app/finance/revenue'
     | '/app/finance/transactions'
     | '/app/sales/deals'
     | '/app/sales/invoices'
@@ -654,9 +710,14 @@ export interface FileRouteTypes {
     | '/app/crm/follow-ups'
     | '/app/crm/lead-pool'
     | '/app/crm/my-leads'
+    | '/app/finance/expenses'
     | '/app/finance/invoices'
     | '/app/finance/payments'
+    | '/app/finance/payroll'
+    | '/app/finance/reconciliation'
     | '/app/finance/refunds'
+    | '/app/finance/reports'
+    | '/app/finance/revenue'
     | '/app/finance/transactions'
     | '/app/sales/deals'
     | '/app/sales/invoices'
@@ -961,6 +1022,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFinanceIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/finance/expenses': {
+      id: '/app/finance/expenses'
+      path: '/finance/expenses'
+      fullPath: '/app/finance/expenses'
+      preLoaderRoute: typeof AppFinanceExpensesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/finance/invoices': {
       id: '/app/finance/invoices'
       path: '/finance/invoices'
@@ -975,11 +1043,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFinancePaymentsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/finance/payroll': {
+      id: '/app/finance/payroll'
+      path: '/finance/payroll'
+      fullPath: '/app/finance/payroll'
+      preLoaderRoute: typeof AppFinancePayrollRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/finance/reconciliation': {
+      id: '/app/finance/reconciliation'
+      path: '/finance/reconciliation'
+      fullPath: '/app/finance/reconciliation'
+      preLoaderRoute: typeof AppFinanceReconciliationRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/finance/refunds': {
       id: '/app/finance/refunds'
       path: '/finance/refunds'
       fullPath: '/app/finance/refunds'
       preLoaderRoute: typeof AppFinanceRefundsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/finance/reports': {
+      id: '/app/finance/reports'
+      path: '/finance/reports'
+      fullPath: '/app/finance/reports'
+      preLoaderRoute: typeof AppFinanceReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/finance/revenue': {
+      id: '/app/finance/revenue'
+      path: '/finance/revenue'
+      fullPath: '/app/finance/revenue'
+      preLoaderRoute: typeof AppFinanceRevenueRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/finance/transactions': {
@@ -1096,9 +1192,14 @@ interface AppRouteChildren {
   AppCrmFollowUpsRoute: typeof AppCrmFollowUpsRoute
   AppCrmLeadPoolRoute: typeof AppCrmLeadPoolRoute
   AppCrmMyLeadsRoute: typeof AppCrmMyLeadsRoute
+  AppFinanceExpensesRoute: typeof AppFinanceExpensesRoute
   AppFinanceInvoicesRoute: typeof AppFinanceInvoicesRoute
   AppFinancePaymentsRoute: typeof AppFinancePaymentsRoute
+  AppFinancePayrollRoute: typeof AppFinancePayrollRoute
+  AppFinanceReconciliationRoute: typeof AppFinanceReconciliationRoute
   AppFinanceRefundsRoute: typeof AppFinanceRefundsRoute
+  AppFinanceReportsRoute: typeof AppFinanceReportsRoute
+  AppFinanceRevenueRoute: typeof AppFinanceRevenueRoute
   AppFinanceTransactionsRoute: typeof AppFinanceTransactionsRoute
   AppSalesDealsRoute: typeof AppSalesDealsRoute
   AppSalesInvoicesRoute: typeof AppSalesInvoicesRoute
@@ -1117,9 +1218,14 @@ const AppRouteChildren: AppRouteChildren = {
   AppCrmFollowUpsRoute: AppCrmFollowUpsRoute,
   AppCrmLeadPoolRoute: AppCrmLeadPoolRoute,
   AppCrmMyLeadsRoute: AppCrmMyLeadsRoute,
+  AppFinanceExpensesRoute: AppFinanceExpensesRoute,
   AppFinanceInvoicesRoute: AppFinanceInvoicesRoute,
   AppFinancePaymentsRoute: AppFinancePaymentsRoute,
+  AppFinancePayrollRoute: AppFinancePayrollRoute,
+  AppFinanceReconciliationRoute: AppFinanceReconciliationRoute,
   AppFinanceRefundsRoute: AppFinanceRefundsRoute,
+  AppFinanceReportsRoute: AppFinanceReportsRoute,
+  AppFinanceRevenueRoute: AppFinanceRevenueRoute,
   AppFinanceTransactionsRoute: AppFinanceTransactionsRoute,
   AppSalesDealsRoute: AppSalesDealsRoute,
   AppSalesInvoicesRoute: AppSalesInvoicesRoute,
