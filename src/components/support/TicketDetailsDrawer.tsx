@@ -214,7 +214,7 @@ export function TicketDetailsDrawer({ ticket, open, onOpenChange }: TicketDetail
                 </div>
               </TabsContent>
             </div>
-          </TabsContent>
+          </Tabs>
         </div>
       </SheetContent>
     </Sheet>
