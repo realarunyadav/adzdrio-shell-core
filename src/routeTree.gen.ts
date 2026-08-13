@@ -72,8 +72,11 @@ import { Route as AppSupportKnowledgeBaseRouteImport } from './routes/app/suppor
 import { Route as AppSupportReportsRouteImport } from './routes/app/support/reports'
 import { Route as AppSupportTicketsRouteImport } from './routes/app/support/tickets'
 import { Route as ModulesAdminAuditRouteImport } from './routes/modules/admin/audit'
+import { Route as ModulesAdminBusinessRouteImport } from './routes/modules/admin/business'
+import { Route as ModulesAdminDataRouteImport } from './routes/modules/admin/data'
 import { Route as ModulesAdminEmployeesRouteImport } from './routes/modules/admin/employees'
 import { Route as ModulesAdminIntegrationsRouteImport } from './routes/modules/admin/integrations'
+import { Route as ModulesAdminSecurityRouteImport } from './routes/modules/admin/security'
 import { Route as ModulesCrmAssignmentsRouteImport } from './routes/modules.crm.assignments'
 import { Route as ModulesCrmDuplicatesRouteImport } from './routes/modules.crm.duplicates'
 import { Route as ModulesCrmForecastRouteImport } from './routes/modules.crm.forecast'
@@ -399,6 +402,16 @@ const ModulesAdminAuditRoute = ModulesAdminAuditRouteImport.update({
   path: '/audit',
   getParentRoute: () => ModulesAdminRoute,
 } as any)
+const ModulesAdminBusinessRoute = ModulesAdminBusinessRouteImport.update({
+  id: '/business',
+  path: '/business',
+  getParentRoute: () => ModulesAdminRoute,
+} as any)
+const ModulesAdminDataRoute = ModulesAdminDataRouteImport.update({
+  id: '/data',
+  path: '/data',
+  getParentRoute: () => ModulesAdminRoute,
+} as any)
 const ModulesAdminEmployeesRoute = ModulesAdminEmployeesRouteImport.update({
   id: '/employees',
   path: '/employees',
@@ -410,6 +423,11 @@ const ModulesAdminIntegrationsRoute =
     path: '/integrations',
     getParentRoute: () => ModulesAdminRoute,
   } as any)
+const ModulesAdminSecurityRoute = ModulesAdminSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => ModulesAdminRoute,
+} as any)
 const ModulesCrmAssignmentsRoute = ModulesCrmAssignmentsRouteImport.update({
   id: '/assignments',
   path: '/assignments',
@@ -506,8 +524,11 @@ export interface FileRoutesByFullPath {
   '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
   '/modules/admin/audit': typeof ModulesAdminAuditRoute
+  '/modules/admin/business': typeof ModulesAdminBusinessRoute
+  '/modules/admin/data': typeof ModulesAdminDataRoute
   '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
   '/modules/admin/integrations': typeof ModulesAdminIntegrationsRoute
+  '/modules/admin/security': typeof ModulesAdminSecurityRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -580,8 +601,11 @@ export interface FileRoutesByTo {
   '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
   '/modules/admin/audit': typeof ModulesAdminAuditRoute
+  '/modules/admin/business': typeof ModulesAdminBusinessRoute
+  '/modules/admin/data': typeof ModulesAdminDataRoute
   '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
   '/modules/admin/integrations': typeof ModulesAdminIntegrationsRoute
+  '/modules/admin/security': typeof ModulesAdminSecurityRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -655,8 +679,11 @@ export interface FileRoutesById {
   '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
   '/modules/admin/audit': typeof ModulesAdminAuditRoute
+  '/modules/admin/business': typeof ModulesAdminBusinessRoute
+  '/modules/admin/data': typeof ModulesAdminDataRoute
   '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
   '/modules/admin/integrations': typeof ModulesAdminIntegrationsRoute
+  '/modules/admin/security': typeof ModulesAdminSecurityRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -731,8 +758,11 @@ export interface FileRouteTypes {
     | '/app/support/reports'
     | '/app/support/tickets'
     | '/modules/admin/audit'
+    | '/modules/admin/business'
+    | '/modules/admin/data'
     | '/modules/admin/employees'
     | '/modules/admin/integrations'
+    | '/modules/admin/security'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -805,8 +835,11 @@ export interface FileRouteTypes {
     | '/app/support/reports'
     | '/app/support/tickets'
     | '/modules/admin/audit'
+    | '/modules/admin/business'
+    | '/modules/admin/data'
     | '/modules/admin/employees'
     | '/modules/admin/integrations'
+    | '/modules/admin/security'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -879,8 +912,11 @@ export interface FileRouteTypes {
     | '/app/support/reports'
     | '/app/support/tickets'
     | '/modules/admin/audit'
+    | '/modules/admin/business'
+    | '/modules/admin/data'
     | '/modules/admin/employees'
     | '/modules/admin/integrations'
+    | '/modules/admin/security'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -1369,6 +1405,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesAdminAuditRouteImport
       parentRoute: typeof ModulesAdminRoute
     }
+    '/modules/admin/business': {
+      id: '/modules/admin/business'
+      path: '/business'
+      fullPath: '/modules/admin/business'
+      preLoaderRoute: typeof ModulesAdminBusinessRouteImport
+      parentRoute: typeof ModulesAdminRoute
+    }
+    '/modules/admin/data': {
+      id: '/modules/admin/data'
+      path: '/data'
+      fullPath: '/modules/admin/data'
+      preLoaderRoute: typeof ModulesAdminDataRouteImport
+      parentRoute: typeof ModulesAdminRoute
+    }
     '/modules/admin/employees': {
       id: '/modules/admin/employees'
       path: '/employees'
@@ -1381,6 +1431,13 @@ declare module '@tanstack/react-router' {
       path: '/integrations'
       fullPath: '/modules/admin/integrations'
       preLoaderRoute: typeof ModulesAdminIntegrationsRouteImport
+      parentRoute: typeof ModulesAdminRoute
+    }
+    '/modules/admin/security': {
+      id: '/modules/admin/security'
+      path: '/security'
+      fullPath: '/modules/admin/security'
+      preLoaderRoute: typeof ModulesAdminSecurityRouteImport
       parentRoute: typeof ModulesAdminRoute
     }
     '/modules/crm/assignments': {
@@ -1525,14 +1582,20 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 
 interface ModulesAdminRouteChildren {
   ModulesAdminAuditRoute: typeof ModulesAdminAuditRoute
+  ModulesAdminBusinessRoute: typeof ModulesAdminBusinessRoute
+  ModulesAdminDataRoute: typeof ModulesAdminDataRoute
   ModulesAdminEmployeesRoute: typeof ModulesAdminEmployeesRoute
   ModulesAdminIntegrationsRoute: typeof ModulesAdminIntegrationsRoute
+  ModulesAdminSecurityRoute: typeof ModulesAdminSecurityRoute
 }
 
 const ModulesAdminRouteChildren: ModulesAdminRouteChildren = {
   ModulesAdminAuditRoute: ModulesAdminAuditRoute,
+  ModulesAdminBusinessRoute: ModulesAdminBusinessRoute,
+  ModulesAdminDataRoute: ModulesAdminDataRoute,
   ModulesAdminEmployeesRoute: ModulesAdminEmployeesRoute,
   ModulesAdminIntegrationsRoute: ModulesAdminIntegrationsRoute,
+  ModulesAdminSecurityRoute: ModulesAdminSecurityRoute,
 }
 
 const ModulesAdminRouteWithChildren = ModulesAdminRoute._addFileChildren(
