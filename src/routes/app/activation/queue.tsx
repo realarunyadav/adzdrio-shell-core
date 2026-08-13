@@ -60,9 +60,9 @@ function ActivationQueuePage() {
       act.id.toLowerCase().includes(searchQuery.toLowerCase());
     
     if (activeTab === "all") return matchesSearch;
-    if (activeTab === "pending") return matchesSearch && (act.status === 'Pending Payment Verification' || act.status === 'Ready for Assignment');
+    if (activeTab === "pending") return matchesSearch && (act.status === 'Pending Payment Verification' || act.status === 'Pending Assignment');
     if (activeTab === "in-progress") return matchesSearch && act.status === 'In Progress';
-    if (activeTab === "waiting") return matchesSearch && act.status === 'Waiting for Customer';
+    if (activeTab === "waiting") return matchesSearch && act.status === 'Waiting Customer';
     if (activeTab === "completed") return matchesSearch && act.status === 'Completed';
     return matchesSearch;
   });
