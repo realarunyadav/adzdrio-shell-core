@@ -192,7 +192,7 @@ function AppDashboard() {
                   </div>
                   <div className="text-right">
                     <div className="font-bold text-foreground">{item.amount}</div>
-                    <StatusBadge status={item.status === 'settled' ? 'success' : item.status === 'pending' ? 'warning' : 'destructive'} className="h-3.5 text-[8px]">
+                    <StatusBadge tone={item.status === 'settled' ? 'success' : item.status === 'pending' ? 'warning' : 'danger'} className="h-3.5 text-[8px]">
                       {item.status}
                     </StatusBadge>
                   </div>
