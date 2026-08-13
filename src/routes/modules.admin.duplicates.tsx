@@ -142,7 +142,7 @@ function DuplicateReviewDashboard() {
         />
         <StatsCard 
           label="Resolved Today" 
-          value={cases.filter(c => c.resolvedAt && c.resolvedAt.startsWith(new Date().toISOString().split('T')[0])).length} 
+          value={cases.filter(c => c.resolvedAt && c.resolvedAt.startsWith(new Date().toISOString().split('T')[0] || '')).length} 
           icon={CheckCircle2} 
           tone="success" 
         />
