@@ -17,8 +17,9 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { demoEmployees, demoBusinesses, demoActivations, demoIncentiveRules, demoPlans, demoLegalTemplates } from "@/lib/mock/workspace.demo";
-import { Trophy, Tag, Scale } from "lucide-react";
+import { demoEmployees, demoBusinesses, demoActivations, demoIncentiveRules, demoPlans, demoLegalTemplates, demoDuplicateCases } from "@/lib/mock/workspace.demo";
+import { Trophy, Tag, Scale, GitMerge } from "lucide-react";
+
 
 export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   const [query, setQuery] = React.useState("");
