@@ -44,6 +44,7 @@ import { Route as AppCrmCustomersRouteImport } from './routes/app/crm/customers'
 import { Route as AppCrmFollowUpsRouteImport } from './routes/app/crm/follow-ups'
 import { Route as AppCrmLeadPoolRouteImport } from './routes/app/crm/lead-pool'
 import { Route as AppCrmMyLeadsRouteImport } from './routes/app/crm/my-leads'
+import { Route as AppFinanceIndexRouteImport } from './routes/app/finance/index'
 import { Route as AppSalesIndexRouteImport } from './routes/app/sales/index'
 import { Route as AppSalesDealsRouteImport } from './routes/app/sales/deals'
 import { Route as AppSalesInvoicesRouteImport } from './routes/app/sales/invoices'
@@ -234,6 +235,11 @@ const AppCrmMyLeadsRoute = AppCrmMyLeadsRouteImport.update({
   path: '/crm/my-leads',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFinanceIndexRoute = AppFinanceIndexRouteImport.update({
+  id: '/finance/',
+  path: '/finance/',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSalesIndexRoute = AppSalesIndexRouteImport.update({
   id: '/sales/',
   path: '/sales/',
@@ -355,6 +361,7 @@ export interface FileRoutesByFullPath {
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
   '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
   '/app/crm/': typeof AppCrmIndexRoute
+  '/app/finance/': typeof AppFinanceIndexRoute
   '/app/sales/': typeof AppSalesIndexRoute
 }
 export interface FileRoutesByTo {
@@ -406,6 +413,7 @@ export interface FileRoutesByTo {
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
   '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
   '/app/crm': typeof AppCrmIndexRoute
+  '/app/finance': typeof AppFinanceIndexRoute
   '/app/sales': typeof AppSalesIndexRoute
 }
 export interface FileRoutesById {
@@ -458,6 +466,7 @@ export interface FileRoutesById {
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
   '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
   '/app/crm/': typeof AppCrmIndexRoute
+  '/app/finance/': typeof AppFinanceIndexRoute
   '/app/sales/': typeof AppSalesIndexRoute
 }
 export interface FileRouteTypes {
@@ -511,6 +520,7 @@ export interface FileRouteTypes {
     | '/modules/hrms/employee'
     | '/public/confirmations/$token'
     | '/app/crm/'
+    | '/app/finance/'
     | '/app/sales/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -562,6 +572,7 @@ export interface FileRouteTypes {
     | '/modules/hrms/employee'
     | '/public/confirmations/$token'
     | '/app/crm'
+    | '/app/finance'
     | '/app/sales'
   id:
     | '__root__'
@@ -613,6 +624,7 @@ export interface FileRouteTypes {
     | '/modules/hrms/employee'
     | '/public/confirmations/$token'
     | '/app/crm/'
+    | '/app/finance/'
     | '/app/sales/'
   fileRoutesById: FileRoutesById
 }
@@ -894,6 +906,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCrmMyLeadsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/finance/': {
+      id: '/app/finance/'
+      path: '/finance'
+      fullPath: '/app/finance/'
+      preLoaderRoute: typeof AppFinanceIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/sales/': {
       id: '/app/sales/'
       path: '/sales'
@@ -1008,6 +1027,7 @@ interface AppRouteChildren {
   AppSalesPlansRoute: typeof AppSalesPlansRoute
   AppSalesReportsRoute: typeof AppSalesReportsRoute
   AppCrmIndexRoute: typeof AppCrmIndexRoute
+  AppFinanceIndexRoute: typeof AppFinanceIndexRoute
   AppSalesIndexRoute: typeof AppSalesIndexRoute
 }
 
@@ -1024,6 +1044,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSalesPlansRoute: AppSalesPlansRoute,
   AppSalesReportsRoute: AppSalesReportsRoute,
   AppCrmIndexRoute: AppCrmIndexRoute,
+  AppFinanceIndexRoute: AppFinanceIndexRoute,
   AppSalesIndexRoute: AppSalesIndexRoute,
 }
 

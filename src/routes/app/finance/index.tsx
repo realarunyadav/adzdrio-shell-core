@@ -23,7 +23,7 @@ import { DashboardKpiCard } from "@/components/shared/DashboardKpiCard";
 import { Button } from "@/components/ui/button";
 import { demoPayments, demoTransactions, demoExpenses, demoRefunds } from "@/lib/mock/workspace.demo";
 
-export const Route = createFileRoute("/app/finance")({
+export const Route = createFileRoute("/app/finance/")({
   component: FinanceModuleLayout,
 });
 
