@@ -402,7 +402,11 @@ export function ConflictResolutionModal({ open, onOpenChange, duplicateCase, onR
                 onClick={() => {
                   const tabs = ["compare", "resolve", "preview"];
                   const nextIdx = tabs.indexOf(activeTab) + 1;
-                  if (nextIdx < tabs.length) setActiveTab(tabs[nextIdx]);
+                  if (nextIdx < tabs.length) {
+                    const nextTab = tabs[nextIdx];
+                    if (nextTab) setActiveTab(nextTab);
+                  }
+
                 }} 
                 className="h-10 gap-2 px-8 font-black uppercase tracking-widest text-[10px]"
               >
