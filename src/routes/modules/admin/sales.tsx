@@ -6,8 +6,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Settings, Zap, DollarSign, Tag, ListFilter, Plus, Edit2, Play, Power, History } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { demoPlans, demoTaxRules } from "@/lib/mock/workspace.demo";
 
 export const Route = createFileRoute("/modules/admin/sales")({
+
   component: () => (
     <div className="space-y-6">
       <PageHeader
