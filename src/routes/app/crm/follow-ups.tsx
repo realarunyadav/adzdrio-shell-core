@@ -12,7 +12,8 @@ import {
   Phone, 
   MessageSquare,
   AlertTriangle,
-  ChevronRight
+  ChevronRight,
+  Eye
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";

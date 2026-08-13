@@ -71,9 +71,9 @@ export const modules: ModuleDefinition[] = [
     navigation: [
       { id: "lead-pool", label: "Lead Pool", path: "/app/crm/lead-pool" },
       { id: "my-leads", label: "My Leads", path: "/app/crm/my-leads" },
-      { id: "customers", label: "Customers", path: "/modules/crm/customers" },
-      { id: "follow-ups", label: "Follow-ups", path: "/modules/crm/follow-ups" },
-      { id: "callbacks", label: "Callbacks", path: "/modules/crm/callbacks" },
+      { id: "customers", label: "Customers", path: "/app/crm/customers" },
+      { id: "follow-ups", label: "Follow-ups", path: "/app/crm/follow-ups" },
+      { id: "callbacks", label: "Callbacks", path: "/app/crm/callbacks" },
     ]
   },
   {
