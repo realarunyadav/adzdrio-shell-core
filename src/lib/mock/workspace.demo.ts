@@ -1321,20 +1321,6 @@ export const demoIncentiveRules: DemoIncentiveRule[] = [
   }
 ];
 
-export interface DemoPlan {
-  id: string;
-  name: string;
-  price: number;
-  status: "Active" | "Draft" | "Inactive";
-  features: string[];
-}
-
-export const demoPlans: DemoPlan[] = [
-  { id: "PLAN-001", name: "Basic", price: 999, status: "Active", features: ["Core CRM", "Email support"] },
-  { id: "PLAN-002", name: "Growth", price: 2999, status: "Active", features: ["All Basic", "Automation", "Incentives"] },
-  { id: "PLAN-003", name: "Enterprise", price: 9999, status: "Draft", features: ["All Growth", "Custom API", "Legal Suite"] }
-];
-
 export interface DemoTaxRule {
   id: string;
   name: string;
