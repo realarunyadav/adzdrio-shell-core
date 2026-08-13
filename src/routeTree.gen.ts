@@ -71,6 +71,7 @@ import { Route as AppSupportCustomersRouteImport } from './routes/app/support/cu
 import { Route as AppSupportKnowledgeBaseRouteImport } from './routes/app/support/knowledge-base'
 import { Route as AppSupportReportsRouteImport } from './routes/app/support/reports'
 import { Route as AppSupportTicketsRouteImport } from './routes/app/support/tickets'
+import { Route as ModulesAdminEmployeesRouteImport } from './routes/modules/admin/employees'
 import { Route as ModulesCrmAssignmentsRouteImport } from './routes/modules.crm.assignments'
 import { Route as ModulesCrmDuplicatesRouteImport } from './routes/modules.crm.duplicates'
 import { Route as ModulesCrmForecastRouteImport } from './routes/modules.crm.forecast'
@@ -391,6 +392,11 @@ const AppSupportTicketsRoute = AppSupportTicketsRouteImport.update({
   path: '/support/tickets',
   getParentRoute: () => AppRoute,
 } as any)
+const ModulesAdminEmployeesRoute = ModulesAdminEmployeesRouteImport.update({
+  id: '/employees',
+  path: '/employees',
+  getParentRoute: () => ModulesAdminRoute,
+} as any)
 const ModulesCrmAssignmentsRoute = ModulesCrmAssignmentsRouteImport.update({
   id: '/assignments',
   path: '/assignments',
@@ -437,7 +443,7 @@ export interface FileRoutesByFullPath {
   '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
-  '/modules/admin': typeof ModulesAdminRoute
+  '/modules/admin': typeof ModulesAdminRouteWithChildren
   '/modules/ai': typeof ModulesAiRoute
   '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
@@ -486,6 +492,7 @@ export interface FileRoutesByFullPath {
   '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
   '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
+  '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -508,7 +515,7 @@ export interface FileRoutesByTo {
   '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
-  '/modules/admin': typeof ModulesAdminRoute
+  '/modules/admin': typeof ModulesAdminRouteWithChildren
   '/modules/ai': typeof ModulesAiRoute
   '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
@@ -557,6 +564,7 @@ export interface FileRoutesByTo {
   '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
   '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
+  '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -580,7 +588,7 @@ export interface FileRoutesById {
   '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
-  '/modules/admin': typeof ModulesAdminRoute
+  '/modules/admin': typeof ModulesAdminRouteWithChildren
   '/modules/ai': typeof ModulesAiRoute
   '/modules/crm': typeof ModulesCrmRouteWithChildren
   '/modules/employees': typeof ModulesEmployeesRoute
@@ -629,6 +637,7 @@ export interface FileRoutesById {
   '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
   '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
+  '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -702,6 +711,7 @@ export interface FileRouteTypes {
     | '/app/support/knowledge-base'
     | '/app/support/reports'
     | '/app/support/tickets'
+    | '/modules/admin/employees'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -773,6 +783,7 @@ export interface FileRouteTypes {
     | '/app/support/knowledge-base'
     | '/app/support/reports'
     | '/app/support/tickets'
+    | '/modules/admin/employees'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -844,6 +855,7 @@ export interface FileRouteTypes {
     | '/app/support/knowledge-base'
     | '/app/support/reports'
     | '/app/support/tickets'
+    | '/modules/admin/employees'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -867,7 +879,7 @@ export interface RootRouteChildren {
   CustomerPortalRoute: typeof CustomerPortalRoute
   ModulesModuleIdRoute: typeof ModulesModuleIdRoute
   ModulesActivationRoute: typeof ModulesActivationRoute
-  ModulesAdminRoute: typeof ModulesAdminRoute
+  ModulesAdminRoute: typeof ModulesAdminRouteWithChildren
   ModulesAiRoute: typeof ModulesAiRoute
   ModulesCrmRoute: typeof ModulesCrmRouteWithChildren
   ModulesEmployeesRoute: typeof ModulesEmployeesRoute
@@ -1325,6 +1337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSupportTicketsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/modules/admin/employees': {
+      id: '/modules/admin/employees'
+      path: '/employees'
+      fullPath: '/modules/admin/employees'
+      preLoaderRoute: typeof ModulesAdminEmployeesRouteImport
+      parentRoute: typeof ModulesAdminRoute
+    }
     '/modules/crm/assignments': {
       id: '/modules/crm/assignments'
       path: '/assignments'
@@ -1465,6 +1484,18 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
   SettingsRouteChildren,
 )
 
+interface ModulesAdminRouteChildren {
+  ModulesAdminEmployeesRoute: typeof ModulesAdminEmployeesRoute
+}
+
+const ModulesAdminRouteChildren: ModulesAdminRouteChildren = {
+  ModulesAdminEmployeesRoute: ModulesAdminEmployeesRoute,
+}
+
+const ModulesAdminRouteWithChildren = ModulesAdminRoute._addFileChildren(
+  ModulesAdminRouteChildren,
+)
+
 interface ModulesCrmRouteChildren {
   ModulesCrmAssignmentsRoute: typeof ModulesCrmAssignmentsRoute
   ModulesCrmDuplicatesRoute: typeof ModulesCrmDuplicatesRoute
@@ -1506,7 +1537,7 @@ const rootRouteChildren: RootRouteChildren = {
   CustomerPortalRoute: CustomerPortalRoute,
   ModulesModuleIdRoute: ModulesModuleIdRoute,
   ModulesActivationRoute: ModulesActivationRoute,
-  ModulesAdminRoute: ModulesAdminRoute,
+  ModulesAdminRoute: ModulesAdminRouteWithChildren,
   ModulesAiRoute: ModulesAiRoute,
   ModulesCrmRoute: ModulesCrmRouteWithChildren,
   ModulesEmployeesRoute: ModulesEmployeesRoute,
