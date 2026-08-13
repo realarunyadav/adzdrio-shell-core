@@ -210,8 +210,9 @@ function DuplicateReviewDashboard() {
                                   {audit.action}
                                </StatusBadge>
                             </TableCell>
-                            <TableCell className="text-[10px] font-mono text-muted-foreground">{audit.caseId}</TableCell>
-                            <TableCell className="text-[11px] font-medium max-w-xs truncate">{audit.details}</TableCell>
+                            <TableCell className="text-[10px] font-mono text-muted-foreground">{audit.recordIds.join(', ')}</TableCell>
+                            <TableCell className="text-[11px] font-medium max-w-xs truncate">{audit.result}</TableCell>
+
                          </TableRow>
                       ))}
                    </TableBody>
