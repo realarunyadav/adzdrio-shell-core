@@ -1,4 +1,6 @@
 import * as React from "react";
+import { Settings2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { demoEmployees, DemoEmployee } from "@/lib/mock/workspace.demo";
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +11,7 @@ import { EmployeeModal } from "./EmployeeModal";
 
 export function EmployeeDirectory() {
   const [selectedEmployee, setSelectedEmployee] = React.useState<DemoEmployee | null>(null);
+  const [selectedEditEmployee, setSelectedEditEmployee] = React.useState<DemoEmployee | null>(null);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [editModalOpen, setEditModalOpen] = React.useState(false);
 
@@ -19,7 +22,7 @@ export function EmployeeDirectory() {
 
   const handleEdit = (emp: DemoEmployee, e: React.MouseEvent) => {
     e.stopPropagation();
-    setSelectedEmployee(emp);
+    setSelectedEditEmployee(emp);
     setEditModalOpen(true);
   };
 
@@ -34,7 +37,7 @@ export function EmployeeDirectory() {
       <EmployeeModal 
         isOpen={editModalOpen} 
         onClose={() => setEditModalOpen(false)} 
-        employee={selectedEmployee}
+        employee={selectedEditEmployee}
       />
 
       <div className="rounded-xl border border-border/40 bg-accent/10 overflow-hidden">
@@ -46,7 +49,7 @@ export function EmployeeDirectory() {
               <TableHead className="text-[10px] font-black uppercase tracking-widest">Role</TableHead>
               <TableHead className="text-[10px] font-black uppercase tracking-widest">Department</TableHead>
               <TableHead className="text-[10px] font-black uppercase tracking-widest">Status</TableHead>
-              <TableHead className="text-[10px] font-black uppercase tracking-widest text-right">Last Active</TableHead>
+              <TableHead className="text-[10px] font-black uppercase tracking-widest text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -80,8 +83,15 @@ export function EmployeeDirectory() {
                     {emp.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-xs text-right text-muted-foreground">
-                  {new Date(emp.lastActive).toLocaleDateString()}
+                <TableCell className="text-right">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="size-7" 
+                    onClick={(e) => handleEdit(emp, e)}
+                  >
+                    <Settings2 className="size-3.5" />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
