@@ -1,3 +1,4 @@
+import * as React from "react";
 import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,8 +9,11 @@ import { WorkflowBuilder } from "@/components/admin-studio/WorkflowBuilder";
 import { BrandingBuilder } from "@/components/admin-studio/BrandingBuilder";
 import { PolicyManager } from "@/components/admin-studio/PolicyManager";
 import { AdminAuditCenter } from "@/components/admin-studio/AdminAuditCenter";
-import { LayoutGrid, Database, Layers, GitBranch, Settings, History, ShieldAlert } from "lucide-react";
+import { LayoutGrid, Database, Layers, GitBranch, Settings, History, ShieldAlert, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { GlobalSearchOverlay } from "@/components/shared/GlobalSearchOverlay";
+
 
 export const Route = createFileRoute("/modules/admin")({
   component: AdminStudioModule,
