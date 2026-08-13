@@ -50,31 +50,27 @@ function CrmDashboard() {
       {/* KPI Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <DashboardKpiCard
-          label="Total Leads"
+          title="Total Leads"
           value={String(demoLeads.length)}
           trend="+12.4%"
-          trendType="up"
           icon={Target}
         />
         <DashboardKpiCard
-          label="Conversion Rate"
+          title="Conversion Rate"
           value="18.6%"
           trend="-1.2%"
-          trendType="down"
           icon={TrendingUp}
         />
         <DashboardKpiCard
-          label="Active Customers"
+          title="Active Customers"
           value="1,284"
           trend="+4.1%"
-          trendType="up"
           icon={Users}
         />
         <DashboardKpiCard
-          label="Pipeline Value"
+          title="Pipeline Value"
           value="₹ 24.7L"
           trend="+5.2%"
-          trendType="up"
           icon={DollarSign}
         />
       </div>
