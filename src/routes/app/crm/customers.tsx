@@ -163,7 +163,7 @@ function CustomersPage() {
                     />
                   </TableCell>
                   <TableCell>
-                    <button onClick={() => openDetails(customer)} className="text-left outline-none flex items-center gap-3">
+                    <button onClick={(e) => { e.preventDefault(); openDetails(customer); }} className="text-left outline-none flex items-center gap-3 cursor-pointer">
                       <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-black text-primary group-hover:bg-primary group-hover:text-white transition-all">
                         {customer.name.split(' ').map(n => n[0]).join('')}
                       </div>
