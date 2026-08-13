@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 import { 
   Sparkles, 
   MessageSquare, 
@@ -21,6 +22,7 @@ import {
   Trash2
 } from "lucide-react";
 import { demoAiCapabilities, demoAiProviders, demoAiAuditLogs, demoAiConversation } from "@/lib/mock/workspace.demo";
+
 
 export const Route = createFileRoute("/modules/admin/ai")({
   component: AIAcademyModule,
@@ -146,4 +148,3 @@ function AIAcademyModule() {
   );
 }
 
-import { Input } from "@/components/ui/input";
