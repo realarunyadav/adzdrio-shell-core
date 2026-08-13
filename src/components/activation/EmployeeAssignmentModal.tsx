@@ -4,20 +4,11 @@ import {
   DialogContent, 
   DialogHeader, 
   DialogTitle, 
-  DialogFooter,
-  DialogDescription
-} from "@/components/ui/sheet"; // Using Sheet or Dialog? The prompt says "assignment modal, selector, dropdown"
-// Actually I'll use standard Dialog for a modal feel
-import { 
-  Dialog as ShadcnDialog, 
-  DialogContent as ShadcnDialogContent, 
-  DialogHeader as ShadcnDialogHeader, 
-  DialogTitle as ShadcnDialogTitle,
-  DialogFooter as ShadcnDialogFooter,
+  DialogFooter
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, User, Users, Search } from "lucide-react";
+import { Check, User, Users, Search, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { demoTeamPerformance } from "@/lib/mock/workspace.demo";
@@ -26,7 +17,7 @@ interface EmployeeAssignmentModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: (employee: any) => void;
-  suggestedEmployeeId?: string;
+  suggestedEmployeeId?: string | null;
 }
 
 export function EmployeeAssignmentModal({ 
@@ -65,14 +56,14 @@ export function EmployeeAssignmentModal({
   };
 
   return (
-    <ShadcnDialog open={open} onOpenChange={onOpenChange}>
-      <ShadcnDialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-border bg-background">
-        <ShadcnDialogHeader className="p-6 bg-muted/5 border-b border-border/40">
-          <ShadcnDialogTitle className="text-xl font-black uppercase tracking-tight flex items-center gap-2">
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-border bg-background">
+        <DialogHeader className="p-6 bg-muted/5 border-b border-border/40">
+          <DialogTitle className="text-xl font-black uppercase tracking-tight flex items-center gap-2">
             <Users className="size-5 text-primary" />
             Assign Provisioning Employee
-          </ShadcnDialogTitle>
-        </ShadcnDialogHeader>
+          </DialogTitle>
+        </DialogHeader>
 
         <div className="p-4 border-b border-border/40">
           <div className="relative">
@@ -143,7 +134,7 @@ export function EmployeeAssignmentModal({
           })}
         </div>
 
-        <ShadcnDialogFooter className="p-6 bg-muted/5 border-t border-border/40 gap-2 sm:gap-0">
+        <DialogFooter className="p-6 bg-muted/5 border-t border-border/40 gap-2 sm:gap-0">
           <Button 
             variant="outline" 
             onClick={() => onOpenChange(false)}
@@ -158,8 +149,8 @@ export function EmployeeAssignmentModal({
           >
             Confirm Assignment
           </Button>
-        </ShadcnDialogFooter>
-      </ShadcnDialogContent>
-    </ShadcnDialog>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
