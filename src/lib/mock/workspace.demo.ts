@@ -491,9 +491,9 @@ export interface DemoInvoice {
 }
 
 export const demoPlans: DemoPlan[] = [
-  { id: "plan-1", name: "Premium Annual", business: "Acme India", price: 12000, status: 'Active', created: "2026-01-15", updated: "2026-06-10", activeSales: 450 },
-  { id: "plan-2", name: "Standard Monthly", business: "Vertex Tech", price: 999, status: 'Active', created: "2026-02-01", updated: "2026-07-01", activeSales: 1200 },
-  { id: "plan-3", name: "Enterprise Custom", business: "Blue Harbour", price: 45000, status: 'Active', created: "2026-03-20", updated: "2026-03-20", activeSales: 12 },
+  { id: "plan-1", name: "Premium Annual", business: "Acme India", price: 12000, status: 'Active', created: "2026-01-15", updated: "2026-06-10", activeSales: 450, features: ["Priority Support", "Advanced Analytics"] },
+  { id: "plan-2", name: "Standard Monthly", business: "Vertex Tech", price: 999, status: 'Active', created: "2026-02-01", updated: "2026-07-01", activeSales: 1200, features: ["Basic CRM", "Standard Support"] },
+  { id: "plan-3", name: "Enterprise Custom", business: "Blue Harbour", price: 45000, status: 'Active', created: "2026-03-20", updated: "2026-03-20", activeSales: 12, features: ["Custom API", "Legal Suite"] },
 ];
 
 export const demoSales: DemoSale[] = [
