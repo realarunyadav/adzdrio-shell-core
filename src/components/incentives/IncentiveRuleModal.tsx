@@ -15,6 +15,13 @@ interface IncentiveRuleModalProps {
   rule?: DemoIncentiveRule | null;
 }
 
+type TierData = {
+  min: number;
+  reward: number;
+  type: "Fixed" | "Percentage";
+  label?: string;
+};
+
 type FormData = {
   name: string;
   businessId: string;
@@ -23,7 +30,7 @@ type FormData = {
   version: number;
   description: string;
   effectiveFrom: string;
-  tiers: { min: number; reward: number; type: "Fixed" | "Percentage"; label?: string }[];
+  tiers: TierData[];
 };
 
 export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModalProps) {
@@ -50,15 +57,12 @@ export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModal
         version: rule.version,
         description: rule.description,
         effectiveFrom: rule.effectiveFrom,
-        tiers: rule.tiers.map(t => {
-          const tier: { min: number; reward: number; type: "Fixed" | "Percentage"; label?: string } = {
-            min: t.min,
-            reward: t.reward,
-            type: t.type
-          };
-          if (t.label) tier.label = t.label;
-          return tier;
-        })
+        tiers: rule.tiers.map(t => ({
+          min: t.min,
+          reward: t.reward,
+          type: t.type,
+          label: t.label
+        }))
       });
     } else {
       setFormData(initialData);
@@ -66,23 +70,21 @@ export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModal
   }, [rule, isOpen]);
 
   const addTier = () => {
-    const newTiers = [...formData.tiers];
-    const lastTier = newTiers[newTiers.length - 1];
-    newTiers.push({ 
+    const lastTier = formData.tiers[formData.tiers.length - 1];
+    const newTier: TierData = { 
       min: (lastTier?.min || 0) + 10, 
       reward: (lastTier?.reward || 0) + 1000, 
       type: "Fixed", 
-      label: `Tier ${newTiers.length + 1}` 
-    });
-    setFormData({ ...formData, tiers: newTiers });
+      label: `Tier ${formData.tiers.length + 1}` 
+    };
+    setFormData({ ...formData, tiers: [...formData.tiers, newTier] });
   };
 
   const removeTier = (index: number) => {
-    const newTiers = formData.tiers.filter((_, i) => i !== index);
-    setFormData({ ...formData, tiers: newTiers });
+    setFormData({ ...formData, tiers: formData.tiers.filter((_, i) => i !== index) });
   };
 
-  const updateTier = (index: number, field: string, value: any) => {
+  const updateTier = (index: number, field: keyof TierData, value: any) => {
     const newTiers = [...formData.tiers];
     newTiers[index] = { ...newTiers[index], [field]: value };
     setFormData({ ...formData, tiers: newTiers });
