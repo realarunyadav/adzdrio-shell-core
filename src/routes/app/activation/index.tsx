@@ -263,7 +263,11 @@ function ActivationDashboard() {
                 </tbody>
               </table>
             </div>
-            <Button variant="ghost" className="w-full text-[10px] font-bold uppercase tracking-widest h-10 mt-2 border border-dashed border-border/60 hover:border-primary/40 hover:bg-primary/5">
+            <Button 
+              variant="ghost" 
+              className="w-full text-[10px] font-bold uppercase tracking-widest h-10 mt-2 border border-dashed border-border/60 hover:border-primary/40 hover:bg-primary/5"
+              onClick={() => navigate({ to: '/app/activation/queue' })}
+            >
               View Complete Activation Queue
             </Button>
           </SectionCard>
