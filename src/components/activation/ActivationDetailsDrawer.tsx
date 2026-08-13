@@ -36,7 +36,8 @@ import {
   DemoActivation, 
   demoActivationActivities, 
   DemoActivationActivity,
-  demoActivations
+  demoActivations,
+  ActivationStatus
 } from "@/lib/mock/workspace.demo";
 import { EmployeeAssignmentModal } from "./EmployeeAssignmentModal";
 import { PaymentVerificationModal } from "./modals/PaymentVerificationModal";
