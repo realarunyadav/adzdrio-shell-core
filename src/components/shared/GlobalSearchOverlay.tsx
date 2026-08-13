@@ -16,7 +16,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { demoEmployees, demoBusinesses, demoActivations } from "@/lib/mock/workspace.demo";
+import { demoEmployees, demoBusinesses, demoActivations, demoIncentiveRules, demoPlans } from "@/lib/mock/workspace.demo";
+import { Trophy, Tag } from "lucide-react";
 
 export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   const [query, setQuery] = React.useState("");
@@ -64,6 +65,20 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
     demoActivations.forEach(act => {
       if (act.id.toLowerCase().includes(q) || act.customerName.toLowerCase().includes(q)) {
         matches.push({ type: 'activation', ...act });
+      }
+    });
+
+    // Search Incentive Rules
+    demoIncentiveRules.forEach(rule => {
+      if (rule.name.toLowerCase().includes(q) || rule.id.toLowerCase().includes(q)) {
+        matches.push({ type: 'incentive', ...rule });
+      }
+    });
+
+    // Search Sales Plans
+    demoPlans.forEach(plan => {
+      if (plan.name.toLowerCase().includes(q) || plan.id.toLowerCase().includes(q)) {
+        matches.push({ type: 'plan', ...plan });
       }
     });
 
@@ -119,6 +134,8 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
                   <div className="size-10 rounded-lg bg-background border border-border/40 flex items-center justify-center shrink-0">
                     {res.type === 'employee' ? <User className="size-5 text-blue-500" /> :
                      res.type === 'business' ? <Building2 className="size-5 text-emerald-500" /> :
+                     res.type === 'incentive' ? <Trophy className="size-5 text-purple-500" /> :
+                     res.type === 'plan' ? <Tag className="size-5 text-rose-500" /> :
                      <Briefcase className="size-5 text-amber-500" />}
                   </div>
                   <div className="flex-1 min-w-0">
