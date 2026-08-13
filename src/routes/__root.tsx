@@ -151,10 +151,21 @@ function InnerRoot() {
   }
 
   const isAuthPage = location.pathname === "/auth";
+  const isAppPage = location.pathname === "/app" || location.pathname.startsWith("/app/");
 
   return (
     <RbacProvider>
-      {isAuthPage ? <Outlet /> : <AppShell><Outlet /></AppShell>}
+      {isAuthPage ? (
+        <Outlet />
+      ) : isAppPage ? (
+        <AppShell>
+          <Outlet />
+        </AppShell>
+      ) : (
+        <AppShell>
+          <Outlet />
+        </AppShell>
+      )}
       <GlobalCommandPalette />
       <Toaster position="top-right" richColors closeButton />
     </RbacProvider>
