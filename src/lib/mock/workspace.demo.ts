@@ -61,6 +61,118 @@ export const demoBusinesses: DemoBusiness[] = [
   { id: "biz-c", name: "Blue Harbour", initials: "BH", plan: "Starter", revenue: "₹ 4.1L", sales: 15, leads: 90, conversion: "16.7%", pendingPayments: "₹ 8.5K", teamSize: 5, status: 'warning' },
 ];
 
+export type LeadStatus = 'New' | 'Contacted' | 'Interested' | 'Follow-up' | 'Negotiation' | 'Converted' | 'Not Interested' | 'Lost';
+export type LeadPriority = 'High' | 'Medium' | 'Low';
+
+export interface DemoLead {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  source: string;
+  business: string;
+  status: LeadStatus;
+  priority: LeadPriority;
+  addedDate: string;
+  lastActivity: string;
+  assignedTo?: string;
+  assignedToName?: string;
+  notes?: string;
+  nextFollowUp?: string;
+  callbackDate?: string;
+}
+
+export const demoLeads: DemoLead[] = [
+  {
+    id: "lead-1",
+    name: "Arjun Sharma",
+    email: "arjun.s@example.com",
+    phone: "+91 98765 43210",
+    source: "Google Search",
+    business: "Acme India",
+    status: "New",
+    priority: "High",
+    addedDate: "2026-08-10T10:30:00Z",
+    lastActivity: "2026-08-12T14:20:00Z",
+    notes: "Interested in Enterprise plan. Needs a demo."
+  },
+  {
+    id: "lead-2",
+    name: "Deepika Rao",
+    email: "d.rao@outlook.com",
+    phone: "+91 87654 32109",
+    source: "LinkedIn",
+    business: "Vertex Tech",
+    status: "Contacted",
+    priority: "Medium",
+    addedDate: "2026-08-11T09:15:00Z",
+    lastActivity: "2026-08-13T11:45:00Z",
+    assignedTo: "user-1",
+    assignedToName: "Priya Nair",
+    notes: "Follow-up scheduled for next week."
+  },
+  {
+    id: "lead-3",
+    name: "Vikram Singh",
+    email: "vikram@singh-corp.in",
+    phone: "+91 76543 21098",
+    source: "Referral",
+    business: "Blue Harbour",
+    status: "Interested",
+    priority: "High",
+    addedDate: "2026-08-09T16:45:00Z",
+    lastActivity: "2026-08-13T09:30:00Z",
+    assignedTo: "user-1",
+    assignedToName: "Priya Nair",
+    nextFollowUp: "2026-08-15T10:00:00Z",
+    notes: "High intent lead. Budget approved."
+  },
+  {
+    id: "lead-4",
+    name: "Sanya Gupta",
+    email: "sanya.g@gmail.com",
+    phone: "+91 99887 76655",
+    source: "Facebook Ads",
+    business: "Acme India",
+    status: "Negotiation",
+    priority: "Medium",
+    addedDate: "2026-08-05T11:00:00Z",
+    lastActivity: "2026-08-12T16:30:00Z",
+    assignedTo: "user-1",
+    assignedToName: "Priya Nair",
+    callbackDate: "2026-08-14T15:00:00Z",
+    notes: "Discussing pricing tiers."
+  },
+  {
+    id: "lead-5",
+    name: "Rohan Varma",
+    email: "rohan@varma-logistics.com",
+    phone: "+91 88776 65544",
+    source: "Direct",
+    business: "Vertex Tech",
+    status: "Follow-up",
+    priority: "Low",
+    addedDate: "2026-08-08T14:00:00Z",
+    lastActivity: "2026-08-13T12:00:00Z",
+    assignedTo: "user-2",
+    assignedToName: "Rahul Menon",
+    notes: "Sent brochure. Waiting for response."
+  },
+  {
+    id: "lead-6",
+    name: "Ananya Iyer",
+    email: "ananya.i@tech-flow.com",
+    phone: "+91 77665 54433",
+    source: "Webinar",
+    business: "Acme India",
+    status: "New",
+    priority: "Medium",
+    addedDate: "2026-08-12T15:20:00Z",
+    lastActivity: "2026-08-12T15:20:00Z",
+    notes: "New inquiry from recent webinar."
+  }
+];
+
 export interface DemoKpi {
   id: string;
   label: string;

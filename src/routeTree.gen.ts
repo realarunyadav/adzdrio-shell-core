@@ -38,6 +38,8 @@ import { Route as PlatformAutomationRouteImport } from './routes/platform.automa
 import { Route as PlatformDataCenterRouteImport } from './routes/platform.data-center'
 import { Route as SettingsAuditRouteImport } from './routes/settings.audit'
 import { Route as SettingsSecurityRouteImport } from './routes/settings.security'
+import { Route as AppCrmLeadPoolRouteImport } from './routes/app/crm/lead-pool'
+import { Route as AppCrmMyLeadsRouteImport } from './routes/app/crm/my-leads'
 import { Route as ModulesCrmAssignmentsRouteImport } from './routes/modules.crm.assignments'
 import { Route as ModulesCrmDuplicatesRouteImport } from './routes/modules.crm.duplicates'
 import { Route as ModulesCrmForecastRouteImport } from './routes/modules.crm.forecast'
@@ -191,6 +193,16 @@ const SettingsSecurityRoute = SettingsSecurityRouteImport.update({
   path: '/security',
   getParentRoute: () => SettingsRoute,
 } as any)
+const AppCrmLeadPoolRoute = AppCrmLeadPoolRouteImport.update({
+  id: '/crm/lead-pool',
+  path: '/crm/lead-pool',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCrmMyLeadsRoute = AppCrmMyLeadsRouteImport.update({
+  id: '/crm/my-leads',
+  path: '/crm/my-leads',
+  getParentRoute: () => AppRoute,
+} as any)
 const ModulesCrmAssignmentsRoute = ModulesCrmAssignmentsRouteImport.update({
   id: '/assignments',
   path: '/assignments',
@@ -230,7 +242,7 @@ const PublicConfirmationsTokenRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/communication': typeof CommunicationRoute
   '/settings': typeof SettingsRouteWithChildren
@@ -258,6 +270,8 @@ export interface FileRoutesByFullPath {
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
+  '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
+  '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -268,7 +282,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/communication': typeof CommunicationRoute
   '/settings': typeof SettingsRouteWithChildren
@@ -296,6 +310,8 @@ export interface FileRoutesByTo {
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
+  '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
+  '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -307,7 +323,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/app': typeof AppRoute
+  '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/communication': typeof CommunicationRoute
   '/settings': typeof SettingsRouteWithChildren
@@ -335,6 +351,8 @@ export interface FileRoutesById {
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
+  '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
+  '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -375,6 +393,8 @@ export interface FileRouteTypes {
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
+    | '/app/crm/lead-pool'
+    | '/app/crm/my-leads'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -413,6 +433,8 @@ export interface FileRouteTypes {
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
+    | '/app/crm/lead-pool'
+    | '/app/crm/my-leads'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -451,6 +473,8 @@ export interface FileRouteTypes {
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
+    | '/app/crm/lead-pool'
+    | '/app/crm/my-leads'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -462,7 +486,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AppRoute: typeof AppRoute
+  AppRoute: typeof AppRouteWithChildren
   AuthRoute: typeof AuthRoute
   CommunicationRoute: typeof CommunicationRoute
   SettingsRoute: typeof SettingsRouteWithChildren
@@ -696,6 +720,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsSecurityRouteImport
       parentRoute: typeof SettingsRoute
     }
+    '/app/crm/lead-pool': {
+      id: '/app/crm/lead-pool'
+      path: '/crm/lead-pool'
+      fullPath: '/app/crm/lead-pool'
+      preLoaderRoute: typeof AppCrmLeadPoolRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/crm/my-leads': {
+      id: '/app/crm/my-leads'
+      path: '/crm/my-leads'
+      fullPath: '/app/crm/my-leads'
+      preLoaderRoute: typeof AppCrmMyLeadsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/modules/crm/assignments': {
       id: '/modules/crm/assignments'
       path: '/assignments'
@@ -748,6 +786,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AppRouteChildren {
+  AppCrmLeadPoolRoute: typeof AppCrmLeadPoolRoute
+  AppCrmMyLeadsRoute: typeof AppCrmMyLeadsRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppCrmLeadPoolRoute: AppCrmLeadPoolRoute,
+  AppCrmMyLeadsRoute: AppCrmMyLeadsRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 interface SettingsRouteChildren {
   SettingsAuditRoute: typeof SettingsAuditRoute
   SettingsSecurityRoute: typeof SettingsSecurityRoute
@@ -796,7 +846,7 @@ const ModulesHrmsRouteWithChildren = ModulesHrmsRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AppRoute: AppRoute,
+  AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRoute,
   CommunicationRoute: CommunicationRoute,
   SettingsRoute: SettingsRouteWithChildren,

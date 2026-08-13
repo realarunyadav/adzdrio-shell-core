@@ -69,8 +69,8 @@ export const modules: ModuleDefinition[] = [
     basePath: "/modules/crm",
     permission: "operations.crm.view",
     navigation: [
-      { id: "lead-pool", label: "Lead Pool", path: "/modules/crm/pool" },
-      { id: "my-leads", label: "My Leads", path: "/modules/crm/leads" },
+      { id: "lead-pool", label: "Lead Pool", path: "/app/crm/lead-pool" },
+      { id: "my-leads", label: "My Leads", path: "/app/crm/my-leads" },
       { id: "customers", label: "Customers", path: "/modules/crm/customers" },
       { id: "follow-ups", label: "Follow-ups", path: "/modules/crm/follow-ups" },
       { id: "callbacks", label: "Callbacks", path: "/modules/crm/callbacks" },
