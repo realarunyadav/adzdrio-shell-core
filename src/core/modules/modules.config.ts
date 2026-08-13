@@ -31,7 +31,8 @@ import {
   Bell,
   Lock,
   Eye,
-  Server
+  Server,
+  BarChart3
 } from "lucide-react";
 
 import { moduleRegistry } from "./registry";
@@ -228,4 +229,4 @@ export function bootstrapModules(): void {
 }
 
 // Re-export Lucide components for dynamic use if needed
-const BarChart3 = PieChart; // Alias if missing from Lucide
+

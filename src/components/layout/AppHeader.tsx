@@ -71,6 +71,11 @@ export function AppHeader() {
     <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border/50 glass-effect px-3 sm:px-5 lg:px-6 premium-transition">
       <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
       <Separator orientation="vertical" className="hidden h-5 sm:block" />
+      
+      <div className="flex items-center px-1">
+        <import { BusinessSwitcher } from "@/components/workspace/BusinessSwitcher"; />
+        <BusinessSwitcher />
+      </div>
 
       {appConfig.shell.showBreadcrumbs ? (
         <Breadcrumb className="hidden min-w-0 md:block">
