@@ -45,6 +45,7 @@ import { Route as AppCrmFollowUpsRouteImport } from './routes/app/crm/follow-ups
 import { Route as AppCrmLeadPoolRouteImport } from './routes/app/crm/lead-pool'
 import { Route as AppCrmMyLeadsRouteImport } from './routes/app/crm/my-leads'
 import { Route as AppFinanceIndexRouteImport } from './routes/app/finance/index'
+import { Route as AppFinancePaymentsRouteImport } from './routes/app/finance/payments'
 import { Route as AppSalesIndexRouteImport } from './routes/app/sales/index'
 import { Route as AppSalesDealsRouteImport } from './routes/app/sales/deals'
 import { Route as AppSalesInvoicesRouteImport } from './routes/app/sales/invoices'
@@ -240,6 +241,11 @@ const AppFinanceIndexRoute = AppFinanceIndexRouteImport.update({
   path: '/finance/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFinancePaymentsRoute = AppFinancePaymentsRouteImport.update({
+  id: '/finance/payments',
+  path: '/finance/payments',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSalesIndexRoute = AppSalesIndexRouteImport.update({
   id: '/sales/',
   path: '/sales/',
@@ -347,6 +353,7 @@ export interface FileRoutesByFullPath {
   '/app/crm/follow-ups': typeof AppCrmFollowUpsRoute
   '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
   '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
+  '/app/finance/payments': typeof AppFinancePaymentsRoute
   '/app/sales/deals': typeof AppSalesDealsRoute
   '/app/sales/invoices': typeof AppSalesInvoicesRoute
   '/app/sales/payment-links': typeof AppSalesPaymentLinksRoute
@@ -399,6 +406,7 @@ export interface FileRoutesByTo {
   '/app/crm/follow-ups': typeof AppCrmFollowUpsRoute
   '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
   '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
+  '/app/finance/payments': typeof AppFinancePaymentsRoute
   '/app/sales/deals': typeof AppSalesDealsRoute
   '/app/sales/invoices': typeof AppSalesInvoicesRoute
   '/app/sales/payment-links': typeof AppSalesPaymentLinksRoute
@@ -452,6 +460,7 @@ export interface FileRoutesById {
   '/app/crm/follow-ups': typeof AppCrmFollowUpsRoute
   '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
   '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
+  '/app/finance/payments': typeof AppFinancePaymentsRoute
   '/app/sales/deals': typeof AppSalesDealsRoute
   '/app/sales/invoices': typeof AppSalesInvoicesRoute
   '/app/sales/payment-links': typeof AppSalesPaymentLinksRoute
@@ -506,6 +515,7 @@ export interface FileRouteTypes {
     | '/app/crm/follow-ups'
     | '/app/crm/lead-pool'
     | '/app/crm/my-leads'
+    | '/app/finance/payments'
     | '/app/sales/deals'
     | '/app/sales/invoices'
     | '/app/sales/payment-links'
@@ -558,6 +568,7 @@ export interface FileRouteTypes {
     | '/app/crm/follow-ups'
     | '/app/crm/lead-pool'
     | '/app/crm/my-leads'
+    | '/app/finance/payments'
     | '/app/sales/deals'
     | '/app/sales/invoices'
     | '/app/sales/payment-links'
@@ -610,6 +621,7 @@ export interface FileRouteTypes {
     | '/app/crm/follow-ups'
     | '/app/crm/lead-pool'
     | '/app/crm/my-leads'
+    | '/app/finance/payments'
     | '/app/sales/deals'
     | '/app/sales/invoices'
     | '/app/sales/payment-links'
@@ -913,6 +925,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFinanceIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/finance/payments': {
+      id: '/app/finance/payments'
+      path: '/finance/payments'
+      fullPath: '/app/finance/payments'
+      preLoaderRoute: typeof AppFinancePaymentsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/sales/': {
       id: '/app/sales/'
       path: '/sales'
@@ -1020,6 +1039,7 @@ interface AppRouteChildren {
   AppCrmFollowUpsRoute: typeof AppCrmFollowUpsRoute
   AppCrmLeadPoolRoute: typeof AppCrmLeadPoolRoute
   AppCrmMyLeadsRoute: typeof AppCrmMyLeadsRoute
+  AppFinancePaymentsRoute: typeof AppFinancePaymentsRoute
   AppSalesDealsRoute: typeof AppSalesDealsRoute
   AppSalesInvoicesRoute: typeof AppSalesInvoicesRoute
   AppSalesPaymentLinksRoute: typeof AppSalesPaymentLinksRoute
@@ -1037,6 +1057,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCrmFollowUpsRoute: AppCrmFollowUpsRoute,
   AppCrmLeadPoolRoute: AppCrmLeadPoolRoute,
   AppCrmMyLeadsRoute: AppCrmMyLeadsRoute,
+  AppFinancePaymentsRoute: AppFinancePaymentsRoute,
   AppSalesDealsRoute: AppSalesDealsRoute,
   AppSalesInvoicesRoute: AppSalesInvoicesRoute,
   AppSalesPaymentLinksRoute: AppSalesPaymentLinksRoute,
