@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { Bell, Moon, Sun, ShieldCheck } from "lucide-react";
+import { Bell, Moon, Sun, ShieldCheck, LifeBuoy } from "lucide-react";
+import { BusinessSwitcher } from "@/components/workspace/BusinessSwitcher";
 
 import { appConfig } from "@/config/app.config";
 import { moduleRegistry } from "@/core/modules/registry";
@@ -73,7 +74,6 @@ export function AppHeader() {
       <Separator orientation="vertical" className="hidden h-5 sm:block" />
       
       <div className="flex items-center px-1">
-        <import { BusinessSwitcher } from "@/components/workspace/BusinessSwitcher"; />
         <BusinessSwitcher />
       </div>
 
@@ -144,6 +144,19 @@ export function AppHeader() {
         </Button>
 
         <GlobalNotificationCenter open={notificationsOpen} onOpenChange={setNotificationsOpen} />
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-xl" asChild aria-label="Support">
+                <a href={appConfig.support.documentationUrl}>
+                  <LifeBuoy className="size-4" />
+                </a>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Help & Support</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
         <Separator orientation="vertical" className="hidden h-6 sm:block" />
 

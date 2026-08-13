@@ -148,31 +148,23 @@ export function AppSidebar() {
                                   </Link>
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
-                              {module.id === 'crm' && (
-                                <>
-                                  <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton asChild>
-                                      <Link to="/modules/crm" className="text-[11px] text-sidebar-foreground/60 px-2 py-1 font-medium hover:text-primary transition-colors">
-                                        Lead Management
-                                      </Link>
-                                    </SidebarMenuSubButton>
-                                  </SidebarMenuSubItem>
-                                  <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton asChild>
-                                      <Link to="/modules/crm" className="text-[11px] text-sidebar-foreground/60 px-2 py-1 font-medium hover:text-primary transition-colors">
-                                        Deal Pipeline
-                                      </Link>
-                                    </SidebarMenuSubButton>
-                                  </SidebarMenuSubItem>
-                                  <SidebarMenuSubItem>
-                                    <SidebarMenuSubButton asChild>
-                                      <Link to="/modules/crm" className="text-[11px] text-sidebar-foreground/60 px-2 py-1 font-medium hover:text-primary transition-colors">
-                                        Account Directory
-                                      </Link>
-                                    </SidebarMenuSubButton>
-                                  </SidebarMenuSubItem>
-                                </>
-                              )}
+                              {module.navigation?.map((nav) => (
+                                <SidebarMenuSubItem key={nav.id}>
+                                  <SidebarMenuSubButton asChild>
+                                    <Link 
+                                      to={nav.path as any} 
+                                      className="text-[11px] text-sidebar-foreground/60 px-2 py-1 font-medium hover:text-primary transition-colors"
+                                    >
+                                      {nav.label}
+                                      {nav.badge && (
+                                        <span className="ml-auto rounded px-1 py-0.5 text-[8px] bg-primary/10 text-primary font-bold">
+                                          {nav.badge}
+                                        </span>
+                                      )}
+                                    </Link>
+                                  </SidebarMenuSubButton>
+                                </SidebarMenuSubItem>
+                              ))}
                             </SidebarMenuSub>
                           </CollapsibleContent>
                         )}
