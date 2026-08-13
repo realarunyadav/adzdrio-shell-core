@@ -225,6 +225,8 @@ export const modules: ModuleDefinition[] = [
       { id: "admin-employees", label: "People & Directory", path: "/modules/admin/employees", icon: Users },
       { id: "admin-roles", label: "Roles & Permissions", path: "/modules/admin/roles", icon: Lock },
       { id: "admin-crm", label: "CRM Configuration", path: "/modules/admin/crm", icon: Hash },
+      { id: "admin-sales", label: "Sales Configuration", path: "/modules/admin/sales", icon: DollarSign },
+      { id: "admin-incentives", label: "Incentive Engine", path: "/modules/admin/incentives", icon: Trophy },
       { id: "admin-int", label: "Integration Manager", path: "/modules/admin/integrations", icon: RefreshCw },
       { id: "admin-sec", label: "Security Hub", path: "/modules/admin/security", icon: ShieldCheck },
       { id: "admin-audit", label: "Audit Center", path: "/modules/admin/audit", icon: Eye },
