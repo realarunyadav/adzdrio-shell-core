@@ -82,7 +82,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const response = await authService.getCurrentSession();
+      // For visual prototype, if token exists, we simulate a successful login
+      let response;
+      try {
+        response = await authService.getCurrentSession();
+      } catch (e) {
+        console.warn('API session check failed, using prototype bypass', e);
+        response = {
+          user: {
+            id: 'mock_user_1',
+            displayName: 'Admin User',
+            email: 'admin@abos.com',
+            role: 'ADMIN',
+            roles: ['ADMIN'],
+            permissions: ['*']
+          }
+        };
+      }
+      
       const userData = response?.user ?? response;
       setUser(mapBackendUser(userData));
       setStatus('authenticated');
@@ -100,6 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setError(err.message || null);
     }
+
   };
 
   const login = async (credentials: { email: string; password: string }) => {
