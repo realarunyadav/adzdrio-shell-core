@@ -160,8 +160,10 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
                       activation: '/app/activation/queue',
                        incentive: '/modules/admin/incentives',
                        plan: '/modules/admin/sales',
-                       legal: '/modules/admin/legal'
+                       legal: '/modules/admin/legal',
+                       duplicate: '/modules/admin/duplicates'
                     };
+
                     navigate({ to: (paths[res.resultType] || '/app') as any });
                     onOpenChange(false);
                   }}
