@@ -71,7 +71,9 @@ import { Route as AppSupportCustomersRouteImport } from './routes/app/support/cu
 import { Route as AppSupportKnowledgeBaseRouteImport } from './routes/app/support/knowledge-base'
 import { Route as AppSupportReportsRouteImport } from './routes/app/support/reports'
 import { Route as AppSupportTicketsRouteImport } from './routes/app/support/tickets'
+import { Route as ModulesAdminAuditRouteImport } from './routes/modules/admin/audit'
 import { Route as ModulesAdminEmployeesRouteImport } from './routes/modules/admin/employees'
+import { Route as ModulesAdminIntegrationsRouteImport } from './routes/modules/admin/integrations'
 import { Route as ModulesCrmAssignmentsRouteImport } from './routes/modules.crm.assignments'
 import { Route as ModulesCrmDuplicatesRouteImport } from './routes/modules.crm.duplicates'
 import { Route as ModulesCrmForecastRouteImport } from './routes/modules.crm.forecast'
@@ -392,11 +394,22 @@ const AppSupportTicketsRoute = AppSupportTicketsRouteImport.update({
   path: '/support/tickets',
   getParentRoute: () => AppRoute,
 } as any)
+const ModulesAdminAuditRoute = ModulesAdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => ModulesAdminRoute,
+} as any)
 const ModulesAdminEmployeesRoute = ModulesAdminEmployeesRouteImport.update({
   id: '/employees',
   path: '/employees',
   getParentRoute: () => ModulesAdminRoute,
 } as any)
+const ModulesAdminIntegrationsRoute =
+  ModulesAdminIntegrationsRouteImport.update({
+    id: '/integrations',
+    path: '/integrations',
+    getParentRoute: () => ModulesAdminRoute,
+  } as any)
 const ModulesCrmAssignmentsRoute = ModulesCrmAssignmentsRouteImport.update({
   id: '/assignments',
   path: '/assignments',
@@ -492,7 +505,9 @@ export interface FileRoutesByFullPath {
   '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
   '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
+  '/modules/admin/audit': typeof ModulesAdminAuditRoute
   '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
+  '/modules/admin/integrations': typeof ModulesAdminIntegrationsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -564,7 +579,9 @@ export interface FileRoutesByTo {
   '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
   '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
+  '/modules/admin/audit': typeof ModulesAdminAuditRoute
   '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
+  '/modules/admin/integrations': typeof ModulesAdminIntegrationsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -637,7 +654,9 @@ export interface FileRoutesById {
   '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
   '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
+  '/modules/admin/audit': typeof ModulesAdminAuditRoute
   '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
+  '/modules/admin/integrations': typeof ModulesAdminIntegrationsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -711,7 +730,9 @@ export interface FileRouteTypes {
     | '/app/support/knowledge-base'
     | '/app/support/reports'
     | '/app/support/tickets'
+    | '/modules/admin/audit'
     | '/modules/admin/employees'
+    | '/modules/admin/integrations'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -783,7 +804,9 @@ export interface FileRouteTypes {
     | '/app/support/knowledge-base'
     | '/app/support/reports'
     | '/app/support/tickets'
+    | '/modules/admin/audit'
     | '/modules/admin/employees'
+    | '/modules/admin/integrations'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -855,7 +878,9 @@ export interface FileRouteTypes {
     | '/app/support/knowledge-base'
     | '/app/support/reports'
     | '/app/support/tickets'
+    | '/modules/admin/audit'
     | '/modules/admin/employees'
+    | '/modules/admin/integrations'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -1337,11 +1362,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSupportTicketsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/modules/admin/audit': {
+      id: '/modules/admin/audit'
+      path: '/audit'
+      fullPath: '/modules/admin/audit'
+      preLoaderRoute: typeof ModulesAdminAuditRouteImport
+      parentRoute: typeof ModulesAdminRoute
+    }
     '/modules/admin/employees': {
       id: '/modules/admin/employees'
       path: '/employees'
       fullPath: '/modules/admin/employees'
       preLoaderRoute: typeof ModulesAdminEmployeesRouteImport
+      parentRoute: typeof ModulesAdminRoute
+    }
+    '/modules/admin/integrations': {
+      id: '/modules/admin/integrations'
+      path: '/integrations'
+      fullPath: '/modules/admin/integrations'
+      preLoaderRoute: typeof ModulesAdminIntegrationsRouteImport
       parentRoute: typeof ModulesAdminRoute
     }
     '/modules/crm/assignments': {
@@ -1485,11 +1524,15 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 )
 
 interface ModulesAdminRouteChildren {
+  ModulesAdminAuditRoute: typeof ModulesAdminAuditRoute
   ModulesAdminEmployeesRoute: typeof ModulesAdminEmployeesRoute
+  ModulesAdminIntegrationsRoute: typeof ModulesAdminIntegrationsRoute
 }
 
 const ModulesAdminRouteChildren: ModulesAdminRouteChildren = {
+  ModulesAdminAuditRoute: ModulesAdminAuditRoute,
   ModulesAdminEmployeesRoute: ModulesAdminEmployeesRoute,
+  ModulesAdminIntegrationsRoute: ModulesAdminIntegrationsRoute,
 }
 
 const ModulesAdminRouteWithChildren = ModulesAdminRoute._addFileChildren(
