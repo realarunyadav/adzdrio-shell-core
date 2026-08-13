@@ -191,9 +191,9 @@ function SimulatorEngine() {
       .find(t => volume >= t.min);
     
     if (applicableTier) {
-      const reward = applicableTier.rewardType === 'Fixed' 
-        ? applicableTier.rewardValue 
-        : (volume * applicableTier.rewardValue) / 100;
+      const reward = applicableTier.type === 'Fixed' 
+        ? applicableTier.reward 
+        : (volume * applicableTier.reward) / 100;
       
       setResults({ earned: reward, tier: applicableTier });
     } else {
@@ -257,7 +257,7 @@ function SimulatorEngine() {
             <CardContent className="p-6 text-center">
               <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Effective Rate</div>
               <div className="text-lg font-black uppercase">
-                {results.tier ? (results.tier.rewardType === 'Fixed' ? 'Fixed Reward' : `${results.tier.rewardValue}% Variable`) : "0%"}
+                {results.tier ? (results.tier.type === 'Fixed' ? 'Fixed Reward' : `${results.tier.reward}% Variable`) : "0%"}
               </div>
             </CardContent>
           </Card>
