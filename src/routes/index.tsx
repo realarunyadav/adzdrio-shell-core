@@ -132,7 +132,659 @@ function ExecutiveDashboard() {
                 <p className="text-xs opacity-60 italic">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            hi</p>
+                                            Build the complete frontend foundation and app shell for a production-grade multi-business CRM/ERP platform.
+
+IMPORTANT:
+
+This is a UI/UX prototype phase only.
+
+DO NOT implement real backend logic.
+
+DO NOT create fake API integrations.
+
+DO NOT claim that payments, authentication, HR calculations, legal signing, Leegality, calling, or external integrations are functional.
+
+Use clearly separated local/mock UI state only where necessary to demonstrate the interface.
+
+The frontend architecture must be designed so the real backend/API can be connected later without rebuilding the UI.
+
+==================================================
+
+PRODUCT STRUCTURE
+
+==================================================
+
+The application is a multi-business CRM/ERP platform.
+
+The hierarchy is:
+
+Owner
+
+→ Business / Brand
+
+→ Role
+
+→ Dashboard
+
+→ Modules
+
+→ Permissions
+
+The system must support multiple businesses/brands in the future.
+
+Do NOT hard-code the entire UI specifically for one business.
+
+==================================================
+
+DESIGN DIRECTION
+
+==================================================
+
+Create a modern, premium, professional SaaS CRM interface.
+
+It should feel like a serious production business platform, not a generic admin template.
+
+Design priorities:
+
+- Clean
+
+- Premium
+
+- Professional
+
+- High information density without feeling crowded
+
+- Excellent hierarchy
+
+- Fast navigation
+
+- Clear actions
+
+- Consistent spacing
+
+- Excellent typography
+
+- Strong table design
+
+- Excellent form UX
+
+- Subtle animations
+
+- Responsive
+
+- Accessible
+
+- Desktop-first, but fully responsive on tablet/mobile
+
+Avoid:
+
+- Excessive gradients
+
+- Huge decorative graphics
+
+- Overly rounded cartoon-style cards
+
+- Excessive shadows
+
+- Unnecessary animations
+
+- Generic template appearance
+
+- Fake charts with meaningless decoration
+
+==================================================
+
+APP SHELL
+
+==================================================
+
+Create:
+
+1. Left sidebar
+
+2. Top header
+
+3. Main content area
+
+4. Breadcrumbs where useful
+
+5. Global search
+
+6. Notifications
+
+7. User/profile menu
+
+8. Business switcher
+
+9. Responsive mobile navigation
+
+Sidebar must support:
+
+- Collapsed state
+
+- Expanded state
+
+- Active navigation state
+
+- Nested navigation
+
+- Permission-aware visibility
+
+- Tooltips when collapsed
+
+==================================================
+
+SIDEBAR INFORMATION ARCHITECTURE
+
+==================================================
+
+Create the navigation structure visually, but do NOT implement real permission enforcement yet.
+
+Main navigation:
+
+Dashboard
+
+CRM
+
+  - Lead Pool
+
+  - My Leads
+
+  - Customers
+
+  - Follow-ups
+
+  - Callbacks
+
+Sales
+
+  - Sales
+
+  - Plans
+
+  - Payment Links
+
+  - Invoices
+
+Support
+
+  - Conversations
+
+  - Calls
+
+  - Video Calls
+
+Activation
+
+Finance
+
+  - Payments
+
+  - Refunds
+
+  - Expenses
+
+  - Payroll
+
+HR
+
+  - Employees
+
+  - Attendance
+
+  - Leave
+
+  - Salary
+
+  - Salary Slips
+
+  - Incentives
+
+  - Referrals
+
+Reports
+
+Documents
+
+Projects
+
+Inventory
+
+Admin Studio
+
+  - Business
+
+  - Employees
+
+  - Roles & Permissions
+
+  - CRM Fields
+
+  - Legal Templates
+
+  - Device Settings
+
+  - Incentive Rules
+
+  - Notifications
+
+  - Integrations
+
+  - Security
+
+  - Audit
+
+  - Data Center
+
+  - System Settings
+
+==================================================
+
+HEADER
+
+==================================================
+
+Create a premium top header containing:
+
+- Mobile menu
+
+- Breadcrumb
+
+- Global search
+
+- Business switcher
+
+- Notifications
+
+- Help/support icon
+
+- User avatar
+
+- User name
+
+- Role
+
+- Profile menu
+
+Profile menu:
+
+- My Profile
+
+- Settings
+
+- Security
+
+- Lock Workspace
+
+- Logout
+
+==================================================
+
+GLOBAL SEARCH
+
+==================================================
+
+Create the UI for global search.
+
+Search categories visually:
+
+- Customers
+
+- Leads
+
+- Employees
+
+- Sales
+
+- Transactions
+
+- Invoices
+
+- Documents
+
+Include:
+
+- Search input
+
+- Keyboard shortcut indicator
+
+- Recent searches
+
+- Search suggestions
+
+- Categorized results
+
+- Empty state
+
+- No-result state
+
+Do not connect to a real backend.
+
+==================================================
+
+NOTIFICATIONS
+
+==================================================
+
+Create a notification center UI.
+
+Categories:
+
+- Sales
+
+- CRM
+
+- Follow-up
+
+- Callback
+
+- Payment
+
+- HR
+
+- Legal
+
+- Security
+
+- System
+
+Include:
+
+- Unread count
+
+- Read/unread states
+
+- Mark as read
+
+- Mark all as read
+
+- Notification grouping
+
+- Timestamp
+
+- Priority indicator
+
+==================================================
+
+BUSINESS SWITCHER
+
+==================================================
+
+Create a business/brand switcher.
+
+Example UI data only:
+
+Business A
+
+Business B
+
+Business C
+
+Include:
+
+- Current business
+
+- Business logo/avatar
+
+- Search
+
+- Recent businesses
+
+- Switch confirmation state
+
+Do not hard-code real business names into the architecture.
+
+==================================================
+
+GLOBAL UI COMPONENTS
+
+==================================================
+
+Create reusable components for:
+
+- Buttons
+
+- Icon buttons
+
+- Inputs
+
+- Search inputs
+
+- Select
+
+- Multi-select
+
+- Date picker
+
+- Date range picker
+
+- Phone input
+
+- Currency input
+
+- Textarea
+
+- Checkbox
+
+- Radio
+
+- Toggle
+
+- Tabs
+
+- Badges
+
+- Status pills
+
+- Cards
+
+- Stat cards
+
+- Tables
+
+- Pagination
+
+- Filters
+
+- Dropdown menus
+
+- Modals
+
+- Drawers
+
+- Confirmation dialogs
+
+- Toasts
+
+- Tooltips
+
+- Skeleton loaders
+
+- Empty states
+
+- Error states
+
+- Success states
+
+- Permission denied state
+
+- File upload
+
+- Avatar
+
+- Timeline
+
+- Activity feed
+
+==================================================
+
+DATA TABLE DESIGN
+
+==================================================
+
+Create a reusable professional table system.
+
+Requirements:
+
+- Sticky header
+
+- Sortable columns
+
+- Search
+
+- Filters
+
+- Pagination
+
+- Row selection
+
+- Bulk actions
+
+- Column visibility
+
+- Density control
+
+- Export button UI
+
+- Empty state
+
+- Loading skeleton
+
+- Error state
+
+- Responsive behavior
+
+==================================================
+
+FORMS
+
+==================================================
+
+Create a reusable form system.
+
+Every form should support:
+
+- Required field indicator
+
+- Optional field indicator
+
+- Validation message
+
+- Disabled state
+
+- Loading state
+
+- Success state
+
+- Error state
+
+- Unsaved changes warning
+
+- Cancel confirmation where necessary
+
+==================================================
+
+RESPONSIVE
+
+==================================================
+
+Desktop:
+
+Full sidebar + header + content.
+
+Tablet:
+
+Compact navigation and responsive tables.
+
+Mobile:
+
+Bottom/slide navigation where appropriate.
+
+Cards instead of wide tables when necessary.
+
+Maintain usability without simply shrinking desktop UI.
+
+==================================================
+
+UI STATES
+
+==================================================
+
+Create reusable examples of:
+
+1. Loading
+
+2. Empty
+
+3. Populated
+
+4. Error
+
+5. Success
+
+6. Disabled
+
+7. Permission denied
+
+8. Offline/unavailable
+
+9. Confirmation
+
+10. Destructive action confirmation
+
+==================================================
+
+IMPORTANT ARCHITECTURE RULE
+
+==================================================
+
+Separate UI components from business logic.
+
+Use mock/local data only for visual demonstration.
+
+Create clean frontend service/API abstraction boundaries so later we can replace mock data with real backend APIs without redesigning components.
+
+Do NOT put business calculations, payment verification, salary calculation, legal signing, permissions, or security logic inside visual components.
+
+==================================================
+
+DELIVERABLE
+
+==================================================
+
+At the end of this task, I should have:
+
+- Complete application shell
+
+- Professional sidebar
+
+- Header
+
+- Global search UI
+
+- Business switcher
+
+- Notification center
+
+- Profile menu
+
+- Responsive layout
+
+- Reusable design system
+
+- Reusable table system
+
+- Reusable form system
+
+- Reusable modal/drawer system
+
+- Loading/empty/error/success/permission states
+
+- Proper frontend component structure
+
+Do NOT build all CRM modules yet.
+
+First make the foundation visually excellent and production-quality.</p>
               </div>
             </SectionCard>
             <SectionCard title="Sales Pipeline" className="h-[320px]">
