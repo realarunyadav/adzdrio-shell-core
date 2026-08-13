@@ -79,6 +79,7 @@ import { Route as ModulesAdminDataRouteImport } from './routes/modules/admin/dat
 import { Route as ModulesAdminEmployeesRouteImport } from './routes/modules/admin/employees'
 import { Route as ModulesAdminIncentivesRouteImport } from './routes/modules/admin/incentives'
 import { Route as ModulesAdminIntegrationsRouteImport } from './routes/modules/admin/integrations'
+import { Route as ModulesAdminLegalRouteImport } from './routes/modules.admin.legal'
 import { Route as ModulesAdminModulesRouteImport } from './routes/modules/admin/modules'
 import { Route as ModulesAdminPoliciesRouteImport } from './routes/modules/admin/policies'
 import { Route as ModulesAdminRolesRouteImport } from './routes/modules/admin/roles'
@@ -447,6 +448,11 @@ const ModulesAdminIntegrationsRoute =
     path: '/integrations',
     getParentRoute: () => ModulesAdminRoute,
   } as any)
+const ModulesAdminLegalRoute = ModulesAdminLegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => ModulesAdminRoute,
+} as any)
 const ModulesAdminModulesRoute = ModulesAdminModulesRouteImport.update({
   id: '/modules',
   path: '/modules',
@@ -585,6 +591,7 @@ export interface FileRoutesByFullPath {
   '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
   '/modules/admin/incentives': typeof ModulesAdminIncentivesRoute
   '/modules/admin/integrations': typeof ModulesAdminIntegrationsRoute
+  '/modules/admin/legal': typeof ModulesAdminLegalRoute
   '/modules/admin/modules': typeof ModulesAdminModulesRoute
   '/modules/admin/policies': typeof ModulesAdminPoliciesRoute
   '/modules/admin/roles': typeof ModulesAdminRolesRoute
@@ -671,6 +678,7 @@ export interface FileRoutesByTo {
   '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
   '/modules/admin/incentives': typeof ModulesAdminIncentivesRoute
   '/modules/admin/integrations': typeof ModulesAdminIntegrationsRoute
+  '/modules/admin/legal': typeof ModulesAdminLegalRoute
   '/modules/admin/modules': typeof ModulesAdminModulesRoute
   '/modules/admin/policies': typeof ModulesAdminPoliciesRoute
   '/modules/admin/roles': typeof ModulesAdminRolesRoute
@@ -758,6 +766,7 @@ export interface FileRoutesById {
   '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
   '/modules/admin/incentives': typeof ModulesAdminIncentivesRoute
   '/modules/admin/integrations': typeof ModulesAdminIntegrationsRoute
+  '/modules/admin/legal': typeof ModulesAdminLegalRoute
   '/modules/admin/modules': typeof ModulesAdminModulesRoute
   '/modules/admin/policies': typeof ModulesAdminPoliciesRoute
   '/modules/admin/roles': typeof ModulesAdminRolesRoute
@@ -846,6 +855,7 @@ export interface FileRouteTypes {
     | '/modules/admin/employees'
     | '/modules/admin/incentives'
     | '/modules/admin/integrations'
+    | '/modules/admin/legal'
     | '/modules/admin/modules'
     | '/modules/admin/policies'
     | '/modules/admin/roles'
@@ -932,6 +942,7 @@ export interface FileRouteTypes {
     | '/modules/admin/employees'
     | '/modules/admin/incentives'
     | '/modules/admin/integrations'
+    | '/modules/admin/legal'
     | '/modules/admin/modules'
     | '/modules/admin/policies'
     | '/modules/admin/roles'
@@ -1018,6 +1029,7 @@ export interface FileRouteTypes {
     | '/modules/admin/employees'
     | '/modules/admin/incentives'
     | '/modules/admin/integrations'
+    | '/modules/admin/legal'
     | '/modules/admin/modules'
     | '/modules/admin/policies'
     | '/modules/admin/roles'
@@ -1562,6 +1574,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesAdminIntegrationsRouteImport
       parentRoute: typeof ModulesAdminRoute
     }
+    '/modules/admin/legal': {
+      id: '/modules/admin/legal'
+      path: '/legal'
+      fullPath: '/modules/admin/legal'
+      preLoaderRoute: typeof ModulesAdminLegalRouteImport
+      parentRoute: typeof ModulesAdminRoute
+    }
     '/modules/admin/modules': {
       id: '/modules/admin/modules'
       path: '/modules'
@@ -1760,6 +1779,7 @@ interface ModulesAdminRouteChildren {
   ModulesAdminEmployeesRoute: typeof ModulesAdminEmployeesRoute
   ModulesAdminIncentivesRoute: typeof ModulesAdminIncentivesRoute
   ModulesAdminIntegrationsRoute: typeof ModulesAdminIntegrationsRoute
+  ModulesAdminLegalRoute: typeof ModulesAdminLegalRoute
   ModulesAdminModulesRoute: typeof ModulesAdminModulesRoute
   ModulesAdminPoliciesRoute: typeof ModulesAdminPoliciesRoute
   ModulesAdminRolesRoute: typeof ModulesAdminRolesRoute
@@ -1778,6 +1798,7 @@ const ModulesAdminRouteChildren: ModulesAdminRouteChildren = {
   ModulesAdminEmployeesRoute: ModulesAdminEmployeesRoute,
   ModulesAdminIncentivesRoute: ModulesAdminIncentivesRoute,
   ModulesAdminIntegrationsRoute: ModulesAdminIntegrationsRoute,
+  ModulesAdminLegalRoute: ModulesAdminLegalRoute,
   ModulesAdminModulesRoute: ModulesAdminModulesRoute,
   ModulesAdminPoliciesRoute: ModulesAdminPoliciesRoute,
   ModulesAdminRolesRoute: ModulesAdminRolesRoute,
