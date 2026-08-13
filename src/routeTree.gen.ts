@@ -61,6 +61,7 @@ import { Route as AppSalesPaymentLinksRouteImport } from './routes/app/sales/pay
 import { Route as AppSalesPaymentsRouteImport } from './routes/app/sales/payments'
 import { Route as AppSalesPlansRouteImport } from './routes/app/sales/plans'
 import { Route as AppSalesReportsRouteImport } from './routes/app/sales/reports'
+import { Route as AppSupportIndexRouteImport } from './routes/app/support/index'
 import { Route as ModulesCrmAssignmentsRouteImport } from './routes/modules.crm.assignments'
 import { Route as ModulesCrmDuplicatesRouteImport } from './routes/modules.crm.duplicates'
 import { Route as ModulesCrmForecastRouteImport } from './routes/modules.crm.forecast'
@@ -330,6 +331,11 @@ const AppSalesReportsRoute = AppSalesReportsRouteImport.update({
   path: '/sales/reports',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSupportIndexRoute = AppSupportIndexRouteImport.update({
+  id: '/support/',
+  path: '/support/',
+  getParentRoute: () => AppRoute,
+} as any)
 const ModulesCrmAssignmentsRoute = ModulesCrmAssignmentsRouteImport.update({
   id: '/assignments',
   path: '/assignments',
@@ -427,6 +433,7 @@ export interface FileRoutesByFullPath {
   '/app/crm/': typeof AppCrmIndexRoute
   '/app/finance/': typeof AppFinanceIndexRoute
   '/app/sales/': typeof AppSalesIndexRoute
+  '/app/support/': typeof AppSupportIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -488,6 +495,7 @@ export interface FileRoutesByTo {
   '/app/crm': typeof AppCrmIndexRoute
   '/app/finance': typeof AppFinanceIndexRoute
   '/app/sales': typeof AppSalesIndexRoute
+  '/app/support': typeof AppSupportIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -550,6 +558,7 @@ export interface FileRoutesById {
   '/app/crm/': typeof AppCrmIndexRoute
   '/app/finance/': typeof AppFinanceIndexRoute
   '/app/sales/': typeof AppSalesIndexRoute
+  '/app/support/': typeof AppSupportIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -613,6 +622,7 @@ export interface FileRouteTypes {
     | '/app/crm/'
     | '/app/finance/'
     | '/app/sales/'
+    | '/app/support/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -674,6 +684,7 @@ export interface FileRouteTypes {
     | '/app/crm'
     | '/app/finance'
     | '/app/sales'
+    | '/app/support'
   id:
     | '__root__'
     | '/'
@@ -735,6 +746,7 @@ export interface FileRouteTypes {
     | '/app/crm/'
     | '/app/finance/'
     | '/app/sales/'
+    | '/app/support/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1134,6 +1146,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSalesReportsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/support/': {
+      id: '/app/support/'
+      path: '/support'
+      fullPath: '/app/support/'
+      preLoaderRoute: typeof AppSupportIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/modules/crm/assignments': {
       id: '/modules/crm/assignments'
       path: '/assignments'
@@ -1210,6 +1229,7 @@ interface AppRouteChildren {
   AppCrmIndexRoute: typeof AppCrmIndexRoute
   AppFinanceIndexRoute: typeof AppFinanceIndexRoute
   AppSalesIndexRoute: typeof AppSalesIndexRoute
+  AppSupportIndexRoute: typeof AppSupportIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -1236,6 +1256,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCrmIndexRoute: AppCrmIndexRoute,
   AppFinanceIndexRoute: AppFinanceIndexRoute,
   AppSalesIndexRoute: AppSalesIndexRoute,
+  AppSupportIndexRoute: AppSupportIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
