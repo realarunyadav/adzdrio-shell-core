@@ -447,10 +447,11 @@ export interface DemoPlan {
   name: string;
   business: string;
   price: number;
-  status: 'Active' | 'Inactive';
+  status: 'Active' | 'Inactive' | 'Draft';
   created: string;
   updated: string;
   activeSales: number;
+  features?: string[];
 }
 
 export interface DemoPaymentLink {
