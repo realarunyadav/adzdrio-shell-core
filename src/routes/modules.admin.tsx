@@ -38,13 +38,9 @@ function AdminStudioModule() {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
-  if (!isBaseRoute) {
-    return (
-      <div className="p-6 pb-20 max-w-[1600px] mx-auto animate-in fade-in duration-500">
-        <Outlet />
-      </div>
-    );
-  }
+  // Remove the isBaseRoute shortcut because we want Admin Studio's tabs
+  // to persist across all sub-routes. We'll handle the content in the main return.
+
 
   return (
     <div className="flex flex-col gap-6 p-6 pb-20 max-w-[1600px] mx-auto animate-in fade-in duration-500">
