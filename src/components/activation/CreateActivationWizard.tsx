@@ -77,7 +77,49 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
   const handleBack = () => setStep(s => Math.max(s - 1, 1));
   const handleClose = () => {
     onOpenChange(false);
-    setStep(1);
+    setTimeout(() => {
+      setStep(1);
+      setSelectedCustomer(null);
+      setSelectedSale(null);
+      setPaymentAcknowledged(false);
+      setSelectedEmployee(null);
+      setPriority('Medium');
+      setActivationDate('2026-08-13T12:00');
+      setNotes('');
+      setSearchQuery("");
+    }, 300);
+  };
+
+  const handleCreate = () => {
+    // Mock creating the activation and updating the shared state
+    const newActivation = {
+      id: `ACT-${8800 + demoActivations.length + 1}`,
+      customerId: selectedCustomer.id,
+      customerName: selectedCustomer.name,
+      businessId: selectedCustomer.business === 'Acme India' ? 'biz-a' : selectedCustomer.business === 'Vertex Tech' ? 'biz-b' : 'biz-c',
+      businessName: selectedCustomer.business,
+      subscriptionId: `SUB-${4400 + demoActivations.length + 1}`,
+      planName: selectedSale.planName,
+      saleId: selectedSale.id,
+      paymentId: `PAY-${9900 + demoActivations.length + 1}`,
+      paymentStatus: selectedSale.paymentStatus,
+      status: selectedSale.paymentStatus === 'Paid' ? 'Pending Assignment' : 'Pending Payment Verification',
+      priority: priority,
+      assignedTo: selectedEmployee.id,
+      assignedToName: selectedEmployee.name,
+      createdAt: new Date().toISOString(),
+      requestedAt: activationDate,
+      slaDueAt: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+      createdBy: "Current User",
+      lastUpdatedAt: new Date().toISOString(),
+      notes: notes
+    };
+
+    // In a real app we'd mutate the state here
+    // For this prototype we push to the mock array
+    demoActivations.unshift(newActivation as any);
+    
+    handleClose();
   };
 
   const renderStep = () => {
