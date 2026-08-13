@@ -104,7 +104,10 @@ export const demoLeads: DemoLead[] = [
     priority: "High",
     addedDate: "2026-08-10T10:30:00Z",
     lastActivity: "2026-08-12T14:20:00Z",
-    notes: "Interested in Enterprise plan. Needs a demo."
+    notes: "Interested in Enterprise plan. Needs a demo.",
+    nextFollowUp: "2026-08-13T10:00:00Z",
+    followUpType: "Call",
+    followUpStatus: "Pending"
   },
   {
     id: "lead-2",
@@ -119,7 +122,10 @@ export const demoLeads: DemoLead[] = [
     lastActivity: "2026-08-13T11:45:00Z",
     assignedTo: "user-1",
     assignedToName: "Priya Nair",
-    notes: "Follow-up scheduled for next week."
+    notes: "Follow-up scheduled for next week.",
+    nextFollowUp: "2026-08-20T11:00:00Z",
+    followUpType: "Meeting",
+    followUpStatus: "Pending"
   },
   {
     id: "lead-3",
@@ -128,14 +134,17 @@ export const demoLeads: DemoLead[] = [
     phone: "+91 76543 21098",
     source: "Referral",
     business: "Blue Harbour",
-    status: "Interested",
+    status: "Converted",
     priority: "High",
     addedDate: "2026-08-09T16:45:00Z",
     lastActivity: "2026-08-13T09:30:00Z",
     assignedTo: "user-1",
     assignedToName: "Priya Nair",
     nextFollowUp: "2026-08-15T10:00:00Z",
-    notes: "High intent lead. Budget approved."
+    notes: "High intent lead. Budget approved.",
+    totalSales: "₹ 1.2L",
+    pendingPayment: "₹ 0",
+    customerSince: "2026-08-12"
   },
   {
     id: "lead-4",
@@ -150,7 +159,10 @@ export const demoLeads: DemoLead[] = [
     lastActivity: "2026-08-12T16:30:00Z",
     assignedTo: "user-1",
     assignedToName: "Priya Nair",
-    callbackDate: "2026-08-14T15:00:00Z",
+    callbackDate: "2026-08-13T15:00:00Z",
+    callbackReason: "Pricing Discussion",
+    callbackStatus: "Requested",
+    requestedBy: "Customer",
     notes: "Discussing pricing tiers."
   },
   {
@@ -166,7 +178,10 @@ export const demoLeads: DemoLead[] = [
     lastActivity: "2026-08-13T12:00:00Z",
     assignedTo: "user-2",
     assignedToName: "Rahul Menon",
-    notes: "Sent brochure. Waiting for response."
+    notes: "Sent brochure. Waiting for response.",
+    nextFollowUp: "2026-08-12T09:00:00Z",
+    followUpType: "Email",
+    followUpStatus: "Overdue"
   },
   {
     id: "lead-6",
@@ -175,11 +190,79 @@ export const demoLeads: DemoLead[] = [
     phone: "+91 77665 54433",
     source: "Webinar",
     business: "Acme India",
-    status: "New",
+    status: "Converted",
     priority: "Medium",
     addedDate: "2026-08-12T15:20:00Z",
     lastActivity: "2026-08-12T15:20:00Z",
-    notes: "New inquiry from recent webinar."
+    notes: "New inquiry from recent webinar.",
+    totalSales: "₹ 85K",
+    pendingPayment: "₹ 15K",
+    customerSince: "2026-08-13"
+  },
+  {
+    id: "lead-7",
+    name: "Rahul Khanna",
+    email: "rahul.k@global.com",
+    phone: "+91 99000 11223",
+    source: "LinkedIn",
+    business: "Acme India",
+    status: "Converted",
+    priority: "High",
+    addedDate: "2026-07-20T10:00:00Z",
+    lastActivity: "2026-08-10T11:00:00Z",
+    assignedTo: "user-1",
+    assignedToName: "Priya Nair",
+    totalSales: "₹ 4.5L",
+    pendingPayment: "₹ 50K",
+    customerSince: "2026-07-25"
+  },
+  {
+    id: "lead-8",
+    name: "Sneha Patel",
+    email: "sneha.p@startup.io",
+    phone: "+91 88990 01122",
+    source: "Google Search",
+    business: "Vertex Tech",
+    status: "Converted",
+    priority: "Medium",
+    addedDate: "2026-08-01T14:30:00Z",
+    lastActivity: "2026-08-11T16:00:00Z",
+    assignedTo: "user-2",
+    assignedToName: "Rahul Menon",
+    totalSales: "₹ 2.1L",
+    pendingPayment: "₹ 0",
+    customerSince: "2026-08-05"
+  },
+  {
+    id: "lead-9",
+    name: "Kabir Das",
+    email: "kabir.das@edu.in",
+    phone: "+91 77889 90011",
+    source: "Referral",
+    business: "Blue Harbour",
+    status: "Interested",
+    priority: "Low",
+    addedDate: "2026-08-13T09:00:00Z",
+    lastActivity: "2026-08-13T09:15:00Z",
+    callbackDate: "2026-08-14T10:00:00Z",
+    callbackReason: "Feature Inquiry",
+    callbackStatus: "Requested",
+    requestedBy: "System"
+  },
+  {
+    id: "lead-10",
+    name: "Meera Reddy",
+    email: "meera.r@health.com",
+    phone: "+91 66778 89900",
+    source: "Direct",
+    business: "Acme India",
+    status: "Follow-up",
+    priority: "Medium",
+    addedDate: "2026-08-05T10:00:00Z",
+    lastActivity: "2026-08-10T15:00:00Z",
+    nextFollowUp: "2026-08-11T14:00:00Z",
+    followUpType: "Call",
+    followUpStatus: "Completed"
   }
 ];
 
