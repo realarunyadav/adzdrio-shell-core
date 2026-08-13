@@ -46,6 +46,7 @@ import { Route as AppCrmLeadPoolRouteImport } from './routes/app/crm/lead-pool'
 import { Route as AppCrmMyLeadsRouteImport } from './routes/app/crm/my-leads'
 import { Route as AppFinanceIndexRouteImport } from './routes/app/finance/index'
 import { Route as AppFinancePaymentsRouteImport } from './routes/app/finance/payments'
+import { Route as AppFinanceRefundsRouteImport } from './routes/app/finance/refunds'
 import { Route as AppFinanceTransactionsRouteImport } from './routes/app/finance/transactions'
 import { Route as AppSalesIndexRouteImport } from './routes/app/sales/index'
 import { Route as AppSalesDealsRouteImport } from './routes/app/sales/deals'
@@ -247,6 +248,11 @@ const AppFinancePaymentsRoute = AppFinancePaymentsRouteImport.update({
   path: '/finance/payments',
   getParentRoute: () => AppRoute,
 } as any)
+const AppFinanceRefundsRoute = AppFinanceRefundsRouteImport.update({
+  id: '/finance/refunds',
+  path: '/finance/refunds',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppFinanceTransactionsRoute = AppFinanceTransactionsRouteImport.update({
   id: '/finance/transactions',
   path: '/finance/transactions',
@@ -360,6 +366,7 @@ export interface FileRoutesByFullPath {
   '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
   '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
   '/app/finance/payments': typeof AppFinancePaymentsRoute
+  '/app/finance/refunds': typeof AppFinanceRefundsRoute
   '/app/finance/transactions': typeof AppFinanceTransactionsRoute
   '/app/sales/deals': typeof AppSalesDealsRoute
   '/app/sales/invoices': typeof AppSalesInvoicesRoute
@@ -414,6 +421,7 @@ export interface FileRoutesByTo {
   '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
   '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
   '/app/finance/payments': typeof AppFinancePaymentsRoute
+  '/app/finance/refunds': typeof AppFinanceRefundsRoute
   '/app/finance/transactions': typeof AppFinanceTransactionsRoute
   '/app/sales/deals': typeof AppSalesDealsRoute
   '/app/sales/invoices': typeof AppSalesInvoicesRoute
@@ -469,6 +477,7 @@ export interface FileRoutesById {
   '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
   '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
   '/app/finance/payments': typeof AppFinancePaymentsRoute
+  '/app/finance/refunds': typeof AppFinanceRefundsRoute
   '/app/finance/transactions': typeof AppFinanceTransactionsRoute
   '/app/sales/deals': typeof AppSalesDealsRoute
   '/app/sales/invoices': typeof AppSalesInvoicesRoute
@@ -525,6 +534,7 @@ export interface FileRouteTypes {
     | '/app/crm/lead-pool'
     | '/app/crm/my-leads'
     | '/app/finance/payments'
+    | '/app/finance/refunds'
     | '/app/finance/transactions'
     | '/app/sales/deals'
     | '/app/sales/invoices'
@@ -579,6 +589,7 @@ export interface FileRouteTypes {
     | '/app/crm/lead-pool'
     | '/app/crm/my-leads'
     | '/app/finance/payments'
+    | '/app/finance/refunds'
     | '/app/finance/transactions'
     | '/app/sales/deals'
     | '/app/sales/invoices'
@@ -633,6 +644,7 @@ export interface FileRouteTypes {
     | '/app/crm/lead-pool'
     | '/app/crm/my-leads'
     | '/app/finance/payments'
+    | '/app/finance/refunds'
     | '/app/finance/transactions'
     | '/app/sales/deals'
     | '/app/sales/invoices'
@@ -944,6 +956,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppFinancePaymentsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/finance/refunds': {
+      id: '/app/finance/refunds'
+      path: '/finance/refunds'
+      fullPath: '/app/finance/refunds'
+      preLoaderRoute: typeof AppFinanceRefundsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/finance/transactions': {
       id: '/app/finance/transactions'
       path: '/finance/transactions'
@@ -1059,6 +1078,7 @@ interface AppRouteChildren {
   AppCrmLeadPoolRoute: typeof AppCrmLeadPoolRoute
   AppCrmMyLeadsRoute: typeof AppCrmMyLeadsRoute
   AppFinancePaymentsRoute: typeof AppFinancePaymentsRoute
+  AppFinanceRefundsRoute: typeof AppFinanceRefundsRoute
   AppFinanceTransactionsRoute: typeof AppFinanceTransactionsRoute
   AppSalesDealsRoute: typeof AppSalesDealsRoute
   AppSalesInvoicesRoute: typeof AppSalesInvoicesRoute
@@ -1078,6 +1098,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCrmLeadPoolRoute: AppCrmLeadPoolRoute,
   AppCrmMyLeadsRoute: AppCrmMyLeadsRoute,
   AppFinancePaymentsRoute: AppFinancePaymentsRoute,
+  AppFinanceRefundsRoute: AppFinanceRefundsRoute,
   AppFinanceTransactionsRoute: AppFinanceTransactionsRoute,
   AppSalesDealsRoute: AppSalesDealsRoute,
   AppSalesInvoicesRoute: AppSalesInvoicesRoute,
