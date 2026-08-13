@@ -50,7 +50,15 @@ export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModal
         version: rule.version,
         description: rule.description,
         effectiveFrom: rule.effectiveFrom,
-        tiers: rule.tiers.map(t => ({ min: t.min, reward: t.reward, type: t.type, label: t.label }))
+        tiers: rule.tiers.map(t => {
+          const tier: { min: number; reward: number; type: "Fixed" | "Percentage"; label?: string } = {
+            min: t.min,
+            reward: t.reward,
+            type: t.type
+          };
+          if (t.label) tier.label = t.label;
+          return tier;
+        })
       });
     } else {
       setFormData(initialData);
@@ -160,7 +168,7 @@ export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModal
                     </Badge>
                     <Input 
                       value={tier.label || ""} 
-                      onChange={e => updateTier(idx, 'label', e.target.value)}
+                      onChange={e => updateTier(idx, 'label', e.target.value || undefined)}
                       placeholder="Label (optional)"
                       className="bg-transparent border-none h-6 p-0 text-[10px] font-black uppercase tracking-widest focus-visible:ring-0"
                     />
