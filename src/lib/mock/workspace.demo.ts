@@ -587,3 +587,79 @@ export const demoSalesDocumentTemplate = {
   content: "This document outlines the terms of your purchase from {{business_name}}.",
   variables: ["business_name", "customer_name", "plan_name", "amount", "date"]
 };
+
+export interface DemoTransaction {
+  id: string;
+  type: 'Payment' | 'Refund' | 'Adjustment' | 'Other';
+  customerName: string;
+  saleId: string;
+  business: string;
+  amount: number;
+  method: string;
+  status: 'Completed' | 'Pending' | 'Failed';
+  date: string;
+  reference: string;
+}
+
+export interface DemoRefund {
+  id: string;
+  paymentId: string;
+  customerName: string;
+  saleId: string;
+  amount: number;
+  reason: string;
+  status: 'Requested' | 'Processing' | 'Completed' | 'Rejected';
+  requestedBy: string;
+  requestedDate: string;
+  processedDate?: string;
+}
+
+export interface DemoExpense {
+  id: string;
+  category: 'Operations' | 'Marketing' | 'Software' | 'Office' | 'Payroll' | 'Travel' | 'Other';
+  description: string;
+  amount: number;
+  business: string;
+  submittedBy: string;
+  date: string;
+  status: 'Pending' | 'Approved' | 'Rejected';
+  approvedBy?: string;
+}
+
+export interface DemoPayrollRecord {
+  id: string;
+  employeeName: string;
+  employeeId: string;
+  role: string;
+  business: string;
+  baseSalary: number;
+  incentive: number;
+  deductions: number;
+  netSalary: number;
+  status: 'Draft' | 'Processing' | 'Paid';
+}
+
+export const demoTransactions: DemoTransaction[] = [
+  { id: "TXN-5001", type: 'Payment', customerName: "Rahul Verma", saleId: "SALE-1001", business: "Acme India", amount: 11000, method: "UPI", status: 'Completed', date: "2024-08-01T14:25:00Z", reference: "RRR123456789" },
+  { id: "TXN-5002", type: 'Refund', customerName: "Amit Patel", saleId: "SALE-995", business: "Vertex Tech", amount: 2500, method: "Bank Transfer", status: 'Completed', date: "2024-08-05T10:00:00Z", reference: "REF990011" },
+];
+
+export const demoRefunds: DemoRefund[] = [
+  { id: "RFD-2001", paymentId: "PAY-9000", customerName: "Amit Patel", saleId: "SALE-995", amount: 2500, reason: "Service cancellation", status: 'Completed', requestedBy: "Sonia Kapoor", requestedDate: "2024-08-04", processedDate: "2024-08-05" },
+  { id: "RFD-2002", paymentId: "PAY-9901", customerName: "Rahul Verma", saleId: "SALE-1001", amount: 1000, reason: "Duplicate charge", status: 'Requested', requestedBy: "Ankit Singh", requestedDate: "2024-08-12" },
+];
+
+export const demoExpenses: DemoExpense[] = [
+  { id: "EXP-3001", category: 'Software', description: "AWS Cloud Services", amount: 45000, business: "Platform", submittedBy: "Tech Admin", date: "2024-08-01", status: 'Approved', approvedBy: "Owner" },
+  { id: "EXP-3002", category: 'Operations', description: "Office Rent - Mumbai", amount: 125000, business: "Acme India", submittedBy: "Admin", date: "2024-08-02", status: 'Pending' },
+];
+
+export const demoPayroll: DemoPayrollRecord[] = [
+  { id: "PAYROLL-001", employeeName: "Ankit Singh", employeeId: "EMP-001", role: "Sales Manager", business: "Acme India", baseSalary: 45000, incentive: 12500, deductions: 2500, netSalary: 55000, status: 'Paid' },
+  { id: "PAYROLL-002", employeeName: "Sonia Kapoor", employeeId: "EMP-002", role: "Sales Executive", business: "Vertex Tech", baseSalary: 35000, incentive: 8200, deductions: 1800, netSalary: 41400, status: 'Draft' },
+];
+
+export const demoReconciliation = [
+  { id: "REC-4001", saleId: "SALE-1001", paymentId: "PAY-9901", invoiceId: "INV-2024-001", expectedAmount: 11000, receivedAmount: 11000, difference: 0, status: 'Matched', date: "2024-08-01" },
+  { id: "REC-4002", saleId: "SALE-1050", paymentId: "PAY-9950", invoiceId: "INV-2024-050", expectedAmount: 15000, receivedAmount: 14500, difference: 500, status: 'Mismatch', date: "2024-08-10" },
+];
