@@ -65,6 +65,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GlobalSearchOverlay } from "@/components/shared/GlobalSearchOverlay";
+
 
 export const Route = createFileRoute("/app")({
   head: () => ({
