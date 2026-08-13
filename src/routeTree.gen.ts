@@ -75,7 +75,7 @@ import { Route as ModulesAdminAuditRouteImport } from './routes/modules/admin/au
 import { Route as ModulesAdminBrandingRouteImport } from './routes/modules/admin/branding'
 import { Route as ModulesAdminBusinessRouteImport } from './routes/modules/admin/business'
 import { Route as ModulesAdminCrmRouteImport } from './routes/modules/admin/crm'
-import { Route as ModulesAdminDataRouteImport } from './routes/modules/admin/data'
+import { Route as ModulesAdminDataRouteImport } from './routes/modules.admin.data'
 import { Route as ModulesAdminDuplicatesRouteImport } from './routes/modules.admin.duplicates'
 import { Route as ModulesAdminEmployeesRouteImport } from './routes/modules/admin/employees'
 import { Route as ModulesAdminIncentivesRouteImport } from './routes/modules/admin/incentives'

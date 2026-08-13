@@ -82,7 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      // For visual prototype, if token exists, we simulate a successful login
+      // Standard session check
       let response;
       try {
         response = await authService.getCurrentSession();
@@ -99,6 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
         };
       }
+
       
       const userData = response?.user ?? response;
       setUser(mapBackendUser(userData));

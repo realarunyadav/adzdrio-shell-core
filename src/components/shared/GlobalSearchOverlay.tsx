@@ -17,8 +17,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { demoEmployees, demoBusinesses, demoActivations, demoIncentiveRules, demoPlans, demoLegalTemplates, demoDuplicateCases } from "@/lib/mock/workspace.demo";
-import { Trophy, Tag, Scale, GitMerge } from "lucide-react";
+import { demoEmployees, demoBusinesses, demoActivations, demoIncentiveRules, demoPlans, demoLegalTemplates, demoDuplicateCases, demoDocuments } from "@/lib/mock/workspace.demo";
+import { Trophy, Tag, Scale, GitMerge, FileText } from "lucide-react";
 
 
 export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
@@ -103,7 +103,13 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
         matches.push({ resultType: 'duplicate', ...dup, name: `Duplicate: ${dup.recordA.name} / ${dup.recordB.name}` });
       }
     });
-
+    
+    // Search Documents
+    demoDocuments.forEach(doc => {
+      if (doc.name.toLowerCase().includes(q) || doc.id.toLowerCase().includes(q)) {
+        matches.push({ ...doc, resultType: 'document' });
+      }
+    });
 
     return matches.slice(0, 8);
   }, [query]);
@@ -158,10 +164,11 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
                       employee: '/modules/admin/employees',
                       business: '/modules/admin/business',
                       activation: '/app/activation/queue',
-                       incentive: '/modules/admin/incentives',
-                       plan: '/modules/admin/sales',
-                       legal: '/modules/admin/legal',
-                       duplicate: '/modules/admin/duplicates'
+                      incentive: '/modules/admin/incentives',
+                      plan: '/modules/admin/sales',
+                      legal: '/modules/admin/legal',
+                      duplicate: '/modules/admin/duplicates',
+                      document: '/modules/admin/data'
                     };
 
                     navigate({ to: (paths[res.resultType] || '/app') as any });
@@ -175,6 +182,7 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
                      res.resultType === 'plan' ? <Tag className="size-5 text-rose-500" /> :
                      res.resultType === 'legal' ? <Scale className="size-5 text-blue-600" /> :
                      res.resultType === 'duplicate' ? <GitMerge className="size-5 text-orange-500" /> :
+                     res.resultType === 'document' ? <FileText className="size-5 text-primary" /> :
                      <Briefcase className="size-5 text-amber-500" />}
 
                   </div>

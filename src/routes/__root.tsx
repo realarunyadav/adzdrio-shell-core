@@ -151,7 +151,7 @@ function InnerRoot() {
   }
 
   const isAuthPage = location.pathname === "/auth";
-  const isAppPage = location.pathname === "/app" || location.pathname.startsWith("/app/");
+  const isAppPage = location.pathname === "/app" || location.pathname.startsWith("/app/") || location.pathname.startsWith("/modules/");
 
   return (
     <RbacProvider>
