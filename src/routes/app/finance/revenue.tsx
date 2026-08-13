@@ -66,17 +66,59 @@ function RevenuePage() {
       <div className="grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-8">
           <SectionCard title="Revenue Breakdown" description="Monthly gross vs net revenue distribution.">
-            <div className="h-80 flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl bg-muted/5 gap-3">
-              <BarChart3 className="h-8 w-8 text-primary/40" />
-              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Revenue Growth visualization</p>
+            <div className="h-80 w-full mt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={barData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" opacity={0.5} />
+                  <XAxis 
+                    dataKey="name" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fontSize: 10, fontWeight: 700, fill: 'var(--color-muted-foreground)' }} 
+                  />
+                  <YAxis 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fontSize: 10, fontWeight: 700, fill: 'var(--color-muted-foreground)' }}
+                    tickFormatter={(value) => `₹${(value / 100000).toFixed(1)}L`}
+                  />
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '12px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-background)' }}
+                    labelStyle={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase' }}
+                  />
+                  <Legend iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', paddingTop: '20px' }} />
+                  <Bar dataKey="gross" fill="var(--color-primary)" name="Gross Revenue" radius={[4, 4, 0, 0]} barSize={40} />
+                  <Bar dataKey="net" fill="#22c55e" name="Net Revenue" radius={[4, 4, 0, 0]} barSize={40} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </SectionCard>
         </div>
         <div className="col-span-12 lg:col-span-4">
           <SectionCard title="By Business" description="Revenue contribution per brand.">
-            <div className="h-80 flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl bg-muted/5 gap-3">
-              <PieChart className="h-8 w-8 text-primary/40" />
-              <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Market Share analysis</p>
+            <div className="h-80 w-full mt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <RePieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '12px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-background)' }}
+                    itemStyle={{ fontSize: '12px', fontWeight: 700 }}
+                  />
+                  <Legend verticalAlign="bottom" iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase' }} />
+                </RePieChart>
+              </ResponsiveContainer>
             </div>
           </SectionCard>
         </div>

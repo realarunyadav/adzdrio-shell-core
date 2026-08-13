@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { demoExpenses } from "@/lib/mock/workspace.demo";
+import { demoExpenses, getFinanceModel } from "@/lib/mock/workspace.demo";
 import { Badge } from "@/components/ui/badge";
 import { DashboardKpiCard } from "@/components/shared/DashboardKpiCard";
 
@@ -14,6 +14,7 @@ export const Route = createFileRoute("/app/finance/expenses")({
 });
 
 function ExpensesPage() {
+  const finance = getFinanceModel();
   return (
     <div className="flex flex-col gap-8 pb-20 animate-in fade-in duration-500">
       <PageHeader
@@ -24,7 +25,7 @@ function ExpensesPage() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <DashboardKpiCard title="Total Expenses" value="₹ 12.4L" trend="+5.7%" icon={TrendingDown} />
+        <DashboardKpiCard title="Total Expenses" value={finance.formatted.expenses} trend="+5.7%" icon={TrendingDown} />
         <DashboardKpiCard title="This Month" value="₹ 2.8L" trend="+2.1%" icon={Clock} />
         <DashboardKpiCard title="Pending Appr." value="₹ 1.2L" trend="4 items" icon={AlertCircle} />
         <DashboardKpiCard title="Approved" value="₹ 11.2L" trend="92%" icon={CheckCircle2} />

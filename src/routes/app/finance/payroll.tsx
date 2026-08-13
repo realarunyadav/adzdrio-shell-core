@@ -25,7 +25,7 @@ function PayrollPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
          <div className="p-4 rounded-xl border-2 border-primary/20 bg-primary/5">
             <p className="text-[10px] font-black text-primary uppercase tracking-widest">Pay Period</p>
-            <p className="text-xl font-black mt-1">August 2024</p>
+            <p className="text-xl font-black mt-1">August 2026</p>
          </div>
          <div className="p-4 rounded-xl border border-border bg-background">
             <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Gross Payroll</p>

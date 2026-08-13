@@ -26,9 +26,9 @@ function ReconciliationPage() {
           {[
             { label: 'Sales', icon: Link, status: 'success' },
             { label: 'Payments', icon: CheckCircle2, status: 'success' },
-            { label: 'Gateway', icon: CheckCircle2, status: 'warning' },
-            { label: 'Ledger', icon: HelpCircle, status: 'pending' },
-            { label: 'Invoices', icon: HelpCircle, status: 'pending' },
+            { label: 'Gateway', icon: AlertTriangle, status: 'warning' },
+            { label: 'Ledger', icon: CheckCircle2, status: 'success' },
+            { label: 'Invoices', icon: CheckCircle2, status: 'success' },
           ].map((step, i, arr) => (
             <React.Fragment key={step.label}>
               <div className="flex flex-col items-center gap-2">
