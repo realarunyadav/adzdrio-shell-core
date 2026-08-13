@@ -38,6 +38,11 @@ import { Route as PlatformAutomationRouteImport } from './routes/platform.automa
 import { Route as PlatformDataCenterRouteImport } from './routes/platform.data-center'
 import { Route as SettingsAuditRouteImport } from './routes/settings.audit'
 import { Route as SettingsSecurityRouteImport } from './routes/settings.security'
+import { Route as AppActivationIndexRouteImport } from './routes/app/activation/index'
+import { Route as AppActivationIdRouteImport } from './routes/app/activation/$id'
+import { Route as AppActivationAssignmentsRouteImport } from './routes/app/activation/assignments'
+import { Route as AppActivationHistoryRouteImport } from './routes/app/activation/history'
+import { Route as AppActivationQueueRouteImport } from './routes/app/activation/queue'
 import { Route as AppCrmIndexRouteImport } from './routes/app/crm/index'
 import { Route as AppCrmCallbacksRouteImport } from './routes/app/crm/callbacks'
 import { Route as AppCrmCustomersRouteImport } from './routes/app/crm/customers'
@@ -218,6 +223,32 @@ const SettingsSecurityRoute = SettingsSecurityRouteImport.update({
   id: '/security',
   path: '/security',
   getParentRoute: () => SettingsRoute,
+} as any)
+const AppActivationIndexRoute = AppActivationIndexRouteImport.update({
+  id: '/activation/',
+  path: '/activation/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppActivationIdRoute = AppActivationIdRouteImport.update({
+  id: '/activation/$id',
+  path: '/activation/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppActivationAssignmentsRoute =
+  AppActivationAssignmentsRouteImport.update({
+    id: '/activation/assignments',
+    path: '/activation/assignments',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppActivationHistoryRoute = AppActivationHistoryRouteImport.update({
+  id: '/activation/history',
+  path: '/activation/history',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppActivationQueueRoute = AppActivationQueueRouteImport.update({
+  id: '/activation/queue',
+  path: '/activation/queue',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppCrmIndexRoute = AppCrmIndexRouteImport.update({
   id: '/crm/',
@@ -427,6 +458,10 @@ export interface FileRoutesByFullPath {
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
+  '/app/activation/$id': typeof AppActivationIdRoute
+  '/app/activation/assignments': typeof AppActivationAssignmentsRoute
+  '/app/activation/history': typeof AppActivationHistoryRoute
+  '/app/activation/queue': typeof AppActivationQueueRoute
   '/app/crm/callbacks': typeof AppCrmCallbacksRoute
   '/app/crm/customers': typeof AppCrmCustomersRoute
   '/app/crm/follow-ups': typeof AppCrmFollowUpsRoute
@@ -458,6 +493,7 @@ export interface FileRoutesByFullPath {
   '/modules/crm/queues': typeof ModulesCrmQueuesRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
   '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
+  '/app/activation/': typeof AppActivationIndexRoute
   '/app/crm/': typeof AppCrmIndexRoute
   '/app/finance/': typeof AppFinanceIndexRoute
   '/app/sales/': typeof AppSalesIndexRoute
@@ -493,6 +529,10 @@ export interface FileRoutesByTo {
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
+  '/app/activation/$id': typeof AppActivationIdRoute
+  '/app/activation/assignments': typeof AppActivationAssignmentsRoute
+  '/app/activation/history': typeof AppActivationHistoryRoute
+  '/app/activation/queue': typeof AppActivationQueueRoute
   '/app/crm/callbacks': typeof AppCrmCallbacksRoute
   '/app/crm/customers': typeof AppCrmCustomersRoute
   '/app/crm/follow-ups': typeof AppCrmFollowUpsRoute
@@ -524,6 +564,7 @@ export interface FileRoutesByTo {
   '/modules/crm/queues': typeof ModulesCrmQueuesRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
   '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
+  '/app/activation': typeof AppActivationIndexRoute
   '/app/crm': typeof AppCrmIndexRoute
   '/app/finance': typeof AppFinanceIndexRoute
   '/app/sales': typeof AppSalesIndexRoute
@@ -560,6 +601,10 @@ export interface FileRoutesById {
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
+  '/app/activation/$id': typeof AppActivationIdRoute
+  '/app/activation/assignments': typeof AppActivationAssignmentsRoute
+  '/app/activation/history': typeof AppActivationHistoryRoute
+  '/app/activation/queue': typeof AppActivationQueueRoute
   '/app/crm/callbacks': typeof AppCrmCallbacksRoute
   '/app/crm/customers': typeof AppCrmCustomersRoute
   '/app/crm/follow-ups': typeof AppCrmFollowUpsRoute
@@ -591,6 +636,7 @@ export interface FileRoutesById {
   '/modules/crm/queues': typeof ModulesCrmQueuesRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
   '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
+  '/app/activation/': typeof AppActivationIndexRoute
   '/app/crm/': typeof AppCrmIndexRoute
   '/app/finance/': typeof AppFinanceIndexRoute
   '/app/sales/': typeof AppSalesIndexRoute
@@ -628,6 +674,10 @@ export interface FileRouteTypes {
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
+    | '/app/activation/$id'
+    | '/app/activation/assignments'
+    | '/app/activation/history'
+    | '/app/activation/queue'
     | '/app/crm/callbacks'
     | '/app/crm/customers'
     | '/app/crm/follow-ups'
@@ -659,6 +709,7 @@ export interface FileRouteTypes {
     | '/modules/crm/queues'
     | '/modules/hrms/employee'
     | '/public/confirmations/$token'
+    | '/app/activation/'
     | '/app/crm/'
     | '/app/finance/'
     | '/app/sales/'
@@ -694,6 +745,10 @@ export interface FileRouteTypes {
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
+    | '/app/activation/$id'
+    | '/app/activation/assignments'
+    | '/app/activation/history'
+    | '/app/activation/queue'
     | '/app/crm/callbacks'
     | '/app/crm/customers'
     | '/app/crm/follow-ups'
@@ -725,6 +780,7 @@ export interface FileRouteTypes {
     | '/modules/crm/queues'
     | '/modules/hrms/employee'
     | '/public/confirmations/$token'
+    | '/app/activation'
     | '/app/crm'
     | '/app/finance'
     | '/app/sales'
@@ -760,6 +816,10 @@ export interface FileRouteTypes {
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
+    | '/app/activation/$id'
+    | '/app/activation/assignments'
+    | '/app/activation/history'
+    | '/app/activation/queue'
     | '/app/crm/callbacks'
     | '/app/crm/customers'
     | '/app/crm/follow-ups'
@@ -791,6 +851,7 @@ export interface FileRouteTypes {
     | '/modules/crm/queues'
     | '/modules/hrms/employee'
     | '/public/confirmations/$token'
+    | '/app/activation/'
     | '/app/crm/'
     | '/app/finance/'
     | '/app/sales/'
@@ -1032,6 +1093,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/settings/security'
       preLoaderRoute: typeof SettingsSecurityRouteImport
       parentRoute: typeof SettingsRoute
+    }
+    '/app/activation/': {
+      id: '/app/activation/'
+      path: '/activation'
+      fullPath: '/app/activation/'
+      preLoaderRoute: typeof AppActivationIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/activation/$id': {
+      id: '/app/activation/$id'
+      path: '/activation/$id'
+      fullPath: '/app/activation/$id'
+      preLoaderRoute: typeof AppActivationIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/activation/assignments': {
+      id: '/app/activation/assignments'
+      path: '/activation/assignments'
+      fullPath: '/app/activation/assignments'
+      preLoaderRoute: typeof AppActivationAssignmentsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/activation/history': {
+      id: '/app/activation/history'
+      path: '/activation/history'
+      fullPath: '/app/activation/history'
+      preLoaderRoute: typeof AppActivationHistoryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/activation/queue': {
+      id: '/app/activation/queue'
+      path: '/activation/queue'
+      fullPath: '/app/activation/queue'
+      preLoaderRoute: typeof AppActivationQueueRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/crm/': {
       id: '/app/crm/'
@@ -1282,6 +1378,10 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppActivationIdRoute: typeof AppActivationIdRoute
+  AppActivationAssignmentsRoute: typeof AppActivationAssignmentsRoute
+  AppActivationHistoryRoute: typeof AppActivationHistoryRoute
+  AppActivationQueueRoute: typeof AppActivationQueueRoute
   AppCrmCallbacksRoute: typeof AppCrmCallbacksRoute
   AppCrmCustomersRoute: typeof AppCrmCustomersRoute
   AppCrmFollowUpsRoute: typeof AppCrmFollowUpsRoute
@@ -1306,6 +1406,7 @@ interface AppRouteChildren {
   AppSupportKnowledgeBaseRoute: typeof AppSupportKnowledgeBaseRoute
   AppSupportReportsRoute: typeof AppSupportReportsRoute
   AppSupportTicketsRoute: typeof AppSupportTicketsRoute
+  AppActivationIndexRoute: typeof AppActivationIndexRoute
   AppCrmIndexRoute: typeof AppCrmIndexRoute
   AppFinanceIndexRoute: typeof AppFinanceIndexRoute
   AppSalesIndexRoute: typeof AppSalesIndexRoute
@@ -1313,6 +1414,10 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppActivationIdRoute: AppActivationIdRoute,
+  AppActivationAssignmentsRoute: AppActivationAssignmentsRoute,
+  AppActivationHistoryRoute: AppActivationHistoryRoute,
+  AppActivationQueueRoute: AppActivationQueueRoute,
   AppCrmCallbacksRoute: AppCrmCallbacksRoute,
   AppCrmCustomersRoute: AppCrmCustomersRoute,
   AppCrmFollowUpsRoute: AppCrmFollowUpsRoute,
@@ -1337,6 +1442,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSupportKnowledgeBaseRoute: AppSupportKnowledgeBaseRoute,
   AppSupportReportsRoute: AppSupportReportsRoute,
   AppSupportTicketsRoute: AppSupportTicketsRoute,
+  AppActivationIndexRoute: AppActivationIndexRoute,
   AppCrmIndexRoute: AppCrmIndexRoute,
   AppFinanceIndexRoute: AppFinanceIndexRoute,
   AppSalesIndexRoute: AppSalesIndexRoute,
