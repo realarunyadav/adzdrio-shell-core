@@ -107,17 +107,60 @@ function FinanceDashboard() {
       </div>
 
       <div className="grid grid-cols-12 gap-6">
-        {/* Revenue Overview Chart Placeholder */}
+        {/* Revenue Overview Chart */}
         <div className="col-span-12 lg:col-span-8">
           <SectionCard title="Revenue & Collections Trend" description="Comparison of gross revenue vs actual collections.">
-            <div className="h-80 flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl bg-muted/5 gap-3">
-              <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <PieChart className="h-6 w-6 text-primary" />
-              </div>
-              <div className="text-center">
-                <p className="text-sm font-black">Revenue Analytics Engine</p>
-                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mt-1">Real-time financial visualization pipeline</p>
-              </div>
+            <div className="h-80 w-full mt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={trendData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.1}/>
+                      <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorColl" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#22c55e" stopOpacity={0.1}/>
+                      <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" opacity={0.5} />
+                  <XAxis 
+                    dataKey="name" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fontSize: 10, fontWeight: 700, fill: 'var(--color-muted-foreground)' }} 
+                  />
+                  <YAxis 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fontSize: 10, fontWeight: 700, fill: 'var(--color-muted-foreground)' }}
+                    tickFormatter={(value) => `₹${(value / 100000).toFixed(1)}L`}
+                  />
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '12px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-background)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                    labelStyle={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', marginBottom: '4px' }}
+                    itemStyle={{ fontSize: '12px', fontWeight: 700, padding: '2px 0' }}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="revenue" 
+                    stroke="var(--color-primary)" 
+                    strokeWidth={2}
+                    fillOpacity={1} 
+                    fill="url(#colorRev)" 
+                    name="Gross Revenue"
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="collections" 
+                    stroke="#22c55e" 
+                    strokeWidth={2}
+                    fillOpacity={1} 
+                    fill="url(#colorColl)" 
+                    name="Paid Collections"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
           </SectionCard>
         </div>
