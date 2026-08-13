@@ -34,7 +34,7 @@ export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModal
     status: "Draft",
     version: 1,
     description: "",
-    effectiveFrom: new Date().toISOString().split('T')[0],
+    effectiveFrom: new Date().toISOString().split('T')[0] || "",
     tiers: [{ min: 0, reward: 0, type: "Fixed", label: "Tier 1" }]
   };
 
@@ -50,7 +50,7 @@ export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModal
         version: rule.version,
         description: rule.description,
         effectiveFrom: rule.effectiveFrom,
-        tiers: rule.tiers.map(t => ({ ...t }))
+        tiers: rule.tiers.map(t => ({ min: t.min, reward: t.reward, type: t.type, label: t.label }))
       });
     } else {
       setFormData(initialData);
