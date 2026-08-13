@@ -79,7 +79,9 @@ function LeadPoolPage() {
             <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loading}>
               <RefreshCw className={cn("mr-2 size-3.5", loading && "animate-spin")} /> Refresh
             </Button>
-            <Button variant="outline" size="sm" className="hidden sm:flex"><Upload className="mr-2 size-3.5" /> Import Leads</Button>
+            <Button variant="outline" size="sm" className="hidden sm:flex" onClick={() => setIsImportDrawerOpen(true)}>
+              <Upload className="mr-2 size-3.5" /> Import Leads
+            </Button>
             <Button variant="outline" size="sm" className="hidden lg:flex"><Download className="mr-2 size-3.5" /> Export</Button>
             <Button size="sm" className="shadow-lg shadow-primary/20"><Plus className="mr-2 size-3.5" /> New Lead</Button>
           </div>
