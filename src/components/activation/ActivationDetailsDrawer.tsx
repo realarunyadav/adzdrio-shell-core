@@ -64,8 +64,9 @@ export function ActivationDetailsDrawer({ activation: initialActivation, open, o
     // 1. Update the mock state for persistence
     const actIndex = demoActivations.findIndex(a => a.id === activation.id);
     if (actIndex > -1) {
+      const currentAct = demoActivations[actIndex];
       const updatedAct: DemoActivation = {
-        ...demoActivations[actIndex],
+        ...currentAct,
         status: 'Assigned',
         assignedTo: employee.id.toString(),
         assignedToName: employee.name,
@@ -387,7 +388,7 @@ export function ActivationDetailsDrawer({ activation: initialActivation, open, o
         open={isAssignModalOpen}
         onOpenChange={setIsAssignModalOpen}
         onConfirm={handleAssignConfirm}
-        suggestedEmployeeId={activation.assignedTo} // Use current or suggested
+        suggestedEmployeeId={activation.assignedTo || null} // Use current or suggested
       />
     </Sheet>
   );
