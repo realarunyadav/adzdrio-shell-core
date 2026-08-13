@@ -29,7 +29,8 @@ import {
   demoLeads, 
   demoSales, 
   demoPlans,
-  demoTeamPerformance
+  demoTeamPerformance,
+  demoActivations
 } from "@/lib/mock/workspace.demo";
 
 interface CreateActivationWizardProps {
