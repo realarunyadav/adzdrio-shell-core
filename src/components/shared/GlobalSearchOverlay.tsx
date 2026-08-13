@@ -92,6 +92,19 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
       }
     });
 
+    // Search Duplicate Cases
+    demoDuplicateCases.forEach(dup => {
+      if (
+        dup.recordA.name.toLowerCase().includes(q) || 
+        dup.recordB.name.toLowerCase().includes(q) ||
+        dup.id.toLowerCase().includes(q) ||
+        (dup.importId && dup.importId.toLowerCase().includes(q))
+      ) {
+        matches.push({ resultType: 'duplicate', ...dup, name: `Duplicate: ${dup.recordA.name} / ${dup.recordB.name}` });
+      }
+    });
+
+
     return matches.slice(0, 8);
   }, [query]);
 
