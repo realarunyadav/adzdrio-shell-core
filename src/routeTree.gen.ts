@@ -62,6 +62,7 @@ import { Route as AppSalesPaymentsRouteImport } from './routes/app/sales/payment
 import { Route as AppSalesPlansRouteImport } from './routes/app/sales/plans'
 import { Route as AppSalesReportsRouteImport } from './routes/app/sales/reports'
 import { Route as AppSupportIndexRouteImport } from './routes/app/support/index'
+import { Route as AppSupportCustomersRouteImport } from './routes/app/support/customers'
 import { Route as AppSupportTicketsRouteImport } from './routes/app/support/tickets'
 import { Route as ModulesCrmAssignmentsRouteImport } from './routes/modules.crm.assignments'
 import { Route as ModulesCrmDuplicatesRouteImport } from './routes/modules.crm.duplicates'
@@ -337,6 +338,11 @@ const AppSupportIndexRoute = AppSupportIndexRouteImport.update({
   path: '/support/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSupportCustomersRoute = AppSupportCustomersRouteImport.update({
+  id: '/support/customers',
+  path: '/support/customers',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSupportTicketsRoute = AppSupportTicketsRouteImport.update({
   id: '/support/tickets',
   path: '/support/tickets',
@@ -429,6 +435,7 @@ export interface FileRoutesByFullPath {
   '/app/sales/payments': typeof AppSalesPaymentsRoute
   '/app/sales/plans': typeof AppSalesPlansRoute
   '/app/sales/reports': typeof AppSalesReportsRoute
+  '/app/support/customers': typeof AppSupportCustomersRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
@@ -492,6 +499,7 @@ export interface FileRoutesByTo {
   '/app/sales/payments': typeof AppSalesPaymentsRoute
   '/app/sales/plans': typeof AppSalesPlansRoute
   '/app/sales/reports': typeof AppSalesReportsRoute
+  '/app/support/customers': typeof AppSupportCustomersRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
@@ -556,6 +564,7 @@ export interface FileRoutesById {
   '/app/sales/payments': typeof AppSalesPaymentsRoute
   '/app/sales/plans': typeof AppSalesPlansRoute
   '/app/sales/reports': typeof AppSalesReportsRoute
+  '/app/support/customers': typeof AppSupportCustomersRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
@@ -621,6 +630,7 @@ export interface FileRouteTypes {
     | '/app/sales/payments'
     | '/app/sales/plans'
     | '/app/sales/reports'
+    | '/app/support/customers'
     | '/app/support/tickets'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
@@ -684,6 +694,7 @@ export interface FileRouteTypes {
     | '/app/sales/payments'
     | '/app/sales/plans'
     | '/app/sales/reports'
+    | '/app/support/customers'
     | '/app/support/tickets'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
@@ -747,6 +758,7 @@ export interface FileRouteTypes {
     | '/app/sales/payments'
     | '/app/sales/plans'
     | '/app/sales/reports'
+    | '/app/support/customers'
     | '/app/support/tickets'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
@@ -1165,6 +1177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSupportIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/support/customers': {
+      id: '/app/support/customers'
+      path: '/support/customers'
+      fullPath: '/app/support/customers'
+      preLoaderRoute: typeof AppSupportCustomersRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/support/tickets': {
       id: '/app/support/tickets'
       path: '/support/tickets'
@@ -1245,6 +1264,7 @@ interface AppRouteChildren {
   AppSalesPaymentsRoute: typeof AppSalesPaymentsRoute
   AppSalesPlansRoute: typeof AppSalesPlansRoute
   AppSalesReportsRoute: typeof AppSalesReportsRoute
+  AppSupportCustomersRoute: typeof AppSupportCustomersRoute
   AppSupportTicketsRoute: typeof AppSupportTicketsRoute
   AppCrmIndexRoute: typeof AppCrmIndexRoute
   AppFinanceIndexRoute: typeof AppFinanceIndexRoute
@@ -1273,6 +1293,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSalesPaymentsRoute: AppSalesPaymentsRoute,
   AppSalesPlansRoute: AppSalesPlansRoute,
   AppSalesReportsRoute: AppSalesReportsRoute,
+  AppSupportCustomersRoute: AppSupportCustomersRoute,
   AppSupportTicketsRoute: AppSupportTicketsRoute,
   AppCrmIndexRoute: AppCrmIndexRoute,
   AppFinanceIndexRoute: AppFinanceIndexRoute,
