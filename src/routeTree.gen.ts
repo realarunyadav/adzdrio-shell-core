@@ -64,6 +64,7 @@ import { Route as AppSalesReportsRouteImport } from './routes/app/sales/reports'
 import { Route as AppSupportIndexRouteImport } from './routes/app/support/index'
 import { Route as AppSupportCustomersRouteImport } from './routes/app/support/customers'
 import { Route as AppSupportKnowledgeBaseRouteImport } from './routes/app/support/knowledge-base'
+import { Route as AppSupportReportsRouteImport } from './routes/app/support/reports'
 import { Route as AppSupportTicketsRouteImport } from './routes/app/support/tickets'
 import { Route as ModulesCrmAssignmentsRouteImport } from './routes/modules.crm.assignments'
 import { Route as ModulesCrmDuplicatesRouteImport } from './routes/modules.crm.duplicates'
@@ -349,6 +350,11 @@ const AppSupportKnowledgeBaseRoute = AppSupportKnowledgeBaseRouteImport.update({
   path: '/support/knowledge-base',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSupportReportsRoute = AppSupportReportsRouteImport.update({
+  id: '/support/reports',
+  path: '/support/reports',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSupportTicketsRoute = AppSupportTicketsRouteImport.update({
   id: '/support/tickets',
   path: '/support/tickets',
@@ -443,6 +449,7 @@ export interface FileRoutesByFullPath {
   '/app/sales/reports': typeof AppSalesReportsRoute
   '/app/support/customers': typeof AppSupportCustomersRoute
   '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
+  '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
@@ -508,6 +515,7 @@ export interface FileRoutesByTo {
   '/app/sales/reports': typeof AppSalesReportsRoute
   '/app/support/customers': typeof AppSupportCustomersRoute
   '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
+  '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
@@ -574,6 +582,7 @@ export interface FileRoutesById {
   '/app/sales/reports': typeof AppSalesReportsRoute
   '/app/support/customers': typeof AppSupportCustomersRoute
   '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
+  '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
@@ -641,6 +650,7 @@ export interface FileRouteTypes {
     | '/app/sales/reports'
     | '/app/support/customers'
     | '/app/support/knowledge-base'
+    | '/app/support/reports'
     | '/app/support/tickets'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
@@ -706,6 +716,7 @@ export interface FileRouteTypes {
     | '/app/sales/reports'
     | '/app/support/customers'
     | '/app/support/knowledge-base'
+    | '/app/support/reports'
     | '/app/support/tickets'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
@@ -771,6 +782,7 @@ export interface FileRouteTypes {
     | '/app/sales/reports'
     | '/app/support/customers'
     | '/app/support/knowledge-base'
+    | '/app/support/reports'
     | '/app/support/tickets'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
@@ -1203,6 +1215,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSupportKnowledgeBaseRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/support/reports': {
+      id: '/app/support/reports'
+      path: '/support/reports'
+      fullPath: '/app/support/reports'
+      preLoaderRoute: typeof AppSupportReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/support/tickets': {
       id: '/app/support/tickets'
       path: '/support/tickets'
@@ -1285,6 +1304,7 @@ interface AppRouteChildren {
   AppSalesReportsRoute: typeof AppSalesReportsRoute
   AppSupportCustomersRoute: typeof AppSupportCustomersRoute
   AppSupportKnowledgeBaseRoute: typeof AppSupportKnowledgeBaseRoute
+  AppSupportReportsRoute: typeof AppSupportReportsRoute
   AppSupportTicketsRoute: typeof AppSupportTicketsRoute
   AppCrmIndexRoute: typeof AppCrmIndexRoute
   AppFinanceIndexRoute: typeof AppFinanceIndexRoute
@@ -1315,6 +1335,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSalesReportsRoute: AppSalesReportsRoute,
   AppSupportCustomersRoute: AppSupportCustomersRoute,
   AppSupportKnowledgeBaseRoute: AppSupportKnowledgeBaseRoute,
+  AppSupportReportsRoute: AppSupportReportsRoute,
   AppSupportTicketsRoute: AppSupportTicketsRoute,
   AppCrmIndexRoute: AppCrmIndexRoute,
   AppFinanceIndexRoute: AppFinanceIndexRoute,
