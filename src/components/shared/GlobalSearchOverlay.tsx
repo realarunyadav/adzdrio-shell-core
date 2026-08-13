@@ -17,8 +17,9 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { demoEmployees, demoBusinesses, demoActivations, demoIncentiveRules, demoPlans, demoLegalTemplates } from "@/lib/mock/workspace.demo";
-import { Trophy, Tag, Scale } from "lucide-react";
+import { demoEmployees, demoBusinesses, demoActivations, demoIncentiveRules, demoPlans, demoLegalTemplates, demoDuplicateCases } from "@/lib/mock/workspace.demo";
+import { Trophy, Tag, Scale, GitMerge } from "lucide-react";
+
 
 export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   const [query, setQuery] = React.useState("");
@@ -91,6 +92,19 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
       }
     });
 
+    // Search Duplicate Cases
+    demoDuplicateCases.forEach(dup => {
+      if (
+        dup.recordA.name.toLowerCase().includes(q) || 
+        dup.recordB.name.toLowerCase().includes(q) ||
+        dup.id.toLowerCase().includes(q) ||
+        (dup.importId && dup.importId.toLowerCase().includes(q))
+      ) {
+        matches.push({ resultType: 'duplicate', ...dup, name: `Duplicate: ${dup.recordA.name} / ${dup.recordB.name}` });
+      }
+    });
+
+
     return matches.slice(0, 8);
   }, [query]);
 
@@ -146,8 +160,10 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
                       activation: '/app/activation/queue',
                        incentive: '/modules/admin/incentives',
                        plan: '/modules/admin/sales',
-                       legal: '/modules/admin/legal'
+                       legal: '/modules/admin/legal',
+                       duplicate: '/modules/admin/duplicates'
                     };
+
                     navigate({ to: (paths[res.resultType] || '/app') as any });
                     onOpenChange(false);
                   }}
@@ -158,7 +174,9 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
                      res.resultType === 'incentive' ? <Trophy className="size-5 text-purple-500" /> :
                      res.resultType === 'plan' ? <Tag className="size-5 text-rose-500" /> :
                      res.resultType === 'legal' ? <Scale className="size-5 text-blue-600" /> :
+                     res.resultType === 'duplicate' ? <GitMerge className="size-5 text-orange-500" /> :
                      <Briefcase className="size-5 text-amber-500" />}
+
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
