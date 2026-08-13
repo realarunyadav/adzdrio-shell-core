@@ -141,13 +141,6 @@ export function AppSidebar() {
                         {!collapsed && !planned && (
                           <CollapsibleContent>
                             <SidebarMenuSub>
-                              <SidebarMenuSubItem>
-                                <SidebarMenuSubButton asChild>
-                                  <Link to={module.basePath as any} className="text-[11px] text-sidebar-foreground/60 px-2 py-1 font-medium hover:text-primary transition-colors">
-                                    {module.name} Dashboard
-                                  </Link>
-                                </SidebarMenuSubButton>
-                              </SidebarMenuSubItem>
                               {module.navigation?.map((nav) => (
                                 <SidebarMenuSubItem key={nav.id}>
                                   <SidebarMenuSubButton asChild>
