@@ -121,7 +121,13 @@ export const modules: ModuleDefinition[] = [
     group: "operations",
     order: 40,
     status: "available",
-    basePath: "/modules/activation",
+    basePath: "/app/activation",
+    navigation: [
+      { id: "activation-dashboard", label: "Activation Dashboard", path: "/app/activation" },
+      { id: "activation-queue", label: "Activation Queue", path: "/app/activation/queue" },
+      { id: "activation-assignments", label: "Assignments", path: "/app/activation/assignments" },
+      { id: "activation-history", label: "Activation History", path: "/app/activation/history" },
+    ]
   },
   {
     id: "finance",

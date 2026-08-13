@@ -857,3 +857,214 @@ export const demoSupportArticles: DemoSupportArticle[] = [
   { id: 'ART-2003', title: 'Setting up Automated GST Invoicing', category: 'Billing & Payments', status: 'Draft', views: 0 },
   { id: 'ART-2004', title: 'User Role Management & Permissions', category: 'Account Security', status: 'Published', views: 2105 },
 ];
+
+export type ActivationStatus = 
+  | 'Pending Payment Verification' 
+  | 'Payment Verified' 
+  | 'Pending Assignment' 
+  | 'Assigned' 
+  | 'In Progress' 
+  | 'Waiting Customer' 
+  | 'Completed' 
+  | 'Failed' 
+  | 'Cancelled' 
+  | 'On Hold';
+
+export type ActivationPriority = 'Critical' | 'High' | 'Medium' | 'Low';
+
+export interface DemoActivation {
+  id: string;
+  customerId: string;
+  customerName: string;
+  businessId: string;
+  businessName: string;
+  subscriptionId: string;
+  planName: string;
+  saleId: string;
+  paymentId: string;
+  paymentStatus: 'Paid' | 'Pending' | 'Failed';
+  status: ActivationStatus;
+  priority: ActivationPriority;
+  assignedTo?: string;
+  assignedToName?: string;
+  createdAt: string;
+  requestedAt: string;
+  startedAt?: string;
+  completedAt?: string;
+  slaDueAt: string;
+  failureReason?: string;
+  waitingReason?: string;
+  notes?: string;
+  createdBy: string;
+  lastUpdatedAt: string;
+}
+
+export interface DemoActivationActivity {
+  id: string;
+  activationId: string;
+  actor: string;
+  actorId: string;
+  action: string;
+  previousStatus?: ActivationStatus;
+  newStatus?: ActivationStatus;
+  timestamp: string;
+  note?: string;
+}
+
+export const demoActivations: DemoActivation[] = [
+  {
+    id: "ACT-8801",
+    customerId: "lead-7",
+    customerName: "Rahul Khanna",
+    businessId: "biz-a",
+    businessName: "Acme India",
+    subscriptionId: "SUB-4401",
+    planName: "Premium Annual",
+    saleId: "SALE-1001",
+    paymentId: "PAY-9901",
+    paymentStatus: "Paid",
+    status: "In Progress",
+    priority: "High",
+    assignedTo: "user-1",
+    assignedToName: "Priya Nair",
+    createdAt: "2026-08-12T09:00:00Z",
+    requestedAt: "2026-08-12T09:05:00Z",
+    startedAt: "2026-08-12T14:00:00Z",
+    slaDueAt: "2026-08-14T09:00:00Z",
+    createdBy: "System",
+    lastUpdatedAt: "2026-08-13T10:00:00Z"
+  },
+  {
+    id: "ACT-8802",
+    customerId: "lead-6",
+    customerName: "Ananya Iyer",
+    businessId: "biz-a",
+    businessName: "Acme India",
+    subscriptionId: "SUB-4402",
+    planName: "Standard Monthly",
+    saleId: "SALE-1002",
+    paymentId: "PAY-9902",
+    paymentStatus: "Pending",
+    status: "Pending Payment Verification",
+    priority: "Medium",
+    createdAt: "2026-08-13T08:30:00Z",
+    requestedAt: "2026-08-13T08:35:00Z",
+    slaDueAt: "2026-08-15T08:30:00Z",
+    createdBy: "Sales Dept",
+    lastUpdatedAt: "2026-08-13T08:35:00Z"
+  },
+  {
+    id: "ACT-8803",
+    customerId: "lead-3",
+    customerName: "Vikram Singh",
+    businessId: "biz-c",
+    businessName: "Blue Harbour",
+    subscriptionId: "SUB-4403",
+    planName: "Enterprise Custom",
+    saleId: "SALE-1003",
+    paymentId: "PAY-9903",
+    paymentStatus: "Paid",
+    status: "Pending Assignment",
+    priority: "Critical",
+    createdAt: "2026-08-13T10:15:00Z",
+    requestedAt: "2026-08-13T10:20:00Z",
+    slaDueAt: "2026-08-14T10:15:00Z",
+    createdBy: "System",
+    lastUpdatedAt: "2026-08-13T10:20:00Z"
+  },
+  {
+    id: "ACT-8804",
+    customerId: "lead-8",
+    customerName: "Sneha Patel",
+    businessId: "biz-b",
+    businessName: "Vertex Tech",
+    subscriptionId: "SUB-4404",
+    planName: "Growth Plus",
+    saleId: "SALE-1004",
+    paymentId: "PAY-9904",
+    paymentStatus: "Paid",
+    status: "Completed",
+    priority: "Low",
+    createdAt: "2026-08-10T11:00:00Z",
+    requestedAt: "2026-08-10T11:10:00Z",
+    startedAt: "2026-08-10T14:00:00Z",
+    completedAt: "2026-08-11T10:00:00Z",
+    slaDueAt: "2026-08-12T11:00:00Z",
+    createdBy: "System",
+    lastUpdatedAt: "2026-08-11T10:00:00Z"
+  },
+  {
+    id: "ACT-8805",
+    customerId: "lead-2",
+    customerName: "Deepika Rao",
+    businessId: "biz-b",
+    businessName: "Vertex Tech",
+    subscriptionId: "SUB-4405",
+    planName: "Growth Plus",
+    saleId: "SALE-1005",
+    paymentId: "PAY-9905",
+    paymentStatus: "Paid",
+    status: "Waiting Customer",
+    priority: "Medium",
+    createdAt: "2026-08-12T15:00:00Z",
+    requestedAt: "2026-08-12T15:05:00Z",
+    startedAt: "2026-08-13T09:00:00Z",
+    slaDueAt: "2026-08-14T15:00:00Z",
+    waitingReason: "Device info required",
+    assignedTo: "user-2",
+    assignedToName: "Rahul Menon",
+    createdBy: "System",
+    lastUpdatedAt: "2026-08-13T09:30:00Z"
+  }
+];
+
+export const demoActivationActivities: DemoActivationActivity[] = [
+  {
+    id: "ACT-EV-1",
+    activationId: "ACT-8801",
+    actor: "System",
+    actorId: "system",
+    action: "Created activation request",
+    newStatus: "Pending Payment Verification",
+    timestamp: "2026-08-12T09:00:00Z"
+  },
+  {
+    id: "ACT-EV-2",
+    activationId: "ACT-8801",
+    actor: "Finance Bot",
+    actorId: "system",
+    action: "Verified payment PAY-9901",
+    previousStatus: "Pending Payment Verification",
+    newStatus: "Pending Assignment",
+    timestamp: "2026-08-12T09:10:00Z"
+  },
+  {
+    id: "ACT-EV-3",
+    activationId: "ACT-8801",
+    actor: "Admin",
+    actorId: "admin-1",
+    action: "Assigned to Priya Nair",
+    previousStatus: "Pending Assignment",
+    newStatus: "Assigned",
+    timestamp: "2026-08-12T11:00:00Z"
+  }
+];
+
+export function getActivationModel() {
+  const pendingPayment = demoActivations.filter(a => a.status === 'Pending Payment Verification').length;
+  const readyAssignment = demoActivations.filter(a => a.status === 'Pending Assignment').length;
+  const inProgress = demoActivations.filter(a => a.status === 'In Progress').length;
+  const waitingCustomer = demoActivations.filter(a => a.status === 'Waiting Customer').length;
+  const completedToday = demoActivations.filter(a => a.status === 'Completed' && a.completedAt?.startsWith('2026-08-13')).length;
+  const failed = demoActivations.filter(a => a.status === 'Failed').length;
+  
+  return {
+    pendingPayment,
+    readyAssignment,
+    inProgress,
+    waitingCustomer,
+    completedToday,
+    failed,
+    totalActive: demoActivations.filter(a => !['Completed', 'Failed', 'Cancelled'].includes(a.status)).length
+  };
+}
