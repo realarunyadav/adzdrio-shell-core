@@ -26,6 +26,7 @@ export interface DemoKpi {
   delta: string;
   trend: "up" | "down";
   caption: string;
+  icon?: any;
 }
 
 import { DollarSign, Users, Target, CreditCard } from "lucide-react";
