@@ -1286,7 +1286,7 @@ export interface DemoIncentiveRule {
   description: string;
   effectiveFrom: string;
   effectiveTo?: string;
-  tiers: { min: number; reward: number; label?: string }[];
+  tiers: { min: number; max?: number; reward: number; type: "Fixed" | "Percentage"; label?: string }[];
 }
 
 export const demoIncentiveRules: DemoIncentiveRule[] = [
@@ -1300,8 +1300,8 @@ export const demoIncentiveRules: DemoIncentiveRule[] = [
     description: "Incentive for exceeding quarterly sales targets.",
     effectiveFrom: "2026-07-01",
     tiers: [
-      { min: 10, reward: 5000, label: "Tier 1" },
-      { min: 20, reward: 12000, label: "Super Accelerator" }
+      { min: 10, max: 19, reward: 5000, type: "Fixed", label: "Tier 1" },
+      { min: 20, reward: 12000, type: "Fixed", label: "Super Accelerator" }
     ]
   },
   {
@@ -1314,17 +1314,31 @@ export const demoIncentiveRules: DemoIncentiveRule[] = [
     description: "Multi-tier reward for successful business referrals.",
     effectiveFrom: "2026-01-01",
     tiers: [
-      { min: 1, reward: 1000, label: "First Referral" },
-      { min: 5, reward: 7500, label: "Gold Partner" }
+      { min: 1, max: 4, reward: 1000, type: "Fixed", label: "First Referral" },
+      { min: 5, reward: 7500, type: "Fixed", label: "Gold Partner" }
     ]
   }
+];
+
+export interface DemoPlan {
+  id: string;
+  name: string;
+  price: number;
+  status: "Active" | "Draft" | "Inactive";
+  features: string[];
+}
+
+export const demoPlans: DemoPlan[] = [
+  { id: "PLAN-001", name: "Basic", price: 999, status: "Active", features: ["Core CRM", "Email support"] },
+  { id: "PLAN-002", name: "Growth", price: 2999, status: "Active", features: ["All Basic", "Automation", "Incentives"] },
+  { id: "PLAN-003", name: "Enterprise", price: 9999, status: "Draft", features: ["All Growth", "Custom API", "Legal Suite"] }
 ];
 
 export interface DemoTaxRule {
   id: string;
   name: string;
   businessId: string;
-  type: string;
+  type: "GST" | "TDS" | "VAT";
   rate: number;
   effectiveFrom: string;
   status: "Active" | "Inactive";
