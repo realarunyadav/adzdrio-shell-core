@@ -461,7 +461,7 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
             {step === 1 ? 'Cancel' : 'Back'}
           </Button>
           <Button 
-            onClick={step === 6 ? handleClose : handleNext}
+            onClick={step === 6 ? handleCreate : handleNext}
             className="bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest h-10 px-8 shadow-lg shadow-primary/20"
           >
             {step === 6 ? 'Create Activation' : 'Continue'}
