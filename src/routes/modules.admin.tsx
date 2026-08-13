@@ -111,6 +111,8 @@ function AdminStudioModule() {
       </div>
     </div>
   );
+}
+
 function AdminTabLink({ to, active, icon: Icon, label }: { to: string, active: boolean, icon: any, label: string }) {
   return (
     <RouterLink 
