@@ -61,8 +61,10 @@ export const demoBusinesses: DemoBusiness[] = [
   { id: "biz-c", name: "Blue Harbour", initials: "BH", plan: "Starter", revenue: "₹ 4.1L", sales: 15, leads: 90, conversion: "16.7%", pendingPayments: "₹ 8.5K", teamSize: 5, status: 'warning' },
 ];
 
-export type LeadStatus = 'New' | 'Contacted' | 'Interested' | 'Follow-up' | 'Negotiation' | 'Converted' | 'Not Interested' | 'Lost';
+export type LeadStatus = 'New' | 'Contacted' | 'Interested' | 'Follow-up' | 'Negotiation' | 'Converted' | 'Not Interested' | 'Lost' | 'Active' | 'Pending' | 'Inactive';
 export type LeadPriority = 'High' | 'Medium' | 'Low';
+export type FollowUpStatus = 'Pending' | 'Completed' | 'Overdue';
+export type CallbackStatus = 'Requested' | 'Attempted' | 'Completed' | 'Rescheduled';
 
 export interface DemoLead {
   id: string;
@@ -78,8 +80,16 @@ export interface DemoLead {
   assignedTo?: string;
   assignedToName?: string;
   notes?: string;
-  nextFollowUp?: string;
-  callbackDate?: string;
+  nextFollowUp?: string; // ISO Date String
+  followUpType?: 'Call' | 'Email' | 'Meeting' | 'WhatsApp';
+  followUpStatus?: FollowUpStatus;
+  callbackDate?: string; // ISO Date String
+  callbackReason?: string;
+  callbackStatus?: CallbackStatus;
+  requestedBy?: string;
+  totalSales?: string;
+  pendingPayment?: string;
+  customerSince?: string;
 }
 
 export const demoLeads: DemoLead[] = [
