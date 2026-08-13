@@ -174,9 +174,7 @@ export function ActivationDetailsDrawer({ activation: initialActivation, open, o
               <Button 
                 size="sm" 
                 className="bg-primary hover:bg-primary/90 font-bold h-8 text-[11px] uppercase tracking-wider"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
+                onClick={() => {
                   setIsAssignModalOpen(true);
                 }}
               >

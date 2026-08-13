@@ -170,8 +170,6 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                     selectedCustomer?.id === customer.id ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-border hover:bg-muted/30"
                   )}
                   onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
                     console.log(`[Wizard] Selecting customer:`, customer.id);
                     setSelectedCustomer(customer);
                     setSelectedSale(null); 
@@ -213,8 +211,6 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                       selectedSale?.id === sale.id ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-border hover:bg-muted/30"
                     )}
                     onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
                       console.log(`[Wizard] Selecting sale:`, sale.id);
                       setSelectedSale(sale);
                     }}
@@ -277,8 +273,6 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                   paymentAcknowledged ? "border-primary bg-primary/5" : "border-yellow-200 bg-yellow-50/50"
                 )}
                 onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
                   setPaymentAcknowledged(!paymentAcknowledged);
                 }}
               >
@@ -315,8 +309,6 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                     selectedEmployee?.id === employee.id ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-border hover:bg-muted/30"
                   )}
                   onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
                     setSelectedEmployee(employee);
                   }}
                 >
@@ -353,8 +345,6 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                       priority === p && p === 'High' ? "bg-orange-500 hover:bg-orange-600" : ""
                     )}
                     onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
                       setPriority(p);
                     }}
                   >

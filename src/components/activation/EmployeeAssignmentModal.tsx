@@ -85,9 +85,7 @@ export function EmployeeAssignmentModal({
             return (
               <div 
                 key={employee.id}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
+                onClick={() => {
                   setSelectedEmployee(employee);
                 }}
                 className={cn(
