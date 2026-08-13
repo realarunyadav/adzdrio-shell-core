@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { demoPlans, demoTaxRules } from "@/lib/mock/workspace.demo";
 import { useState } from "react";
 import { PlanModal } from "@/components/sales/PlanModal";
+import { TaxRuleModal } from "@/components/sales/TaxRuleModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -17,10 +18,17 @@ export const Route = createFileRoute("/modules/admin/sales")({
   component: () => {
     const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState<any>(null);
+    const [isTaxModalOpen, setIsTaxModalOpen] = useState(false);
+    const [selectedTaxRule, setSelectedTaxRule] = useState<any>(null);
 
     const openPlanModal = (plan?: any) => {
       setSelectedPlan(plan || null);
       setIsPlanModalOpen(true);
+    };
+
+    const openTaxModal = (rule?: any) => {
+      setSelectedTaxRule(rule || null);
+      setIsTaxModalOpen(true);
     };
 
     return (
@@ -171,7 +179,7 @@ export const Route = createFileRoute("/modules/admin/sales")({
                 <h3 className="text-sm font-black uppercase tracking-wider">Compliance & Taxes</h3>
                 <p className="text-[10px] text-muted-foreground uppercase font-bold mt-1">Configure GST, TDS, and global tax calculation rules</p>
               </div>
-              <Button size="sm" variant="outline" className="h-9 text-[10px] font-black uppercase tracking-widest gap-2 border-border/40">
+              <Button onClick={() => openTaxModal()} size="sm" variant="outline" className="h-9 text-[10px] font-black uppercase tracking-widest gap-2 border-border/40">
                 <Plus className="size-4" /> Add Tax Rule
               </Button>
             </div>
@@ -188,7 +196,11 @@ export const Route = createFileRoute("/modules/admin/sales")({
                 </TableHeader>
                 <TableBody>
                   {demoTaxRules.map((rule) => (
-                    <TableRow key={rule.id} className="border-border/40 hover:bg-accent/20 transition-colors">
+                    <TableRow 
+                      key={rule.id} 
+                      className="border-border/40 hover:bg-accent/20 transition-colors cursor-pointer"
+                      onClick={() => openTaxModal(rule)}
+                    >
                       <TableCell className="py-4 font-bold text-xs uppercase tracking-tight">{rule.name}</TableCell>
                       <TableCell>
                         <Badge variant="outline" className="text-[8px] font-black uppercase tracking-tighter h-5 border-border/60">
@@ -213,6 +225,11 @@ export const Route = createFileRoute("/modules/admin/sales")({
           isOpen={isPlanModalOpen} 
           onClose={() => setIsPlanModalOpen(false)} 
           plan={selectedPlan}
+        />
+        <TaxRuleModal
+          isOpen={isTaxModalOpen}
+          onClose={() => setIsTaxModalOpen(false)}
+          rule={selectedTaxRule}
         />
       </div>
     );
