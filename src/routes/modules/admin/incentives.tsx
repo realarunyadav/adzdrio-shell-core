@@ -2,15 +2,25 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Plus, Settings, History, Play, Power, Zap, Target, Eye, Copy } from "lucide-react";
+import { Plus, Settings, History, Play, Power, Zap, Eye, Copy } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { demoIncentiveRules } from "@/lib/mock/workspace.demo";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { IncentiveRuleModal } from "@/components/incentives/IncentiveRuleModal";
+import { useState } from "react";
 
 export const Route = createFileRoute("/modules/admin/incentives")({
   component: () => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedRule, setSelectedRule] = useState<any>(null);
+
+    const openModal = (rule?: any) => {
+      setSelectedRule(rule || null);
+      setIsModalOpen(true);
+    };
+
     const salesRules = demoIncentiveRules.filter(r => r.type === "Sales");
     const referralRules = demoIncentiveRules.filter(r => r.type === "Referral");
 
@@ -34,7 +44,7 @@ export const Route = createFileRoute("/modules/admin/incentives")({
                 <h3 className="text-sm font-black uppercase tracking-wider">Performance Rules</h3>
                 <p className="text-[10px] text-muted-foreground uppercase font-bold mt-1">Active slabs for sales achievement</p>
               </div>
-              <Button className="h-9 text-[10px] font-black uppercase tracking-widest gap-2 bg-primary">
+              <Button onClick={() => openModal()} className="h-9 text-[10px] font-black uppercase tracking-widest gap-2 bg-primary">
                 <Plus className="size-4" /> Create Sales Rule
               </Button>
             </div>
@@ -79,8 +89,8 @@ export const Route = createFileRoute("/modules/admin/incentives")({
                       </TableCell>
                       <TableCell className="text-right pr-6">
                         <div className="flex justify-end gap-1">
-                          <Button variant="ghost" size="icon" className="size-8"><Eye className="size-3.5" /></Button>
-                          <Button variant="ghost" size="icon" className="size-8"><Settings className="size-3.5" /></Button>
+                          <Button variant="ghost" size="icon" className="size-8" onClick={() => openModal(rule)}><Eye className="size-3.5" /></Button>
+                          <Button variant="ghost" size="icon" className="size-8" onClick={() => openModal(rule)}><Settings className="size-3.5" /></Button>
                           <Button variant="ghost" size="icon" className="size-8"><History className="size-3.5" /></Button>
                         </div>
                       </TableCell>
@@ -97,7 +107,7 @@ export const Route = createFileRoute("/modules/admin/incentives")({
                 <h3 className="text-sm font-black uppercase tracking-wider">Referral Programs</h3>
                 <p className="text-[10px] text-muted-foreground uppercase font-bold mt-1">Multi-tier referral reward configuration</p>
               </div>
-              <Button className="h-9 text-[10px] font-black uppercase tracking-widest gap-2 variant-outline border-primary/20 text-primary">
+              <Button onClick={() => openModal()} className="h-9 text-[10px] font-black uppercase tracking-widest gap-2 variant-outline border-primary/20 text-primary">
                 <Plus className="size-4" /> Create Referral Rule
               </Button>
             </div>
@@ -134,7 +144,7 @@ export const Route = createFileRoute("/modules/admin/incentives")({
                       </TableCell>
                       <TableCell className="text-right pr-6">
                         <div className="flex justify-end gap-1">
-                          <Button variant="ghost" size="icon" className="size-8"><Settings className="size-3.5" /></Button>
+                          <Button variant="ghost" size="icon" className="size-8" onClick={() => openModal(rule)}><Settings className="size-3.5" /></Button>
                           <Button variant="ghost" size="icon" className="size-8"><Copy className="size-3.5" /></Button>
                         </div>
                       </TableCell>
@@ -164,7 +174,14 @@ export const Route = createFileRoute("/modules/admin/incentives")({
             </Card>
           </TabsContent>
         </Tabs>
+
+        <IncentiveRuleModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          rule={selectedRule}
+        />
       </div>
     );
   }
 });
+
