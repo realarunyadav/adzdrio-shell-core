@@ -32,7 +32,9 @@ import {
   Database,
   ShieldCheck,
   Settings,
-  ArrowRight
+  ArrowRight,
+  UserPlus,
+  Video
 } from "lucide-react";
 
 import { PageHeader } from "@/components/shared/PageHeader";
