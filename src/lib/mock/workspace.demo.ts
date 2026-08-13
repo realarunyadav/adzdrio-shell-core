@@ -1275,3 +1275,62 @@ export const demoIntegrations: DemoIntegration[] = [
   { id: "int-5", name: "AWS S3", category: "Cloud", status: "Connected", lastSync: "2026-08-14T12:00:00Z", usageCount: 15400 }
 ];
 
+
+export interface DemoIncentiveRule {
+  id: string;
+  name: string;
+  businessId: string;
+  type: "Sales" | "Referral";
+  status: "Draft" | "Active" | "Inactive";
+  version: number;
+  description: string;
+  effectiveFrom: string;
+  effectiveTo?: string;
+  tiers: { min: number; reward: number; label?: string }[];
+}
+
+export const demoIncentiveRules: DemoIncentiveRule[] = [
+  {
+    id: "RULE-101",
+    name: "Q3 Sales Accelerator",
+    businessId: "biz-a",
+    type: "Sales",
+    status: "Active",
+    version: 1,
+    description: "Incentive for exceeding quarterly sales targets.",
+    effectiveFrom: "2026-07-01",
+    tiers: [
+      { min: 10, reward: 5000, label: "Tier 1" },
+      { min: 20, reward: 12000, label: "Super Accelerator" }
+    ]
+  },
+  {
+    id: "RULE-102",
+    name: "Partner Referral Rewards",
+    businessId: "biz-a",
+    type: "Referral",
+    status: "Active",
+    version: 1,
+    description: "Multi-tier reward for successful business referrals.",
+    effectiveFrom: "2026-01-01",
+    tiers: [
+      { min: 1, reward: 1000, label: "First Referral" },
+      { min: 5, reward: 7500, label: "Gold Partner" }
+    ]
+  }
+];
+
+export interface DemoTaxRule {
+  id: string;
+  name: string;
+  businessId: string;
+  type: string;
+  rate: number;
+  effectiveFrom: string;
+  status: "Active" | "Inactive";
+}
+
+export const demoTaxRules: DemoTaxRule[] = [
+  { id: "TAX-01", name: "GST Standard", businessId: "biz-a", type: "GST", rate: 18, effectiveFrom: "2026-01-01", status: "Active" },
+  { id: "TAX-02", name: "TDS Professional", businessId: "biz-a", type: "TDS", rate: 10, effectiveFrom: "2026-04-01", status: "Active" }
+];
