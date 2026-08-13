@@ -1617,3 +1617,171 @@ export const demoDuplicateAudit: DuplicateAudit[] = [
   }
 ];
 
+export type DocCategory = 'Employee' | 'Customer' | 'Legal' | 'Finance' | 'Company';
+export type DocAccessLevel = 'Public' | 'Restricted' | 'Confidential' | 'Internal';
+
+export interface DocumentVersion {
+  id: string;
+  version: number;
+  uploadedBy: string;
+  uploadedByName: string;
+  timestamp: string;
+  note: string;
+  size: string;
+}
+
+export interface Document {
+  resultType?: 'document'; // For search indexing
+  id: string;
+  name: string;
+  type: string; // PDF, DOCX, etc.
+  category: DocCategory;
+  businessId: string;
+  businessName: string;
+  relatedEntityId?: string;
+  relatedEntityName?: string;
+  version: number;
+  status: 'Active' | 'Archived' | 'Expired' | 'Draft';
+  accessLevel: DocAccessLevel;
+  ownerId: string;
+  ownerName: string;
+  created: string;
+  updated: string;
+  expiryDate?: string;
+  description: string;
+  tags: string[];
+  versions: DocumentVersion[];
+}
+
+
+export interface DocumentAudit {
+  id: string;
+  docId: string;
+  docName: string;
+  actorId: string;
+  actorName: string;
+  employeeCode?: string;
+  businessName: string;
+  action: 'Uploaded' | 'Viewed' | 'Downloaded' | 'Version Uploaded' | 'Access Changed' | 'Archived' | 'Restored' | 'Metadata Changed';
+  timestamp: string;
+  result: string;
+}
+
+export const demoDocuments: Document[] = [
+  {
+    id: "DOC-001",
+    name: "Enterprise Service Agreement",
+    type: "PDF",
+    category: "Legal",
+    businessId: "biz-a",
+    businessName: "Acme India",
+    relatedEntityId: "cust-501",
+    relatedEntityName: "Global Exports Ltd",
+    version: 2,
+    status: "Active",
+    accessLevel: "Confidential",
+    ownerId: "admin-1",
+    ownerName: "SuperAdmin",
+    created: "2026-01-10T10:00:00Z",
+    updated: "2026-06-15T14:30:00Z",
+    expiryDate: "2027-01-10T00:00:00Z",
+    description: "Master service agreement for enterprise clients.",
+    tags: ["contract", "enterprise", "legal"],
+    versions: [
+      { id: "VER-001", version: 1, uploadedBy: "admin-1", uploadedByName: "SuperAdmin", timestamp: "2026-01-10T10:00:00Z", note: "Initial draft", size: "2.4 MB" },
+      { id: "VER-002", version: 2, uploadedBy: "admin-1", uploadedByName: "SuperAdmin", timestamp: "2026-06-15T14:30:00Z", note: "Updated liability clauses", size: "2.5 MB" }
+    ]
+  },
+  {
+    id: "DOC-002",
+    name: "Employee Handbook 2026",
+    type: "PDF",
+    category: "Employee",
+    businessId: "global",
+    businessName: "Global",
+    version: 1,
+    status: "Active",
+    accessLevel: "Internal",
+    ownerId: "hr-1",
+    ownerName: "Sarah Connor",
+    created: "2026-01-01T09:00:00Z",
+    updated: "2026-01-01T09:00:00Z",
+    description: "Standard operating procedures for all employees.",
+    tags: ["hr", "policy", "handbook"],
+    versions: [
+      { id: "VER-003", version: 1, uploadedBy: "hr-1", uploadedByName: "Sarah Connor", timestamp: "2026-01-01T09:00:00Z", note: "2026 release", size: "1.8 MB" }
+    ]
+  },
+  {
+    id: "DOC-003",
+    name: "Q3 Financial Projection",
+    type: "XLSX",
+    category: "Finance",
+    businessId: "biz-b",
+    businessName: "Vertex Tech",
+    version: 3,
+    status: "Active",
+    accessLevel: "Confidential",
+    ownerId: "fin-1",
+    ownerName: "Michael Scott",
+    created: "2026-07-01T11:00:00Z",
+    updated: "2026-08-10T16:00:00Z",
+    description: "Detailed revenue and expense projections for Q3.",
+    tags: ["finance", "projection", "q3"],
+    versions: [
+      { id: "VER-004", version: 1, uploadedBy: "fin-1", uploadedByName: "Michael Scott", timestamp: "2026-07-01T11:00:00Z", note: "Draft", size: "1.2 MB" },
+      { id: "VER-005", version: 2, uploadedBy: "fin-1", uploadedByName: "Michael Scott", timestamp: "2026-07-15T10:00:00Z", note: "Revised margins", size: "1.3 MB" },
+      { id: "VER-006", version: 3, uploadedBy: "fin-1", uploadedByName: "Michael Scott", timestamp: "2026-08-10T16:00:00Z", note: "Final version", size: "1.3 MB" }
+    ]
+  },
+  {
+    id: "DOC-004",
+    name: "Trade License - MH",
+    type: "JPG",
+    category: "Company",
+    businessId: "biz-a",
+    businessName: "Acme India",
+    version: 1,
+    status: "Expired",
+    accessLevel: "Restricted",
+    ownerId: "admin-1",
+    ownerName: "SuperAdmin",
+    created: "2025-08-01T09:00:00Z",
+    updated: "2025-08-01T09:00:00Z",
+    expiryDate: "2026-08-01T00:00:00Z",
+    description: "Business trade license for Maharashtra region.",
+    tags: ["compliance", "license", "government"],
+    versions: [
+      { id: "VER-007", version: 1, uploadedBy: "admin-1", uploadedByName: "SuperAdmin", timestamp: "2025-08-01T09:00:00Z", note: "Original scan", size: "4.5 MB" }
+    ]
+  }
+];
+
+export const demoDocAudit: DocumentAudit[] = [
+  {
+    id: "DA-001",
+    docId: "DOC-001",
+    docName: "Enterprise Service Agreement",
+    actorId: "admin-1",
+    actorName: "SuperAdmin",
+    employeeCode: "HQ-001",
+    businessName: "Acme India",
+    action: "Version Uploaded",
+    timestamp: "2026-06-15T14:30:00Z",
+    result: "Uploaded v2 with updated liability clauses."
+  },
+  {
+    id: "DA-002",
+    docId: "DOC-003",
+    docName: "Q3 Financial Projection",
+    actorId: "fin-1",
+    actorName: "Michael Scott",
+    employeeCode: "FIN-102",
+    businessName: "Vertex Tech",
+    action: "Viewed",
+    timestamp: "2026-08-13T10:15:00Z",
+    result: "Viewed document metadata and preview."
+  }
+];
+
+

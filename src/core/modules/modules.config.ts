@@ -230,7 +230,9 @@ export const modules: ModuleDefinition[] = [
       { id: "admin-int", label: "Integration Manager", path: "/modules/admin/integrations", icon: RefreshCw },
       { id: "admin-sec", label: "Security Hub", path: "/modules/admin/security", icon: ShieldCheck },
       { id: "admin-audit", label: "Audit Center", path: "/modules/admin/audit", icon: Eye },
-      { id: "admin-data", label: "Data Center", path: "/modules/admin/data", icon: Database },
+      { id: "admin-data", label: "Documents", path: "/modules/admin/data", icon: FileText },
+      { id: "admin-dq", label: "Data Quality", path: "/modules/admin/duplicates", icon: Database },
+
       { id: "admin-sys", label: "System Configuration", path: "/modules/admin/system", icon: Settings },
     ]
   },

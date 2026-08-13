@@ -9,7 +9,7 @@ import { WorkflowBuilder } from "@/components/admin-studio/WorkflowBuilder";
 import { BrandingBuilder } from "@/components/admin-studio/BrandingBuilder";
 import { PolicyManager } from "@/components/admin-studio/PolicyManager";
 import { AdminAuditCenter } from "@/components/admin-studio/AdminAuditCenter";
-import { LayoutGrid, Database, Layers, GitBranch, Settings, History, ShieldAlert, Search, Link, Scale, GitMerge } from "lucide-react";
+import { LayoutGrid, Database, Layers, GitBranch, Settings, History, ShieldAlert, Search, Link, Scale, GitMerge, Folder } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlobalSearchOverlay } from "@/components/shared/GlobalSearchOverlay";
@@ -38,13 +38,9 @@ function AdminStudioModule() {
     return () => document.removeEventListener("keydown", down);
   }, []);
 
-  if (!isBaseRoute) {
-    return (
-      <div className="p-6 pb-20 max-w-[1600px] mx-auto animate-in fade-in duration-500">
-        <Outlet />
-      </div>
-    );
-  }
+  // Remove the isBaseRoute shortcut because we want Admin Studio's tabs
+  // to persist across all sub-routes. We'll handle the content in the main return.
+
 
   return (
     <div className="flex flex-col gap-6 p-6 pb-20 max-w-[1600px] mx-auto animate-in fade-in duration-500">
@@ -94,8 +90,9 @@ function AdminStudioModule() {
           <AdminTabLink to="/modules/admin/policies" active={location.pathname === "/modules/admin/policies"} icon={ShieldAlert} label="Policies" />
           <AdminTabLink to="/modules/admin/audit" active={location.pathname === "/modules/admin/audit"} icon={History} label="Audit Center" />
           <AdminTabLink to="/modules/admin/security" active={location.pathname === "/modules/admin/security"} icon={ShieldAlert} label="Security" />
-          <AdminTabLink to="/modules/admin/data" active={location.pathname === "/modules/admin/data"} icon={Database} label="Data Center" />
+          
           <AdminTabLink to="/modules/admin/duplicates" active={location.pathname === "/modules/admin/duplicates"} icon={GitMerge} label="Data Quality" />
+          <AdminTabLink to="/modules/admin/data" active={location.pathname === "/modules/admin/data"} icon={Folder} label="Documents" />
           <AdminTabLink to="/modules/admin/integrations" active={location.pathname === "/modules/admin/integrations"} icon={Link} label="Integrations" />
 
           <AdminTabLink to="/modules/admin/legal" active={location.pathname === "/modules/admin/legal"} icon={Scale} label="Legal" />
