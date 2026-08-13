@@ -169,7 +169,7 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                     "flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all",
                     selectedCustomer?.id === customer.id ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-border hover:bg-muted/30"
                   )}
-                  onClick={(e) => {
+                  onClick={() => {
                     console.log(`[Wizard] Selecting customer:`, customer.id);
                     setSelectedCustomer(customer);
                     setSelectedSale(null); 
@@ -210,7 +210,7 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                       "p-3 rounded-xl border cursor-pointer transition-all",
                       selectedSale?.id === sale.id ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-border hover:bg-muted/30"
                     )}
-                    onClick={(e) => {
+                    onClick={() => {
                       console.log(`[Wizard] Selecting sale:`, sale.id);
                       setSelectedSale(sale);
                     }}
@@ -272,7 +272,7 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                   "p-4 rounded-xl border flex items-start gap-3 cursor-pointer transition-all",
                   paymentAcknowledged ? "border-primary bg-primary/5" : "border-yellow-200 bg-yellow-50/50"
                 )}
-                onClick={(e) => {
+                onClick={() => {
                   setPaymentAcknowledged(!paymentAcknowledged);
                 }}
               >
@@ -308,7 +308,7 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                     "flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all",
                     selectedEmployee?.id === employee.id ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-border hover:bg-muted/30"
                   )}
-                  onClick={(e) => {
+                  onClick={() => {
                     setSelectedEmployee(employee);
                   }}
                 >
@@ -344,7 +344,7 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                       priority === p && p === 'Critical' ? "bg-red-600 hover:bg-red-700" :
                       priority === p && p === 'High' ? "bg-orange-500 hover:bg-orange-600" : ""
                     )}
-                    onClick={(e) => {
+                    onClick={() => {
                       setPriority(p);
                     }}
                   >
