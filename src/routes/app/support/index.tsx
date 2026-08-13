@@ -40,7 +40,7 @@ import {
 } from 'recharts';
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/app/support/")({
+export const Route = createFileRoute("/app/support")({
   component: SupportModuleLayout,
 });
 
