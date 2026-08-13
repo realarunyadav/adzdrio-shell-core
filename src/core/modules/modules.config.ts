@@ -129,12 +129,18 @@ export const modules: ModuleDefinition[] = [
     group: "finance",
     order: 50,
     status: "available",
-    basePath: "/modules/finance",
+    basePath: "/app/finance",
     navigation: [
-      { id: "payments", label: "Payments", path: "/modules/finance/payments" },
-      { id: "refunds", label: "Refunds", path: "/modules/finance/refunds" },
-      { id: "expenses", label: "Expenses", path: "/modules/finance/expenses" },
-      { id: "payroll", label: "Payroll", path: "/modules/finance/payroll" },
+      { id: "finance-dashboard", label: "Finance Dashboard", path: "/app/finance" },
+      { id: "finance-payments", label: "Payments", path: "/app/finance/payments" },
+      { id: "finance-transactions", label: "Transactions", path: "/app/finance/transactions" },
+      { id: "finance-refunds", label: "Refunds", path: "/app/finance/refunds" },
+      { id: "finance-invoices", label: "Invoices", path: "/app/finance/invoices" },
+      { id: "finance-expenses", label: "Expenses", path: "/app/finance/expenses" },
+      { id: "finance-revenue", label: "Revenue", path: "/app/finance/revenue" },
+      { id: "finance-reconciliation", label: "Reconciliation", path: "/app/finance/reconciliation" },
+      { id: "finance-payroll", label: "Payroll", path: "/app/finance/payroll" },
+      { id: "finance-reports", label: "Financial Reports", path: "/app/finance/reports" },
     ]
   },
   {
