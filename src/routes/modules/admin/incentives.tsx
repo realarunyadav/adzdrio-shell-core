@@ -2,11 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Plus, Settings, History, Play, Power, Zap, Target } from "lucide-react";
+import { Plus, Settings, History, Play, Power, Zap, Target, Eye, Copy } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { demoIncentiveRules } from "@/lib/mock/workspace.demo";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/modules/admin/incentives")({
+
   component: () => (
     <div className="space-y-6">
       <PageHeader
