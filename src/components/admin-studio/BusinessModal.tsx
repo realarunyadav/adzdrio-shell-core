@@ -24,7 +24,14 @@ export function BusinessModal({ isOpen, onClose, business }: BusinessModalProps)
     address: ""
   };
 
-  const [formData, setFormData] = useState(initialData);
+  const [formData, setFormData] = useState(business ? {
+    name: business.name,
+    plan: business.plan || "Growth",
+    revenue: business.revenue || "₹ 0",
+    teamSize: business.teamSize || 0,
+    status: business.status || "active",
+    initials: business.initials || business.name.substring(0, 2).toUpperCase()
+  } : initialData);
 
   const handleSave = () => {
     console.log("Saving business:", formData);

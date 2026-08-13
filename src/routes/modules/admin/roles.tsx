@@ -34,7 +34,7 @@ function RolesPermissionsPage() {
           title="Roles & Permissions"
           description="Define access hierarchies, granular permissions, and authorization policies across all modules."
         />
-        <Button className="h-10 text-[10px] font-black uppercase tracking-widest gap-2 bg-primary">
+        <Button onClick={() => setModalOpen(true)} className="h-10 text-[10px] font-black uppercase tracking-widest gap-2 bg-primary">
           <Key className="size-4" /> Create Custom Role
         </Button>
       </div>
