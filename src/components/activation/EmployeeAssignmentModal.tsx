@@ -85,7 +85,11 @@ export function EmployeeAssignmentModal({
             return (
               <div 
                 key={employee.id}
-                onClick={() => setSelectedEmployee(employee)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSelectedEmployee(employee);
+                }}
                 className={cn(
                   "flex items-center justify-between p-3 rounded-xl border transition-all cursor-pointer group",
                   isSelected 
