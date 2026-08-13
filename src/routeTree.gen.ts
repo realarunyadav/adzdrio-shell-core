@@ -76,6 +76,7 @@ import { Route as ModulesAdminBrandingRouteImport } from './routes/modules/admin
 import { Route as ModulesAdminBusinessRouteImport } from './routes/modules/admin/business'
 import { Route as ModulesAdminCrmRouteImport } from './routes/modules/admin/crm'
 import { Route as ModulesAdminDataRouteImport } from './routes/modules/admin/data'
+import { Route as ModulesAdminDuplicatesRouteImport } from './routes/modules.admin.duplicates'
 import { Route as ModulesAdminEmployeesRouteImport } from './routes/modules/admin/employees'
 import { Route as ModulesAdminIncentivesRouteImport } from './routes/modules/admin/incentives'
 import { Route as ModulesAdminIntegrationsRouteImport } from './routes/modules/admin/integrations'
@@ -432,6 +433,11 @@ const ModulesAdminDataRoute = ModulesAdminDataRouteImport.update({
   path: '/data',
   getParentRoute: () => ModulesAdminRoute,
 } as any)
+const ModulesAdminDuplicatesRoute = ModulesAdminDuplicatesRouteImport.update({
+  id: '/duplicates',
+  path: '/duplicates',
+  getParentRoute: () => ModulesAdminRoute,
+} as any)
 const ModulesAdminEmployeesRoute = ModulesAdminEmployeesRouteImport.update({
   id: '/employees',
   path: '/employees',
@@ -588,6 +594,7 @@ export interface FileRoutesByFullPath {
   '/modules/admin/business': typeof ModulesAdminBusinessRoute
   '/modules/admin/crm': typeof ModulesAdminCrmRoute
   '/modules/admin/data': typeof ModulesAdminDataRoute
+  '/modules/admin/duplicates': typeof ModulesAdminDuplicatesRoute
   '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
   '/modules/admin/incentives': typeof ModulesAdminIncentivesRoute
   '/modules/admin/integrations': typeof ModulesAdminIntegrationsRoute
@@ -675,6 +682,7 @@ export interface FileRoutesByTo {
   '/modules/admin/business': typeof ModulesAdminBusinessRoute
   '/modules/admin/crm': typeof ModulesAdminCrmRoute
   '/modules/admin/data': typeof ModulesAdminDataRoute
+  '/modules/admin/duplicates': typeof ModulesAdminDuplicatesRoute
   '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
   '/modules/admin/incentives': typeof ModulesAdminIncentivesRoute
   '/modules/admin/integrations': typeof ModulesAdminIntegrationsRoute
@@ -763,6 +771,7 @@ export interface FileRoutesById {
   '/modules/admin/business': typeof ModulesAdminBusinessRoute
   '/modules/admin/crm': typeof ModulesAdminCrmRoute
   '/modules/admin/data': typeof ModulesAdminDataRoute
+  '/modules/admin/duplicates': typeof ModulesAdminDuplicatesRoute
   '/modules/admin/employees': typeof ModulesAdminEmployeesRoute
   '/modules/admin/incentives': typeof ModulesAdminIncentivesRoute
   '/modules/admin/integrations': typeof ModulesAdminIntegrationsRoute
@@ -852,6 +861,7 @@ export interface FileRouteTypes {
     | '/modules/admin/business'
     | '/modules/admin/crm'
     | '/modules/admin/data'
+    | '/modules/admin/duplicates'
     | '/modules/admin/employees'
     | '/modules/admin/incentives'
     | '/modules/admin/integrations'
@@ -939,6 +949,7 @@ export interface FileRouteTypes {
     | '/modules/admin/business'
     | '/modules/admin/crm'
     | '/modules/admin/data'
+    | '/modules/admin/duplicates'
     | '/modules/admin/employees'
     | '/modules/admin/incentives'
     | '/modules/admin/integrations'
@@ -1026,6 +1037,7 @@ export interface FileRouteTypes {
     | '/modules/admin/business'
     | '/modules/admin/crm'
     | '/modules/admin/data'
+    | '/modules/admin/duplicates'
     | '/modules/admin/employees'
     | '/modules/admin/incentives'
     | '/modules/admin/integrations'
@@ -1553,6 +1565,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ModulesAdminDataRouteImport
       parentRoute: typeof ModulesAdminRoute
     }
+    '/modules/admin/duplicates': {
+      id: '/modules/admin/duplicates'
+      path: '/duplicates'
+      fullPath: '/modules/admin/duplicates'
+      preLoaderRoute: typeof ModulesAdminDuplicatesRouteImport
+      parentRoute: typeof ModulesAdminRoute
+    }
     '/modules/admin/employees': {
       id: '/modules/admin/employees'
       path: '/employees'
@@ -1776,6 +1795,7 @@ interface ModulesAdminRouteChildren {
   ModulesAdminBusinessRoute: typeof ModulesAdminBusinessRoute
   ModulesAdminCrmRoute: typeof ModulesAdminCrmRoute
   ModulesAdminDataRoute: typeof ModulesAdminDataRoute
+  ModulesAdminDuplicatesRoute: typeof ModulesAdminDuplicatesRoute
   ModulesAdminEmployeesRoute: typeof ModulesAdminEmployeesRoute
   ModulesAdminIncentivesRoute: typeof ModulesAdminIncentivesRoute
   ModulesAdminIntegrationsRoute: typeof ModulesAdminIntegrationsRoute
@@ -1795,6 +1815,7 @@ const ModulesAdminRouteChildren: ModulesAdminRouteChildren = {
   ModulesAdminBusinessRoute: ModulesAdminBusinessRoute,
   ModulesAdminCrmRoute: ModulesAdminCrmRoute,
   ModulesAdminDataRoute: ModulesAdminDataRoute,
+  ModulesAdminDuplicatesRoute: ModulesAdminDuplicatesRoute,
   ModulesAdminEmployeesRoute: ModulesAdminEmployeesRoute,
   ModulesAdminIncentivesRoute: ModulesAdminIncentivesRoute,
   ModulesAdminIntegrationsRoute: ModulesAdminIntegrationsRoute,
