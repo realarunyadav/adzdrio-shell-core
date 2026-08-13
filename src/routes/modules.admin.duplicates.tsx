@@ -83,15 +83,20 @@ function DuplicateReviewDashboard() {
     // Add audit entry
     const newAudit: DuplicateAudit = {
       id: `aud-${Math.random().toString(36).substr(2, 9)}`,
-      caseId: id,
       adminId: "ADMIN-001",
       adminName: "System Admin",
-      action: action as any,
+      business: "Global",
+      entityType: cases.find(c => c.id === id)?.entityType || "Unknown",
+      recordIds: [cases.find(c => c.id === id)?.recordA.id || "", cases.find(c => c.id === id)?.recordB.id || ""],
+      action: (action === 'Record A Retained' || action === 'Record B Retained') 
+        ? action 
+        : action === 'Merged' ? 'Merged' : 'Reviewed',
       timestamp: new Date().toISOString(),
-      details: result ? `Resolution applied with merged data.` : `Action: ${action}`
+      result: result ? `Resolution applied with merged data.` : `Action: ${action}`
     };
     setAudits(prev => [newAudit, ...prev]);
   };
+
 
   const getStatusTone = (status: string) => {
     switch (status) {
