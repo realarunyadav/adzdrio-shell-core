@@ -95,7 +95,9 @@ function AdminStudioModule() {
           <AdminTabLink to="/modules/admin/audit" active={location.pathname === "/modules/admin/audit"} icon={History} label="Audit Center" />
           <AdminTabLink to="/modules/admin/security" active={location.pathname === "/modules/admin/security"} icon={ShieldAlert} label="Security" />
           <AdminTabLink to="/modules/admin/data" active={location.pathname === "/modules/admin/data"} icon={Database} label="Data Center" />
+          <AdminTabLink to="/modules/admin/duplicates" active={location.pathname === "/modules/admin/duplicates"} icon={GitMerge} label="Data Quality" />
           <AdminTabLink to="/modules/admin/integrations" active={location.pathname === "/modules/admin/integrations"} icon={Link} label="Integrations" />
+
           <AdminTabLink to="/modules/admin/legal" active={location.pathname === "/modules/admin/legal"} icon={Scale} label="Legal" />
           <AdminTabLink to="/modules/admin/system" active={location.pathname === "/modules/admin/system"} icon={Settings} label="System" />
         </div>
