@@ -11,8 +11,10 @@ import { demoLeads, DemoLead } from "@/lib/mock/workspace.demo";
 import { format } from "date-fns";
 import { LeadDetailsDrawer } from "@/components/crm/LeadDetailsDrawer";
 import { ClaimConfirmationModal } from "@/components/crm/ClaimConfirmationModal";
+import { ImportLeadsDrawer } from "@/components/crm/ImportLeadsDrawer";
 import { toast } from "sonner";
 import { SkeletonTable } from "@/components/shared/SkeletonLoader";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/crm/lead-pool")({ 
   component: LeadPoolPage 
@@ -25,6 +27,7 @@ function LeadPoolPage() {
   const [selectedLead, setSelectedLead] = React.useState<DemoLead | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [isClaimModalOpen, setIsClaimModalOpen] = React.useState(false);
+  const [isImportDrawerOpen, setIsImportDrawerOpen] = React.useState(false);
 
   const handleRefresh = () => {
     setLoading(true);
@@ -185,8 +188,13 @@ function LeadPoolPage() {
         onConfirm={handleClaimConfirm}
         leadName={selectedLead?.name || ""}
       />
+
+      <ImportLeadsDrawer 
+        open={isImportDrawerOpen}
+        onOpenChange={setIsImportDrawerOpen}
+      />
     </div>
   );
 }
 
-const cn = (...classes: any[]) => classes.filter(Boolean).join(" ");
+// Removing local cn as we import from @/lib/utils now

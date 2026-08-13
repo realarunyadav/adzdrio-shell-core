@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import * as React from "react";
-import { Search, Plus, Filter, RefreshCw, Phone, MessageSquare, MoreHorizontal, Eye, Calendar, Clock, ArrowRight } from "lucide-react";
+import { Search, Plus, Filter, RefreshCw, Phone, MessageSquare, MoreHorizontal, Eye, Calendar, Clock, ArrowRight, Upload } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { StatusBadge } from "@/components/shared/StatusBadge";
@@ -10,9 +10,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { demoLeads, DemoLead } from "@/lib/mock/workspace.demo";
 import { format } from "date-fns";
 import { LeadDetailsDrawer } from "@/components/crm/LeadDetailsDrawer";
+import { ImportLeadsDrawer } from "@/components/crm/ImportLeadsDrawer";
 import { toast } from "sonner";
 import { SkeletonTable } from "@/components/shared/SkeletonLoader";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/app/crm/my-leads")({ 
   component: MyLeadsPage 
@@ -24,6 +26,7 @@ function MyLeadsPage() {
   const [search, setSearch] = React.useState("");
   const [selectedLead, setSelectedLead] = React.useState<DemoLead | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const [isImportDrawerOpen, setIsImportDrawerOpen] = React.useState(false);
 
   const handleRefresh = () => {
     setLoading(true);
@@ -53,6 +56,9 @@ function MyLeadsPage() {
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loading}>
               <RefreshCw className={cn("mr-2 size-3.5", loading && "animate-spin")} /> Sync
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setIsImportDrawerOpen(true)}>
+              <Upload className="mr-2 size-3.5" /> Import
             </Button>
             <Button size="sm" className="shadow-lg shadow-primary/20"><Plus className="mr-2 size-3.5" /> Add Lead</Button>
           </div>
@@ -172,8 +178,13 @@ function MyLeadsPage() {
         open={isDrawerOpen} 
         onOpenChange={setIsDrawerOpen} 
       />
+
+      <ImportLeadsDrawer
+        open={isImportDrawerOpen}
+        onOpenChange={setIsImportDrawerOpen}
+      />
     </div>
   );
 }
 
-const cn = (...classes: any[]) => classes.filter(Boolean).join(" ");
+// Removing local cn
