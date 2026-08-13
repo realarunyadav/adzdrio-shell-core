@@ -32,7 +32,7 @@ Build a comprehensive "Owner Command Center" as the default `/app` dashboard and
     - **Activity Feed**: Company-wide events.
 
 ### 3. Admin Studio Landing Page
-- Update `src/components/admin-studio/AdminStudioHome.tsx` (and `src/routes/modules.admin.tsx` if needed):
+- Update `src/components/admin-studio/AdminStudioHome.tsx`:
     - Create a grid of "Category Cards" (Organization, People & Access, CRM, Sales, HR, Legal, Communication, Integrations, Security, Data, System).
     - Each card will display its sub-modules and a brief description.
     - Link categories to placeholder pages.
@@ -41,7 +41,6 @@ Build a comprehensive "Owner Command Center" as the default `/app` dashboard and
 - Create/Refine shared components in `src/components/shared`:
     - `BusinessPerformanceCard.tsx`: For comparing brands.
     - `AlertBanner.tsx`: For the "Needs Attention" section.
-    - `SimpleChart.tsx`: A lightweight wrapper for visual trends.
     - `AdminCategoryCard.tsx`: For the Admin Studio grid.
 
 ## Technical Details
@@ -49,4 +48,3 @@ Build a comprehensive "Owner Command Center" as the default `/app` dashboard and
 - **Responsive Grid**: Use `grid-cols-12` layouts to efficiently use desktop space while stacking for mobile.
 - **Lucide Icons**: Use standard enterprise icons for different business domains.
 - **State States**: Implement `Skeleton` loaders and "No Data" overlays as requested for each major widget.
-
