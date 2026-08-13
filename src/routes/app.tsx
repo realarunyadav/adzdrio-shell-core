@@ -112,6 +112,8 @@ function OwnerDashboard() {
 
   return (
     <div className="flex flex-col gap-8 pb-20 animate-in fade-in duration-500">
+      <GlobalSearchOverlay open={searchOpen} onOpenChange={setSearchOpen} />
+      
       {/* Header Section */}
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-6 border-b border-border/50 pb-6">
         <div>
@@ -119,11 +121,25 @@ function OwnerDashboard() {
             <ShieldCheck className="size-3" />
             Restricted: Owner Access
           </Badge>
-          <PageHeader
-            title="Owner Command Center"
-            description="Company-wide business performance, operations, finance, people and system overview."
-            className="p-0 space-y-1"
-          />
+          <div className="flex items-center gap-4">
+            <PageHeader
+              title="Owner Command Center"
+              description="Company-wide business performance, operations, finance, people and system overview."
+              className="p-0 space-y-1"
+            />
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="h-9 px-3 gap-2 bg-accent/30 border-border/40 text-muted-foreground hover:text-foreground hidden md:flex"
+              onClick={() => setSearchOpen(true)}
+            >
+              <Search className="size-4" />
+              <span className="text-[10px] font-black uppercase tracking-widest">Search...</span>
+              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-background border border-border/40 text-[8px]">
+                <span className="opacity-50">⌘</span>K
+              </div>
+            </Button>
+          </div>
         </div>
         
         <div className="flex flex-wrap items-center gap-3">
