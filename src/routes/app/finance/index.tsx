@@ -171,7 +171,7 @@ function FinanceDashboard() {
             <div className="space-y-4">
               {[
                 { label: 'Failed Payments', value: '₹ 18K', icon: AlertTriangle, color: 'text-red-600', bg: 'bg-red-500/10' },
-                { label: 'Outstanding Amount', value: '₹ 4.2L', icon: Clock, color: 'text-yellow-600', bg: 'bg-yellow-500/10' },
+                { label: 'Outstanding Amount', value: finance.formatted.pendingCollections, icon: Clock, color: 'text-yellow-600', bg: 'bg-yellow-500/10' },
                 { label: 'Reconciliation Status', value: '98.2%', icon: ShieldCheck, color: 'text-green-600', bg: 'bg-green-500/10' },
               ].map((item) => (
                 <div key={item.label} className="flex items-center justify-between p-3 rounded-lg border border-border/40">
