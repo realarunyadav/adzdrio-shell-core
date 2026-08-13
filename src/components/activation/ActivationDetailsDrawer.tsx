@@ -64,28 +64,14 @@ export function ActivationDetailsDrawer({ activation: initialActivation, open, o
     // 1. Update the mock state for persistence
     const actIndex = demoActivations.findIndex(a => a.id === activation.id);
     if (actIndex > -1) {
-      const currentAct = demoActivations[actIndex];
+      const currentAct = demoActivations[actIndex]!;
       const updatedAct: DemoActivation = {
-        id: currentAct.id,
-        customerId: currentAct.customerId,
-        customerName: currentAct.customerName,
-        businessId: currentAct.businessId,
-        businessName: currentAct.businessName,
-        subscriptionId: currentAct.subscriptionId,
-        planName: currentAct.planName,
-        saleId: currentAct.saleId,
-        paymentId: currentAct.paymentId,
-        paymentStatus: currentAct.paymentStatus,
-        priority: currentAct.priority,
-        createdAt: currentAct.createdAt,
-        requestedAt: currentAct.requestedAt,
-        slaDueAt: currentAct.slaDueAt,
-        createdBy: currentAct.createdBy,
+        ...currentAct,
         status: 'Assigned',
         assignedTo: employee.id.toString(),
         assignedToName: employee.name,
         lastUpdatedAt: new Date().toISOString()
-      };
+      } as DemoActivation;
       
       demoActivations[actIndex] = updatedAct;
       
