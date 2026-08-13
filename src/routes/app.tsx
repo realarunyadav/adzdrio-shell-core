@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import * as React from "react";
 import { 
   TrendingUp, 
@@ -84,9 +84,14 @@ export const Route = createFileRoute("/app")({
   ),
 });
 
-import { Outlet } from "@tanstack/react-router";
-
 function OwnerDashboard() {
+  const { location } = useRouterState();
+  
+  // Only show the dashboard if we are exactly at /app
+  if (location.pathname !== "/app" && location.pathname !== "/app/") {
+    return null;
+  }
+
   const { location } = useRouterState();
   
   // Only show the dashboard if we are exactly at /app
