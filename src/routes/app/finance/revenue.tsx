@@ -4,12 +4,50 @@ import { TrendingUp, PieChart, BarChart3, ArrowUpRight, ArrowDownRight, DollarSi
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { DashboardKpiCard } from "@/components/shared/DashboardKpiCard";
+import { getFinanceModel } from "@/lib/mock/workspace.demo";
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer, 
+  Cell,
+  PieChart as RePieChart,
+  Pie,
+  Legend
+} from 'recharts';
 
 export const Route = createFileRoute("/app/finance/revenue")({
   component: RevenuePage,
 });
 
 function RevenuePage() {
+  const finance = getFinanceModel();
+  
+  const kpiData = [
+    { title: "Gross Revenue", value: finance.formatted.grossRevenue, trend: "+14%", icon: DollarSign },
+    { title: "Net Revenue", value: finance.formatted.netRevenue, trend: "+12%", icon: TrendingUp },
+    { title: "Paid Coll.", value: finance.formatted.paidCollections, trend: "+8%", icon: ArrowUpRight },
+    { title: "Refunds", value: finance.formatted.refunds, trend: "+1%", icon: ArrowDownRight },
+    { title: "Expenses", value: finance.formatted.expenses, trend: "+5%", icon: ArrowDownRight },
+    { title: "Net Position", value: finance.formatted.netPosition, trend: "+13%", icon: TrendingUp },
+  ];
+
+  const barData = [
+    { name: 'May', gross: 3200000, net: 2800000 },
+    { name: 'Jun', gross: 3800000, net: 3400000 },
+    { name: 'Jul', gross: 4200000, net: 3800000 },
+    { name: 'Aug', gross: 4820000, net: 4778000 },
+  ];
+
+  const pieData = [
+    { name: 'Acme India', value: 2470000, color: 'var(--color-primary)' },
+    { name: 'Vertex Tech', value: 1640000, color: '#22c55e' },
+    { name: 'Blue Harbour', value: 710000, color: '#f59e0b' },
+  ];
+
   return (
     <div className="flex flex-col gap-8 pb-20 animate-in fade-in duration-500">
       <PageHeader
@@ -19,13 +57,11 @@ function RevenuePage() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <DashboardKpiCard title="Gross Revenue" value="₹ 48.2L" trend="+14%" icon={DollarSign} />
-        <DashboardKpiCard title="Net Revenue" value="₹ 35.8L" trend="+12%" icon={TrendingUp} />
-        <DashboardKpiCard title="Paid Coll." value="₹ 42.5L" trend="+8%" icon={ArrowUpRight} />
-        <DashboardKpiCard title="Refunds" value="₹ 42K" trend="+1%" icon={ArrowDownRight} />
-        <DashboardKpiCard title="Expenses" value="₹ 12.4L" trend="+5%" icon={ArrowDownRight} />
-        <DashboardKpiCard title="Net Position" value="₹ 30.1L" trend="+13%" icon={TrendingUp} />
+        {kpiData.map((kpi) => (
+          <DashboardKpiCard key={kpi.title} title={kpi.title} value={kpi.value} trend={kpi.trend} icon={kpi.icon} />
+        ))}
       </div>
+
 
       <div className="grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-8">
