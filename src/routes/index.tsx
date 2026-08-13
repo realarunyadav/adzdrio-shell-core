@@ -132,159 +132,53 @@ function ExecutiveDashboard() {
                 <p className="text-xs opacity-60 italic">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            Build the complete frontend foundation and app shell for a production-grade multi-business CRM/ERP platform.
+                                            IMPORTANT: DO NOT PROCEED TO NEW MODULES YET.
 
-IMPORTANT:
+I reviewed the current preview.
 
-This is a UI/UX prototype phase only.
+The root route is currently showing the existing ABOS Portal authorization/login screen instead of the authenticated CRM application shell that we are currently designing.
 
-DO NOT implement real backend logic.
-
-DO NOT create fake API integrations.
-
-DO NOT claim that payments, authentication, HR calculations, legal signing, Leegality, calling, or external integrations are functional.
-
-Use clearly separated local/mock UI state only where necessary to demonstrate the interface.
-
-The frontend architecture must be designed so the real backend/API can be connected later without rebuilding the UI.
+We need to preserve the existing authentication screen, but it must NOT replace the main application UI.
 
 ==================================================
 
-PRODUCT STRUCTURE
+ROUTING REQUIREMENT
 
 ==================================================
 
-The application is a multi-business CRM/ERP platform.
+Separate the application into:
 
-The hierarchy is:
+1. Authentication / Login route
 
-Owner
+2. Authenticated CRM application route
 
-→ Business / Brand
+The current ABOS Portal authorization screen should remain available as the login/authentication screen.
 
-→ Role
+After authentication, the user must enter the main CRM application shell.
 
-→ Dashboard
+Do NOT delete the existing authentication functionality.
 
-→ Modules
+Do NOT expose credentials or security keys in frontend source code.
 
-→ Permissions
+Do NOT hard-code real-looking enterprise credentials into the UI.
 
-The system must support multiple businesses/brands in the future.
-
-Do NOT hard-code the entire UI specifically for one business.
+Use safe placeholder/mock values only for the prototype.
 
 ==================================================
 
-DESIGN DIRECTION
+MAIN APPLICATION SHELL
 
 ==================================================
 
-Create a modern, premium, professional SaaS CRM interface.
+Create the authenticated application shell separately from the login page.
 
-It should feel like a serious production business platform, not a generic admin template.
+The authenticated shell must contain:
 
-Design priorities:
+LEFT SIDEBAR:
 
-- Clean
+- Dashboard
 
-- Premium
-
-- Professional
-
-- High information density without feeling crowded
-
-- Excellent hierarchy
-
-- Fast navigation
-
-- Clear actions
-
-- Consistent spacing
-
-- Excellent typography
-
-- Strong table design
-
-- Excellent form UX
-
-- Subtle animations
-
-- Responsive
-
-- Accessible
-
-- Desktop-first, but fully responsive on tablet/mobile
-
-Avoid:
-
-- Excessive gradients
-
-- Huge decorative graphics
-
-- Overly rounded cartoon-style cards
-
-- Excessive shadows
-
-- Unnecessary animations
-
-- Generic template appearance
-
-- Fake charts with meaningless decoration
-
-==================================================
-
-APP SHELL
-
-==================================================
-
-Create:
-
-1. Left sidebar
-
-2. Top header
-
-3. Main content area
-
-4. Breadcrumbs where useful
-
-5. Global search
-
-6. Notifications
-
-7. User/profile menu
-
-8. Business switcher
-
-9. Responsive mobile navigation
-
-Sidebar must support:
-
-- Collapsed state
-
-- Expanded state
-
-- Active navigation state
-
-- Nested navigation
-
-- Permission-aware visibility
-
-- Tooltips when collapsed
-
-==================================================
-
-SIDEBAR INFORMATION ARCHITECTURE
-
-==================================================
-
-Create the navigation structure visually, but do NOT implement real permission enforcement yet.
-
-Main navigation:
-
-Dashboard
-
-CRM
+- CRM
 
   - Lead Pool
 
@@ -296,7 +190,7 @@ CRM
 
   - Callbacks
 
-Sales
+- Sales
 
   - Sales
 
@@ -306,7 +200,7 @@ Sales
 
   - Invoices
 
-Support
+- Support
 
   - Conversations
 
@@ -314,9 +208,9 @@ Support
 
   - Video Calls
 
-Activation
+- Activation
 
-Finance
+- Finance
 
   - Payments
 
@@ -326,7 +220,7 @@ Finance
 
   - Payroll
 
-HR
+- HR
 
   - Employees
 
@@ -342,15 +236,15 @@ HR
 
   - Referrals
 
-Reports
+- Reports
 
-Documents
+- Documents
 
-Projects
+- Projects
 
-Inventory
+- Inventory
 
-Admin Studio
+- Admin Studio
 
   - Business
 
@@ -380,371 +274,99 @@ Admin Studio
 
 ==================================================
 
-HEADER
+TOP HEADER
 
 ==================================================
 
-Create a premium top header containing:
+Create:
 
-- Mobile menu
+- Sidebar collapse button
 
 - Breadcrumb
 
 - Global search
 
-- Business switcher
+- Business/brand switcher
 
 - Notifications
 
-- Help/support icon
+- Help
 
 - User avatar
 
 - User name
 
-- Role
+- Current role
 
 - Profile menu
 
-Profile menu:
+==================================================
 
-- My Profile
-
-- Settings
-
-- Security
-
-- Lock Workspace
-
-- Logout
+DASHBOARD
 
 ==================================================
 
-GLOBAL SEARCH
+Create a professional dashboard workspace after login.
+
+Do NOT make it a generic template.
+
+Create:
+
+- Welcome/header section
+
+- Business context
+
+- KPI cards
+
+- Recent activity
+
+- Quick actions
+
+- Notifications
+
+- Sales/CRM overview sections
+
+- Upcoming follow-ups/callbacks
+
+- Recent payments
+
+- Team/activity overview
+
+Use clearly labeled mock/demo data only.
+
+The UI must clearly distinguish demo data from real backend data.
 
 ==================================================
 
-Create the UI for global search.
-
-Search categories visually:
-
-- Customers
-
-- Leads
-
-- Employees
-
-- Sales
-
-- Transactions
-
-- Invoices
-
-- Documents
-
-Include:
-
-- Search input
-
-- Keyboard shortcut indicator
-
-- Recent searches
-
-- Search suggestions
-
-- Categorized results
-
-- Empty state
-
-- No-result state
-
-Do not connect to a real backend.
+IMPORTANT
 
 ==================================================
 
-NOTIFICATIONS
+Do NOT put all of this into the login screen.
+
+The login screen and authenticated CRM application shell are separate routes/components.
+
+Do NOT remove the login screen.
+
+Do NOT implement real backend authentication yet.
+
+Do NOT implement real payment/API/Leegality/HR/business logic.
+
+This is still the UI/UX prototype phase.
 
 ==================================================
 
-Create a notification center UI.
-
-Categories:
-
-- Sales
-
-- CRM
-
-- Follow-up
-
-- Callback
-
-- Payment
-
-- HR
-
-- Legal
-
-- Security
-
-- System
-
-Include:
-
-- Unread count
-
-- Read/unread states
-
-- Mark as read
-
-- Mark all as read
-
-- Notification grouping
-
-- Timestamp
-
-- Priority indicator
+DESIGN
 
 ==================================================
 
-BUSINESS SWITCHER
+Keep the current ABOS visual identity where appropriate, but make the authenticated CRM application feel like a premium production SaaS platform.
 
-==================================================
+Do not create an oversized login-card-style interface for the dashboard.
 
-Create a business/brand switcher.
+The dashboard should use the full available viewport.
 
-Example UI data only:
-
-Business A
-
-Business B
-
-Business C
-
-Include:
-
-- Current business
-
-- Business logo/avatar
-
-- Search
-
-- Recent businesses
-
-- Switch confirmation state
-
-Do not hard-code real business names into the architecture.
-
-==================================================
-
-GLOBAL UI COMPONENTS
-
-==================================================
-
-Create reusable components for:
-
-- Buttons
-
-- Icon buttons
-
-- Inputs
-
-- Search inputs
-
-- Select
-
-- Multi-select
-
-- Date picker
-
-- Date range picker
-
-- Phone input
-
-- Currency input
-
-- Textarea
-
-- Checkbox
-
-- Radio
-
-- Toggle
-
-- Tabs
-
-- Badges
-
-- Status pills
-
-- Cards
-
-- Stat cards
-
-- Tables
-
-- Pagination
-
-- Filters
-
-- Dropdown menus
-
-- Modals
-
-- Drawers
-
-- Confirmation dialogs
-
-- Toasts
-
-- Tooltips
-
-- Skeleton loaders
-
-- Empty states
-
-- Error states
-
-- Success states
-
-- Permission denied state
-
-- File upload
-
-- Avatar
-
-- Timeline
-
-- Activity feed
-
-==================================================
-
-DATA TABLE DESIGN
-
-==================================================
-
-Create a reusable professional table system.
-
-Requirements:
-
-- Sticky header
-
-- Sortable columns
-
-- Search
-
-- Filters
-
-- Pagination
-
-- Row selection
-
-- Bulk actions
-
-- Column visibility
-
-- Density control
-
-- Export button UI
-
-- Empty state
-
-- Loading skeleton
-
-- Error state
-
-- Responsive behavior
-
-==================================================
-
-FORMS
-
-==================================================
-
-Create a reusable form system.
-
-Every form should support:
-
-- Required field indicator
-
-- Optional field indicator
-
-- Validation message
-
-- Disabled state
-
-- Loading state
-
-- Success state
-
-- Error state
-
-- Unsaved changes warning
-
-- Cancel confirmation where necessary
-
-==================================================
-
-RESPONSIVE
-
-==================================================
-
-Desktop:
-
-Full sidebar + header + content.
-
-Tablet:
-
-Compact navigation and responsive tables.
-
-Mobile:
-
-Bottom/slide navigation where appropriate.
-
-Cards instead of wide tables when necessary.
-
-Maintain usability without simply shrinking desktop UI.
-
-==================================================
-
-UI STATES
-
-==================================================
-
-Create reusable examples of:
-
-1. Loading
-
-2. Empty
-
-3. Populated
-
-4. Error
-
-5. Success
-
-6. Disabled
-
-7. Permission denied
-
-8. Offline/unavailable
-
-9. Confirmation
-
-10. Destructive action confirmation
-
-==================================================
-
-IMPORTANT ARCHITECTURE RULE
-
-==================================================
-
-Separate UI components from business logic.
-
-Use mock/local data only for visual demonstration.
-
-Create clean frontend service/API abstraction boundaries so later we can replace mock data with real backend APIs without redesigning components.
-
-Do NOT put business calculations, payment verification, salary calculation, legal signing, permissions, or security logic inside visual components.
+Desktop-first, responsive on tablet and mobile.
 
 ==================================================
 
@@ -752,39 +374,17 @@ DELIVERABLE
 
 ==================================================
 
-At the end of this task, I should have:
+After this change, previewing the authenticated application route must show:
 
-- Complete application shell
+Sidebar + Header + Main Dashboard
 
-- Professional sidebar
+NOT the login page.
 
-- Header
+Keep the login page available separately.
 
-- Global search UI
+Do not proceed to CRM, Finance, HR, Legal or other detailed modules yet.
 
-- Business switcher
-
-- Notification center
-
-- Profile menu
-
-- Responsive layout
-
-- Reusable design system
-
-- Reusable table system
-
-- Reusable form system
-
-- Reusable modal/drawer system
-
-- Loading/empty/error/success/permission states
-
-- Proper frontend component structure
-
-Do NOT build all CRM modules yet.
-
-First make the foundation visually excellent and production-quality.</p>
+First make the application shell visually correct.</p>
               </div>
             </SectionCard>
             <SectionCard title="Sales Pipeline" className="h-[320px]">
