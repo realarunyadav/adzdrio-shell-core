@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Trash2, ShieldCheck, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { demoIncentiveRules, DemoIncentiveRule } from "@/lib/mock/workspace.demo";
+import { DemoIncentiveRule } from "@/lib/mock/workspace.demo";
 
 interface IncentiveRuleModalProps {
   isOpen: boolean;
@@ -15,22 +15,50 @@ interface IncentiveRuleModalProps {
   rule?: DemoIncentiveRule | null;
 }
 
+type FormData = {
+  name: string;
+  businessId: string;
+  type: "Sales" | "Referral";
+  status: "Draft" | "Active" | "Inactive";
+  version: number;
+  description: string;
+  effectiveFrom: string;
+  tiers: { min: number; reward: number; type: "Fixed" | "Percentage"; label?: string }[];
+};
+
 export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModalProps) {
-  const [formData, setFormData] = useState<Partial<DemoIncentiveRule>>(
-    rule || {
-      name: "",
-      businessId: "biz-a",
-      type: "Sales",
-      status: "Draft",
-      version: 1,
-      description: "",
-      effectiveFrom: new Date().toISOString().split('T')[0],
-      tiers: [{ min: 0, reward: 0, type: "Fixed", label: "Tier 1" }]
+  const initialData: FormData = {
+    name: "",
+    businessId: "biz-a",
+    type: "Sales",
+    status: "Draft",
+    version: 1,
+    description: "",
+    effectiveFrom: new Date().toISOString().split('T')[0],
+    tiers: [{ min: 0, reward: 0, type: "Fixed", label: "Tier 1" }]
+  };
+
+  const [formData, setFormData] = useState<FormData>(initialData);
+
+  useEffect(() => {
+    if (rule) {
+      setFormData({
+        name: rule.name,
+        businessId: rule.businessId,
+        type: rule.type,
+        status: rule.status,
+        version: rule.version,
+        description: rule.description,
+        effectiveFrom: rule.effectiveFrom,
+        tiers: rule.tiers.map(t => ({ ...t }))
+      });
+    } else {
+      setFormData(initialData);
     }
-  );
+  }, [rule, isOpen]);
 
   const addTier = () => {
-    const newTiers = [...(formData.tiers || [])];
+    const newTiers = [...formData.tiers];
     const lastTier = newTiers[newTiers.length - 1];
     newTiers.push({ 
       min: (lastTier?.min || 0) + 10, 
@@ -42,18 +70,17 @@ export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModal
   };
 
   const removeTier = (index: number) => {
-    const newTiers = formData.tiers?.filter((_, i) => i !== index);
+    const newTiers = formData.tiers.filter((_, i) => i !== index);
     setFormData({ ...formData, tiers: newTiers });
   };
 
   const updateTier = (index: number, field: string, value: any) => {
-    const newTiers = [...(formData.tiers || [])];
+    const newTiers = [...formData.tiers];
     newTiers[index] = { ...newTiers[index], [field]: value };
     setFormData({ ...formData, tiers: newTiers });
   };
 
   const handleSave = () => {
-    // In a real app, this would be a mutation
     console.log("Saving rule:", formData);
     onClose();
   };
@@ -125,14 +152,14 @@ export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModal
             </div>
             
             <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
-              {formData.tiers?.map((tier, idx) => (
+              {formData.tiers.map((tier, idx) => (
                 <div key={idx} className="p-3 rounded-lg border border-border/40 bg-accent/5 space-y-3 relative group">
                   <div className="flex items-center gap-2">
                     <Badge variant="outline" className="text-[8px] font-black border-primary/20 text-primary h-4 px-1.5">
                       T{idx + 1}
                     </Badge>
                     <Input 
-                      value={tier.label} 
+                      value={tier.label || ""} 
                       onChange={e => updateTier(idx, 'label', e.target.value)}
                       placeholder="Label (optional)"
                       className="bg-transparent border-none h-6 p-0 text-[10px] font-black uppercase tracking-widest focus-visible:ring-0"
@@ -153,7 +180,7 @@ export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModal
                       <Input 
                         type="number"
                         value={tier.min} 
-                        onChange={e => updateTier(idx, 'min', parseInt(e.target.value))}
+                        onChange={e => updateTier(idx, 'min', parseInt(e.target.value) || 0)}
                         className="bg-background/50 border-border/40 h-7 text-[10px]"
                       />
                     </div>
@@ -162,7 +189,7 @@ export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModal
                       <Input 
                         type="number"
                         value={tier.reward} 
-                        onChange={e => updateTier(idx, 'reward', parseInt(e.target.value))}
+                        onChange={e => updateTier(idx, 'reward', parseInt(e.target.value) || 0)}
                         className="bg-background/50 border-border/40 h-7 text-[10px]"
                       />
                     </div>
