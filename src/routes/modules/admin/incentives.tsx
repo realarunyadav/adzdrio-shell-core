@@ -9,7 +9,10 @@ import { demoIncentiveRules } from "@/lib/mock/workspace.demo";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { IncentiveRuleModal } from "@/components/incentives/IncentiveRuleModal";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/modules/admin/incentives")({
   component: () => {
@@ -156,22 +159,7 @@ export const Route = createFileRoute("/modules/admin/incentives")({
           </TabsContent>
 
           <TabsContent value="simulator" className="space-y-6">
-            <Card className="glass-surface border-border/40 border-dashed bg-navy/5">
-              <CardContent className="p-12 flex flex-col items-center text-center">
-                <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                  <Play className="size-6 text-primary" />
-                </div>
-                <h4 className="text-lg font-black uppercase tracking-widest mb-2 italic">Prototype Preview Engine</h4>
-                <p className="text-xs text-muted-foreground max-w-md font-bold uppercase leading-relaxed tracking-wider mb-8">
-                  Select a rule and enter hypothetical sales volume to simulate incentive payouts before publishing a new version.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-lg">
-                  <div className="h-10 px-4 rounded-lg bg-background border border-border/50 flex items-center text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Rule...</div>
-                  <div className="h-10 px-4 rounded-lg bg-background border border-border/50 flex items-center text-[10px] font-black uppercase tracking-widest text-muted-foreground">Volume: 0</div>
-                </div>
-                <Button className="mt-6 h-10 px-8 text-[10px] font-black uppercase tracking-widest bg-primary opacity-50 cursor-not-allowed">Run Simulation</Button>
-              </CardContent>
-            </Card>
+            <SimulatorEngine />
           </TabsContent>
         </Tabs>
 
@@ -184,4 +172,98 @@ export const Route = createFileRoute("/modules/admin/incentives")({
     );
   }
 });
+
+function SimulatorEngine() {
+  const [selectedRuleId, setSelectedRuleId] = useState<string>("");
+  const [volume, setVolume] = useState<number>(0);
+  const [results, setResults] = useState<{ earned: number; tier: any } | null>(null);
+
+  const selectedRule = useMemo(() => 
+    demoIncentiveRules.find(r => r.id === selectedRuleId),
+  [selectedRuleId]);
+
+  const runSimulation = () => {
+    if (!selectedRule) return;
+    
+    // Find highest applicable tier
+    const applicableTier = [...selectedRule.tiers]
+      .sort((a, b) => b.min - a.min)
+      .find(t => volume >= t.min);
+    
+    if (applicableTier) {
+      const reward = applicableTier.type === 'Fixed' 
+        ? applicableTier.reward 
+        : (volume * applicableTier.reward) / 100;
+      
+      setResults({ earned: reward, tier: applicableTier });
+    } else {
+      setResults({ earned: 0, tier: null });
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card className="glass-surface border-border/40 bg-navy/5 overflow-hidden">
+        <CardContent className="p-8">
+          <div className="flex flex-col md:flex-row items-end gap-6">
+            <div className="flex-1 space-y-2 w-full">
+              <Label className="text-[10px] font-black uppercase tracking-widest">Select Incentive Rule</Label>
+              <Select value={selectedRuleId} onValueChange={setSelectedRuleId}>
+                <SelectTrigger className="bg-background border-border/40 h-10 text-xs">
+                  <SelectValue placeholder="Select a rule to simulate..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {demoIncentiveRules.map(r => (
+                    <SelectItem key={r.id} value={r.id}>{r.name} ({r.type})</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-full md:w-48 space-y-2">
+              <Label className="text-[10px] font-black uppercase tracking-widest">Input Volume (₹ / Qty)</Label>
+              <Input 
+                type="number" 
+                value={volume} 
+                onChange={e => setVolume(parseInt(e.target.value) || 0)}
+                className="bg-background border-border/40 h-10 text-xs font-bold"
+              />
+            </div>
+            <Button 
+              onClick={runSimulation}
+              disabled={!selectedRuleId}
+              className="h-10 px-8 text-[10px] font-black uppercase tracking-widest bg-primary"
+            >
+              <Play className="size-4 mr-2" /> Calculate Payout
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {results && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
+          <Card className="glass-surface border-border/40 bg-primary/5 border-primary/20">
+            <CardContent className="p-6 text-center">
+              <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Simulated Payout</div>
+              <div className="text-3xl font-black text-primary">₹ {results.earned.toLocaleString()}</div>
+            </CardContent>
+          </Card>
+          <Card className="glass-surface border-border/40 bg-accent/5">
+            <CardContent className="p-6 text-center">
+              <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Qualifying Slab</div>
+              <div className="text-lg font-black uppercase">{results.tier ? results.tier.label || `Tier ${selectedRule?.tiers.indexOf(results.tier)! + 1}` : "No Qualifier"}</div>
+            </CardContent>
+          </Card>
+          <Card className="glass-surface border-border/40 bg-accent/5">
+            <CardContent className="p-6 text-center">
+              <div className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">Effective Rate</div>
+              <div className="text-lg font-black uppercase">
+                {results.tier ? (results.tier.type === 'Fixed' ? 'Fixed Reward' : `${results.tier.reward}% Variable`) : "0%"}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+    </div>
+  );
+}
 
