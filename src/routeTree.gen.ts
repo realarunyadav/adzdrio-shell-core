@@ -38,6 +38,7 @@ import { Route as PlatformAutomationRouteImport } from './routes/platform.automa
 import { Route as PlatformDataCenterRouteImport } from './routes/platform.data-center'
 import { Route as SettingsAuditRouteImport } from './routes/settings.audit'
 import { Route as SettingsSecurityRouteImport } from './routes/settings.security'
+import { Route as AppCrmIndexRouteImport } from './routes/app/crm/index'
 import { Route as AppCrmCallbacksRouteImport } from './routes/app/crm/callbacks'
 import { Route as AppCrmCustomersRouteImport } from './routes/app/crm/customers'
 import { Route as AppCrmFollowUpsRouteImport } from './routes/app/crm/follow-ups'
@@ -196,6 +197,11 @@ const SettingsSecurityRoute = SettingsSecurityRouteImport.update({
   path: '/security',
   getParentRoute: () => SettingsRoute,
 } as any)
+const AppCrmIndexRoute = AppCrmIndexRouteImport.update({
+  id: '/crm/',
+  path: '/crm/',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppCrmCallbacksRoute = AppCrmCallbacksRouteImport.update({
   id: '/crm/callbacks',
   path: '/crm/callbacks',
@@ -300,6 +306,7 @@ export interface FileRoutesByFullPath {
   '/modules/crm/queues': typeof ModulesCrmQueuesRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
   '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
+  '/app/crm/': typeof AppCrmIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -343,6 +350,7 @@ export interface FileRoutesByTo {
   '/modules/crm/queues': typeof ModulesCrmQueuesRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
   '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
+  '/app/crm': typeof AppCrmIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -387,6 +395,7 @@ export interface FileRoutesById {
   '/modules/crm/queues': typeof ModulesCrmQueuesRoute
   '/modules/hrms/employee': typeof ModulesHrmsEmployeeRoute
   '/public/confirmations/$token': typeof PublicConfirmationsTokenRoute
+  '/app/crm/': typeof AppCrmIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -432,6 +441,7 @@ export interface FileRouteTypes {
     | '/modules/crm/queues'
     | '/modules/hrms/employee'
     | '/public/confirmations/$token'
+    | '/app/crm/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -475,6 +485,7 @@ export interface FileRouteTypes {
     | '/modules/crm/queues'
     | '/modules/hrms/employee'
     | '/public/confirmations/$token'
+    | '/app/crm'
   id:
     | '__root__'
     | '/'
@@ -518,6 +529,7 @@ export interface FileRouteTypes {
     | '/modules/crm/queues'
     | '/modules/hrms/employee'
     | '/public/confirmations/$token'
+    | '/app/crm/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -756,6 +768,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsSecurityRouteImport
       parentRoute: typeof SettingsRoute
     }
+    '/app/crm/': {
+      id: '/app/crm/'
+      path: '/crm'
+      fullPath: '/app/crm/'
+      preLoaderRoute: typeof AppCrmIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/crm/callbacks': {
       id: '/app/crm/callbacks'
       path: '/crm/callbacks'
@@ -849,6 +868,7 @@ interface AppRouteChildren {
   AppCrmFollowUpsRoute: typeof AppCrmFollowUpsRoute
   AppCrmLeadPoolRoute: typeof AppCrmLeadPoolRoute
   AppCrmMyLeadsRoute: typeof AppCrmMyLeadsRoute
+  AppCrmIndexRoute: typeof AppCrmIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -857,6 +877,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCrmFollowUpsRoute: AppCrmFollowUpsRoute,
   AppCrmLeadPoolRoute: AppCrmLeadPoolRoute,
   AppCrmMyLeadsRoute: AppCrmMyLeadsRoute,
+  AppCrmIndexRoute: AppCrmIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

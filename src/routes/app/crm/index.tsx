@@ -22,7 +22,7 @@ import { DashboardKpiCard } from "@/components/shared/DashboardKpiCard";
 import { demoLeads, demoKpis } from "@/lib/mock/workspace.demo";
 import { Outlet } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/app/crm")({
+export const Route = createFileRoute("/app/crm/")({
   component: () => (
     <>
       <CrmDashboard />
