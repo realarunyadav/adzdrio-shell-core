@@ -1,32 +1,43 @@
 import * as React from "react";
-import { Search, Filter, History, Star, User, Building2, FileText, Package, Briefcase, ChevronRight, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
-  Command,
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
+  Search, 
+  History, 
+  Star, 
+  User, 
+  Building2, 
+  FileText, 
+  Package, 
+  Briefcase, 
+  ChevronRight,
+  TrendingUp,
+  CreditCard
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { 
+  CommandDialog, 
+  CommandEmpty, 
+  CommandGroup, 
+  CommandInput, 
+  CommandItem, 
+  CommandList, 
+  CommandSeparator 
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 
 interface SearchResult {
   id: string;
-  type: 'customer' | 'employee' | 'invoice' | 'project' | 'inventory';
+  type: 'customer' | 'lead' | 'employee' | 'invoice' | 'project' | 'transaction';
   title: string;
   subtitle: string;
   status?: string;
-  metadata?: Record<string, string>;
 }
 
 const DEMO_RESULTS: SearchResult[] = [
-  { id: '1', type: 'customer', title: 'Data Pending', subtitle: 'Search results will appear here after sync', status: 'Syncing' },
+  { id: '1', type: 'customer', title: 'Acme Retail Solutions', subtitle: 'Enterprise Client · Retail Sector', status: 'Active' },
+  { id: '2', type: 'lead', title: 'Vertex Foods Pvt Ltd', subtitle: 'Potential Deal: ₹ 12,50,000', status: 'Proposal' },
+  { id: '3', type: 'employee', title: 'Priya Nair', subtitle: 'Senior Account Manager · CRM Dept' },
+  { id: '4', type: 'transaction', title: 'TRX-992011', subtitle: '₹ 48,000 · UPI Payment', status: 'Settled' },
+  { id: '5', type: 'invoice', title: 'INV-2024-008', subtitle: 'Due: 24 Oct · ₹ 1,20,000', status: 'Pending' },
 ];
 
 export function GlobalSearch() {
@@ -63,7 +74,7 @@ export function GlobalSearch() {
         <div className="flex items-center border-b px-3">
           <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
           <CommandInput 
-            placeholder="Search across Prospects, Customers, Sales, Invoices..." 
+            placeholder="Search Customers, Leads, Employees, Sales..." 
             className="flex h-12 w-full rounded-md bg-transparent py-3 text-sm outline-none border-none focus:ring-0"
             value={query}
             onValueChange={setQuery}
@@ -74,7 +85,7 @@ export function GlobalSearch() {
           <CommandEmpty>No results found for "{query}".</CommandEmpty>
           
           <div className="flex p-2 gap-2 border-b overflow-x-auto no-scrollbar">
-            {['All', 'Customers', 'Invoices', 'Projects', 'Employees'].map(filter => (
+            {['All', 'Customers', 'Leads', 'Employees', 'Sales', 'Invoices'].map(filter => (
               <Badge key={filter} variant="outline" className="cursor-pointer hover:bg-primary/10 font-bold text-[10px] uppercase tracking-wider">
                 {filter}
               </Badge>
@@ -97,32 +108,35 @@ export function GlobalSearch() {
 
           <CommandSeparator />
 
-          <CommandGroup heading="Results">
+          <CommandGroup heading="Suggestions">
             {DEMO_RESULTS.map(result => (
-              <CommandItem key={result.id} className="flex items-center gap-3 p-3">
+              <CommandItem key={result.id} className="flex items-center gap-3 p-3 cursor-pointer">
                 <div className={cn(
                   "p-2 rounded-lg shrink-0",
-                  result.type === 'customer' ? "bg-blue-50 text-blue-600" :
-                  result.type === 'invoice' ? "bg-emerald-50 text-emerald-600" :
-                  result.type === 'employee' ? "bg-purple-50 text-purple-600" :
-                  "bg-slate-50 text-slate-600"
+                  result.type === 'customer' ? "bg-blue-500/10 text-blue-600" :
+                  result.type === 'lead' ? "bg-purple-500/10 text-purple-600" :
+                  result.type === 'invoice' ? "bg-emerald-500/10 text-emerald-600" :
+                  result.type === 'employee' ? "bg-amber-500/10 text-amber-600" :
+                  result.type === 'transaction' ? "bg-indigo-500/10 text-indigo-600" :
+                  "bg-slate-500/10 text-slate-600"
                 )}>
                   {result.type === 'customer' ? <Building2 className="size-4" /> :
+                   result.type === 'lead' ? <TrendingUp className="size-4" /> :
                    result.type === 'invoice' ? <FileText className="size-4" /> :
                    result.type === 'employee' ? <User className="size-4" /> :
-                   result.type === 'project' ? <Briefcase className="size-4" /> :
+                   result.type === 'transaction' ? <CreditCard className="size-4" /> :
                    <Package className="size-4" />}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm font-black text-foreground">{result.title}</p>
+                    <p className="text-sm font-bold text-foreground">{result.title}</p>
                     {result.status && (
-                      <Badge variant="outline" className="text-[9px] font-bold h-4">
+                      <Badge variant="outline" className="text-[9px] font-bold h-4 uppercase tracking-tighter">
                         {result.status}
                       </Badge>
                     )}
                   </div>
-                  <p className="text-xs text-muted-foreground truncate">{result.subtitle}</p>
+                  <p className="text-[11px] text-muted-foreground truncate">{result.subtitle}</p>
                 </div>
                 <ChevronRight className="size-4 opacity-30" />
               </CommandItem>

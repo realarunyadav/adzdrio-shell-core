@@ -211,12 +211,16 @@ function Dashboard() {
 }
 
 function KPICard({ label, value, delta, trend, icon: Icon, caption }: any) {
+  // Map string icon names from mock data to actual components if necessary, 
+  // but the demo data currently provides objects or we can default to TrendingUp.
+  const MetricIcon = Icon || TrendingUp;
+  
   return (
     <Card className="glass-surface border-border/40 shadow-sm overflow-hidden group hover:shadow-md transition-all duration-300">
       <CardContent className="p-5">
         <div className="flex justify-between items-start mb-4">
           <div className="size-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary border border-primary/10 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
-            <Icon className="size-5" />
+            <MetricIcon className="size-5" />
           </div>
           <Badge className={cn(
             "h-5 text-[10px] font-black tracking-tight",

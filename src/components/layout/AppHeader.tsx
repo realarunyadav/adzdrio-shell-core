@@ -102,11 +102,9 @@ export function AppHeader() {
       ) : null}
 
       <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-        {appConfig.shell.showGlobalSearch ? (
-          <div className="hidden w-64 lg:block xl:w-80">
-            <GlobalSearch />
-          </div>
-        ) : null}
+        <div className="hidden w-64 lg:block xl:w-80">
+          <GlobalSearch />
+        </div>
 
         {allowUserToggle ? (
           <Button

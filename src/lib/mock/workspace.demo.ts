@@ -28,11 +28,13 @@ export interface DemoKpi {
   caption: string;
 }
 
+import { DollarSign, Users, Target, CreditCard } from "lucide-react";
+
 export const demoKpis: DemoKpi[] = [
-  { id: "revenue", label: "Revenue (MTD)", value: "₹ 18,42,000", delta: "+12.4%", trend: "up", caption: "vs previous month" },
-  { id: "leads", label: "Active Leads", value: "348", delta: "+26", trend: "up", caption: "across all queues" },
-  { id: "conversion", label: "Conversion Rate", value: "21.8%", delta: "-1.2%", trend: "down", caption: "lead → customer" },
-  { id: "collections", label: "Collections", value: "₹ 9,10,500", delta: "+8.1%", trend: "up", caption: "settled this month" },
+  { id: "revenue", label: "Revenue (MTD)", value: "₹ 18,42,000", delta: "+12.4%", trend: "up", caption: "vs previous month", icon: DollarSign },
+  { id: "leads", label: "Active Leads", value: "348", delta: "+26", trend: "up", caption: "across all queues", icon: Users },
+  { id: "conversion", label: "Conversion Rate", value: "21.8%", delta: "-1.2%", trend: "down", caption: "lead → customer", icon: Target },
+  { id: "collections", label: "Collections", value: "₹ 9,10,500", delta: "+8.1%", trend: "up", caption: "settled this month", icon: CreditCard },
 ];
 
 export interface DemoPipelineStage {
