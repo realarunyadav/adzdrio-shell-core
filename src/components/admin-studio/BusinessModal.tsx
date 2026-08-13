@@ -30,7 +30,9 @@ export function BusinessModal({ isOpen, onClose, business }: BusinessModalProps)
     revenue: business.revenue || "₹ 0",
     teamSize: business.teamSize || 0,
     status: business.status || "active",
-    initials: business.initials || business.name.substring(0, 2).toUpperCase()
+    initials: business.initials || business.name.substring(0, 2).toUpperCase(),
+    domain: "",
+    address: ""
   } : initialData);
 
   const handleSave = () => {
