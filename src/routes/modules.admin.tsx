@@ -23,6 +23,20 @@ function AdminStudioModule() {
   const { location } = useRouterState();
   const isBaseRoute = location.pathname === "/modules/admin" || location.pathname === "/modules/admin/";
 
+  const [searchOpen, setSearchOpen] = React.useState(false);
+
+  // Global search keyboard shortcut
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setSearchOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
+
   if (!isBaseRoute) {
     return (
       <div className="p-6 pb-20 max-w-[1600px] mx-auto animate-in fade-in duration-500">
