@@ -155,17 +155,7 @@ function InnerRoot() {
 
   return (
     <RbacProvider>
-      {isAuthPage ? (
-        <Outlet />
-      ) : isAppPage ? (
-        <AppShell>
-          <Outlet />
-        </AppShell>
-      ) : (
-        <AppShell>
-          <Outlet />
-        </AppShell>
-      )}
+      <Outlet />
       <GlobalCommandPalette />
       <Toaster position="top-right" richColors closeButton />
     </RbacProvider>
