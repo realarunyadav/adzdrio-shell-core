@@ -32,7 +32,8 @@ import {
   Lock,
   Eye,
   Server,
-  BarChart3
+  BarChart3,
+  Sparkles
 } from "lucide-react";
 
 import { moduleRegistry } from "./registry";
@@ -232,8 +233,9 @@ export const modules: ModuleDefinition[] = [
       { id: "admin-audit", label: "Audit Center", path: "/modules/admin/audit", icon: Eye },
       { id: "admin-data", label: "Documents", path: "/modules/admin/data", icon: FileText },
       { id: "admin-dq", label: "Data Quality", path: "/modules/admin/duplicates", icon: Database },
-
+      { id: "admin-ai", label: "AI Foundation", path: "/modules/admin/ai", icon: Sparkles },
       { id: "admin-sys", label: "System Configuration", path: "/modules/admin/system", icon: Settings },
+
     ]
   },
 ];
