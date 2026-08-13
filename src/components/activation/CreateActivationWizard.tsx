@@ -172,7 +172,10 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
           </div>
         );
       case 2:
-        const availableSales = demoSales.filter(s => s.customerId === selectedCustomer?.id || s.customerName === selectedCustomer?.name);
+        const availableSales = demoSales.filter(s => 
+          s.customerId === selectedCustomer?.id || 
+          s.customerName.toLowerCase() === selectedCustomer?.name.toLowerCase()
+        );
         return (
           <div className="space-y-4 py-4">
             <div className="flex flex-col gap-1 mb-2">
