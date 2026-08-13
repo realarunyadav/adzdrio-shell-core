@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { 
   Search, 
   User, 
@@ -16,11 +17,13 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { demoEmployees, demoBusinesses, demoActivations } from "@/lib/mock/workspace.demo";
+import { demoEmployees, demoBusinesses, demoActivations, demoIncentiveRules, demoPlans } from "@/lib/mock/workspace.demo";
+import { Trophy, Tag } from "lucide-react";
 
 export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   const [query, setQuery] = React.useState("");
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     if (open) {
@@ -49,21 +52,35 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
     // Search Employees
     demoEmployees.forEach(emp => {
       if (emp.name.toLowerCase().includes(q) || emp.code.toLowerCase().includes(q) || emp.phone.includes(q)) {
-        matches.push({ type: 'employee', ...emp });
+        matches.push({ resultType: 'employee', ...emp });
       }
     });
 
     // Search Businesses
     demoBusinesses.forEach(biz => {
       if (biz.name.toLowerCase().includes(q)) {
-        matches.push({ type: 'business', ...biz });
+        matches.push({ resultType: 'business', ...biz });
       }
     });
 
     // Search Activations/IDs
     demoActivations.forEach(act => {
       if (act.id.toLowerCase().includes(q) || act.customerName.toLowerCase().includes(q)) {
-        matches.push({ type: 'activation', ...act });
+        matches.push({ resultType: 'activation', ...act });
+      }
+    });
+
+    // Search Incentive Rules
+    demoIncentiveRules.forEach(rule => {
+      if (rule.name.toLowerCase().includes(q) || rule.id.toLowerCase().includes(q)) {
+        matches.push({ resultType: 'incentive', ...rule });
+      }
+    });
+
+    // Search Sales Plans
+    demoPlans.forEach(plan => {
+      if (plan.name.toLowerCase().includes(q) || plan.id.toLowerCase().includes(q)) {
+        matches.push({ resultType: 'plan', ...plan });
       }
     });
 
@@ -115,17 +132,30 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
                 <div 
                   key={i} 
                   className="flex items-center gap-4 p-3 rounded-xl hover:bg-accent/50 cursor-pointer group transition-all"
+                  onClick={() => {
+                    const paths: Record<string, string> = {
+                      employee: '/modules/admin/employees',
+                      business: '/modules/admin/business',
+                      activation: '/app/activation/queue',
+                      incentive: '/modules/admin/incentives',
+                      plan: '/modules/admin/sales'
+                    };
+                    navigate({ to: (paths[res.resultType] || '/app') as any });
+                    onOpenChange(false);
+                  }}
                 >
                   <div className="size-10 rounded-lg bg-background border border-border/40 flex items-center justify-center shrink-0">
-                    {res.type === 'employee' ? <User className="size-5 text-blue-500" /> :
-                     res.type === 'business' ? <Building2 className="size-5 text-emerald-500" /> :
+                    {res.resultType === 'employee' ? <User className="size-5 text-blue-500" /> :
+                     res.resultType === 'business' ? <Building2 className="size-5 text-emerald-500" /> :
+                     res.resultType === 'incentive' ? <Trophy className="size-5 text-purple-500" /> :
+                     res.resultType === 'plan' ? <Tag className="size-5 text-rose-500" /> :
                      <Briefcase className="size-5 text-amber-500" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-black truncate">{res.name || res.customerName}</span>
                       <Badge variant="outline" className="text-[8px] font-black uppercase tracking-tighter h-4 px-1.5">
-                        {res.type}
+                        {res.resultType}
                       </Badge>
                     </div>
                     <div className="flex items-center gap-3 mt-0.5 text-[10px] text-muted-foreground font-medium">

@@ -9,10 +9,11 @@ import { WorkflowBuilder } from "@/components/admin-studio/WorkflowBuilder";
 import { BrandingBuilder } from "@/components/admin-studio/BrandingBuilder";
 import { PolicyManager } from "@/components/admin-studio/PolicyManager";
 import { AdminAuditCenter } from "@/components/admin-studio/AdminAuditCenter";
-import { LayoutGrid, Database, Layers, GitBranch, Settings, History, ShieldAlert, Search } from "lucide-react";
+import { LayoutGrid, Database, Layers, GitBranch, Settings, History, ShieldAlert, Search, Link } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlobalSearchOverlay } from "@/components/shared/GlobalSearchOverlay";
+import { Link as RouterLink, useLocation } from "@tanstack/react-router";
 
 
 export const Route = createFileRoute("/modules/admin")({
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/modules/admin")({
 });
 
 function AdminStudioModule() {
-  const { location } = useRouterState();
+  const location = useLocation();
   const isBaseRoute = location.pathname === "/modules/admin" || location.pathname === "/modules/admin/";
 
   const [searchOpen, setSearchOpen] = React.useState(false);
@@ -78,53 +79,55 @@ function AdminStudioModule() {
         </div>
       </div>
 
-      <Tabs defaultValue="home" className="w-full">
-        <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
-          <TabsTrigger value="home" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent shadow-none px-4 py-2">
-            <LayoutGrid className="mr-2 size-3.5" /> Dashboard
-          </TabsTrigger>
-          <TabsTrigger value="modules" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent shadow-none px-4 py-2">
-            <Layers className="mr-2 size-3.5" /> Modules
-          </TabsTrigger>
-          <TabsTrigger value="crm" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent shadow-none px-4 py-2">
-            <Database className="mr-2 size-3.5" /> CRM Config
-          </TabsTrigger>
-          <TabsTrigger value="workflows" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent shadow-none px-4 py-2">
-            <GitBranch className="mr-2 size-3.5" /> Workflows
-          </TabsTrigger>
-          <TabsTrigger value="branding" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent shadow-none px-4 py-2">
-            <Settings className="mr-2 size-3.5" /> Branding
-          </TabsTrigger>
-          <TabsTrigger value="policies" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent shadow-none px-4 py-2">
-            <ShieldAlert className="mr-2 size-3.5" /> Policies
-          </TabsTrigger>
-          <TabsTrigger value="audit" className="rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent shadow-none px-4 py-2">
-            <History className="mr-2 size-3.5" /> Audit Center
-          </TabsTrigger>
-        </TabsList>
+      <div className="w-full">
+        <div className="flex w-full justify-start border-b border-border/40 mb-6 bg-transparent gap-2 overflow-x-auto no-scrollbar">
+          <AdminTabLink to="/modules/admin" active={isBaseRoute} icon={LayoutGrid} label="Dashboard" />
+          <AdminTabLink to="/modules/admin/modules" active={location.pathname === "/modules/admin/modules"} icon={Layers} label="Modules" />
+          <AdminTabLink to="/modules/admin/business" active={location.pathname === "/modules/admin/business"} icon={Settings} label="Business" />
+          <AdminTabLink to="/modules/admin/employees" active={location.pathname === "/modules/admin/employees"} icon={Settings} label="People" />
+          <AdminTabLink to="/modules/admin/roles" active={location.pathname === "/modules/admin/roles"} icon={ShieldAlert} label="Roles" />
+          <AdminTabLink to="/modules/admin/crm" active={location.pathname === "/modules/admin/crm"} icon={Database} label="CRM Config" />
+          <AdminTabLink to="/modules/admin/sales" active={location.pathname === "/modules/admin/sales"} icon={Settings} label="Sales" />
+          <AdminTabLink to="/modules/admin/incentives" active={location.pathname === "/modules/admin/incentives"} icon={GitBranch} label="Incentives" />
+          <AdminTabLink to="/modules/admin/workflows" active={location.pathname === "/modules/admin/workflows"} icon={GitBranch} label="Workflows" />
+          <AdminTabLink to="/modules/admin/branding" active={location.pathname === "/modules/admin/branding"} icon={Settings} label="Branding" />
+          <AdminTabLink to="/modules/admin/policies" active={location.pathname === "/modules/admin/policies"} icon={ShieldAlert} label="Policies" />
+          <AdminTabLink to="/modules/admin/audit" active={location.pathname === "/modules/admin/audit"} icon={History} label="Audit Center" />
+          <AdminTabLink to="/modules/admin/security" active={location.pathname === "/modules/admin/security"} icon={ShieldAlert} label="Security" />
+          <AdminTabLink to="/modules/admin/data" active={location.pathname === "/modules/admin/data"} icon={Database} label="Data Center" />
+          <AdminTabLink to="/modules/admin/integrations" active={location.pathname === "/modules/admin/integrations"} icon={Link} label="Integrations" />
+          <AdminTabLink to="/modules/admin/system" active={location.pathname === "/modules/admin/system"} icon={Settings} label="System" />
+        </div>
 
-        <TabsContent value="home" className="pt-6">
-          <AdminStudioHome />
-        </TabsContent>
-        <TabsContent value="modules" className="pt-6">
-          <ModuleManagement />
-        </TabsContent>
-        <TabsContent value="crm" className="pt-6">
-          <CRMBuilder />
-        </TabsContent>
-        <TabsContent value="workflows" className="pt-6">
-          <WorkflowBuilder />
-        </TabsContent>
-        <TabsContent value="branding" className="pt-6">
-          <BrandingBuilder />
-        </TabsContent>
-        <TabsContent value="policies" className="pt-6">
-          <PolicyManager />
-        </TabsContent>
-        <TabsContent value="audit" className="pt-6">
-          <AdminAuditCenter />
-        </TabsContent>
-      </Tabs>
+        {isBaseRoute ? (
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <AdminStudioHome />
+          </div>
+        ) : (
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <Outlet />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
+function AdminTabLink({ to, active, icon: Icon, label }: { to: string, active: boolean, icon: any, label: string }) {
+  return (
+    <RouterLink 
+      to={to} 
+      className={cn(
+        "flex items-center gap-2 px-4 py-3 text-[10px] font-black uppercase tracking-widest border-b-2 transition-all shrink-0",
+        active 
+          ? "border-primary text-primary" 
+          : "border-transparent text-muted-foreground hover:text-foreground hover:bg-accent/10"
+      )}
+    >
+      <Icon className="size-3.5" />
+      {label}
+    </RouterLink>
+  );
+}
+
+import { cn } from "@/lib/utils";

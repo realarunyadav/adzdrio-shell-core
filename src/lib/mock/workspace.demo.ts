@@ -447,10 +447,11 @@ export interface DemoPlan {
   name: string;
   business: string;
   price: number;
-  status: 'Active' | 'Inactive';
+  status: 'Active' | 'Inactive' | 'Draft';
   created: string;
   updated: string;
   activeSales: number;
+  features?: string[];
 }
 
 export interface DemoPaymentLink {
@@ -490,9 +491,9 @@ export interface DemoInvoice {
 }
 
 export const demoPlans: DemoPlan[] = [
-  { id: "plan-1", name: "Premium Annual", business: "Acme India", price: 12000, status: 'Active', created: "2026-01-15", updated: "2026-06-10", activeSales: 450 },
-  { id: "plan-2", name: "Standard Monthly", business: "Vertex Tech", price: 999, status: 'Active', created: "2026-02-01", updated: "2026-07-01", activeSales: 1200 },
-  { id: "plan-3", name: "Enterprise Custom", business: "Blue Harbour", price: 45000, status: 'Active', created: "2026-03-20", updated: "2026-03-20", activeSales: 12 },
+  { id: "plan-1", name: "Premium Annual", business: "Acme India", price: 12000, status: 'Active', created: "2026-01-15", updated: "2026-06-10", activeSales: 450, features: ["Priority Support", "Advanced Analytics"] },
+  { id: "plan-2", name: "Standard Monthly", business: "Vertex Tech", price: 999, status: 'Active', created: "2026-02-01", updated: "2026-07-01", activeSales: 1200, features: ["Basic CRM", "Standard Support"] },
+  { id: "plan-3", name: "Enterprise Custom", business: "Blue Harbour", price: 45000, status: 'Active', created: "2026-03-20", updated: "2026-03-20", activeSales: 12, features: ["Custom API", "Legal Suite"] },
 ];
 
 export const demoSales: DemoSale[] = [
@@ -1286,7 +1287,7 @@ export interface DemoIncentiveRule {
   description: string;
   effectiveFrom: string;
   effectiveTo?: string;
-  tiers: { min: number; reward: number; label?: string }[];
+  tiers: { min: number; max?: number; reward: number; type: "Fixed" | "Percentage"; label?: string }[];
 }
 
 export const demoIncentiveRules: DemoIncentiveRule[] = [
@@ -1300,8 +1301,8 @@ export const demoIncentiveRules: DemoIncentiveRule[] = [
     description: "Incentive for exceeding quarterly sales targets.",
     effectiveFrom: "2026-07-01",
     tiers: [
-      { min: 10, reward: 5000, label: "Tier 1" },
-      { min: 20, reward: 12000, label: "Super Accelerator" }
+      { min: 10, max: 19, reward: 5000, type: "Fixed", label: "Tier 1" },
+      { min: 20, reward: 12000, type: "Fixed", label: "Super Accelerator" }
     ]
   },
   {
@@ -1314,8 +1315,8 @@ export const demoIncentiveRules: DemoIncentiveRule[] = [
     description: "Multi-tier reward for successful business referrals.",
     effectiveFrom: "2026-01-01",
     tiers: [
-      { min: 1, reward: 1000, label: "First Referral" },
-      { min: 5, reward: 7500, label: "Gold Partner" }
+      { min: 1, max: 4, reward: 1000, type: "Fixed", label: "First Referral" },
+      { min: 5, reward: 7500, type: "Fixed", label: "Gold Partner" }
     ]
   }
 ];
@@ -1324,7 +1325,7 @@ export interface DemoTaxRule {
   id: string;
   name: string;
   businessId: string;
-  type: string;
+  type: "GST" | "TDS" | "VAT";
   rate: number;
   effectiveFrom: string;
   status: "Active" | "Inactive";
