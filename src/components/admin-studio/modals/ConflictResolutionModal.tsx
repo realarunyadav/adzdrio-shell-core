@@ -25,8 +25,10 @@ import {
   GitMerge,
   Copy,
   ChevronRight,
-  History
+  History,
+  Eye
 } from "lucide-react";
+
 import { DuplicateCase, demoDuplicateAudit } from "@/lib/mock/workspace.demo";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
