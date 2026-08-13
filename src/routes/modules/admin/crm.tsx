@@ -7,7 +7,7 @@ export const Route = createFileRoute("/modules/admin/crm")({
     <div className="space-y-6">
       <PageHeader
         title="CRM Configuration"
-        description="Configure lead statuses, custom fields, assignment rules, and CRM-specific automation workflows."
+        description="Architect customer data structures, lead lifecycles, and custom field logic."
       />
       <CRMBuilder />
     </div>
