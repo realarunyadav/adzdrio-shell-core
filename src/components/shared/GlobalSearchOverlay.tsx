@@ -132,17 +132,17 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
                   className="flex items-center gap-4 p-3 rounded-xl hover:bg-accent/50 cursor-pointer group transition-all"
                 >
                   <div className="size-10 rounded-lg bg-background border border-border/40 flex items-center justify-center shrink-0">
-                    {res.type === 'employee' ? <User className="size-5 text-blue-500" /> :
-                     res.type === 'business' ? <Building2 className="size-5 text-emerald-500" /> :
-                     res.type === 'incentive' ? <Trophy className="size-5 text-purple-500" /> :
-                     res.type === 'plan' ? <Tag className="size-5 text-rose-500" /> :
+                    {res.resultType === 'employee' ? <User className="size-5 text-blue-500" /> :
+                     res.resultType === 'business' ? <Building2 className="size-5 text-emerald-500" /> :
+                     res.resultType === 'incentive' ? <Trophy className="size-5 text-purple-500" /> :
+                     res.resultType === 'plan' ? <Tag className="size-5 text-rose-500" /> :
                      <Briefcase className="size-5 text-amber-500" />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-black truncate">{res.name || res.customerName}</span>
                       <Badge variant="outline" className="text-[8px] font-black uppercase tracking-tighter h-4 px-1.5">
-                        {res.type}
+                        {res.resultType}
                       </Badge>
                     </div>
                     <div className="flex items-center gap-3 mt-0.5 text-[10px] text-muted-foreground font-medium">
