@@ -25,7 +25,7 @@ function AuthPage() {
     try {
       await login({ email, password });
       toast.success("Welcome back to ABOS");
-      navigate({ to: "/" });
+      navigate({ to: "/app" });
     } catch (err: any) {
       toast.error(err.message || "Authentication failed. Please check your credentials.");
     } finally {

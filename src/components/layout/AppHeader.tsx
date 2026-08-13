@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { Bell, Moon, Sun, ShieldCheck } from "lucide-react";
+import { Bell, Moon, Sun, ShieldCheck, LifeBuoy } from "lucide-react";
+import { BusinessSwitcher } from "@/components/workspace/BusinessSwitcher";
 
 import { appConfig } from "@/config/app.config";
 import { moduleRegistry } from "@/core/modules/registry";
@@ -71,6 +72,10 @@ export function AppHeader() {
     <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border/50 glass-effect px-3 sm:px-5 lg:px-6 premium-transition">
       <SidebarTrigger className="text-muted-foreground hover:text-foreground" />
       <Separator orientation="vertical" className="hidden h-5 sm:block" />
+      
+      <div className="flex items-center px-1">
+        <BusinessSwitcher />
+      </div>
 
       {appConfig.shell.showBreadcrumbs ? (
         <Breadcrumb className="hidden min-w-0 md:block">
@@ -97,11 +102,9 @@ export function AppHeader() {
       ) : null}
 
       <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-        {appConfig.shell.showGlobalSearch ? (
-          <div className="hidden w-64 lg:block xl:w-80">
-            <GlobalSearch />
-          </div>
-        ) : null}
+        <div className="hidden w-64 lg:block xl:w-80">
+          <GlobalSearch />
+        </div>
 
         {allowUserToggle ? (
           <Button
@@ -139,6 +142,19 @@ export function AppHeader() {
         </Button>
 
         <GlobalNotificationCenter open={notificationsOpen} onOpenChange={setNotificationsOpen} />
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-xl" asChild aria-label="Support">
+                <a href={appConfig.support.documentationUrl}>
+                  <LifeBuoy className="size-4" />
+                </a>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Help & Support</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
 
         <Separator orientation="vertical" className="hidden h-6 sm:block" />
 

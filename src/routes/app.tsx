@@ -18,7 +18,8 @@ import {
   CreditCard,
   Target,
   BarChart3,
-  Search
+  Search,
+  Activity
 } from "lucide-react";
 
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -51,10 +52,10 @@ export const Route = createFileRoute("/app")({
       },
     ],
   }),
-  component: AppDashboard,
+  component: Dashboard,
 });
 
-function AppDashboard() {
+function Dashboard() {
   return (
     <div className="flex flex-col gap-6 pb-12 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -210,46 +211,31 @@ function AppDashboard() {
 }
 
 function KPICard({ label, value, delta, trend, icon: Icon, caption }: any) {
+  // Map string icon names from mock data to actual components if necessary, 
+  // but the demo data currently provides objects or we can default to TrendingUp.
+  const MetricIcon = Icon || TrendingUp;
+  
   return (
     <Card className="glass-surface border-border/40 shadow-sm overflow-hidden group hover:shadow-md transition-all duration-300">
       <CardContent className="p-5">
         <div className="flex justify-between items-start mb-4">
           <div className="size-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary border border-primary/10 group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
-            <Icon className="size-5" />
+            <MetricIcon className="size-5" />
           </div>
           <Badge className={cn(
             "h-5 text-[10px] font-black tracking-tight",
-            trend === 'up' ? "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20" : "bg-rose-500/10 text-rose-600 hover:bg-rose-500/20"
+            trend === 'up' ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" : "bg-red-500/10 text-red-600 border-red-500/20"
           )}>
-            {trend === 'up' ? <TrendingUp className="size-3 mr-1" /> : <TrendingDown className="size-3 mr-1" />}
+            {trend === 'up' ? <TrendingUp className="mr-1 size-3 inline" /> : <TrendingDown className="mr-1 size-3 inline" />}
             {delta}
           </Badge>
         </div>
         <div>
-          <h3 className="text-xs font-bold uppercase tracking-[0.1em] text-muted-foreground/70 mb-1">{label}</h3>
-          <p className="text-2xl font-black tracking-tighter text-foreground">{value}</p>
-          <p className="text-[10px] text-muted-foreground/60 mt-1 font-medium">{caption}</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">{label}</p>
+          <p className="text-2xl font-black tracking-tighter mt-1 text-foreground">{value}</p>
+          {caption && <p className="text-[10px] text-muted-foreground mt-1 font-medium italic">{caption}</p>}
         </div>
       </CardContent>
     </Card>
-  );
-}
-
-function Activity({ className }: { className?: string }) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      width="24" 
-      height="24" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-    >
-      <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-    </svg>
   );
 }
