@@ -71,6 +71,7 @@ import { Route as AppSupportCustomersRouteImport } from './routes/app/support/cu
 import { Route as AppSupportKnowledgeBaseRouteImport } from './routes/app/support/knowledge-base'
 import { Route as AppSupportReportsRouteImport } from './routes/app/support/reports'
 import { Route as AppSupportTicketsRouteImport } from './routes/app/support/tickets'
+import { Route as ModulesAdminAiRouteImport } from './routes/modules.admin.ai'
 import { Route as ModulesAdminAuditRouteImport } from './routes/modules/admin/audit'
 import { Route as ModulesAdminBrandingRouteImport } from './routes/modules/admin/branding'
 import { Route as ModulesAdminBusinessRouteImport } from './routes/modules/admin/business'
@@ -408,6 +409,11 @@ const AppSupportTicketsRoute = AppSupportTicketsRouteImport.update({
   path: '/support/tickets',
   getParentRoute: () => AppRoute,
 } as any)
+const ModulesAdminAiRoute = ModulesAdminAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
+  getParentRoute: () => ModulesAdminRoute,
+} as any)
 const ModulesAdminAuditRoute = ModulesAdminAuditRouteImport.update({
   id: '/audit',
   path: '/audit',
@@ -589,6 +595,7 @@ export interface FileRoutesByFullPath {
   '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
   '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
+  '/modules/admin/ai': typeof ModulesAdminAiRoute
   '/modules/admin/audit': typeof ModulesAdminAuditRoute
   '/modules/admin/branding': typeof ModulesAdminBrandingRoute
   '/modules/admin/business': typeof ModulesAdminBusinessRoute
@@ -677,6 +684,7 @@ export interface FileRoutesByTo {
   '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
   '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
+  '/modules/admin/ai': typeof ModulesAdminAiRoute
   '/modules/admin/audit': typeof ModulesAdminAuditRoute
   '/modules/admin/branding': typeof ModulesAdminBrandingRoute
   '/modules/admin/business': typeof ModulesAdminBusinessRoute
@@ -766,6 +774,7 @@ export interface FileRoutesById {
   '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
   '/app/support/reports': typeof AppSupportReportsRoute
   '/app/support/tickets': typeof AppSupportTicketsRoute
+  '/modules/admin/ai': typeof ModulesAdminAiRoute
   '/modules/admin/audit': typeof ModulesAdminAuditRoute
   '/modules/admin/branding': typeof ModulesAdminBrandingRoute
   '/modules/admin/business': typeof ModulesAdminBusinessRoute
@@ -856,6 +865,7 @@ export interface FileRouteTypes {
     | '/app/support/knowledge-base'
     | '/app/support/reports'
     | '/app/support/tickets'
+    | '/modules/admin/ai'
     | '/modules/admin/audit'
     | '/modules/admin/branding'
     | '/modules/admin/business'
@@ -944,6 +954,7 @@ export interface FileRouteTypes {
     | '/app/support/knowledge-base'
     | '/app/support/reports'
     | '/app/support/tickets'
+    | '/modules/admin/ai'
     | '/modules/admin/audit'
     | '/modules/admin/branding'
     | '/modules/admin/business'
@@ -1032,6 +1043,7 @@ export interface FileRouteTypes {
     | '/app/support/knowledge-base'
     | '/app/support/reports'
     | '/app/support/tickets'
+    | '/modules/admin/ai'
     | '/modules/admin/audit'
     | '/modules/admin/branding'
     | '/modules/admin/business'
@@ -1530,6 +1542,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSupportTicketsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/modules/admin/ai': {
+      id: '/modules/admin/ai'
+      path: '/ai'
+      fullPath: '/modules/admin/ai'
+      preLoaderRoute: typeof ModulesAdminAiRouteImport
+      parentRoute: typeof ModulesAdminRoute
+    }
     '/modules/admin/audit': {
       id: '/modules/admin/audit'
       path: '/audit'
@@ -1790,6 +1809,7 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
 )
 
 interface ModulesAdminRouteChildren {
+  ModulesAdminAiRoute: typeof ModulesAdminAiRoute
   ModulesAdminAuditRoute: typeof ModulesAdminAuditRoute
   ModulesAdminBrandingRoute: typeof ModulesAdminBrandingRoute
   ModulesAdminBusinessRoute: typeof ModulesAdminBusinessRoute
@@ -1810,6 +1830,7 @@ interface ModulesAdminRouteChildren {
 }
 
 const ModulesAdminRouteChildren: ModulesAdminRouteChildren = {
+  ModulesAdminAiRoute: ModulesAdminAiRoute,
   ModulesAdminAuditRoute: ModulesAdminAuditRoute,
   ModulesAdminBrandingRoute: ModulesAdminBrandingRoute,
   ModulesAdminBusinessRoute: ModulesAdminBusinessRoute,

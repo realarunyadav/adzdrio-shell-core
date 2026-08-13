@@ -9,7 +9,7 @@ import { WorkflowBuilder } from "@/components/admin-studio/WorkflowBuilder";
 import { BrandingBuilder } from "@/components/admin-studio/BrandingBuilder";
 import { PolicyManager } from "@/components/admin-studio/PolicyManager";
 import { AdminAuditCenter } from "@/components/admin-studio/AdminAuditCenter";
-import { LayoutGrid, Database, Layers, GitBranch, Settings, History, ShieldAlert, Search, Link, Scale, GitMerge, Folder } from "lucide-react";
+import { LayoutGrid, Database, Layers, GitBranch, Settings, History, ShieldAlert, Search, Link, Scale, GitMerge, Folder, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlobalSearchOverlay } from "@/components/shared/GlobalSearchOverlay";
@@ -94,6 +94,8 @@ function AdminStudioModule() {
           <AdminTabLink to="/modules/admin/duplicates" active={location.pathname === "/modules/admin/duplicates"} icon={GitMerge} label="Data Quality" />
           <AdminTabLink to="/modules/admin/data" active={location.pathname === "/modules/admin/data"} icon={Folder} label="Documents" />
           <AdminTabLink to="/modules/admin/integrations" active={location.pathname === "/modules/admin/integrations"} icon={Link} label="Integrations" />
+          <AdminTabLink to="/modules/admin/ai" active={location.pathname === "/modules/admin/ai"} icon={Sparkles} label="AI Foundation" />
+
 
           <AdminTabLink to="/modules/admin/legal" active={location.pathname === "/modules/admin/legal"} icon={Scale} label="Legal" />
           <AdminTabLink to="/modules/admin/system" active={location.pathname === "/modules/admin/system"} icon={Settings} label="System" />
