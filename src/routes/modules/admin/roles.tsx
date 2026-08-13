@@ -1,14 +1,34 @@
+import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
-import { Lock, Shield, UserCheck, Key, Eye, AlertTriangle } from "lucide-react";
+import { Lock, Shield, Key, Eye, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { RolePermissionsModal } from "@/components/admin-studio/modals/RolePermissionsModal";
 
 export const Route = createFileRoute("/modules/admin/roles")({
-  component: () => (
+  component: RolesPermissionsPage,
+});
+
+function RolesPermissionsPage() {
+  const [selectedRole, setSelectedRole] = React.useState<string | null>(null);
+  const [modalOpen, setModalOpen] = React.useState(false);
+
+  const handleViewPermissions = (roleName: string) => {
+    setSelectedRole(roleName);
+    setModalOpen(true);
+  };
+
+  return (
     <div className="space-y-6">
+      <RolePermissionsModal 
+        open={modalOpen} 
+        onOpenChange={setModalOpen} 
+        roleName={selectedRole || ""} 
+      />
+      
       <div className="flex justify-between items-end">
         <PageHeader
           title="Roles & Permissions"
@@ -37,16 +57,16 @@ export const Route = createFileRoute("/modules/admin/roles")({
             </TableRow>
           </TableHeader>
           <TableBody>
-            <RoleRow name="Owner" access="Full Access" users="01" type="System" />
-            <RoleRow name="Admin" access="Management + Config" users="02" type="System" />
-            <RoleRow name="Sales Manager" access="Sales, CRM, Finance (Limited)" users="04" type="Custom" />
-            <RoleRow name="Support Agent" access="Support, CRM (Read)" users="12" type="Custom" />
+            <RoleRow name="Owner" access="Full Access" users="01" type="System" onView={() => handleViewPermissions("Owner")} />
+            <RoleRow name="Admin" access="Management + Config" users="02" type="System" onView={() => handleViewPermissions("Admin")} />
+            <RoleRow name="Sales Manager" access="Sales, CRM, Finance (Limited)" users="04" type="Custom" onView={() => handleViewPermissions("Sales Manager")} />
+            <RoleRow name="Support Agent" access="Support, CRM (Read)" users="12" type="Custom" onView={() => handleViewPermissions("Support Agent")} />
           </TableBody>
         </Table>
       </div>
     </div>
-  ),
-});
+  );
+}
 
 function RoleStatCard({ title, value, icon: Icon, tone = "default" }: any) {
   return (
@@ -66,7 +86,7 @@ function RoleStatCard({ title, value, icon: Icon, tone = "default" }: any) {
   );
 }
 
-function RoleRow({ name, access, users, type }: any) {
+function RoleRow({ name, access, users, type, onView }: any) {
   return (
     <TableRow className="border-border/40 hover:bg-accent/30 transition-colors">
       <TableCell>
@@ -80,7 +100,12 @@ function RoleRow({ name, access, users, type }: any) {
         </Badge>
       </TableCell>
       <TableCell className="text-right">
-        <Button variant="ghost" size="sm" className="text-[9px] font-black uppercase tracking-widest h-8 gap-1.5">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="text-[9px] font-black uppercase tracking-widest h-8 gap-1.5"
+          onClick={onView}
+        >
           <Eye className="size-3" /> View Permissions
         </Button>
       </TableCell>
