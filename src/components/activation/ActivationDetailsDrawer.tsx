@@ -66,7 +66,21 @@ export function ActivationDetailsDrawer({ activation: initialActivation, open, o
     if (actIndex > -1) {
       const currentAct = demoActivations[actIndex];
       const updatedAct: DemoActivation = {
-        ...currentAct,
+        id: currentAct.id,
+        customerId: currentAct.customerId,
+        customerName: currentAct.customerName,
+        businessId: currentAct.businessId,
+        businessName: currentAct.businessName,
+        subscriptionId: currentAct.subscriptionId,
+        planName: currentAct.planName,
+        saleId: currentAct.saleId,
+        paymentId: currentAct.paymentId,
+        paymentStatus: currentAct.paymentStatus,
+        priority: currentAct.priority,
+        createdAt: currentAct.createdAt,
+        requestedAt: currentAct.requestedAt,
+        slaDueAt: currentAct.slaDueAt,
+        createdBy: currentAct.createdBy,
         status: 'Assigned',
         assignedTo: employee.id.toString(),
         assignedToName: employee.name,
