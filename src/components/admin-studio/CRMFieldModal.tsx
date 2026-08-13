@@ -23,7 +23,14 @@ export function CRMFieldModal({ isOpen, onClose, field }: CRMFieldModalProps) {
     businessEntity: "Global"
   };
 
-  const [formData, setFormData] = useState(initialData);
+  const [formData, setFormData] = useState(field ? {
+    label: field.label,
+    type: field.type,
+    required: field.required || false,
+    unique: field.unique || false,
+    placeholder: field.placeholder || "",
+    businessEntity: field.businessEntity || "Global"
+  } : initialData);
 
   const handleSave = () => {
     console.log("Saving CRM Field:", formData);

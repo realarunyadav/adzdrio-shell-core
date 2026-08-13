@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { 
   Search, 
   User, 
@@ -22,6 +23,7 @@ import { Trophy, Tag } from "lucide-react";
 export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   const [query, setQuery] = React.useState("");
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     if (open) {
@@ -130,6 +132,17 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
                 <div 
                   key={i} 
                   className="flex items-center gap-4 p-3 rounded-xl hover:bg-accent/50 cursor-pointer group transition-all"
+                  onClick={() => {
+                    const paths: Record<string, string> = {
+                      employee: '/modules/admin/employees',
+                      business: '/modules/admin/business',
+                      activation: '/app/activation/queue',
+                      incentive: '/modules/admin/incentives',
+                      plan: '/modules/admin/sales'
+                    };
+                    navigate({ to: (paths[res.resultType] || '/app') as any });
+                    onOpenChange(false);
+                  }}
                 >
                   <div className="size-10 rounded-lg bg-background border border-border/40 flex items-center justify-center shrink-0">
                     {res.resultType === 'employee' ? <User className="size-5 text-blue-500" /> :
