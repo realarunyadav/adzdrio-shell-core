@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 
 export interface SectionCardProps {
   title?: string;
+  eyebrow?: string;
   description?: string;
   actions?: ReactNode;
   footer?: ReactNode;
@@ -15,6 +16,7 @@ export interface SectionCardProps {
 /** Neutral content container used across all modules. */
 export function SectionCard({
   title,
+  eyebrow,
   description,
   actions,
   footer,
@@ -24,9 +26,12 @@ export function SectionCard({
 }: SectionCardProps) {
   return (
     <section className={cn("surface-card surface-card-hover overflow-hidden shadow-card border-border/40 premium-transition", className)}>
-      {title || actions ? (
+      {title || actions || eyebrow ? (
         <header className="flex flex-wrap items-center justify-between gap-4 border-b border-border/40 bg-muted/5 px-6 py-4 backdrop-blur-[2px]">
           <div className="space-y-1">
+            {eyebrow ? (
+              <p className="text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-0.5">{eyebrow}</p>
+            ) : null}
             {title ? (
               <h2 className="text-sm font-black text-foreground tracking-tight uppercase tracking-widest">{title}</h2>
             ) : null}
