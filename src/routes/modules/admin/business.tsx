@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Building2, Plus, ArrowUpRight, ShieldCheck, MoreVertical, Edit2 } from "lucide-react";
 import { useState } from "react";
 import { BusinessModal } from "@/components/admin-studio/BusinessModal";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/modules/admin/business")({
   component: () => {
@@ -43,10 +44,10 @@ export const Route = createFileRoute("/modules/admin/business")({
             <TableHeader>
               <TableRow className="hover:bg-transparent border-border/50">
                 <TableHead className="text-[10px] font-black uppercase tracking-widest py-4">Business Entity</TableHead>
-                <TableHead className="text-[10px] font-black uppercase tracking-widest">Revenue (MTD)</TableHead>
-                <TableHead className="text-[10px] font-black uppercase tracking-widest">Active Staff</TableHead>
-                <TableHead className="text-[10px] font-black uppercase tracking-widest">Compliance</TableHead>
-                <TableHead className="text-[10px] font-black uppercase tracking-widest">Status</TableHead>
+                <TableHead className="text-[10px] font-black uppercase tracking-widest text-center">Revenue (MTD)</TableHead>
+                <TableHead className="text-[10px] font-black uppercase tracking-widest text-center">Active Staff</TableHead>
+                <TableHead className="text-[10px] font-black uppercase tracking-widest text-center">Compliance</TableHead>
+                <TableHead className="text-[10px] font-black uppercase tracking-widest text-center">Status</TableHead>
                 <TableHead className="text-[10px] font-black uppercase tracking-widest text-right pr-6">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -66,14 +67,14 @@ export const Route = createFileRoute("/modules/admin/business")({
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="text-xs font-bold text-emerald-600">{biz.revenue}</TableCell>
-                  <TableCell className="text-xs font-medium">12</TableCell>
-                  <TableCell>
+                  <TableCell className="text-xs font-bold text-emerald-600 text-center">{biz.revenue}</TableCell>
+                  <TableCell className="text-xs font-medium text-center">12</TableCell>
+                  <TableCell className="text-center">
                     <Badge variant="outline" className="text-[9px] font-black uppercase tracking-tighter border-emerald-500/20 text-emerald-600 h-5">
                       Verified
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="text-center">
                     <Badge className="bg-primary/10 text-primary border-none text-[8px] font-black uppercase tracking-tighter h-5">
                       {biz.status}
                     </Badge>
@@ -107,7 +108,10 @@ function BusinessSummaryCard({ label, value, icon: Icon, tone = "default" }: any
         <div className="flex justify-between items-start">
           <div>
             <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">{label}</p>
-            <h4 className="text-2xl font-black">{value}</h4>
+            <h4 className={cn(
+              "text-2xl font-black",
+              tone === "success" && "text-emerald-600"
+            )}>{value}</h4>
           </div>
           <div className="size-10 rounded-xl bg-accent/50 flex items-center justify-center">
             <Icon className="size-5 text-muted-foreground" />
