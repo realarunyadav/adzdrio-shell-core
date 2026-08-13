@@ -1087,3 +1087,191 @@ export function getActivationModel() {
     totalActive: demoActivations.filter(a => !['Completed', 'Failed', 'Cancelled'].includes(a.status)).length
   };
 }
+
+/**
+ * ADMIN STUDIO / OWNER SCOPE MODELS
+ */
+
+export interface DemoEmployee {
+  id: string;
+  code: string;
+  name: string;
+  role: string;
+  businessIds: string[];
+  status: 'Active' | 'Onboarding' | 'On Leave' | 'Terminated';
+  lastActive: string;
+  phone: string;
+  email: string;
+  department: string;
+  session?: {
+    device: string;
+    ip: string;
+    location: string;
+  };
+}
+
+export interface DemoAuditLog {
+  id: string;
+  timestamp: string;
+  actorName: string;
+  actorId: string;
+  action: string;
+  module: string;
+  entityId: string;
+  entityType: string;
+  severity: 'Info' | 'Warning' | 'Critical';
+  details: string;
+}
+
+export interface DemoSecurityEvent {
+  id: string;
+  timestamp: string;
+  type: 'Login' | 'Failed Login' | 'Permission Change' | 'Data Export' | 'Settings Update';
+  actor: string;
+  ip: string;
+  location: string;
+  status: 'Success' | 'Blocked' | 'Flagged';
+  details: string;
+}
+
+export interface DemoIntegration {
+  id: string;
+  name: string;
+  category: 'Legal' | 'Payment' | 'Communication' | 'Cloud';
+  status: 'Connected' | 'Error' | 'Disconnected' | 'Pending';
+  lastSync?: string;
+  usageCount?: number;
+}
+
+export const demoEmployees: DemoEmployee[] = [
+  {
+    id: "EMP-001",
+    code: "ABOS-001",
+    name: "Ankit Singh",
+    role: "Admin",
+    businessIds: ["biz-a", "biz-b"],
+    status: "Active",
+    lastActive: "2026-08-14T12:00:00Z",
+    phone: "+91 98765 43210",
+    email: "ankit@abos.co",
+    department: "Operations",
+    session: { device: "MacBook Pro / Chrome", ip: "192.168.1.1", location: "Mumbai, IN" }
+  },
+  {
+    id: "EMP-002",
+    code: "ABOS-002",
+    name: "Sonia Kapoor",
+    role: "Sales Executive",
+    businessIds: ["biz-b"],
+    status: "Active",
+    lastActive: "2026-08-14T11:45:00Z",
+    phone: "+91 98765 00002",
+    email: "sonia@vertex.co",
+    department: "Sales"
+  },
+  {
+    id: "EMP-003",
+    code: "ABOS-003",
+    name: "Priya Nair",
+    role: "Support Lead",
+    businessIds: ["biz-a", "biz-c"],
+    status: "Active",
+    lastActive: "2026-08-14T10:30:00Z",
+    phone: "+91 98765 11111",
+    email: "priya@abos.co",
+    department: "Support"
+  },
+  {
+    id: "EMP-004",
+    code: "ABOS-004",
+    name: "Vikram Das",
+    role: "Manager",
+    businessIds: ["biz-c"],
+    status: "On Leave",
+    lastActive: "2026-08-12T17:00:00Z",
+    phone: "+91 98765 22222",
+    email: "vikram@harbour.co",
+    department: "Management"
+  }
+];
+
+export const demoAuditLogs: DemoAuditLog[] = [
+  {
+    id: "AUD-1001",
+    timestamp: "2026-08-14T11:30:00Z",
+    actorName: "Ankit Singh",
+    actorId: "EMP-001",
+    action: "Updated CRM Field Settings",
+    module: "Admin / CRM",
+    entityId: "field-map-01",
+    entityType: "Configuration",
+    severity: "Warning",
+    details: "Modified 'Lead Priority' weight from 0.5 to 0.8"
+  },
+  {
+    id: "AUD-1002",
+    timestamp: "2026-08-14T10:15:00Z",
+    actorName: "Sonia Kapoor",
+    actorId: "EMP-002",
+    action: "Bulk Lead Export",
+    module: "CRM / Leads",
+    entityId: "export-882",
+    entityType: "Data Export",
+    severity: "Critical",
+    details: "Exported 450 leads from Mumbai region"
+  },
+  {
+    id: "AUD-1003",
+    timestamp: "2026-08-14T09:00:00Z",
+    actorName: "System",
+    actorId: "system",
+    action: "Automated Backup Completed",
+    module: "Admin / Data",
+    entityId: "bak-20260814",
+    entityType: "Backup",
+    severity: "Info",
+    details: "Daily system backup successful. 1.2GB compressed."
+  }
+];
+
+export const demoSecurityEvents: DemoSecurityEvent[] = [
+  {
+    id: "SEC-901",
+    timestamp: "2026-08-14T12:05:00Z",
+    type: "Login",
+    actor: "Ankit Singh (Admin)",
+    ip: "103.22.44.11",
+    location: "Mumbai, India",
+    status: "Success",
+    details: "Session started via Desktop Browser"
+  },
+  {
+    id: "SEC-902",
+    timestamp: "2026-08-14T11:50:00Z",
+    type: "Failed Login",
+    actor: "Unknown (root)",
+    ip: "45.22.11.88",
+    location: "Moscow, Russia",
+    status: "Blocked",
+    details: "Multiple failed attempts with invalid credentials"
+  },
+  {
+    id: "SEC-903",
+    timestamp: "2026-08-14T08:30:00Z",
+    type: "Permission Change",
+    actor: "System / Owner",
+    ip: "Internal",
+    location: "Cloud",
+    status: "Flagged",
+    details: "Elevation of 'Sonia Kapoor' to Sales Manager role"
+  }
+];
+
+export const demoIntegrations: DemoIntegration[] = [
+  { id: "int-1", name: "Leegality", category: "Legal", status: "Connected", lastSync: "2026-08-14T11:00:00Z", usageCount: 450 },
+  { id: "int-2", name: "Razorpay", category: "Payment", status: "Connected", lastSync: "2026-08-14T12:00:00Z", usageCount: 1240 },
+  { id: "int-3", name: "WhatsApp Business", category: "Communication", status: "Connected", lastSync: "2026-08-14T11:45:00Z", usageCount: 8900 },
+  { id: "int-4", name: "Tally Prime", category: "Cloud", status: "Error", lastSync: "2026-08-13T09:00:00Z", usageCount: 0 },
+  { id: "int-5", name: "AWS S3", category: "Cloud", status: "Connected", lastSync: "2026-08-14T12:00:00Z", usageCount: 15400 }
+];
+
