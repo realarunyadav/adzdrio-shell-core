@@ -45,6 +45,19 @@ export function AppSidebar() {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (router) => router.location.pathname });
+  const [searchOpen, setSearchOpen] = React.useState(false);
+
+  // Global search keyboard shortcut
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setSearchOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
 
   const tree = moduleRegistry.navigationTree((permission) =>
     permission ? can(permission) : true,
