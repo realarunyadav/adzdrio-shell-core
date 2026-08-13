@@ -70,12 +70,31 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
   };
 
   const handleNext = () => {
+    console.log(`[Wizard] Attempting to move from Step ${step}. Valid: ${isStepValid()}`);
     if (isStepValid()) {
-      setStep(s => Math.min(s + 1, 6));
+      setStep(s => {
+        const next = Math.min(s + 1, 6);
+        console.log(`[Wizard] Advancing to Step ${next}`);
+        return next;
+      });
+    } else {
+      console.warn(`[Wizard] Step ${step} validation failed. State:`, {
+        selectedCustomer: selectedCustomer?.id,
+        selectedSale: selectedSale?.id,
+        paymentAcknowledged,
+        selectedEmployee: selectedEmployee?.id,
+        activationDate
+      });
     }
   };
-  const handleBack = () => setStep(s => Math.max(s - 1, 1));
+
+  const handleBack = () => {
+    console.log(`[Wizard] Going back from Step ${step}`);
+    setStep(s => Math.max(s - 1, 1));
+  };
+
   const handleClose = () => {
+    console.log(`[Wizard] Closing and resetting state`);
     onOpenChange(false);
     setTimeout(() => {
       setStep(1);
@@ -91,6 +110,7 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
   };
 
   const handleCreate = () => {
+    console.log(`[Wizard] Finalizing activation for:`, selectedCustomer?.name);
     // Mock creating the activation and updating the shared state
     const newActivation = {
       id: `ACT-${8800 + demoActivations.length + 1}`,
@@ -105,8 +125,8 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
       paymentStatus: selectedSale.paymentStatus,
       status: selectedSale.paymentStatus === 'Paid' ? 'Pending Assignment' : 'Pending Payment Verification',
       priority: priority,
-      assignedTo: selectedEmployee.id,
-      assignedToName: selectedEmployee.name,
+      assignedTo: selectedEmployee?.id,
+      assignedToName: selectedEmployee?.name,
       createdAt: new Date().toISOString(),
       requestedAt: activationDate,
       slaDueAt: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
@@ -115,10 +135,8 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
       notes: notes
     };
 
-    // In a real app we'd mutate the state here
-    // For this prototype we push to the mock array
     demoActivations.unshift(newActivation as any);
-    
+    console.log(`[Wizard] Activation created:`, newActivation.id);
     handleClose();
   };
 
@@ -151,9 +169,12 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                     "flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all",
                     selectedCustomer?.id === customer.id ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-border hover:bg-muted/30"
                   )}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log(`[Wizard] Selecting customer:`, customer.id);
                     setSelectedCustomer(customer);
-                    setSelectedSale(null); // Reset sale when customer changes
+                    setSelectedSale(null); 
                   }}
                 >
                   <div className="flex items-center gap-3">
@@ -191,7 +212,12 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                       "p-3 rounded-xl border cursor-pointer transition-all",
                       selectedSale?.id === sale.id ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-border hover:bg-muted/30"
                     )}
-                    onClick={() => setSelectedSale(sale)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      console.log(`[Wizard] Selecting sale:`, sale.id);
+                      setSelectedSale(sale);
+                    }}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-[10px] font-black text-primary uppercase tracking-widest">{sale.id}</span>
@@ -250,7 +276,11 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                   "p-4 rounded-xl border flex items-start gap-3 cursor-pointer transition-all",
                   paymentAcknowledged ? "border-primary bg-primary/5" : "border-yellow-200 bg-yellow-50/50"
                 )}
-                onClick={() => setPaymentAcknowledged(!paymentAcknowledged)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setPaymentAcknowledged(!paymentAcknowledged);
+                }}
               >
                 <div className="mt-0.5">
                   {paymentAcknowledged ? <CheckCircle2 className="size-4 text-primary" /> : <AlertTriangle className="size-4 text-yellow-600" />}
@@ -284,7 +314,11 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                     "flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all",
                     selectedEmployee?.id === employee.id ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-border hover:bg-muted/30"
                   )}
-                  onClick={() => setSelectedEmployee(employee)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setSelectedEmployee(employee);
+                  }}
                 >
                   <div className="flex items-center gap-3">
                     <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black uppercase text-xs">
@@ -318,7 +352,11 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                       priority === p && p === 'Critical' ? "bg-red-600 hover:bg-red-700" :
                       priority === p && p === 'High' ? "bg-orange-500 hover:bg-orange-600" : ""
                     )}
-                    onClick={() => setPriority(p)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setPriority(p);
+                    }}
                   >
                     {p}
                   </Button>
