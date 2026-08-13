@@ -66,9 +66,10 @@ export const modules: ModuleDefinition[] = [
     group: "operations",
     order: 10,
     status: "available",
-    basePath: "/modules/crm",
+    basePath: "/app/crm",
     permission: "operations.crm.view",
     navigation: [
+      { id: "crm-dashboard", label: "CRM Dashboard", path: "/app/crm" },
       { id: "lead-pool", label: "Lead Pool", path: "/app/crm/lead-pool" },
       { id: "my-leads", label: "My Leads", path: "/app/crm/my-leads" },
       { id: "customers", label: "Customers", path: "/app/crm/customers" },
