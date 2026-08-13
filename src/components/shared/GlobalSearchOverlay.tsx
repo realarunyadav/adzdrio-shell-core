@@ -174,7 +174,9 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
                      res.resultType === 'incentive' ? <Trophy className="size-5 text-purple-500" /> :
                      res.resultType === 'plan' ? <Tag className="size-5 text-rose-500" /> :
                      res.resultType === 'legal' ? <Scale className="size-5 text-blue-600" /> :
+                     res.resultType === 'duplicate' ? <GitMerge className="size-5 text-orange-500" /> :
                      <Briefcase className="size-5 text-amber-500" />}
+
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
