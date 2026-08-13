@@ -1452,3 +1452,168 @@ export const demoTaxRules: DemoTaxRule[] = [
   { id: "TAX-01", name: "GST Standard", businessId: "biz-a", type: "GST", rate: 18, effectiveFrom: "2026-01-01", status: "Active" },
   { id: "TAX-02", name: "TDS Professional", businessId: "biz-a", type: "TDS", rate: 10, effectiveFrom: "2026-04-01", status: "Active" }
 ];
+
+export interface DuplicateCase {
+  id: string;
+  entityType: 'Customer' | 'Lead' | 'Employee' | 'Business';
+  recordA: {
+    id: string;
+    name: string;
+    phone: string;
+    email: string;
+    business: string;
+    status: string;
+    metadata: Record<string, any>;
+    created: string;
+    source: string;
+    importId?: string;
+  };
+  recordB: {
+    id: string;
+    name: string;
+    phone: string;
+    email: string;
+    business: string;
+    status: string;
+    metadata: Record<string, any>;
+    created: string;
+    source: string;
+    importId?: string;
+  };
+  matchingReason: string;
+  confidence: number;
+  status: 'Pending Review' | 'Confirmed Duplicate' | 'Not Duplicate' | 'Merged' | 'Rejected';
+  detectedAt: string;
+  importId?: string;
+  resolvedAt?: string;
+  resolvedBy?: string;
+}
+
+export interface DuplicateAudit {
+  id: string;
+  adminId: string;
+  adminName: string;
+  employeeCode?: string;
+  business: string;
+  entityType: string;
+  recordIds: string[];
+  action: 'Reviewed' | 'Marked Not Duplicate' | 'Record A Retained' | 'Record B Retained' | 'Merged' | 'Rejected';
+  timestamp: string;
+  importId?: string;
+  result: string;
+}
+
+export const demoDuplicateCases: DuplicateCase[] = [
+  {
+    id: "dup-1",
+    entityType: "Lead",
+    recordA: {
+      id: "lead-101",
+      name: "Arjun Sharma",
+      phone: "+91 98765 43210",
+      email: "arjun.s@example.com",
+      business: "Acme India",
+      status: "New",
+      metadata: { priority: "High" },
+      created: "2026-08-10T10:30:00Z",
+      source: "Google Search",
+      importId: "IMP-001"
+    },
+    recordB: {
+      id: "lead-202",
+      name: "Arjun K. Sharma",
+      phone: "+91 98765 43210",
+      email: "arjun.sharma@gmail.com",
+      business: "Acme India",
+      status: "Contacted",
+      metadata: { priority: "Medium" },
+      created: "2026-08-12T14:20:00Z",
+      source: "Manual Import",
+      importId: "IMP-002"
+    },
+    matchingReason: "Identical phone number found in new import.",
+    confidence: 0.95,
+    status: "Pending Review",
+    detectedAt: "2026-08-13T09:00:00Z",
+    importId: "IMP-002"
+  },
+  {
+    id: "dup-2",
+    entityType: "Customer",
+    recordA: {
+      id: "cust-501",
+      name: "Global Exports Ltd",
+      phone: "022-44556677",
+      email: "info@global-exports.com",
+      business: "Acme India",
+      status: "Active",
+      metadata: { totalSales: "₹ 12.4L" },
+      created: "2025-12-01T08:00:00Z",
+      source: "Salesforce Migration"
+    },
+    recordB: {
+      id: "cust-909",
+      name: "Global Exports",
+      phone: "+91 22 4455 6677",
+      email: "admin@global-exports.com",
+      business: "Acme India",
+      status: "Pending",
+      metadata: { totalSales: "₹ 0" },
+      created: "2026-08-11T11:00:00Z",
+      source: "API Integration"
+    },
+    matchingReason: "High similarity in company name and phone suffix.",
+    confidence: 0.82,
+    status: "Pending Review",
+    detectedAt: "2026-08-13T10:15:00Z"
+  },
+  {
+    id: "dup-3",
+    entityType: "Employee",
+    recordA: {
+      id: "emp-001",
+      name: "Rahul Menon",
+      phone: "+91 99887 76655",
+      email: "rahul.m@abos.com",
+      business: "Global",
+      status: "Active",
+      metadata: { role: "Sr. Associate", employeeCode: "AB-202" },
+      created: "2026-01-10T09:00:00Z",
+      source: "System"
+    },
+    recordB: {
+      id: "emp-999",
+      name: "Rahul Menon",
+      phone: "+91 99887 76655",
+      email: "rahul.menon@gmail.com",
+      business: "Global",
+      status: "Active",
+      metadata: { role: "Associate", employeeCode: "TEMP-99" },
+      created: "2026-08-12T16:00:00Z",
+      source: "HR Import",
+      importId: "IMP-088"
+    },
+    matchingReason: "Identical name and phone number.",
+    confidence: 0.99,
+    status: "Pending Review",
+    detectedAt: "2026-08-13T11:30:00Z",
+    importId: "IMP-088"
+  }
+];
+
+export const demoDuplicateAudit: DuplicateAudit[] = [
+  {
+    id: "aud-1",
+    adminId: "admin-1",
+    adminName: "SuperAdmin",
+    employeeCode: "HQ-001",
+    business: "Global",
+    entityType: "Lead",
+    recordIds: ["lead-99", "lead-100"],
+    action: "Merged",
+    timestamp: "2026-08-12T15:00:00Z",
+    importId: "IMP-000",
+    result: "Records merged successfully. Record lead-99 was retained as primary."
+  }
+];
+
