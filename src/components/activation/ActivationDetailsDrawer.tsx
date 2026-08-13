@@ -35,8 +35,12 @@ import { cn } from "@/lib/utils";
 import { 
   DemoActivation, 
   demoActivationActivities, 
-  DemoActivationActivity 
+  DemoActivationActivity,
+  demoActivations
 } from "@/lib/mock/workspace.demo";
+import { EmployeeAssignmentModal } from "./EmployeeAssignmentModal";
+import { toast } from "sonner";
+
 
 interface ActivationDetailsDrawerProps {
   activation: DemoActivation | null;
@@ -44,10 +48,51 @@ interface ActivationDetailsDrawerProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function ActivationDetailsDrawer({ activation, open, onOpenChange }: ActivationDetailsDrawerProps) {
+export function ActivationDetailsDrawer({ activation: initialActivation, open, onOpenChange }: ActivationDetailsDrawerProps) {
+  const [activation, setActivation] = React.useState<DemoActivation | null>(initialActivation);
+  const [isAssignModalOpen, setIsAssignModalOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    setActivation(initialActivation);
+  }, [initialActivation]);
+
   if (!activation) return null;
 
   const activities = demoActivationActivities.filter((a: DemoActivationActivity) => a.activationId === activation.id);
+
+  const handleAssignConfirm = (employee: any) => {
+    // 1. Update the mock state for persistence
+    const actIndex = demoActivations.findIndex(a => a.id === activation.id);
+    if (actIndex > -1) {
+      const updatedAct: DemoActivation = {
+        ...demoActivations[actIndex],
+        status: 'Assigned',
+        assignedTo: employee.id.toString(),
+        assignedToName: employee.name,
+        lastUpdatedAt: new Date().toISOString()
+      };
+      
+      demoActivations[actIndex] = updatedAct;
+      
+      // 2. Add activity log
+      const newActivity: DemoActivationActivity = {
+        id: `ACT-EV-${demoActivationActivities.length + 1}`,
+        activationId: activation.id,
+        actor: "Current User",
+        actorId: "user-current",
+        action: `assigned activation to ${employee.name}`,
+        previousStatus: activation.status,
+        newStatus: "Assigned",
+        timestamp: new Date().toISOString()
+      };
+      demoActivationActivities.unshift(newActivity);
+
+      // 3. Update local state
+      setActivation(updatedAct);
+      toast.success(`Activation assigned to ${employee.name}`);
+    }
+  };
+
 
   const getStatusBadge = (status: string) => {
     const statusMap: Record<string, string> = {
@@ -125,7 +170,11 @@ export function ActivationDetailsDrawer({ activation, open, onOpenChange }: Acti
               </Button>
             )}
             {activation.status === 'Pending Assignment' && (
-              <Button size="sm" className="bg-primary hover:bg-primary/90 font-bold h-8 text-[11px] uppercase tracking-wider">
+              <Button 
+                size="sm" 
+                className="bg-primary hover:bg-primary/90 font-bold h-8 text-[11px] uppercase tracking-wider"
+                onClick={() => setIsAssignModalOpen(true)}
+              >
                 <UserPlus className="mr-2 h-3.5 w-3.5" /> Assign Employee
               </Button>
             )}
@@ -334,6 +383,12 @@ export function ActivationDetailsDrawer({ activation, open, onOpenChange }: Acti
           </Tabs>
         </div>
       </SheetContent>
+      <EmployeeAssignmentModal 
+        open={isAssignModalOpen}
+        onOpenChange={setIsAssignModalOpen}
+        onConfirm={handleAssignConfirm}
+        suggestedEmployeeId={activation.assignedTo} // Use current or suggested
+      />
     </Sheet>
   );
 }

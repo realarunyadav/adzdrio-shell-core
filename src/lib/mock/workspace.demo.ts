@@ -930,7 +930,7 @@ export interface DemoActivationActivity {
   note?: string;
 }
 
-export const demoActivations: DemoActivation[] = [
+export let demoActivations: DemoActivation[] = [
   {
     id: "ACT-8801",
     customerId: "lead-7",
@@ -1037,7 +1037,7 @@ export const demoActivations: DemoActivation[] = [
   }
 ];
 
-export const demoActivationActivities: DemoActivationActivity[] = [
+export let demoActivationActivities: DemoActivationActivity[] = [
   {
     id: "ACT-EV-1",
     activationId: "ACT-8801",
