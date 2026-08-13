@@ -1,152 +1,89 @@
 import { 
-  LayoutGrid, 
-  Settings, 
-  ShieldCheck, 
-  Bell, 
-  Activity, 
-  AlertCircle,
   ArrowRight,
-  CheckCircle2,
-  Clock
+  ShieldCheck,
+  AlertCircle
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { SectionCard } from "@/components/shared/SectionCard";
+import { adminCategories } from "@/lib/mock/workspace.demo";
+import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
 
 export function AdminStudioHome() {
   return (
-    <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card className="surface-sunken">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between space-y-0 pb-2">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Configuration Health</p>
-              <Activity className="size-4 text-emerald-500" />
-            </div>
-            <div className="flex flex-col gap-2 mt-2">
-              <div className="text-2xl font-bold">98.2%</div>
-              <Progress value={98.2} className="h-1.5" />
-              <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-                <CheckCircle2 className="size-3 text-emerald-500" /> Optimized
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="surface-sunken">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between space-y-0 pb-2">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Active Modules</p>
-              <LayoutGrid className="size-4 text-blue-500" />
-            </div>
-            <div className="flex flex-col gap-1 mt-2">
-              <div className="text-2xl font-bold">12 / 14</div>
-              <p className="text-[10px] text-muted-foreground">2 Modules disabled</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="surface-sunken">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between space-y-0 pb-2">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Pending Approvals</p>
-              <ShieldCheck className="size-4 text-amber-500" />
-            </div>
-            <div className="flex flex-col gap-1 mt-2">
-              <div className="text-2xl font-bold">03</div>
-              <p className="text-[10px] text-muted-foreground">Requires Super Admin action</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="surface-sunken">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between space-y-0 pb-2">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">System Alerts</p>
-              <Bell className="size-4 text-danger" />
-            </div>
-            <div className="flex flex-col gap-1 mt-2">
-              <div className="text-2xl font-bold">0</div>
-              <p className="text-[10px] text-muted-foreground font-medium text-emerald-500">System Healthy</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-7">
-        <SectionCard 
-          className="md:col-span-4"
-          title="Recent Configuration Changes"
-          description="Track recent modifications to the system architecture and business rules."
-        >
-          <div className="space-y-4">
-            {[
-              { user: "Super Admin", action: "Updated Sales Stages", module: "CRM", time: "2 hours ago", status: "Success" },
-              { user: "System", action: "Auto-backup complete", module: "Platform", time: "4 hours ago", status: "Success" },
-              { user: "Admin (Finance)", action: "Modified GSTR-3B Rule", module: "Finance", time: "6 hours ago", status: "Review" },
-              { user: "Super Admin", action: "Enabled Inventory Module", module: "Inventory", time: "1 day ago", status: "Success" },
-            ].map((change, i) => (
-              <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-border bg-muted/20">
-                <div className="flex gap-3 items-center">
-                  <div className="size-8 rounded-full bg-muted flex items-center justify-center">
-                    <Clock className="size-4 text-muted-foreground" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold leading-none">{change.action}</p>
-                    <p className="text-[10px] text-muted-foreground mt-1">
-                      {change.user} • {change.module}
-                    </p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <Badge variant={change.status === 'Success' ? 'secondary' : 'outline'} className="text-[10px] uppercase font-bold">
-                    {change.status}
-                  </Badge>
-                  <p className="text-[10px] text-muted-foreground mt-1">{change.time}</p>
-                </div>
-              </div>
-            ))}
-            <Button variant="ghost" className="w-full text-xs" size="sm">
-              View Audit Center <ArrowRight className="ml-2 size-3" />
-            </Button>
+    <div className="space-y-8 pb-20 animate-in fade-in duration-700">
+      {/* Hero Warning */}
+      <div className="rounded-xl border border-red-500/10 bg-red-500/5 p-6 flex flex-col md:flex-row items-center gap-6 group hover:border-red-500/20 transition-all">
+        <div className="size-14 rounded-2xl bg-red-500/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <ShieldCheck className="size-7 text-red-600" />
+        </div>
+        <div className="flex-1 text-center md:text-left">
+          <div className="flex flex-col md:flex-row md:items-center gap-2 mb-2">
+            <h4 className="text-sm font-black uppercase tracking-[0.2em] text-red-600">Enterprise Control Environment</h4>
+            <Badge className="bg-red-500 text-white border-none text-[8px] font-black uppercase tracking-tighter h-4 w-fit mx-auto md:mx-0">Restricted</Badge>
           </div>
-        </SectionCard>
-
-        <SectionCard 
-          className="md:col-span-3"
-          title="Quick Configuration"
-          description="Commonly accessed system settings and builders."
-        >
-          <div className="grid grid-cols-1 gap-2">
-            {[
-              { label: "Branding & Identity", icon: Settings },
-              { label: "User Roles Matrix", icon: ShieldCheck },
-              { label: "Notification Rules", icon: Bell },
-              { label: "Workflow Designer", icon: Activity },
-            ].map((action, i) => (
-              <Button key={i} variant="outline" className="justify-start h-auto py-3 px-4">
-                <action.icon className="mr-3 size-4 text-muted-foreground" />
-                <div className="text-left">
-                  <p className="text-sm font-bold">{action.label}</p>
-                  <p className="text-[10px] text-muted-foreground leading-none mt-0.5">Manage system-wide {action.label.toLowerCase()}</p>
-                </div>
-              </Button>
-            ))}
-          </div>
-        </SectionCard>
-      </div>
-
-      <div className="rounded-lg border border-danger/20 bg-danger/5 p-4 flex items-start gap-3">
-        <AlertCircle className="size-5 text-danger shrink-0 mt-0.5" />
-        <div>
-          <h4 className="text-sm font-bold text-danger">Critical System Security</h4>
-          <p className="text-xs text-danger/80 mt-1 max-w-2xl">
-            You are currently in the Admin Studio with Super Admin privileges. Any configuration changes made here will impact all active enterprise users immediately. Ensure you test complex workflows before deployment.
+          <p className="text-xs text-muted-foreground leading-relaxed max-w-3xl">
+            You are currently in the <span className="text-foreground font-bold">Admin Studio</span>. Changes here impact global system behavior, business logic, and security policies across all brands. Proceed with extreme caution.
           </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" className="h-9 text-[10px] font-black uppercase tracking-widest border-red-500/20 text-red-600 hover:bg-red-500/5">System Audit</Button>
+          <Button className="h-9 text-[10px] font-black uppercase tracking-widest bg-red-600 hover:bg-red-700 shadow-lg shadow-red-600/20">Security Hub</Button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {adminCategories.map((category) => (
+          <CategoryCard key={category.id} {...category} />
+        ))}
+      </div>
+
+      {/* Footer Info */}
+      <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-border/50 gap-4">
+        <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">
+          <AlertCircle className="size-3.5" />
+          Last System-wide Update: 4 hours ago by SuperAdmin
+        </div>
+        <div className="flex items-center gap-6">
+          <Link to="/settings/audit" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">Global Audit Center</Link>
+          <Link to="/settings/security" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">Enterprise Security</Link>
+          <Link to="/platform/activity" className="text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors">Developer Portal</Link>
         </div>
       </div>
     </div>
   );
 }
+
+function CategoryCard({ title, icon: Icon, desc, modules }: any) {
+  return (
+    <Card className="glass-surface border-border/40 shadow-sm overflow-hidden group hover:shadow-xl hover:border-primary/20 transition-all duration-500 cursor-pointer flex flex-col h-full">
+      <div className="p-6 flex flex-col h-full">
+        <div className="flex justify-between items-start mb-6">
+          <div className="size-12 rounded-2xl bg-accent/30 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
+            <Icon className="size-6 transition-transform group-hover:scale-110" />
+          </div>
+          <ArrowRight className="size-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-primary" />
+        </div>
+        
+        <div className="space-y-2 flex-1">
+          <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-foreground group-hover:text-primary transition-colors">{title}</h3>
+          <p className="text-[11px] text-muted-foreground font-medium leading-relaxed opacity-80">{desc}</p>
+        </div>
+
+        <div className="mt-6 pt-6 border-t border-border/40 space-y-2">
+          <div className="text-[8px] font-black text-muted-foreground uppercase tracking-widest mb-3">Available Modules</div>
+          <div className="flex flex-wrap gap-1.5">
+            {modules.map((mod: string) => (
+              <Badge key={mod} variant="secondary" className="bg-accent/50 text-muted-foreground border-none text-[8px] font-black uppercase tracking-tighter hover:bg-primary/10 hover:text-primary transition-colors">
+                {mod}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+import { Card } from "@/components/ui/card";
