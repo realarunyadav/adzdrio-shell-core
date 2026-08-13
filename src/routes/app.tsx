@@ -92,14 +92,8 @@ function OwnerDashboard() {
     return null;
   }
 
-  const { location } = useRouterState();
-  
-  // Only show the dashboard if we are exactly at /app
-  if (location.pathname !== "/app" && location.pathname !== "/app/") {
-    return null;
-  }
-
   const [dateRange, setDateRange] = React.useState("This Month");
+
 
   return (
     <div className="flex flex-col gap-8 pb-20 animate-in fade-in duration-500">
