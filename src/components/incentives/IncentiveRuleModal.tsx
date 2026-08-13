@@ -19,7 +19,7 @@ type TierData = {
   min: number;
   reward: number;
   type: "Fixed" | "Percentage";
-  label?: string;
+  label?: string | undefined;
 };
 
 type FormData = {
@@ -86,7 +86,7 @@ export function IncentiveRuleModal({ isOpen, onClose, rule }: IncentiveRuleModal
 
   const updateTier = (index: number, field: keyof TierData, value: any) => {
     const newTiers = [...formData.tiers];
-    newTiers[index] = { ...newTiers[index], [field]: value };
+    newTiers[index] = { ...newTiers[index], [field]: value } as TierData;
     setFormData({ ...formData, tiers: newTiers });
   };
 
