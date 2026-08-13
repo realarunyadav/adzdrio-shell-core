@@ -20,7 +20,7 @@ import { demoEmployees, demoBusinesses, demoActivations } from "@/lib/mock/works
 
 export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   const [query, setQuery] = React.useState("");
-  const inputRef = React.useRef<HTMLInputElement>(None);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     if (open) {
