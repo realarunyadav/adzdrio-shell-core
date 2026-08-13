@@ -61,6 +61,11 @@ import { Route as AppSalesPaymentLinksRouteImport } from './routes/app/sales/pay
 import { Route as AppSalesPaymentsRouteImport } from './routes/app/sales/payments'
 import { Route as AppSalesPlansRouteImport } from './routes/app/sales/plans'
 import { Route as AppSalesReportsRouteImport } from './routes/app/sales/reports'
+import { Route as AppSupportIndexRouteImport } from './routes/app/support/index'
+import { Route as AppSupportCustomersRouteImport } from './routes/app/support/customers'
+import { Route as AppSupportKnowledgeBaseRouteImport } from './routes/app/support/knowledge-base'
+import { Route as AppSupportReportsRouteImport } from './routes/app/support/reports'
+import { Route as AppSupportTicketsRouteImport } from './routes/app/support/tickets'
 import { Route as ModulesCrmAssignmentsRouteImport } from './routes/modules.crm.assignments'
 import { Route as ModulesCrmDuplicatesRouteImport } from './routes/modules.crm.duplicates'
 import { Route as ModulesCrmForecastRouteImport } from './routes/modules.crm.forecast'
@@ -330,6 +335,31 @@ const AppSalesReportsRoute = AppSalesReportsRouteImport.update({
   path: '/sales/reports',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSupportIndexRoute = AppSupportIndexRouteImport.update({
+  id: '/support/',
+  path: '/support/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSupportCustomersRoute = AppSupportCustomersRouteImport.update({
+  id: '/support/customers',
+  path: '/support/customers',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSupportKnowledgeBaseRoute = AppSupportKnowledgeBaseRouteImport.update({
+  id: '/support/knowledge-base',
+  path: '/support/knowledge-base',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSupportReportsRoute = AppSupportReportsRouteImport.update({
+  id: '/support/reports',
+  path: '/support/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSupportTicketsRoute = AppSupportTicketsRouteImport.update({
+  id: '/support/tickets',
+  path: '/support/tickets',
+  getParentRoute: () => AppRoute,
+} as any)
 const ModulesCrmAssignmentsRoute = ModulesCrmAssignmentsRouteImport.update({
   id: '/assignments',
   path: '/assignments',
@@ -417,6 +447,10 @@ export interface FileRoutesByFullPath {
   '/app/sales/payments': typeof AppSalesPaymentsRoute
   '/app/sales/plans': typeof AppSalesPlansRoute
   '/app/sales/reports': typeof AppSalesReportsRoute
+  '/app/support/customers': typeof AppSupportCustomersRoute
+  '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
+  '/app/support/reports': typeof AppSupportReportsRoute
+  '/app/support/tickets': typeof AppSupportTicketsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -427,6 +461,7 @@ export interface FileRoutesByFullPath {
   '/app/crm/': typeof AppCrmIndexRoute
   '/app/finance/': typeof AppFinanceIndexRoute
   '/app/sales/': typeof AppSalesIndexRoute
+  '/app/support/': typeof AppSupportIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -478,6 +513,10 @@ export interface FileRoutesByTo {
   '/app/sales/payments': typeof AppSalesPaymentsRoute
   '/app/sales/plans': typeof AppSalesPlansRoute
   '/app/sales/reports': typeof AppSalesReportsRoute
+  '/app/support/customers': typeof AppSupportCustomersRoute
+  '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
+  '/app/support/reports': typeof AppSupportReportsRoute
+  '/app/support/tickets': typeof AppSupportTicketsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -488,6 +527,7 @@ export interface FileRoutesByTo {
   '/app/crm': typeof AppCrmIndexRoute
   '/app/finance': typeof AppFinanceIndexRoute
   '/app/sales': typeof AppSalesIndexRoute
+  '/app/support': typeof AppSupportIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -540,6 +580,10 @@ export interface FileRoutesById {
   '/app/sales/payments': typeof AppSalesPaymentsRoute
   '/app/sales/plans': typeof AppSalesPlansRoute
   '/app/sales/reports': typeof AppSalesReportsRoute
+  '/app/support/customers': typeof AppSupportCustomersRoute
+  '/app/support/knowledge-base': typeof AppSupportKnowledgeBaseRoute
+  '/app/support/reports': typeof AppSupportReportsRoute
+  '/app/support/tickets': typeof AppSupportTicketsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
   '/modules/crm/duplicates': typeof ModulesCrmDuplicatesRoute
   '/modules/crm/forecast': typeof ModulesCrmForecastRoute
@@ -550,6 +594,7 @@ export interface FileRoutesById {
   '/app/crm/': typeof AppCrmIndexRoute
   '/app/finance/': typeof AppFinanceIndexRoute
   '/app/sales/': typeof AppSalesIndexRoute
+  '/app/support/': typeof AppSupportIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -603,6 +648,10 @@ export interface FileRouteTypes {
     | '/app/sales/payments'
     | '/app/sales/plans'
     | '/app/sales/reports'
+    | '/app/support/customers'
+    | '/app/support/knowledge-base'
+    | '/app/support/reports'
+    | '/app/support/tickets'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -613,6 +662,7 @@ export interface FileRouteTypes {
     | '/app/crm/'
     | '/app/finance/'
     | '/app/sales/'
+    | '/app/support/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -664,6 +714,10 @@ export interface FileRouteTypes {
     | '/app/sales/payments'
     | '/app/sales/plans'
     | '/app/sales/reports'
+    | '/app/support/customers'
+    | '/app/support/knowledge-base'
+    | '/app/support/reports'
+    | '/app/support/tickets'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -674,6 +728,7 @@ export interface FileRouteTypes {
     | '/app/crm'
     | '/app/finance'
     | '/app/sales'
+    | '/app/support'
   id:
     | '__root__'
     | '/'
@@ -725,6 +780,10 @@ export interface FileRouteTypes {
     | '/app/sales/payments'
     | '/app/sales/plans'
     | '/app/sales/reports'
+    | '/app/support/customers'
+    | '/app/support/knowledge-base'
+    | '/app/support/reports'
+    | '/app/support/tickets'
     | '/modules/crm/assignments'
     | '/modules/crm/duplicates'
     | '/modules/crm/forecast'
@@ -735,6 +794,7 @@ export interface FileRouteTypes {
     | '/app/crm/'
     | '/app/finance/'
     | '/app/sales/'
+    | '/app/support/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1134,6 +1194,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSalesReportsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/support/': {
+      id: '/app/support/'
+      path: '/support'
+      fullPath: '/app/support/'
+      preLoaderRoute: typeof AppSupportIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/support/customers': {
+      id: '/app/support/customers'
+      path: '/support/customers'
+      fullPath: '/app/support/customers'
+      preLoaderRoute: typeof AppSupportCustomersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/support/knowledge-base': {
+      id: '/app/support/knowledge-base'
+      path: '/support/knowledge-base'
+      fullPath: '/app/support/knowledge-base'
+      preLoaderRoute: typeof AppSupportKnowledgeBaseRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/support/reports': {
+      id: '/app/support/reports'
+      path: '/support/reports'
+      fullPath: '/app/support/reports'
+      preLoaderRoute: typeof AppSupportReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/support/tickets': {
+      id: '/app/support/tickets'
+      path: '/support/tickets'
+      fullPath: '/app/support/tickets'
+      preLoaderRoute: typeof AppSupportTicketsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/modules/crm/assignments': {
       id: '/modules/crm/assignments'
       path: '/assignments'
@@ -1207,9 +1302,14 @@ interface AppRouteChildren {
   AppSalesPaymentsRoute: typeof AppSalesPaymentsRoute
   AppSalesPlansRoute: typeof AppSalesPlansRoute
   AppSalesReportsRoute: typeof AppSalesReportsRoute
+  AppSupportCustomersRoute: typeof AppSupportCustomersRoute
+  AppSupportKnowledgeBaseRoute: typeof AppSupportKnowledgeBaseRoute
+  AppSupportReportsRoute: typeof AppSupportReportsRoute
+  AppSupportTicketsRoute: typeof AppSupportTicketsRoute
   AppCrmIndexRoute: typeof AppCrmIndexRoute
   AppFinanceIndexRoute: typeof AppFinanceIndexRoute
   AppSalesIndexRoute: typeof AppSalesIndexRoute
+  AppSupportIndexRoute: typeof AppSupportIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -1233,9 +1333,14 @@ const AppRouteChildren: AppRouteChildren = {
   AppSalesPaymentsRoute: AppSalesPaymentsRoute,
   AppSalesPlansRoute: AppSalesPlansRoute,
   AppSalesReportsRoute: AppSalesReportsRoute,
+  AppSupportCustomersRoute: AppSupportCustomersRoute,
+  AppSupportKnowledgeBaseRoute: AppSupportKnowledgeBaseRoute,
+  AppSupportReportsRoute: AppSupportReportsRoute,
+  AppSupportTicketsRoute: AppSupportTicketsRoute,
   AppCrmIndexRoute: AppCrmIndexRoute,
   AppFinanceIndexRoute: AppFinanceIndexRoute,
   AppSalesIndexRoute: AppSalesIndexRoute,
+  AppSupportIndexRoute: AppSupportIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

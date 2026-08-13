@@ -708,3 +708,152 @@ export const demoReconciliation = [
   { id: "REC-4002", saleId: "SALE-1050", paymentId: "PAY-9950", invoiceId: "INV-2026-050", expectedAmount: 15000, receivedAmount: 14500, difference: 500, status: 'Mismatch', date: "2026-08-10" },
 ];
 
+
+/**
+ * SUPPORT MODULE MOCK DATA
+ */
+
+export interface DemoSupportTicket {
+  id: string;
+  customerId: string;
+  customerName: string;
+  business: string;
+  subject: string;
+  category: string;
+  priority: 'Critical' | 'High' | 'Medium' | 'Low';
+  status: 'New' | 'Assigned' | 'In Progress' | 'Waiting' | 'Resolved' | 'Closed';
+  assignedToId: string;
+  assignedToName: string;
+  created: string;
+  lastActivity: string;
+  dueTime: string;
+  slaStatus: 'Healthy' | 'Approaching' | 'Breached';
+}
+
+export interface DemoSupportAgent {
+  id: string;
+  name: string;
+  role: string;
+  status: 'online' | 'away' | 'offline';
+  openTickets: number;
+  csat: string;
+}
+
+export interface DemoSupportActivity {
+  id: string;
+  ticketId: string;
+  actor: string;
+  action: string;
+  timestamp: string;
+}
+
+export interface DemoSupportArticle {
+  id: string;
+  title: string;
+  category: string;
+  status: 'Published' | 'Draft' | 'Archived';
+  views: number;
+}
+
+export const demoSupportAgents: DemoSupportAgent[] = [
+  { id: 'agent-1', name: 'Ankit Singh', role: 'Senior Lead', status: 'online', openTickets: 8, csat: '4.9/5' },
+  { id: 'agent-2', name: 'Sonia Kapoor', role: 'Support Executive', status: 'online', openTickets: 12, csat: '4.8/5' },
+  { id: 'agent-3', name: 'Rahul Menon', role: 'Technical Specialist', status: 'away', openTickets: 5, csat: '4.7/5' },
+  { id: 'agent-4', name: 'Vikram Das', role: 'Account Manager', status: 'offline', openTickets: 0, csat: '4.5/5' },
+];
+
+export const demoSupportTickets: DemoSupportTicket[] = [
+  { 
+    id: 'TIC-1024', 
+    customerId: 'cust-1', 
+    customerName: 'Amit Sharma', 
+    business: 'Sharma Enterprises',
+    subject: 'Unable to access billing dashboard after August update',
+    category: 'Billing',
+    priority: 'High',
+    status: 'In Progress',
+    assignedToId: 'agent-1',
+    assignedToName: 'Ankit Singh',
+    created: '2026-08-14T10:30:00Z',
+    lastActivity: '2026-08-14T11:45:00Z',
+    dueTime: '2026-08-14T14:30:00Z',
+    slaStatus: 'Approaching'
+  },
+  { 
+    id: 'TIC-1025', 
+    customerId: 'cust-2', 
+    customerName: 'Priya Verma', 
+    business: 'Verma Logistics',
+    subject: 'Request for custom integration with Tally Prime',
+    category: 'Technical',
+    priority: 'Medium',
+    status: 'New',
+    assignedToId: 'agent-2',
+    assignedToName: 'Sonia Kapoor',
+    created: '2026-08-14T09:15:00Z',
+    lastActivity: '2026-08-14T09:15:00Z',
+    dueTime: '2026-08-15T09:15:00Z',
+    slaStatus: 'Healthy'
+  },
+  { 
+    id: 'TIC-1026', 
+    customerId: 'cust-1', 
+    customerName: 'Amit Sharma', 
+    business: 'Sharma Enterprises',
+    subject: 'CRITICAL: Server timeout on main production environment',
+    category: 'Technical',
+    priority: 'Critical',
+    status: 'In Progress',
+    assignedToId: 'agent-3',
+    assignedToName: 'Rahul Menon',
+    created: '2026-08-14T12:00:00Z',
+    lastActivity: '2026-08-14T12:15:00Z',
+    dueTime: '2026-08-14T13:00:00Z',
+    slaStatus: 'Breached'
+  },
+  { 
+    id: 'TIC-1027', 
+    customerId: 'cust-3', 
+    customerName: 'Rajesh Gupta', 
+    business: 'Gupta & Sons',
+    subject: 'Payment failed but amount deducted from bank',
+    category: 'Billing',
+    priority: 'High',
+    status: 'Waiting',
+    assignedToId: 'agent-2',
+    assignedToName: 'Sonia Kapoor',
+    created: '2026-08-13T16:45:00Z',
+    lastActivity: '2026-08-14T10:00:00Z',
+    dueTime: '2026-08-14T12:45:00Z',
+    slaStatus: 'Breached'
+  },
+  { 
+    id: 'TIC-1028', 
+    customerId: 'cust-2', 
+    customerName: 'Priya Verma', 
+    business: 'Verma Logistics',
+    subject: 'How to export monthly GST reports?',
+    category: 'Billing',
+    priority: 'Low',
+    status: 'Resolved',
+    assignedToId: 'agent-1',
+    assignedToName: 'Ankit Singh',
+    created: '2026-08-12T11:00:00Z',
+    lastActivity: '2026-08-12T14:30:00Z',
+    dueTime: '2026-08-13T11:00:00Z',
+    slaStatus: 'Healthy'
+  }
+];
+
+export const demoSupportActivities: DemoSupportActivity[] = [
+  { id: 'act-1', ticketId: 'TIC-1024', actor: 'Ankit Singh', action: 'changed status to In Progress', timestamp: '2026-08-14T11:45:00Z' },
+  { id: 'act-2', ticketId: 'TIC-1024', actor: 'System', action: 'assigned ticket to Ankit Singh', timestamp: '2026-08-14T10:35:00Z' },
+  { id: 'act-3', ticketId: 'TIC-1024', actor: 'Amit Sharma', action: 'created ticket', timestamp: '2026-08-14T10:30:00Z' },
+];
+
+export const demoSupportArticles: DemoSupportArticle[] = [
+  { id: 'ART-2001', title: 'Configuring Multi-Business Workspaces', category: 'Getting Started', status: 'Published', views: 1240 },
+  { id: 'ART-2002', title: 'Troubleshooting Gateway 502 Errors', category: 'Technical Docs', status: 'Published', views: 856 },
+  { id: 'ART-2003', title: 'Setting up Automated GST Invoicing', category: 'Billing & Payments', status: 'Draft', views: 0 },
+  { id: 'ART-2004', title: 'User Role Management & Permissions', category: 'Account Security', status: 'Published', views: 2105 },
+];

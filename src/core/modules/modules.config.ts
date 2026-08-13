@@ -99,16 +99,18 @@ export const modules: ModuleDefinition[] = [
   {
     id: "support",
     name: "Support",
-    description: "Multi-channel support and communication.",
+    description: "Enterprise multi-channel support and ticket management.",
     icon: LifeBuoy,
     group: "operations",
     order: 30,
     status: "available",
-    basePath: "/modules/support",
+    basePath: "/app/support",
     navigation: [
-      { id: "conversations", label: "Conversations", path: "/modules/support/chat" },
-      { id: "calls", label: "Calls", path: "/modules/support/calls" },
-      { id: "video-calls", label: "Video Calls", path: "/modules/support/video" },
+      { id: "support-dashboard", label: "Support Dashboard", path: "/app/support" },
+      { id: "support-tickets", label: "Tickets", path: "/app/support/tickets" },
+      { id: "support-customers", label: "Support Customers", path: "/app/support/customers" },
+      { id: "support-kb", label: "Knowledge Base", path: "/app/support/knowledge-base" },
+      { id: "support-reports", label: "Support Reports", path: "/app/support/reports" },
     ]
   },
   {
