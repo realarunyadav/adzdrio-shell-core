@@ -151,7 +151,7 @@ function OwnerDashboard() {
         <div className="col-span-12">
           <SectionCard 
             title="Needs Attention" 
-            eyebrow="SYSTEM ALERTS"
+            
             className="border-red-500/10"
             actions={<Button variant="ghost" size="sm" className="text-[10px] font-bold uppercase text-muted-foreground">Dismiss All</Button>}
           >
@@ -167,7 +167,7 @@ function OwnerDashboard() {
         <div className="col-span-12 xl:col-span-8">
           <SectionCard 
             title="Business Performance" 
-            eyebrow="MULTI-BRAND OVERVIEW"
+            
             actions={<Button variant="outline" size="sm" className="h-7 text-[10px] font-bold gap-1.5"><Download className="size-3" /> Export Report</Button>}
           >
             <div className="space-y-4">
@@ -222,7 +222,7 @@ function OwnerDashboard() {
 
         {/* Finance Snapshot */}
         <div className="col-span-12 md:col-span-6 xl:col-span-4">
-          <SectionCard title="Finance Overview" eyebrow="CASH FLOW SNAPSHOT">
+          <SectionCard title="Finance Overview" >
             <div className="space-y-6">
               <div className="grid grid-cols-2 gap-4">
                 <FinanceMiniCard label="Net Revenue" value={demoFinanceSnapshot.revenue} trend="+5.2%" tone="success" />
@@ -250,7 +250,7 @@ function OwnerDashboard() {
         <div className="col-span-12 xl:col-span-8">
           <SectionCard 
             title="Team Performance" 
-            eyebrow="WORKFORCE PRODUCTIVITY"
+            
             actions={
               <div className="flex items-center gap-2">
                 <div className="relative hidden sm:block">
@@ -310,7 +310,7 @@ function OwnerDashboard() {
 
         {/* HR & Support Sidebars */}
         <div className="col-span-12 md:col-span-6 xl:col-span-4 space-y-6">
-          <SectionCard title="HR Snapshot" eyebrow="PEOPLE OPERATIONS">
+          <SectionCard title="HR Snapshot" >
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div className="p-3 rounded-xl border border-border/40 glass-surface">
                 <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Active Staff</div>
@@ -342,7 +342,7 @@ function OwnerDashboard() {
             </Button>
           </SectionCard>
 
-          <SectionCard title="Support & Operations" eyebrow="SERVICE LEVEL OVERVIEW">
+          <SectionCard title="Support & Operations" >
             <div className="space-y-4">
               <div className="grid grid-cols-3 gap-2">
                 <SupportMetric label="Open" value={demoSupportSnapshot.conversations} icon={MessageSquare} />
@@ -366,7 +366,7 @@ function OwnerDashboard() {
 
         {/* Activity Feed */}
         <div className="col-span-12 xl:col-span-8">
-          <SectionCard title="Company-wide Activity" eyebrow="REAL-TIME EVENT STREAM" actions={<Button variant="ghost" size="sm" className="text-[10px] font-bold uppercase">View Audit Log</Button>}>
+          <SectionCard title="Company-wide Activity"  actions={<Button variant="ghost" size="sm" className="text-[10px] font-bold uppercase">View Audit Log</Button>}>
             <div className="space-y-1">
               {demoActivities.map((act) => (
                 <div key={act.id} className="flex items-center gap-4 p-3 rounded-lg hover:bg-accent/40 transition-colors group">
@@ -396,7 +396,7 @@ function OwnerDashboard() {
 
         {/* Sales Trend Visualization Placeholder */}
         <div className="col-span-12 xl:col-span-4">
-          <SectionCard title="Sales Intelligence" eyebrow="REVENUE TREND">
+          <SectionCard title="Sales Intelligence" >
              <div className="h-[300px] w-full flex flex-col items-center justify-center gap-3 text-muted-foreground bg-accent/10 rounded-xl border border-dashed border-border/50">
                 <BarChart3 className="size-12 opacity-20" />
                 <p className="text-[10px] font-black uppercase tracking-widest opacity-40">Revenue Intelligence Stream</p>
