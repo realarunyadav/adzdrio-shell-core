@@ -131,7 +131,7 @@ function InnerRoot() {
       navigate({ to: "/auth", replace: true });
     }
     if (status === "authenticated" && location.pathname === "/auth") {
-      navigate({ to: "/", replace: true });
+      navigate({ to: "/app", replace: true });
     }
   }, [status, location.pathname, navigate]);
 
