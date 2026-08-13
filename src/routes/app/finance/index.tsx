@@ -21,7 +21,16 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { DashboardKpiCard } from "@/components/shared/DashboardKpiCard";
 import { Button } from "@/components/ui/button";
-import { demoPayments, demoTransactions, demoExpenses, demoRefunds } from "@/lib/mock/workspace.demo";
+import { demoPayments, demoTransactions, demoExpenses, demoRefunds, getFinanceModel } from "@/lib/mock/workspace.demo";
+import { 
+  AreaChart, 
+  Area, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer
+} from 'recharts';
 
 export const Route = createFileRoute("/app/finance/")({
   component: FinanceModuleLayout,
@@ -38,18 +47,31 @@ function FinanceModuleLayout() {
 
 function FinanceDashboard() {
   const { location } = useRouterState();
+  const finance = getFinanceModel();
   
   // Only show the dashboard if we are exactly at /app/finance or /app/finance/
   if (location.pathname !== "/app/finance" && location.pathname !== "/app/finance/") {
     return null;
   }
 
-  const totalRevenue = "₹ 48.2L";
-  const paidCollections = "₹ 42.5L";
-  const pendingCollections = "₹ 5.7L";
-  const totalRefunds = "₹ 42K";
-  const totalExpenses = "₹ 12.4L";
-  const netPosition = "₹ 30.1L";
+  const kpiData = [
+    { title: "Total Revenue", value: finance.formatted.grossRevenue, trend: "+14.2%", icon: TrendingUp },
+    { title: "Paid Coll.", value: finance.formatted.paidCollections, trend: "+8.5%", icon: CreditCard },
+    { title: "Pending", value: finance.formatted.pendingCollections, trend: "-2.4%", icon: Clock },
+    { title: "Refunds", value: finance.formatted.refunds, trend: "+1.2%", icon: RefreshCw },
+    { title: "Expenses", value: finance.formatted.expenses, trend: "+5.7%", icon: ArrowDownRight },
+    { title: "Net Position", value: finance.formatted.netPosition, trend: "+12.8%", icon: DollarSign },
+  ];
+
+  const trendData = [
+    { name: 'Aug 01', revenue: 420000, collections: 380000 },
+    { name: 'Aug 05', revenue: 850000, collections: 720000 },
+    { name: 'Aug 10', revenue: 1200000, collections: 1050000 },
+    { name: 'Aug 15', revenue: 1850000, collections: 1600000 },
+    { name: 'Aug 20', revenue: 2600000, collections: 2200000 },
+    { name: 'Aug 25', revenue: 3800000, collections: 3400000 },
+    { name: 'Aug 30', revenue: 4820000, collections: 4250000 },
+  ];
 
   return (
     <div className="flex flex-col gap-8 pb-20 animate-in fade-in duration-500">
@@ -73,42 +95,15 @@ function FinanceDashboard() {
 
       {/* KPI Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        <DashboardKpiCard
-          title="Total Revenue"
-          value={totalRevenue}
-          trend="+14.2%"
-          icon={TrendingUp}
-        />
-        <DashboardKpiCard
-          title="Paid Coll."
-          value={paidCollections}
-          trend="+8.5%"
-          icon={CreditCard}
-        />
-        <DashboardKpiCard
-          title="Pending"
-          value={pendingCollections}
-          trend="-2.4%"
-          icon={Clock}
-        />
-        <DashboardKpiCard
-          title="Refunds"
-          value={totalRefunds}
-          trend="+1.2%"
-          icon={RefreshCw}
-        />
-        <DashboardKpiCard
-          title="Expenses"
-          value={totalExpenses}
-          trend="+5.7%"
-          icon={ArrowDownRight}
-        />
-        <DashboardKpiCard
-          title="Net Position"
-          value={netPosition}
-          trend="+12.8%"
-          icon={DollarSign}
-        />
+        {kpiData.map((kpi) => (
+          <DashboardKpiCard
+            key={kpi.title}
+            title={kpi.title}
+            value={kpi.value}
+            trend={kpi.trend}
+            icon={kpi.icon}
+          />
+        ))}
       </div>
 
       <div className="grid grid-cols-12 gap-6">
