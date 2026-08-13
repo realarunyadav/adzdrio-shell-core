@@ -41,8 +41,12 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
   const [step, setStep] = React.useState(1);
   const [selectedCustomer, setSelectedCustomer] = React.useState<any>(null);
   const [selectedSale, setSelectedSale] = React.useState<any>(null);
+  const [paymentAcknowledged, setPaymentAcknowledged] = React.useState(false);
   const [selectedEmployee, setSelectedEmployee] = React.useState<any>(null);
   const [priority, setPriority] = React.useState('Medium');
+  const [activationDate, setActivationDate] = React.useState('2026-08-13T12:00');
+  const [notes, setNotes] = React.useState('');
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   const steps = [
     { id: 1, label: "Customer", icon: User },
@@ -53,7 +57,22 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
     { id: 6, label: "Review", icon: Rocket },
   ];
 
-  const handleNext = () => setStep(s => Math.min(s + 1, 6));
+  const isStepValid = () => {
+    switch(step) {
+      case 1: return !!selectedCustomer;
+      case 2: return !!selectedSale;
+      case 3: return paymentAcknowledged || selectedSale?.paymentStatus === 'Paid';
+      case 4: return !!selectedEmployee;
+      case 5: return !!activationDate;
+      default: return true;
+    }
+  };
+
+  const handleNext = () => {
+    if (isStepValid()) {
+      setStep(s => Math.min(s + 1, 6));
+    }
+  };
   const handleBack = () => setStep(s => Math.max(s - 1, 1));
   const handleClose = () => {
     onOpenChange(false);
