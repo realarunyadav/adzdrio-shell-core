@@ -86,7 +86,7 @@ function RoleStatCard({ title, value, icon: Icon, tone = "default" }: any) {
   );
 }
 
-function RoleRow({ name, access, users, type }: any) {
+function RoleRow({ name, access, users, type, onView }: any) {
   return (
     <TableRow className="border-border/40 hover:bg-accent/30 transition-colors">
       <TableCell>
@@ -100,7 +100,12 @@ function RoleRow({ name, access, users, type }: any) {
         </Badge>
       </TableCell>
       <TableCell className="text-right">
-        <Button variant="ghost" size="sm" className="text-[9px] font-black uppercase tracking-widest h-8 gap-1.5">
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="text-[9px] font-black uppercase tracking-widest h-8 gap-1.5"
+          onClick={onView}
+        >
           <Eye className="size-3" /> View Permissions
         </Button>
       </TableCell>
