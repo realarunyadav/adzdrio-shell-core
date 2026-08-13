@@ -23,7 +23,14 @@ export function EmployeeModal({ isOpen, onClose, employee }: EmployeeModalProps)
     status: "Active" as const
   };
 
-  const [formData, setFormData] = useState(initialData);
+  const [formData, setFormData] = useState(employee ? {
+    name: employee.name,
+    email: employee.email,
+    phone: employee.phone || "",
+    role: employee.role,
+    business: employee.department || "Acme India",
+    status: (employee.status as any) || "Active"
+  } : initialData);
 
   const handleSave = () => {
     console.log("Saving employee:", formData);
