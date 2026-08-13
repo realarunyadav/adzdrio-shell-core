@@ -38,6 +38,9 @@ import { Route as PlatformAutomationRouteImport } from './routes/platform.automa
 import { Route as PlatformDataCenterRouteImport } from './routes/platform.data-center'
 import { Route as SettingsAuditRouteImport } from './routes/settings.audit'
 import { Route as SettingsSecurityRouteImport } from './routes/settings.security'
+import { Route as AppCrmCallbacksRouteImport } from './routes/app/crm/callbacks'
+import { Route as AppCrmCustomersRouteImport } from './routes/app/crm/customers'
+import { Route as AppCrmFollowUpsRouteImport } from './routes/app/crm/follow-ups'
 import { Route as AppCrmLeadPoolRouteImport } from './routes/app/crm/lead-pool'
 import { Route as AppCrmMyLeadsRouteImport } from './routes/app/crm/my-leads'
 import { Route as ModulesCrmAssignmentsRouteImport } from './routes/modules.crm.assignments'
@@ -193,6 +196,21 @@ const SettingsSecurityRoute = SettingsSecurityRouteImport.update({
   path: '/security',
   getParentRoute: () => SettingsRoute,
 } as any)
+const AppCrmCallbacksRoute = AppCrmCallbacksRouteImport.update({
+  id: '/crm/callbacks',
+  path: '/crm/callbacks',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCrmCustomersRoute = AppCrmCustomersRouteImport.update({
+  id: '/crm/customers',
+  path: '/crm/customers',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCrmFollowUpsRoute = AppCrmFollowUpsRouteImport.update({
+  id: '/crm/follow-ups',
+  path: '/crm/follow-ups',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppCrmLeadPoolRoute = AppCrmLeadPoolRouteImport.update({
   id: '/crm/lead-pool',
   path: '/crm/lead-pool',
@@ -270,6 +288,9 @@ export interface FileRoutesByFullPath {
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
+  '/app/crm/callbacks': typeof AppCrmCallbacksRoute
+  '/app/crm/customers': typeof AppCrmCustomersRoute
+  '/app/crm/follow-ups': typeof AppCrmFollowUpsRoute
   '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
   '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
@@ -310,6 +331,9 @@ export interface FileRoutesByTo {
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
+  '/app/crm/callbacks': typeof AppCrmCallbacksRoute
+  '/app/crm/customers': typeof AppCrmCustomersRoute
+  '/app/crm/follow-ups': typeof AppCrmFollowUpsRoute
   '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
   '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
@@ -351,6 +375,9 @@ export interface FileRoutesById {
   '/platform/data-center': typeof PlatformDataCenterRoute
   '/settings/audit': typeof SettingsAuditRoute
   '/settings/security': typeof SettingsSecurityRoute
+  '/app/crm/callbacks': typeof AppCrmCallbacksRoute
+  '/app/crm/customers': typeof AppCrmCustomersRoute
+  '/app/crm/follow-ups': typeof AppCrmFollowUpsRoute
   '/app/crm/lead-pool': typeof AppCrmLeadPoolRoute
   '/app/crm/my-leads': typeof AppCrmMyLeadsRoute
   '/modules/crm/assignments': typeof ModulesCrmAssignmentsRoute
@@ -393,6 +420,9 @@ export interface FileRouteTypes {
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
+    | '/app/crm/callbacks'
+    | '/app/crm/customers'
+    | '/app/crm/follow-ups'
     | '/app/crm/lead-pool'
     | '/app/crm/my-leads'
     | '/modules/crm/assignments'
@@ -433,6 +463,9 @@ export interface FileRouteTypes {
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
+    | '/app/crm/callbacks'
+    | '/app/crm/customers'
+    | '/app/crm/follow-ups'
     | '/app/crm/lead-pool'
     | '/app/crm/my-leads'
     | '/modules/crm/assignments'
@@ -473,6 +506,9 @@ export interface FileRouteTypes {
     | '/platform/data-center'
     | '/settings/audit'
     | '/settings/security'
+    | '/app/crm/callbacks'
+    | '/app/crm/customers'
+    | '/app/crm/follow-ups'
     | '/app/crm/lead-pool'
     | '/app/crm/my-leads'
     | '/modules/crm/assignments'
@@ -720,6 +756,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsSecurityRouteImport
       parentRoute: typeof SettingsRoute
     }
+    '/app/crm/callbacks': {
+      id: '/app/crm/callbacks'
+      path: '/crm/callbacks'
+      fullPath: '/app/crm/callbacks'
+      preLoaderRoute: typeof AppCrmCallbacksRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/crm/customers': {
+      id: '/app/crm/customers'
+      path: '/crm/customers'
+      fullPath: '/app/crm/customers'
+      preLoaderRoute: typeof AppCrmCustomersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/crm/follow-ups': {
+      id: '/app/crm/follow-ups'
+      path: '/crm/follow-ups'
+      fullPath: '/app/crm/follow-ups'
+      preLoaderRoute: typeof AppCrmFollowUpsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/crm/lead-pool': {
       id: '/app/crm/lead-pool'
       path: '/crm/lead-pool'
@@ -787,11 +844,17 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppRouteChildren {
+  AppCrmCallbacksRoute: typeof AppCrmCallbacksRoute
+  AppCrmCustomersRoute: typeof AppCrmCustomersRoute
+  AppCrmFollowUpsRoute: typeof AppCrmFollowUpsRoute
   AppCrmLeadPoolRoute: typeof AppCrmLeadPoolRoute
   AppCrmMyLeadsRoute: typeof AppCrmMyLeadsRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppCrmCallbacksRoute: AppCrmCallbacksRoute,
+  AppCrmCustomersRoute: AppCrmCustomersRoute,
+  AppCrmFollowUpsRoute: AppCrmFollowUpsRoute,
   AppCrmLeadPoolRoute: AppCrmLeadPoolRoute,
   AppCrmMyLeadsRoute: AppCrmMyLeadsRoute,
 }
