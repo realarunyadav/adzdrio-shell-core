@@ -383,7 +383,14 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                 </div>
                 <div>
                   <p className="text-[9px] font-black uppercase text-muted-foreground mb-1">Priority</p>
-                  <p className="text-xs font-black uppercase">{priority}</p>
+                  <Badge className={cn(
+                    "text-[9px] font-black uppercase h-5",
+                    priority === 'Critical' ? "bg-red-600" :
+                    priority === 'High' ? "bg-orange-500" :
+                    priority === 'Medium' ? "bg-blue-500" : "bg-slate-500"
+                  )}>
+                    {priority}
+                  </Badge>
                 </div>
                 <div>
                   <p className="text-[9px] font-black uppercase text-muted-foreground mb-1">Activation Date</p>
