@@ -1,5 +1,8 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { ChevronRight, LogOut, User, Settings as SettingsIcon } from "lucide-react";
+import * as React from "react";
+import { ChevronRight, LogOut, User, Settings as SettingsIcon, Search } from "lucide-react";
+import { GlobalSearchOverlay } from "@/components/shared/GlobalSearchOverlay";
+
 
 
 import { appConfig } from "@/config/app.config";
