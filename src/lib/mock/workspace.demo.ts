@@ -496,6 +496,73 @@ export const demoPlans: DemoPlan[] = [
   { id: "plan-3", name: "Enterprise Custom", business: "Blue Harbour", price: 45000, status: 'Active', created: "2026-03-20", updated: "2026-03-20", activeSales: 12, features: ["Custom API", "Legal Suite"] },
 ];
 
+
+export interface AiCapability {
+  id: string;
+  name: string;
+  description: string;
+  status: 'active' | 'disabled' | 'restricted';
+  scope: 'global' | 'business' | 'role';
+  lastUpdated: string;
+  config: Record<string, any>;
+}
+
+export interface AiProvider {
+  id: string;
+  name: string;
+  environment: 'production' | 'staging' | 'development';
+  status: 'connected' | 'error' | 'disconnected';
+  lastEvent: string;
+  model: string;
+  latency?: string;
+  error?: string;
+}
+
+export interface AiAuditLog {
+  id: string;
+  userId: string;
+  userName: string;
+  employeeCode?: string;
+  business: string;
+  capability: string;
+  requestType: 'Query' | 'Summary' | 'Insight' | 'Draft' | 'System';
+  timestamp: string;
+  result: string;
+  status: 'success' | 'restricted' | 'error';
+}
+
+export interface AiMessage {
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: string;
+}
+
+export const demoAiCapabilities: AiCapability[] = [
+  { id: 'ai-ast', name: 'AI Assistant', description: 'Real-time conversational support for administrators.', status: 'active', scope: 'global', lastUpdated: '2026-08-12', config: {} },
+  { id: 'ai-sea', name: 'Search Assistance', description: 'Enhanced semantic search across platform data.', status: 'active', scope: 'global', lastUpdated: '2026-08-11', config: {} },
+  { id: 'ai-ins', name: 'Business Insights', description: 'Automated trend detection and performance analysis.', status: 'restricted', scope: 'business', lastUpdated: '2026-08-10', config: {} },
+  { id: 'ai-sum', name: 'Summarization', description: 'Automated document and activity summaries.', status: 'active', scope: 'global', lastUpdated: '2026-08-12', config: {} },
+  { id: 'ai-dra', name: 'Drafting Assistance', description: 'AI-powered email and communication drafting.', status: 'active', scope: 'role', lastUpdated: '2026-08-09', config: {} },
+  { id: 'ai-dat', name: 'Data Analysis', description: 'Advanced CSV/JSON processing and visualization.', status: 'disabled', scope: 'global', lastUpdated: '2026-08-05', config: {} },
+];
+
+export const demoAiProviders: AiProvider[] = [
+  { id: 'prov-1', name: 'OpenAI Enterprise', environment: 'production', status: 'connected', lastEvent: '2m ago', model: 'gpt-4o' },
+  { id: 'prov-2', name: 'Claude Anthropic', environment: 'production', status: 'connected', lastEvent: '5m ago', model: 'claude-3-5-sonnet' },
+  { id: 'prov-3', name: 'Azure OpenAI', environment: 'staging', status: 'error', lastEvent: '1h ago', model: 'gpt-4-turbo', error: 'Authentication Timeout' },
+];
+
+export const demoAiAuditLogs: AiAuditLog[] = [
+  { id: 'log-1', userId: 'user-admin', userName: 'Super Admin', employeeCode: 'EMP001', business: 'Global', capability: 'AI Assistant', requestType: 'Query', timestamp: '2026-08-13T10:00:00Z', result: 'Retrieved revenue report', status: 'success' },
+  { id: 'log-2', userId: 'user-1', userName: 'Priya Nair', employeeCode: 'EMP042', business: 'Acme India', capability: 'Drafting Assistance', requestType: 'Draft', timestamp: '2026-08-13T10:15:00Z', result: 'Drafted follow-up email', status: 'success' },
+  { id: 'log-3', userId: 'user-2', userName: 'Rahul Menon', employeeCode: 'EMP038', business: 'Vertex Tech', capability: 'Business Insights', requestType: 'Insight', timestamp: '2026-08-13T10:30:00Z', result: 'Access Denied: Restricted Role', status: 'restricted' },
+];
+
+export const demoAiConversation: AiMessage[] = [
+  { role: 'user', content: 'What is the total revenue for Acme India this month?', timestamp: '10:00 AM' },
+  { role: 'assistant', content: 'Acme India has recorded a total revenue of ₹ 12.4L this month, showing a 15% increase compared to July. Would you like a breakdown by category?', timestamp: '10:00 AM' },
+];
+
 export interface LegalTemplate {
   id: string;
   name: string;
