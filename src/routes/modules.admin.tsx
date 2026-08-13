@@ -9,6 +9,7 @@ import { BrandingBuilder } from "@/components/admin-studio/BrandingBuilder";
 import { PolicyManager } from "@/components/admin-studio/PolicyManager";
 import { AdminAuditCenter } from "@/components/admin-studio/AdminAuditCenter";
 import { LayoutGrid, Database, Layers, GitBranch, Settings, History, ShieldAlert } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export const Route = createFileRoute("/modules/admin")({
   component: AdminStudioModule,
