@@ -50,35 +50,35 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
     // Search Employees
     demoEmployees.forEach(emp => {
       if (emp.name.toLowerCase().includes(q) || emp.code.toLowerCase().includes(q) || emp.phone.includes(q)) {
-        matches.push({ type: 'employee', ...emp });
+        matches.push({ resultType: 'employee', ...emp });
       }
     });
 
     // Search Businesses
     demoBusinesses.forEach(biz => {
       if (biz.name.toLowerCase().includes(q)) {
-        matches.push({ type: 'business', ...biz });
+        matches.push({ resultType: 'business', ...biz });
       }
     });
 
     // Search Activations/IDs
     demoActivations.forEach(act => {
       if (act.id.toLowerCase().includes(q) || act.customerName.toLowerCase().includes(q)) {
-        matches.push({ type: 'activation', ...act });
+        matches.push({ resultType: 'activation', ...act });
       }
     });
 
     // Search Incentive Rules
     demoIncentiveRules.forEach(rule => {
       if (rule.name.toLowerCase().includes(q) || rule.id.toLowerCase().includes(q)) {
-        matches.push({ type: 'incentive', ...rule });
+        matches.push({ resultType: 'incentive', ...rule });
       }
     });
 
     // Search Sales Plans
     demoPlans.forEach(plan => {
       if (plan.name.toLowerCase().includes(q) || plan.id.toLowerCase().includes(q)) {
-        matches.push({ type: 'plan', ...plan });
+        matches.push({ resultType: 'plan', ...plan });
       }
     });
 
