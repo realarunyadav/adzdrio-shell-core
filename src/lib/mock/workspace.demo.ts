@@ -32,7 +32,9 @@ import {
   HardDrive,
   RefreshCw,
   Bell,
-  Fingerprint
+  Fingerprint,
+  Link,
+  Receipt
 } from "lucide-react";
 
 /**
@@ -418,3 +420,170 @@ export const adminCategories = [
     modules: ["System Settings", "Localization"]
   }
 ];
+
+export interface DemoSale {
+  id: string;
+  customerId: string;
+  customerName: string;
+  phone: string;
+  email: string;
+  business: string;
+  planId: string;
+  planName: string;
+  amount: number;
+  discount: number;
+  finalAmount: number;
+  salesEmployeeId: string;
+  salesEmployeeName: string;
+  status: 'New' | 'Qualified' | 'Proposal' | 'Negotiation' | 'Won' | 'Lost';
+  paymentStatus: 'Paid' | 'Pending' | 'Failed' | 'Refunded';
+  created: string;
+  lastActivity: string;
+  notes?: string;
+}
+
+export interface DemoPlan {
+  id: string;
+  name: string;
+  business: string;
+  price: number;
+  status: 'Active' | 'Inactive';
+  created: string;
+  updated: string;
+  activeSales: number;
+}
+
+export interface DemoPaymentLink {
+  id: string;
+  saleId: string;
+  customerName: string;
+  phone: string;
+  email: string;
+  amount: number;
+  status: 'Active' | 'Paid' | 'Expired' | 'Disabled';
+  created: string;
+  expires: string;
+  createdBy: string;
+}
+
+export interface DemoPayment {
+  id: string;
+  saleId: string;
+  customerId: string;
+  customerName: string;
+  amount: number;
+  method: string;
+  status: 'Paid' | 'Pending' | 'Failed' | 'Refunded';
+  date: string;
+  reference: string;
+}
+
+export interface DemoInvoice {
+  id: string;
+  saleId: string;
+  customerName: string;
+  amount: number;
+  status: 'Draft' | 'Sent' | 'Paid' | 'Overdue' | 'Void';
+  issueDate: string;
+  dueDate: string;
+  paymentStatus: 'Paid' | 'Pending';
+}
+
+export const demoPlans: DemoPlan[] = [
+  { id: "plan-1", name: "Premium Annual", business: "Acme India", price: 12000, status: 'Active', created: "2024-01-15", updated: "2024-06-10", activeSales: 450 },
+  { id: "plan-2", name: "Standard Monthly", business: "Vertex Tech", price: 999, status: 'Active', created: "2024-02-01", updated: "2024-07-01", activeSales: 1200 },
+  { id: "plan-3", name: "Enterprise Custom", business: "Blue Harbour", price: 45000, status: 'Active', created: "2024-03-20", updated: "2024-03-20", activeSales: 12 },
+];
+
+export const demoSales: DemoSale[] = [
+  {
+    id: "SALE-1001",
+    customerId: "cust-1",
+    customerName: "Rahul Verma",
+    phone: "+91 98765 43210",
+    email: "rahul.v@example.com",
+    business: "Acme India",
+    planId: "plan-1",
+    planName: "Premium Annual",
+    amount: 12000,
+    discount: 1000,
+    finalAmount: 11000,
+    salesEmployeeId: "emp-1",
+    salesEmployeeName: "Ankit Singh",
+    status: 'Won',
+    paymentStatus: 'Paid',
+    created: "2024-08-01T10:00:00Z",
+    lastActivity: "2024-08-01T14:30:00Z",
+    notes: "Customer converted from lead-1."
+  },
+  {
+    id: "SALE-1002",
+    customerId: "cust-2",
+    customerName: "Priya Das",
+    phone: "+91 98765 00001",
+    email: "priya.d@example.com",
+    business: "Vertex Tech",
+    planId: "plan-2",
+    planName: "Standard Monthly",
+    amount: 999,
+    discount: 0,
+    finalAmount: 999,
+    salesEmployeeId: "emp-2",
+    salesEmployeeName: "Sonia Kapoor",
+    status: 'Proposal',
+    paymentStatus: 'Pending',
+    created: "2024-08-10T09:15:00Z",
+    lastActivity: "2024-08-11T11:00:00Z"
+  }
+];
+
+export const demoPaymentLinks: DemoPaymentLink[] = [
+  {
+    id: "LNK-7788",
+    saleId: "SALE-1002",
+    customerName: "Priya Das",
+    phone: "+91 98765 00001",
+    email: "priya.d@example.com",
+    amount: 999,
+    status: 'Active',
+    created: "2024-08-10T09:20:00Z",
+    expires: "2024-08-17T09:20:00Z",
+    createdBy: "Sonia Kapoor"
+  }
+];
+
+export const demoPayments: DemoPayment[] = [
+  {
+    id: "PAY-9901",
+    saleId: "SALE-1001",
+    customerId: "cust-1",
+    customerName: "Rahul Verma",
+    amount: 11000,
+    method: "UPI",
+    status: 'Paid',
+    date: "2024-08-01T14:25:00Z",
+    reference: "RRR123456789"
+  }
+];
+
+export const demoInvoices: DemoInvoice[] = [
+  {
+    id: "INV-2024-001",
+    saleId: "SALE-1001",
+    customerName: "Rahul Verma",
+    amount: 11000,
+    status: 'Paid',
+    issueDate: "2024-08-01",
+    dueDate: "2024-08-01",
+    paymentStatus: 'Paid'
+  }
+];
+
+export const demoSalesDocumentTemplate = {
+  id: "template-1",
+  name: "Standard Sales Document",
+  version: "1.2.0",
+  lastPublished: "2024-07-20",
+  content: "This document outlines the terms of your purchase from {{business_name}}.",
+  variables: ["business_name", "customer_name", "plan_name", "amount", "date"]
+};

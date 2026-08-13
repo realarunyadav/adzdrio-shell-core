@@ -85,12 +85,15 @@ export const modules: ModuleDefinition[] = [
     group: "operations",
     order: 20,
     status: "available",
-    basePath: "/modules/sales",
+    basePath: "/app/sales",
     navigation: [
-      { id: "sales-list", label: "Sales", path: "/modules/sales/list" },
-      { id: "plans", label: "Plans", path: "/modules/sales/plans" },
-      { id: "payment-links", label: "Payment Links", path: "/modules/sales/links" },
-      { id: "invoices", label: "Invoices", path: "/modules/sales/invoices" },
+      { id: "sales-dashboard", label: "Sales Dashboard", path: "/app/sales" },
+      { id: "sales-deals", label: "Sales / Deals", path: "/app/sales/deals" },
+      { id: "sales-plans", label: "Plans", path: "/app/sales/plans" },
+      { id: "sales-payment-links", label: "Payment Links", path: "/app/sales/payment-links" },
+      { id: "sales-payments", label: "Payments", path: "/app/sales/payments" },
+      { id: "sales-invoices", label: "Invoices", path: "/app/sales/invoices" },
+      { id: "sales-reports", label: "Sales Reports", path: "/app/sales/reports" },
     ]
   },
   {
