@@ -39,6 +39,7 @@ import {
   demoActivations
 } from "@/lib/mock/workspace.demo";
 import { EmployeeAssignmentModal } from "./EmployeeAssignmentModal";
+import { PaymentVerificationModal } from "./modals/PaymentVerificationModal";
 import { toast } from "sonner";
 
 
@@ -51,6 +52,7 @@ interface ActivationDetailsDrawerProps {
 export function ActivationDetailsDrawer({ activation: initialActivation, open, onOpenChange }: ActivationDetailsDrawerProps) {
   const [activation, setActivation] = React.useState<DemoActivation | null>(initialActivation);
   const [isAssignModalOpen, setIsAssignModalOpen] = React.useState(false);
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = React.useState(false);
 
   React.useEffect(() => {
     setActivation(initialActivation);
@@ -92,6 +94,80 @@ export function ActivationDetailsDrawer({ activation: initialActivation, open, o
       setActivation(updatedAct);
       toast.success(`Activation assigned to ${employee.name}`);
     }
+  };
+
+  const handleVerifyPayment = () => {
+    // 1. Update the mock state for persistence
+    const actIndex = demoActivations.findIndex(a => a.id === activation.id);
+    if (actIndex > -1) {
+      const currentAct = demoActivations[actIndex]!;
+      const updatedAct: DemoActivation = {
+        ...currentAct,
+        status: 'Pending Assignment',
+        paymentStatus: 'Paid',
+        lastUpdatedAt: new Date().toISOString()
+      } as DemoActivation;
+      
+      demoActivations[actIndex] = updatedAct;
+      
+      // 2. Add activity log
+      const newActivity: DemoActivationActivity = {
+        id: `ACT-EV-${demoActivationActivities.length + 1}`,
+        activationId: activation.id,
+        actor: "Current User",
+        actorId: "user-current",
+        action: "verified payment for SALE-" + activation.saleId.split('-').pop(),
+        previousStatus: activation.status,
+        newStatus: "Pending Assignment",
+        timestamp: new Date().toISOString(),
+        note: `Payment verified for ${activation.paymentId}. Total: ₹ 12,000.00`
+      };
+      demoActivationActivities.unshift(newActivity);
+
+      // 3. Update local state
+      setActivation(updatedAct);
+      toast.success(`Payment verified for ${activation.id}`);
+    }
+  };
+
+  const handleStatusUpdate = (newStatus: ActivationStatus, actionLabel: string) => {
+    const actIndex = demoActivations.findIndex(a => a.id === activation.id);
+    if (actIndex > -1) {
+      const currentAct = demoActivations[actIndex]!;
+      const updatedAct: DemoActivation = {
+        ...currentAct,
+        status: newStatus,
+        lastUpdatedAt: new Date().toISOString()
+      } as DemoActivation;
+
+      if (newStatus === 'In Progress' && !updatedAct.startedAt) {
+        updatedAct.startedAt = new Date().toISOString();
+      }
+      if (newStatus === 'Completed') {
+        updatedAct.completedAt = new Date().toISOString();
+      }
+      
+      demoActivations[actIndex] = updatedAct;
+      
+      const newActivity: DemoActivationActivity = {
+        id: `ACT-EV-${demoActivationActivities.length + 1}`,
+        activationId: activation.id,
+        actor: "Current User",
+        actorId: "user-current",
+        action: actionLabel,
+        previousStatus: activation.status,
+        newStatus: newStatus,
+        timestamp: new Date().toISOString()
+      };
+      demoActivationActivities.unshift(newActivity);
+
+      setActivation(updatedAct);
+      toast.success(`Activation updated to ${newStatus}`);
+    }
+  };
+
+  const handleAddNote = () => {
+    toast.info("Note functionality is simulated in the activity log.");
   };
 
 
@@ -166,7 +242,14 @@ export function ActivationDetailsDrawer({ activation: initialActivation, open, o
 
           <div className="flex flex-wrap items-center gap-2 mt-6">
             {activation.status === 'Pending Payment Verification' && (
-              <Button size="sm" className="bg-primary hover:bg-primary/90 font-bold h-8 text-[11px] uppercase tracking-wider">
+              <Button 
+                size="sm" 
+                className="bg-primary hover:bg-primary/90 font-bold h-8 text-[11px] uppercase tracking-wider"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsVerifyModalOpen(true);
+                }}
+              >
                 <CreditCard className="mr-2 h-3.5 w-3.5" /> Verify Payment
               </Button>
             )}
@@ -174,7 +257,8 @@ export function ActivationDetailsDrawer({ activation: initialActivation, open, o
               <Button 
                 size="sm" 
                 className="bg-primary hover:bg-primary/90 font-bold h-8 text-[11px] uppercase tracking-wider"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   setIsAssignModalOpen(true);
                 }}
               >
@@ -182,35 +266,88 @@ export function ActivationDetailsDrawer({ activation: initialActivation, open, o
               </Button>
             )}
             {activation.status === 'Assigned' && (
-              <Button size="sm" className="bg-primary hover:bg-primary/90 font-bold h-8 text-[11px] uppercase tracking-wider">
+              <Button 
+                size="sm" 
+                className="bg-primary hover:bg-primary/90 font-bold h-8 text-[11px] uppercase tracking-wider"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleStatusUpdate('In Progress', 'started activation');
+                }}
+              >
                 <Play className="mr-2 h-3.5 w-3.5" /> Start Activation
               </Button>
             )}
             {activation.status === 'In Progress' && (
               <>
-                <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white font-bold h-8 text-[11px] uppercase tracking-wider">
+                <Button 
+                  size="sm" 
+                  className="bg-green-600 hover:bg-green-700 text-white font-bold h-8 text-[11px] uppercase tracking-wider"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleStatusUpdate('Completed', 'completed activation');
+                  }}
+                >
                   <CheckCircle2 className="mr-2 h-3.5 w-3.5" /> Complete
                 </Button>
-                <Button size="sm" variant="outline" className="h-8 text-[11px] font-bold uppercase tracking-wider">
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  className="h-8 text-[11px] font-bold uppercase tracking-wider"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleStatusUpdate('Waiting Customer', 'marked as waiting customer');
+                  }}
+                >
                   <Pause className="mr-2 h-3.5 w-3.5" /> Mark Waiting Customer
                 </Button>
               </>
             )}
             {activation.status === 'Waiting Customer' && (
-              <Button size="sm" className="bg-primary hover:bg-primary/90 font-bold h-8 text-[11px] uppercase tracking-wider">
+              <Button 
+                size="sm" 
+                className="bg-primary hover:bg-primary/90 font-bold h-8 text-[11px] uppercase tracking-wider"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleStatusUpdate('In Progress', 'resumed activation');
+                }}
+              >
                 <Play className="mr-2 h-3.5 w-3.5" /> Resume
               </Button>
             )}
             
             <Separator orientation="vertical" className="h-8 mx-1 hidden sm:block" />
             
-            <Button size="sm" variant="outline" className="h-8 text-[11px] font-bold uppercase tracking-wider">
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="h-8 text-[11px] font-bold uppercase tracking-wider"
+              onClick={(e) => {
+                e.preventDefault();
+                handleStatusUpdate('On Hold', 'placed on hold');
+              }}
+            >
               <Pause className="mr-2 h-3.5 w-3.5" /> Hold
             </Button>
-            <Button size="sm" variant="outline" className="h-8 text-[11px] font-bold uppercase tracking-wider text-red-600 hover:text-red-700">
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="h-8 text-[11px] font-bold uppercase tracking-wider text-red-600 hover:text-red-700"
+              onClick={(e) => {
+                e.preventDefault();
+                handleStatusUpdate('Failed', 'marked as failed');
+              }}
+            >
               <Ban className="mr-2 h-3.5 w-3.5" /> Fail
             </Button>
-            <Button size="sm" variant="outline" className="h-8 text-[11px] font-bold uppercase tracking-wider">
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="h-8 text-[11px] font-bold uppercase tracking-wider"
+              onClick={(e) => {
+                e.preventDefault();
+                handleAddNote();
+              }}
+            >
               <MessageSquare className="mr-2 h-3.5 w-3.5" /> Add Note
             </Button>
           </div>
@@ -391,6 +528,12 @@ export function ActivationDetailsDrawer({ activation: initialActivation, open, o
         onOpenChange={setIsAssignModalOpen}
         onConfirm={handleAssignConfirm}
         suggestedEmployeeId={activation.assignedTo || null} // Use current or suggested
+      />
+      <PaymentVerificationModal 
+        open={isVerifyModalOpen}
+        onOpenChange={setIsVerifyModalOpen}
+        activation={activation}
+        onConfirm={handleVerifyPayment}
       />
     </Sheet>
   );
