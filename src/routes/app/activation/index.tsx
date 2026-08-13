@@ -60,6 +60,7 @@ function ActivationModuleLayout() {
 
 function ActivationDashboard() {
   const { location } = useRouterState();
+  const navigate = useNavigate();
   const [selectedActivation, setSelectedActivation] = React.useState<DemoActivation | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [isWizardOpen, setIsWizardOpen] = React.useState(false);
