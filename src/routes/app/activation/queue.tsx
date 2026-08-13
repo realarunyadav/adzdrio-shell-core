@@ -275,7 +275,7 @@ function ActivationQueuePage() {
               </div>
             </div>
           </div>
-        </div>
+        </Tabs>
       </div>
 
       <ActivationDetailsDrawer 
