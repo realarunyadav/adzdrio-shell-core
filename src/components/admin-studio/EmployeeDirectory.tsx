@@ -5,14 +5,22 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { EmployeeDetailsDrawer } from "./drawers/EmployeeDetailsDrawer";
+import { EmployeeModal } from "./EmployeeModal";
 
 export function EmployeeDirectory() {
   const [selectedEmployee, setSelectedEmployee] = React.useState<DemoEmployee | null>(null);
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [editModalOpen, setEditModalOpen] = React.useState(false);
 
   const handleRowClick = (emp: DemoEmployee) => {
     setSelectedEmployee(emp);
     setDrawerOpen(true);
+  };
+
+  const handleEdit = (emp: DemoEmployee, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedEmployee(emp);
+    setEditModalOpen(true);
   };
 
   return (
@@ -22,7 +30,14 @@ export function EmployeeDirectory() {
         open={drawerOpen} 
         onOpenChange={setDrawerOpen} 
       />
-      <div className="rounded-xl border border-border/40 bg-accent/10">
+      
+      <EmployeeModal 
+        isOpen={editModalOpen} 
+        onClose={() => setEditModalOpen(false)} 
+        employee={selectedEmployee}
+      />
+
+      <div className="rounded-xl border border-border/40 bg-accent/10 overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent border-border/50">
