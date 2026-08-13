@@ -2,18 +2,21 @@ import * as React from "react";
 import { 
   X, 
   MessageSquare, 
-  Phone, 
-  UserPlus, 
-  ArrowRightLeft, 
   Clock, 
+  AlertTriangle, 
+  User, 
+  Calendar, 
   Paperclip, 
-  FileText, 
-  ExternalLink,
-  History,
-  ShieldAlert,
+  Send,
   MoreVertical,
+  History,
+  CheckCircle2,
   Reply,
-  StickyNote
+  Phone,
+  UserPlus,
+  StickyNote,
+  ArrowRightLeft,
+  ShieldAlert
 } from "lucide-react";
 import { 
   Sheet, 
@@ -22,15 +25,16 @@ import {
   SheetTitle,
   SheetClose
 } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 import { 
   DemoSupportTicket, 
-  demoSupportActivities 
+  demoSupportActivities, 
+  DemoSupportActivity 
 } from "@/lib/mock/workspace.demo";
-import { cn } from "@/lib/utils";
 
 interface TicketDetailsDrawerProps {
   ticket: DemoSupportTicket | null;
@@ -41,39 +45,36 @@ interface TicketDetailsDrawerProps {
 export function TicketDetailsDrawer({ ticket, open, onOpenChange }: TicketDetailsDrawerProps) {
   if (!ticket) return null;
 
-  const activities = demoSupportActivities.filter(a => a.ticketId === ticket.id);
+  const activities = demoSupportActivities.filter((a: DemoSupportActivity) => a.ticketId === ticket.id);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-3xl p-0 overflow-hidden flex flex-col border-l-border/60">
-        <SheetHeader className="p-6 border-b border-border/40 bg-muted/20 shrink-0">
+      <SheetContent className="sm:max-w-[700px] p-0 flex flex-col h-full bg-background border-l border-border">
+        <SheetHeader className="p-6 border-b border-border/40 bg-muted/5 space-y-0">
           <div className="flex items-start justify-between">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{ticket.id}</span>
+                <span className="text-[10px] font-black tracking-widest text-muted-foreground uppercase">{ticket.id}</span>
                 <Badge variant="outline" className={cn(
-                  "text-[9px] uppercase font-bold",
-                  ticket.status === 'Resolved' ? "bg-green-500/10 text-green-700 border-green-500/20" :
-                  ticket.status === 'In Progress' ? "bg-blue-500/10 text-blue-700 border-blue-500/20" :
-                  "bg-orange-500/10 text-orange-700 border-orange-500/20"
-                )}>
-                  {ticket.status}
-                </Badge>
-                <Badge variant="outline" className={cn(
-                  "text-[9px] uppercase font-bold",
+                  "text-[9px] font-black uppercase h-5",
                   ticket.priority === 'Critical' ? "bg-red-500/10 text-red-700 border-red-500/20" :
+                  ticket.priority === 'High' ? "bg-orange-500/10 text-orange-700 border-orange-500/20" :
                   "bg-muted border-border/40 text-muted-foreground"
                 )}>
-                  {ticket.priority}
+                  {ticket.priority} Priority
                 </Badge>
               </div>
-              <SheetTitle className="text-xl font-black leading-tight tracking-tight mt-2">
-                {ticket.subject}
-              </SheetTitle>
-              <div className="flex items-center gap-4 text-[10px] font-bold text-muted-foreground mt-2 uppercase tracking-wide">
-                <span>Customer: <span className="text-foreground">{ticket.customerName}</span></span>
-                <span>Business: <span className="text-foreground">{ticket.business}</span></span>
-                <span>Agent: <span className="text-foreground">{ticket.assignedToName}</span></span>
+              <SheetTitle className="text-xl font-black leading-tight tracking-tight mt-2">{ticket.subject}</SheetTitle>
+              <div className="flex items-center gap-3 text-muted-foreground pt-1">
+                <div className="flex items-center gap-1">
+                  <User className="size-3" />
+                  <span className="text-[10px] font-bold uppercase">{ticket.customerName}</span>
+                </div>
+                <Separator orientation="vertical" className="h-3" />
+                <div className="flex items-center gap-1">
+                  <Calendar className="size-3" />
+                  <span className="text-[10px] font-bold uppercase">{new Date(ticket.created).toLocaleDateString()}</span>
+                </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -138,44 +139,44 @@ export function TicketDetailsDrawer({ ticket, open, onOpenChange }: TicketDetail
                       </div>
                     </div>
                   </div>
+
                   <div className="space-y-4">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Timeline</h4>
-                    <div className="space-y-2">
-                       <div className="flex items-center justify-between text-[10px]">
-                         <span className="text-muted-foreground font-bold uppercase">Created</span>
-                         <span className="font-black">{new Date(ticket.created).toLocaleString()}</span>
-                       </div>
-                       <div className="flex items-center justify-between text-[10px]">
-                         <span className="text-muted-foreground font-bold uppercase">Last Activity</span>
-                         <span className="font-black">{new Date(ticket.lastActivity).toLocaleString()}</span>
-                       </div>
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Assigned Agent</h4>
+                    <div className="flex items-center gap-3 p-4 rounded-xl border border-border">
+                      <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black uppercase">
+                        {ticket.assignedToName.split(' ').map((n: string) => n[0]).join('')}
+                      </div>
+                      <div>
+                        <p className="text-xs font-black uppercase">{ticket.assignedToName}</p>
+                        <p className="text-[10px] text-muted-foreground font-bold uppercase">Senior Lead</p>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <Separator />
-
                 <div className="space-y-4">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Original Request</h4>
-                  <div className="p-4 rounded-xl border border-border bg-background text-sm font-medium leading-relaxed">
-                    {ticket.subject} - Customer needs immediate assistance with processing a bulk payment. Reference ID was SALE-1001.
-                  </div>
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Description</h4>
+                  <p className="text-sm font-medium leading-relaxed bg-muted/20 p-4 rounded-xl border border-border/40">
+                    The customer is reporting persistent 403 Forbidden errors when attempting to access the billing dashboard. 
+                    This started occurring after the last system maintenance window on August 12th. 
+                    They have tried clearing browser cache and using a different administrator account, but the issue persists.
+                  </p>
                 </div>
               </TabsContent>
 
-              <TabsContent value="conversation" className="m-0 space-y-6">
-                <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-border before:via-border before:to-transparent">
-                  {activities.filter(a => a.type === 'comment').map((activity) => (
-                    <div key={activity.id} className="relative pl-12">
-                      <div className="absolute left-0 size-10 rounded-full border-2 border-background bg-primary/10 flex items-center justify-center font-bold text-primary text-[10px]">
-                        {activity.actor[0]}
+              <TabsContent value="conversation" className="m-0">
+                <div className="space-y-6">
+                  {activities.filter((a: DemoSupportActivity) => a.action.includes('created') || a.action.includes('reply')).map((activity: DemoSupportActivity) => (
+                    <div key={activity.id} className="flex flex-col gap-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase">{activity.actor}</span>
+                        <span className="text-[10px] text-muted-foreground font-bold">{new Date(activity.timestamp).toLocaleString()}</span>
                       </div>
-                      <div className="p-4 rounded-xl border border-border bg-background shadow-sm space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-black uppercase">{activity.actor}</span>
-                          <span className="text-[10px] text-muted-foreground">{new Date(activity.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                        </div>
-                        <p className="text-xs font-medium leading-relaxed">{activity.content}</p>
+                      <div className="p-4 rounded-xl bg-muted/30 border border-border/60 text-sm font-medium">
+                        {activity.action === 'created ticket' ? 
+                          "Hi Support, I'm unable to access the billing dashboard. It keeps saying '403 Forbidden'. Can you please help?" :
+                          "Thank you for the update. Let me check the server logs."
+                        }
                       </div>
                     </div>
                   ))}
@@ -186,7 +187,7 @@ export function TicketDetailsDrawer({ ticket, open, onOpenChange }: TicketDetail
                     <Button variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase">Internal Note</Button>
                     <Button variant="ghost" size="sm" className="h-8 text-[10px] font-black uppercase text-primary">Customer Reply</Button>
                   </div>
-                  <div className="min-h-[100px] w-full p-4 rounded-xl border-2 border-primary/20 bg-primary/5 text-sm font-medium focus-within:border-primary transition-all">
+                  <div className="min-h-[100px] w-full p-4 rounded-xl border-2 border-primary/20 bg-primary/5 text-sm font-medium focus-within:border-primary transition-all text-muted-foreground">
                     Type your message here...
                   </div>
                   <div className="flex items-center justify-between mt-4">
@@ -198,7 +199,7 @@ export function TicketDetailsDrawer({ ticket, open, onOpenChange }: TicketDetail
 
               <TabsContent value="activity" className="m-0">
                  <div className="space-y-4">
-                  {activities.map((activity) => (
+                  {activities.map((activity: DemoSupportActivity) => (
                     <div key={activity.id} className="flex items-start gap-3 p-2">
                       <div className="size-6 rounded-full bg-muted flex items-center justify-center">
                         <History className="size-3 text-muted-foreground" />
