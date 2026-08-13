@@ -55,34 +55,39 @@ export function AdminStudioHome() {
   );
 }
 
-function CategoryCard({ title, icon: Icon, desc, modules }: any) {
+function CategoryCard({ id, title, icon: Icon, desc, modules }: any) {
   return (
-    <Card className="glass-surface border-border/40 shadow-sm overflow-hidden group hover:shadow-xl hover:border-primary/20 transition-all duration-500 cursor-pointer flex flex-col h-full">
-      <div className="p-6 flex flex-col h-full">
-        <div className="flex justify-between items-start mb-6">
-          <div className="size-12 rounded-2xl bg-accent/30 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
-            <Icon className="size-6 transition-transform group-hover:scale-110" />
+    <Link 
+      to={`/modules/admin/${id}` as any}
+      className="block h-full"
+    >
+      <Card className="glass-surface border-border/40 shadow-sm overflow-hidden group hover:shadow-xl hover:border-primary/20 transition-all duration-500 cursor-pointer flex flex-col h-full">
+        <div className="p-6 flex flex-col h-full">
+          <div className="flex justify-between items-start mb-6">
+            <div className="size-12 rounded-2xl bg-accent/30 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
+              <Icon className="size-6 transition-transform group-hover:scale-110" />
+            </div>
+            <ArrowRight className="size-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-primary" />
           </div>
-          <ArrowRight className="size-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-primary" />
-        </div>
-        
-        <div className="space-y-2 flex-1">
-          <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-foreground group-hover:text-primary transition-colors">{title}</h3>
-          <p className="text-[11px] text-muted-foreground font-medium leading-relaxed opacity-80">{desc}</p>
-        </div>
+          
+          <div className="space-y-2 flex-1">
+            <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-foreground group-hover:text-primary transition-colors">{title}</h3>
+            <p className="text-[11px] text-muted-foreground font-medium leading-relaxed opacity-80">{desc}</p>
+          </div>
 
-        <div className="mt-6 pt-6 border-t border-border/40 space-y-2">
-          <div className="text-[8px] font-black text-muted-foreground uppercase tracking-widest mb-3">Available Modules</div>
-          <div className="flex flex-wrap gap-1.5">
-            {modules.map((mod: string) => (
-              <Badge key={mod} variant="secondary" className="bg-accent/50 text-muted-foreground border-none text-[8px] font-black uppercase tracking-tighter hover:bg-primary/10 hover:text-primary transition-colors">
-                {mod}
-              </Badge>
-            ))}
+          <div className="mt-6 pt-6 border-t border-border/40 space-y-2">
+            <div className="text-[8px] font-black text-muted-foreground uppercase tracking-widest mb-3">Available Modules</div>
+            <div className="flex flex-wrap gap-1.5">
+              {modules.map((mod: string) => (
+                <Badge key={mod} variant="secondary" className="bg-accent/50 text-muted-foreground border-none text-[8px] font-black uppercase tracking-tighter hover:bg-primary/10 hover:text-primary transition-colors">
+                  {mod}
+                </Badge>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </Link>
   );
 }
 
