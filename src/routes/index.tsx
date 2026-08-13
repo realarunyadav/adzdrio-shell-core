@@ -129,7 +129,7 @@ function ExecutiveDashboard() {
               <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                 <BarChart3 className="size-12 mb-4 opacity-10" />
                 <p className="text-sm font-medium">Financial data stream pending</p>
-                <p className="text-xs opacity-60 italic">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
+                <p className="text-xs opacity-60 italic">hi
                                         
                                             
                                             IMPLEMENT THIS NOW.
