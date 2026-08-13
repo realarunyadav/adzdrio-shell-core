@@ -65,6 +65,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GlobalSearchOverlay } from "@/components/shared/GlobalSearchOverlay";
+
 
 export const Route = createFileRoute("/app")({
   head: () => ({
@@ -93,10 +95,25 @@ function OwnerDashboard() {
   }
 
   const [dateRange, setDateRange] = React.useState("This Month");
+  const [searchOpen, setSearchOpen] = React.useState(false);
+
+  // Global search keyboard shortcut
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setSearchOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
 
 
   return (
     <div className="flex flex-col gap-8 pb-20 animate-in fade-in duration-500">
+      <GlobalSearchOverlay open={searchOpen} onOpenChange={setSearchOpen} />
+      
       {/* Header Section */}
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-6 border-b border-border/50 pb-6">
         <div>
@@ -104,11 +121,25 @@ function OwnerDashboard() {
             <ShieldCheck className="size-3" />
             Restricted: Owner Access
           </Badge>
-          <PageHeader
-            title="Owner Command Center"
-            description="Company-wide business performance, operations, finance, people and system overview."
-            className="p-0 space-y-1"
-          />
+          <div className="flex items-center gap-4">
+            <PageHeader
+              title="Owner Command Center"
+              description="Company-wide business performance, operations, finance, people and system overview."
+              className="p-0 space-y-1"
+            />
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="h-9 px-3 gap-2 bg-accent/30 border-border/40 text-muted-foreground hover:text-foreground hidden md:flex"
+              onClick={() => setSearchOpen(true)}
+            >
+              <Search className="size-4" />
+              <span className="text-[10px] font-black uppercase tracking-widest">Search...</span>
+              <div className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-background border border-border/40 text-[8px]">
+                <span className="opacity-50">⌘</span>K
+              </div>
+            </Button>
+          </div>
         </div>
         
         <div className="flex flex-wrap items-center gap-3">
@@ -143,10 +174,26 @@ function OwnerDashboard() {
                </Button>
              </DropdownMenuTrigger>
              <DropdownMenuContent align="end" className="w-56 glass-surface border-border/40">
-                <DropdownMenuItem className="text-xs font-bold gap-2"><UserPlus className="size-4" /> Add Employee</DropdownMenuItem>
-                <DropdownMenuItem className="text-xs font-bold gap-2"><Building2 className="size-4" /> Create Business</DropdownMenuItem>
-                <DropdownMenuItem className="text-xs font-bold gap-2"><Briefcase className="size-4" /> Open Admin Studio</DropdownMenuItem>
-                <DropdownMenuItem className="text-xs font-bold gap-2"><BarChart3 className="size-4" /> Generate Report</DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/modules/admin/employees" className="flex items-center w-full text-xs font-bold gap-2">
+                    <UserPlus className="size-4" /> Add Employee
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/modules/admin/business" className="flex items-center w-full text-xs font-bold gap-2">
+                    <Building2 className="size-4" /> Create Business
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/modules/admin" className="flex items-center w-full text-xs font-bold gap-2">
+                    <Briefcase className="size-4" /> Open Admin Studio
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/modules/admin/data" className="flex items-center w-full text-xs font-bold gap-2">
+                    <BarChart3 className="size-4" /> Generate Report
+                  </Link>
+                </DropdownMenuItem>
              </DropdownMenuContent>
            </DropdownMenu>
         </div>
