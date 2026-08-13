@@ -534,6 +534,25 @@ export const demoSales: DemoSale[] = [
     paymentStatus: 'Pending',
     created: "2026-08-10T09:15:00Z",
     lastActivity: "2026-08-11T11:00:00Z"
+  },
+  {
+    id: "SALE-1003",
+    customerId: "lead-3",
+    customerName: "Vikram Singh",
+    phone: "+91 76543 21098",
+    email: "vikram@singh-corp.in",
+    business: "Blue Harbour",
+    planId: "plan-3",
+    planName: "Enterprise Custom",
+    amount: 45000,
+    discount: 0,
+    finalAmount: 45000,
+    salesEmployeeId: "user-1",
+    salesEmployeeName: "Priya Nair",
+    status: 'Won',
+    paymentStatus: 'Paid',
+    created: "2026-08-12T10:00:00Z",
+    lastActivity: "2026-08-12T14:30:00Z"
   }
 ];
 

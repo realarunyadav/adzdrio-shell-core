@@ -29,7 +29,8 @@ import {
   demoLeads, 
   demoSales, 
   demoPlans,
-  demoTeamPerformance
+  demoTeamPerformance,
+  demoActivations
 } from "@/lib/mock/workspace.demo";
 
 interface CreateActivationWizardProps {
@@ -41,8 +42,12 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
   const [step, setStep] = React.useState(1);
   const [selectedCustomer, setSelectedCustomer] = React.useState<any>(null);
   const [selectedSale, setSelectedSale] = React.useState<any>(null);
+  const [paymentAcknowledged, setPaymentAcknowledged] = React.useState(false);
   const [selectedEmployee, setSelectedEmployee] = React.useState<any>(null);
   const [priority, setPriority] = React.useState('Medium');
+  const [activationDate, setActivationDate] = React.useState('2026-08-13T12:00');
+  const [notes, setNotes] = React.useState('');
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   const steps = [
     { id: 1, label: "Customer", icon: User },
@@ -53,31 +58,103 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
     { id: 6, label: "Review", icon: Rocket },
   ];
 
-  const handleNext = () => setStep(s => Math.min(s + 1, 6));
+  const isStepValid = () => {
+    switch(step) {
+      case 1: return !!selectedCustomer;
+      case 2: return !!selectedSale;
+      case 3: return paymentAcknowledged || selectedSale?.paymentStatus === 'Paid';
+      case 4: return !!selectedEmployee;
+      case 5: return !!activationDate;
+      default: return true;
+    }
+  };
+
+  const handleNext = () => {
+    if (isStepValid()) {
+      setStep(s => Math.min(s + 1, 6));
+    }
+  };
   const handleBack = () => setStep(s => Math.max(s - 1, 1));
   const handleClose = () => {
     onOpenChange(false);
-    setStep(1);
+    setTimeout(() => {
+      setStep(1);
+      setSelectedCustomer(null);
+      setSelectedSale(null);
+      setPaymentAcknowledged(false);
+      setSelectedEmployee(null);
+      setPriority('Medium');
+      setActivationDate('2026-08-13T12:00');
+      setNotes('');
+      setSearchQuery("");
+    }, 300);
+  };
+
+  const handleCreate = () => {
+    // Mock creating the activation and updating the shared state
+    const newActivation = {
+      id: `ACT-${8800 + demoActivations.length + 1}`,
+      customerId: selectedCustomer.id,
+      customerName: selectedCustomer.name,
+      businessId: selectedCustomer.business === 'Acme India' ? 'biz-a' : selectedCustomer.business === 'Vertex Tech' ? 'biz-b' : 'biz-c',
+      businessName: selectedCustomer.business,
+      subscriptionId: `SUB-${4400 + demoActivations.length + 1}`,
+      planName: selectedSale.planName,
+      saleId: selectedSale.id,
+      paymentId: `PAY-${9900 + demoActivations.length + 1}`,
+      paymentStatus: selectedSale.paymentStatus,
+      status: selectedSale.paymentStatus === 'Paid' ? 'Pending Assignment' : 'Pending Payment Verification',
+      priority: priority,
+      assignedTo: selectedEmployee.id,
+      assignedToName: selectedEmployee.name,
+      createdAt: new Date().toISOString(),
+      requestedAt: activationDate,
+      slaDueAt: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString(),
+      createdBy: "Current User",
+      lastUpdatedAt: new Date().toISOString(),
+      notes: notes
+    };
+
+    // In a real app we'd mutate the state here
+    // For this prototype we push to the mock array
+    demoActivations.unshift(newActivation as any);
+    
+    handleClose();
   };
 
   const renderStep = () => {
     switch(step) {
       case 1:
+        const filteredCustomers = demoLeads
+          .filter(l => l.status === 'Converted')
+          .filter(c => 
+            c.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+            c.business.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+
         return (
           <div className="space-y-4 py-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-              <Input placeholder="Search customer name, email or phone..." className="pl-10 h-10 font-medium" />
+              <Input 
+                placeholder="Search customer name or business..." 
+                className="pl-10 h-10 font-medium" 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
             <div className="space-y-2 mt-4 max-h-[300px] overflow-y-auto pr-2">
-              {demoLeads.filter(l => l.status === 'Converted').map(customer => (
+              {filteredCustomers.map(customer => (
                 <div 
                   key={customer.id} 
                   className={cn(
                     "flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all",
                     selectedCustomer?.id === customer.id ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-border hover:bg-muted/30"
                   )}
-                  onClick={() => setSelectedCustomer(customer)}
+                  onClick={() => {
+                    setSelectedCustomer(customer);
+                    setSelectedSale(null); // Reset sale when customer changes
+                  }}
                 >
                   <div className="flex items-center gap-3">
                     <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black uppercase text-xs">
@@ -95,30 +172,46 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
           </div>
         );
       case 2:
+        const availableSales = demoSales.filter(s => 
+          s.customerId === selectedCustomer?.id || 
+          s.customerName.toLowerCase() === selectedCustomer?.name.toLowerCase()
+        );
         return (
           <div className="space-y-4 py-4">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Subscription / Sale</h4>
+            <div className="flex flex-col gap-1 mb-2">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Subscription / Sale</h4>
+              <p className="text-[10px] font-bold text-primary uppercase">Customer: {selectedCustomer?.name}</p>
+            </div>
             <div className="space-y-2 max-h-[300px] overflow-y-auto pr-2">
-              {demoSales.filter(s => s.customerId === selectedCustomer?.id || !selectedCustomer).map(sale => (
-                <div 
-                  key={sale.id} 
-                  className={cn(
-                    "p-3 rounded-xl border cursor-pointer transition-all",
-                    selectedSale?.id === sale.id ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-border hover:bg-muted/30"
-                  )}
-                  onClick={() => setSelectedSale(sale)}
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-black text-primary uppercase tracking-widest">{sale.id}</span>
-                    <Badge variant="outline" className="text-[9px] font-black uppercase">{sale.paymentStatus}</Badge>
+              {availableSales.length > 0 ? (
+                availableSales.map(sale => (
+                  <div 
+                    key={sale.id} 
+                    className={cn(
+                      "p-3 rounded-xl border cursor-pointer transition-all",
+                      selectedSale?.id === sale.id ? "border-primary bg-primary/5 ring-1 ring-primary/20" : "border-border hover:bg-muted/30"
+                    )}
+                    onClick={() => setSelectedSale(sale)}
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-black text-primary uppercase tracking-widest">{sale.id}</span>
+                      <Badge variant="outline" className={cn(
+                        "text-[9px] font-black uppercase",
+                        sale.paymentStatus === 'Paid' ? "text-green-600 border-green-500/20" : "text-yellow-700 border-yellow-500/20"
+                      )}>{sale.paymentStatus}</Badge>
+                    </div>
+                    <p className="text-xs font-black uppercase">{sale.planName}</p>
+                    <div className="flex items-center justify-between mt-1">
+                      <p className="text-[10px] text-muted-foreground font-bold uppercase">Amount: ₹ {sale.finalAmount.toLocaleString()}</p>
+                      <p className="text-[10px] text-muted-foreground font-bold uppercase">{new Date(sale.created).toLocaleDateString()}</p>
+                    </div>
                   </div>
-                  <p className="text-xs font-black uppercase">{sale.planName}</p>
-                  <div className="flex items-center justify-between mt-1">
-                    <p className="text-[10px] text-muted-foreground font-bold uppercase">Amount: ₹ {sale.finalAmount.toLocaleString()}</p>
-                    <p className="text-[10px] text-muted-foreground font-bold uppercase">{new Date(sale.created).toLocaleDateString()}</p>
-                  </div>
+                ))
+              ) : (
+                <div className="p-8 text-center border border-dashed rounded-xl">
+                  <p className="text-[10px] font-black uppercase text-muted-foreground">No eligible sales found for this customer</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         );
@@ -143,7 +236,7 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                   <span className="text-[10px] font-black uppercase text-muted-foreground">Status</span>
                   <Badge variant={selectedSale?.paymentStatus === 'Paid' ? 'default' : 'outline'} className={cn(
                     "font-black uppercase text-[9px]",
-                    selectedSale?.paymentStatus === 'Paid' ? "bg-green-600" : "text-yellow-700 border-yellow-500/20"
+                    selectedSale?.paymentStatus === 'Paid' ? "bg-green-600 text-white" : "text-yellow-700 border-yellow-500/20"
                   )}>
                     {selectedSale?.paymentStatus || 'Pending'}
                   </Badge>
@@ -151,11 +244,29 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
               </div>
             </div>
             
-            {selectedSale?.paymentStatus !== 'Paid' && (
-              <div className="p-4 rounded-xl border border-yellow-200 bg-yellow-50/50 flex items-start gap-3">
-                <AlertTriangle className="size-4 text-yellow-600 mt-0.5" />
-                <p className="text-[11px] font-bold text-yellow-800 uppercase leading-relaxed">
-                  Activation will be created in 'Pending Payment Verification' status.
+            {selectedSale?.paymentStatus !== 'Paid' ? (
+              <div 
+                className={cn(
+                  "p-4 rounded-xl border flex items-start gap-3 cursor-pointer transition-all",
+                  paymentAcknowledged ? "border-primary bg-primary/5" : "border-yellow-200 bg-yellow-50/50"
+                )}
+                onClick={() => setPaymentAcknowledged(!paymentAcknowledged)}
+              >
+                <div className="mt-0.5">
+                  {paymentAcknowledged ? <CheckCircle2 className="size-4 text-primary" /> : <AlertTriangle className="size-4 text-yellow-600" />}
+                </div>
+                <div className="flex-1">
+                  <p className="text-[11px] font-black text-yellow-800 uppercase leading-relaxed">
+                    I acknowledge that payment is pending and this activation will be flagged for verification.
+                  </p>
+                  <p className="text-[9px] font-bold text-muted-foreground uppercase mt-1">Click to acknowledge and continue</p>
+                </div>
+              </div>
+            ) : (
+              <div className="p-4 rounded-xl border border-green-200 bg-green-50/50 flex items-start gap-3">
+                <CheckCircle2 className="size-4 text-green-600 mt-0.5" />
+                <p className="text-[11px] font-bold text-green-800 uppercase leading-relaxed">
+                  Payment has been fully verified for this subscription.
                 </p>
               </div>
             )}
@@ -221,13 +332,19 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Requested Activation Date</label>
-              <Input type="datetime-local" defaultValue="2026-08-13T12:00" />
+              <Input 
+                type="datetime-local" 
+                value={activationDate} 
+                onChange={(e) => setActivationDate(e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Internal Notes</label>
               <textarea 
                 className="w-full min-h-[120px] p-3 rounded-xl border border-border bg-background text-xs font-medium focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all"
                 placeholder="Enter any special instructions for the provisioning team..."
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
               />
             </div>
           </div>
@@ -256,7 +373,12 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                 </div>
                 <div>
                   <p className="text-[9px] font-black uppercase text-muted-foreground mb-1">Payment</p>
-                  <p className="text-xs font-black uppercase">{selectedSale?.paymentStatus || 'Pending'}</p>
+                  <Badge variant="outline" className={cn(
+                    "text-[9px] font-black uppercase h-5",
+                    selectedSale?.paymentStatus === 'Paid' ? "text-green-600 border-green-500/20" : "text-yellow-700 border-yellow-500/20"
+                  )}>
+                    {selectedSale?.paymentStatus || 'Pending'}
+                  </Badge>
                 </div>
                 <div>
                   <p className="text-[9px] font-black uppercase text-muted-foreground mb-1">Assigned To</p>
@@ -264,7 +386,18 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
                 </div>
                 <div>
                   <p className="text-[9px] font-black uppercase text-muted-foreground mb-1">Priority</p>
-                  <p className="text-xs font-black uppercase">{priority}</p>
+                  <Badge className={cn(
+                    "text-[9px] font-black uppercase h-5",
+                    priority === 'Critical' ? "bg-red-600" :
+                    priority === 'High' ? "bg-orange-500" :
+                    priority === 'Medium' ? "bg-blue-500" : "bg-slate-500"
+                  )}>
+                    {priority}
+                  </Badge>
+                </div>
+                <div>
+                  <p className="text-[9px] font-black uppercase text-muted-foreground mb-1">Activation Date</p>
+                  <p className="text-xs font-black uppercase">{new Date(activationDate).toLocaleDateString()} {new Date(activationDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                 </div>
               </div>
             </div>
@@ -338,7 +471,7 @@ export function CreateActivationWizard({ open, onOpenChange }: CreateActivationW
             {step === 1 ? 'Cancel' : 'Back'}
           </Button>
           <Button 
-            onClick={step === 6 ? handleClose : handleNext}
+            onClick={step === 6 ? handleCreate : handleNext}
             className="bg-primary hover:bg-primary/90 text-white font-black uppercase tracking-widest h-10 px-8 shadow-lg shadow-primary/20"
           >
             {step === 6 ? 'Create Activation' : 'Continue'}
