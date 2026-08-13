@@ -174,7 +174,9 @@ export function ActivationDetailsDrawer({ activation: initialActivation, open, o
               <Button 
                 size="sm" 
                 className="bg-primary hover:bg-primary/90 font-bold h-8 text-[11px] uppercase tracking-wider"
-                onClick={() => setIsAssignModalOpen(true)}
+                onClick={() => {
+                  setIsAssignModalOpen(true);
+                }}
               >
                 <UserPlus className="mr-2 h-3.5 w-3.5" /> Assign Employee
               </Button>
