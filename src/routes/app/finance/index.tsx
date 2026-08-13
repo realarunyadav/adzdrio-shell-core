@@ -21,7 +21,16 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { DashboardKpiCard } from "@/components/shared/DashboardKpiCard";
 import { Button } from "@/components/ui/button";
-import { demoPayments, demoTransactions, demoExpenses, demoRefunds } from "@/lib/mock/workspace.demo";
+import { demoPayments, demoTransactions, demoExpenses, demoRefunds, getFinanceModel } from "@/lib/mock/workspace.demo";
+import { 
+  AreaChart, 
+  Area, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer
+} from 'recharts';
 
 export const Route = createFileRoute("/app/finance/")({
   component: FinanceModuleLayout,
@@ -38,18 +47,31 @@ function FinanceModuleLayout() {
 
 function FinanceDashboard() {
   const { location } = useRouterState();
+  const finance = getFinanceModel();
   
   // Only show the dashboard if we are exactly at /app/finance or /app/finance/
   if (location.pathname !== "/app/finance" && location.pathname !== "/app/finance/") {
     return null;
   }
 
-  const totalRevenue = "₹ 48.2L";
-  const paidCollections = "₹ 42.5L";
-  const pendingCollections = "₹ 5.7L";
-  const totalRefunds = "₹ 42K";
-  const totalExpenses = "₹ 12.4L";
-  const netPosition = "₹ 30.1L";
+  const kpiData = [
+    { title: "Total Revenue", value: finance.formatted.grossRevenue, trend: "+14.2%", icon: TrendingUp },
+    { title: "Paid Coll.", value: finance.formatted.paidCollections, trend: "+8.5%", icon: CreditCard },
+    { title: "Pending", value: finance.formatted.pendingCollections, trend: "-2.4%", icon: Clock },
+    { title: "Refunds", value: finance.formatted.refunds, trend: "+1.2%", icon: RefreshCw },
+    { title: "Expenses", value: finance.formatted.expenses, trend: "+5.7%", icon: ArrowDownRight },
+    { title: "Net Position", value: finance.formatted.netPosition, trend: "+12.8%", icon: DollarSign },
+  ];
+
+  const trendData = [
+    { name: 'Aug 01', revenue: 420000, collections: 380000 },
+    { name: 'Aug 05', revenue: 850000, collections: 720000 },
+    { name: 'Aug 10', revenue: 1200000, collections: 1050000 },
+    { name: 'Aug 15', revenue: 1850000, collections: 1600000 },
+    { name: 'Aug 20', revenue: 2600000, collections: 2200000 },
+    { name: 'Aug 25', revenue: 3800000, collections: 3400000 },
+    { name: 'Aug 30', revenue: 4820000, collections: 4250000 },
+  ];
 
   return (
     <div className="flex flex-col gap-8 pb-20 animate-in fade-in duration-500">
@@ -73,56 +95,72 @@ function FinanceDashboard() {
 
       {/* KPI Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        <DashboardKpiCard
-          title="Total Revenue"
-          value={totalRevenue}
-          trend="+14.2%"
-          icon={TrendingUp}
-        />
-        <DashboardKpiCard
-          title="Paid Coll."
-          value={paidCollections}
-          trend="+8.5%"
-          icon={CreditCard}
-        />
-        <DashboardKpiCard
-          title="Pending"
-          value={pendingCollections}
-          trend="-2.4%"
-          icon={Clock}
-        />
-        <DashboardKpiCard
-          title="Refunds"
-          value={totalRefunds}
-          trend="+1.2%"
-          icon={RefreshCw}
-        />
-        <DashboardKpiCard
-          title="Expenses"
-          value={totalExpenses}
-          trend="+5.7%"
-          icon={ArrowDownRight}
-        />
-        <DashboardKpiCard
-          title="Net Position"
-          value={netPosition}
-          trend="+12.8%"
-          icon={DollarSign}
-        />
+        {kpiData.map((kpi) => (
+          <DashboardKpiCard
+            key={kpi.title}
+            title={kpi.title}
+            value={kpi.value}
+            trend={kpi.trend}
+            icon={kpi.icon}
+          />
+        ))}
       </div>
 
       <div className="grid grid-cols-12 gap-6">
-        {/* Revenue Overview Chart Placeholder */}
+        {/* Revenue Overview Chart */}
         <div className="col-span-12 lg:col-span-8">
           <SectionCard title="Revenue & Collections Trend" description="Comparison of gross revenue vs actual collections.">
-            <div className="h-80 flex flex-col items-center justify-center border-2 border-dashed border-border rounded-xl bg-muted/5 gap-3">
-              <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <PieChart className="h-6 w-6 text-primary" />
-              </div>
-              <div className="text-center">
-                <p className="text-sm font-black">Revenue Analytics Engine</p>
-                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest mt-1">Real-time financial visualization pipeline</p>
-              </div>
+            <div className="h-80 w-full mt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={trendData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.1}/>
+                      <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorColl" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#22c55e" stopOpacity={0.1}/>
+                      <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" opacity={0.5} />
+                  <XAxis 
+                    dataKey="name" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fontSize: 10, fontWeight: 700, fill: 'var(--color-muted-foreground)' }} 
+                  />
+                  <YAxis 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fontSize: 10, fontWeight: 700, fill: 'var(--color-muted-foreground)' }}
+                    tickFormatter={(value) => `₹${(value / 100000).toFixed(1)}L`}
+                  />
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '12px', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-background)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                    labelStyle={{ fontSize: '10px', fontWeight: 900, textTransform: 'uppercase', marginBottom: '4px' }}
+                    itemStyle={{ fontSize: '12px', fontWeight: 700, padding: '2px 0' }}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="revenue" 
+                    stroke="var(--color-primary)" 
+                    strokeWidth={2}
+                    fillOpacity={1} 
+                    fill="url(#colorRev)" 
+                    name="Gross Revenue"
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="collections" 
+                    stroke="#22c55e" 
+                    strokeWidth={2}
+                    fillOpacity={1} 
+                    fill="url(#colorColl)" 
+                    name="Paid Collections"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
           </SectionCard>
         </div>
@@ -133,7 +171,7 @@ function FinanceDashboard() {
             <div className="space-y-4">
               {[
                 { label: 'Failed Payments', value: '₹ 18K', icon: AlertTriangle, color: 'text-red-600', bg: 'bg-red-500/10' },
-                { label: 'Outstanding Amount', value: '₹ 4.2L', icon: Clock, color: 'text-yellow-600', bg: 'bg-yellow-500/10' },
+                { label: 'Outstanding Amount', value: finance.formatted.pendingCollections, icon: Clock, color: 'text-yellow-600', bg: 'bg-yellow-500/10' },
                 { label: 'Reconciliation Status', value: '98.2%', icon: ShieldCheck, color: 'text-green-600', bg: 'bg-green-500/10' },
               ].map((item) => (
                 <div key={item.label} className="flex items-center justify-between p-3 rounded-lg border border-border/40">

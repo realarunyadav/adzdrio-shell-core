@@ -54,7 +54,7 @@ function TransactionsPage() {
                   <td className="py-4 px-6 text-xs font-bold">{txn.customerName}</td>
                   <td className="py-4 px-6 text-right font-black text-xs">₹ {txn.amount.toLocaleString()}</td>
                   <td className="py-4 px-6 text-center"><Badge variant="outline" className="text-[9px] uppercase">{txn.status}</Badge></td>
-                  <td className="py-4 px-6 text-[10px] font-medium">{new Date(txn.date).toLocaleDateString()}</td>
+                  <td className="py-4 px-6 text-[10px] font-medium">{new Date(txn.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
                   <td className="py-4 px-6 text-right"><Button variant="ghost" size="sm"><Eye className="h-3.5 w-3.5" /></Button></td>
                 </tr>
               ))}
