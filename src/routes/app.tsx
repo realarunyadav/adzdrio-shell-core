@@ -76,10 +76,24 @@ export const Route = createFileRoute("/app")({
       },
     ],
   }),
-  component: OwnerDashboard,
+  component: () => (
+    <>
+      <OwnerDashboard />
+      <Outlet />
+    </>
+  ),
 });
 
+import { Outlet } from "@tanstack/react-router";
+
 function OwnerDashboard() {
+  const { location } = useRouterState();
+  
+  // Only show the dashboard if we are exactly at /app
+  if (location.pathname !== "/app" && location.pathname !== "/app/") {
+    return null;
+  }
+
   const [dateRange, setDateRange] = React.useState("This Month");
 
   return (
