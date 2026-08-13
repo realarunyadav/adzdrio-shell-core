@@ -10,6 +10,7 @@ import {
   ChevronRight, 
   ChevronLeft,
   CheckCircle2,
+  AlertTriangle,
   Package
 } from "lucide-react";
 import { 
