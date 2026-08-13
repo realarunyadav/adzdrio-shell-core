@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
 import * as React from "react";
 import { 
   TrendingUp, 
@@ -76,11 +76,24 @@ export const Route = createFileRoute("/app")({
       },
     ],
   }),
-  component: OwnerDashboard,
+  component: () => (
+    <>
+      <OwnerDashboard />
+      <Outlet />
+    </>
+  ),
 });
 
 function OwnerDashboard() {
+  const { location } = useRouterState();
+  
+  // Only show the dashboard if we are exactly at /app
+  if (location.pathname !== "/app" && location.pathname !== "/app/") {
+    return null;
+  }
+
   const [dateRange, setDateRange] = React.useState("This Month");
+
 
   return (
     <div className="flex flex-col gap-8 pb-20 animate-in fade-in duration-500">
