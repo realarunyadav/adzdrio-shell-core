@@ -20,6 +20,7 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { DashboardKpiCard } from "@/components/shared/DashboardKpiCard";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { 
   demoActivations, 
   getActivationModel,
