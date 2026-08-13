@@ -11,6 +11,7 @@ import {
   AlertTriangle, 
   Rocket,
   User,
+  UserPlus,
   ExternalLink,
   ChevronRight,
   RefreshCw,
