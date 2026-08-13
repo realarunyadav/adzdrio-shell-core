@@ -132,153 +132,145 @@ function ExecutiveDashboard() {
                 <p className="text-xs opacity-60 italic">'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''
                                         
                                             
-                                            IMPORTANT: DO NOT PROCEED TO NEW MODULES YET.
+                                            IMPLEMENT THIS NOW.
 
-I reviewed the current preview.
+Do not only update instructions or documentation.
 
-The root route is currently showing the existing ABOS Portal authorization/login screen instead of the authenticated CRM application shell that we are currently designing.
-
-We need to preserve the existing authentication screen, but it must NOT replace the main application UI.
+Create the actual authenticated application shell route in the existing project.
 
 ==================================================
 
-ROUTING REQUIREMENT
+ROUTES
 
 ==================================================
 
-Separate the application into:
+Keep the existing authentication page at:
 
-1. Authentication / Login route
+/auth
 
-2. Authenticated CRM application route
+Do NOT delete or redesign the existing authentication screen unless necessary for routing.
 
-The current ABOS Portal authorization screen should remain available as the login/authentication screen.
+Create a separate authenticated application route:
 
-After authentication, the user must enter the main CRM application shell.
+/app
 
-Do NOT delete the existing authentication functionality.
-
-Do NOT expose credentials or security keys in frontend source code.
-
-Do NOT hard-code real-looking enterprise credentials into the UI.
-
-Use safe placeholder/mock values only for the prototype.
+The /app route must render the actual CRM application shell.
 
 ==================================================
 
-MAIN APPLICATION SHELL
+/APP APPLICATION SHELL
 
 ==================================================
 
-Create the authenticated application shell separately from the login page.
+Build the actual visible UI now.
 
-The authenticated shell must contain:
+It must contain:
 
-LEFT SIDEBAR:
+LEFT SIDEBAR
 
-- Dashboard
+Dashboard
 
-- CRM
+CRM
 
-  - Lead Pool
+- Lead Pool
 
-  - My Leads
+- My Leads
 
-  - Customers
+- Customers
 
-  - Follow-ups
+- Follow-ups
 
-  - Callbacks
+- Callbacks
+
+Sales
 
 - Sales
 
-  - Sales
+- Plans
 
-  - Plans
+- Payment Links
 
-  - Payment Links
+- Invoices
 
-  - Invoices
+Support
 
-- Support
+- Conversations
 
-  - Conversations
+- Calls
 
-  - Calls
+- Video Calls
 
-  - Video Calls
+Activation
 
-- Activation
+Finance
 
-- Finance
+- Payments
 
-  - Payments
+- Refunds
 
-  - Refunds
+- Expenses
 
-  - Expenses
+- Payroll
 
-  - Payroll
+HR
 
-- HR
+- Employees
 
-  - Employees
+- Attendance
 
-  - Attendance
+- Leave
 
-  - Leave
+- Salary
 
-  - Salary
+- Salary Slips
 
-  - Salary Slips
+- Incentives
 
-  - Incentives
+- Referrals
 
-  - Referrals
+Reports
 
-- Reports
+Documents
 
-- Documents
+Projects
 
-- Projects
+Inventory
 
-- Inventory
+Admin Studio
 
-- Admin Studio
+- Business
 
-  - Business
+- Employees
 
-  - Employees
+- Roles & Permissions
 
-  - Roles & Permissions
+- CRM Fields
 
-  - CRM Fields
+- Legal Templates
 
-  - Legal Templates
+- Device Settings
 
-  - Device Settings
+- Incentive Rules
 
-  - Incentive Rules
+- Notifications
 
-  - Notifications
+- Integrations
 
-  - Integrations
+- Security
 
-  - Security
+- Audit
 
-  - Audit
+- Data Center
 
-  - Data Center
-
-  - System Settings
+- System Settings
 
 ==================================================
 
-TOP HEADER
+HEADER
 
 ==================================================
 
-Create:
+Create the actual application header with:
 
 - Sidebar collapse button
 
@@ -296,7 +288,7 @@ Create:
 
 - User name
 
-- Current role
+- Role
 
 - Profile menu
 
@@ -306,35 +298,35 @@ DASHBOARD
 
 ==================================================
 
-Create a professional dashboard workspace after login.
+The /app route should initially open on Dashboard.
 
-Do NOT make it a generic template.
+Create a complete dashboard UI with:
 
-Create:
+- Welcome section
 
-- Welcome/header section
-
-- Business context
+- Current business/brand
 
 - KPI cards
 
+- Sales overview
+
+- CRM/lead overview
+
+- Upcoming follow-ups
+
+- Upcoming callbacks
+
 - Recent activity
+
+- Recent payments
 
 - Quick actions
 
 - Notifications
 
-- Sales/CRM overview sections
+Use clearly marked demo/mock data only.
 
-- Upcoming follow-ups/callbacks
-
-- Recent payments
-
-- Team/activity overview
-
-Use clearly labeled mock/demo data only.
-
-The UI must clearly distinguish demo data from real backend data.
+Do NOT implement real business calculations.
 
 ==================================================
 
@@ -342,17 +334,39 @@ IMPORTANT
 
 ==================================================
 
-Do NOT put all of this into the login screen.
+This is a frontend prototype.
 
-The login screen and authenticated CRM application shell are separate routes/components.
+Do NOT implement real backend authentication.
 
-Do NOT remove the login screen.
+Do NOT implement real payments.
 
-Do NOT implement real backend authentication yet.
+Do NOT implement real Leegality.
 
-Do NOT implement real payment/API/Leegality/HR/business logic.
+Do NOT implement real HR calculations.
 
-This is still the UI/UX prototype phase.
+Do NOT implement real calling/video.
+
+Do NOT create fake APIs pretending these systems are live.
+
+Use local/mock UI data only where necessary to display the prototype.
+
+==================================================
+
+ROUTING
+
+==================================================
+
+For now:
+
+/auth → existing login screen
+
+/app → authenticated CRM shell
+
+The login button may navigate to /app ONLY as a prototype navigation demonstration.
+
+Clearly structure this so real authentication can replace it later.
+
+If an authenticated route guard is needed, keep it simple and clearly separated from real backend authentication.
 
 ==================================================
 
@@ -360,31 +374,63 @@ DESIGN
 
 ==================================================
 
-Keep the current ABOS visual identity where appropriate, but make the authenticated CRM application feel like a premium production SaaS platform.
+The /app dashboard must use the FULL available viewport.
 
-Do not create an oversized login-card-style interface for the dashboard.
+It must NOT look like the current centered login card.
 
-The dashboard should use the full available viewport.
+Use a premium professional SaaS CRM layout.
 
-Desktop-first, responsive on tablet and mobile.
+Desktop-first.
+
+Responsive for tablet/mobile.
+
+Use the existing project's visual identity where appropriate.
 
 ==================================================
 
-DELIVERABLE
+DO NOT
 
 ==================================================
 
-After this change, previewing the authenticated application route must show:
+Do not modify the existing login design unnecessarily.
 
-Sidebar + Header + Main Dashboard
+Do not put the dashboard inside the login card.
 
-NOT the login page.
+Do not hard-code real credentials.
 
-Keep the login page available separately.
+Do not create real backend logic.
 
-Do not proceed to CRM, Finance, HR, Legal or other detailed modules yet.
+Do not move all functionality into index.tsx if the project architecture already supports reusable routes/components.
 
-First make the application shell visually correct.</p>
+Create reusable components where appropriate.
+
+==================================================
+
+SUCCESS CONDITION
+
+==================================================
+
+After implementation:
+
+Opening /auth shows the login screen.
+
+Opening /app shows:
+
+Sidebar
+
++
+
+Header
+
++
+
+Full Dashboard
+
+The dashboard must be visibly implemented in the preview.
+
+Do not stop at updating instructions.
+
+Actually create and render the UI.</p>
               </div>
             </SectionCard>
             <SectionCard title="Sales Pipeline" className="h-[320px]">
