@@ -17,8 +17,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { demoEmployees, demoBusinesses, demoActivations, demoIncentiveRules, demoPlans } from "@/lib/mock/workspace.demo";
-import { Trophy, Tag } from "lucide-react";
+import { demoEmployees, demoBusinesses, demoActivations, demoIncentiveRules, demoPlans, demoLegalTemplates } from "@/lib/mock/workspace.demo";
+import { Trophy, Tag, Scale } from "lucide-react";
 
 export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   const [query, setQuery] = React.useState("");
@@ -84,6 +84,13 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
       }
     });
 
+    // Search Legal Templates
+    demoLegalTemplates.forEach(template => {
+      if (template.name.toLowerCase().includes(q) || template.id.toLowerCase().includes(q)) {
+        matches.push({ resultType: 'legal', ...template });
+      }
+    });
+
     return matches.slice(0, 8);
   }, [query]);
 
@@ -137,8 +144,9 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
                       employee: '/modules/admin/employees',
                       business: '/modules/admin/business',
                       activation: '/app/activation/queue',
-                      incentive: '/modules/admin/incentives',
-                      plan: '/modules/admin/sales'
+                       incentive: '/modules/admin/incentives',
+                       plan: '/modules/admin/sales',
+                       legal: '/modules/admin/legal'
                     };
                     navigate({ to: (paths[res.resultType] || '/app') as any });
                     onOpenChange(false);
@@ -149,6 +157,7 @@ export function GlobalSearchOverlay({ open, onOpenChange }: { open: boolean, onO
                      res.resultType === 'business' ? <Building2 className="size-5 text-emerald-500" /> :
                      res.resultType === 'incentive' ? <Trophy className="size-5 text-purple-500" /> :
                      res.resultType === 'plan' ? <Tag className="size-5 text-rose-500" /> :
+                     res.resultType === 'legal' ? <Scale className="size-5 text-blue-600" /> :
                      <Briefcase className="size-5 text-amber-500" />}
                   </div>
                   <div className="flex-1 min-w-0">

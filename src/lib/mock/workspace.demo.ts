@@ -496,6 +496,123 @@ export const demoPlans: DemoPlan[] = [
   { id: "plan-3", name: "Enterprise Custom", business: "Blue Harbour", price: 45000, status: 'Active', created: "2026-03-20", updated: "2026-03-20", activeSales: 12, features: ["Custom API", "Legal Suite"] },
 ];
 
+export interface LegalTemplate {
+  id: string;
+  name: string;
+  type: 'Service Agreement' | 'NDA' | 'Privacy Policy' | 'Terms of Service' | 'Sales Contract';
+  business: string;
+  applicableTo: string; // Plan or Process
+  status: 'Draft' | 'In Review' | 'Active' | 'Inactive' | 'Archived';
+  version: string;
+  effectiveDate: string;
+  lastUpdated: string;
+  createdBy: string;
+  content: string;
+  variables: string[];
+}
+
+export interface LegalVersion {
+  id: string;
+  templateId: string;
+  version: string;
+  status: 'Active' | 'Read-only' | 'Archived';
+  createdBy: string;
+  createdAt: string;
+  effectiveFrom: string;
+  effectiveTo?: string;
+  changeSummary: string;
+  content: string;
+}
+
+export interface LegalAssignment {
+  id: string;
+  templateId: string;
+  businessId: string;
+  planId?: string;
+  process?: string;
+  status: 'Active' | 'Inactive';
+}
+
+export interface ProhibitedTerm {
+  id: string;
+  term: string;
+  category: 'Compliance' | 'Risk' | 'Legal' | 'Brand';
+  severity: 'Blocker' | 'Warning';
+  status: 'Active' | 'Inactive';
+}
+
+export const demoLegalTemplates: LegalTemplate[] = [
+  {
+    id: "leg-1",
+    name: "Standard Service Agreement v2",
+    type: "Service Agreement",
+    business: "Acme India",
+    applicableTo: "Enterprise Plan",
+    status: "Active",
+    version: "2.1.0",
+    effectiveDate: "2026-01-01",
+    lastUpdated: "2026-07-15",
+    createdBy: "SuperAdmin",
+    content: "This Service Agreement is between {{business_name}} and {{customer_name}}...",
+    variables: ["business_name", "customer_name", "plan_price", "effective_date"]
+  },
+  {
+    id: "leg-2",
+    name: "Global Privacy Policy",
+    type: "Privacy Policy",
+    business: "Global",
+    applicableTo: "All Plans",
+    status: "Active",
+    version: "1.4.2",
+    effectiveDate: "2026-05-20",
+    lastUpdated: "2026-05-20",
+    createdBy: "Compliance Officer",
+    content: "We take your privacy seriously at {{business_name}}...",
+    variables: ["business_name"]
+  }
+];
+
+export const demoLegalVersions: LegalVersion[] = [
+  {
+    id: "ver-1",
+    templateId: "leg-1",
+    version: "2.1.0",
+    status: "Active",
+    createdBy: "SuperAdmin",
+    createdAt: "2026-07-15",
+    effectiveFrom: "2026-07-15",
+    changeSummary: "Updated liability clause for enterprise clients.",
+    content: "This Service Agreement is between {{business_name}} and {{customer_name}}..."
+  },
+  {
+    id: "ver-2",
+    templateId: "leg-1",
+    version: "2.0.0",
+    status: "Read-only",
+    createdBy: "SuperAdmin",
+    createdAt: "2026-01-01",
+    effectiveFrom: "2026-01-01",
+    effectiveTo: "2026-07-14",
+    changeSummary: "Initial version for 2026.",
+    content: "Legacy content..."
+  }
+];
+
+export const demoProhibitedTerms: ProhibitedTerm[] = [
+  { id: "term-1", term: "unlimited liability", category: "Legal", severity: "Blocker", status: "Active" },
+  { id: "term-2", term: "guaranteed returns", category: "Compliance", severity: "Blocker", status: "Active" },
+  { id: "term-3", term: "perpetual ownership", category: "Legal", severity: "Warning", status: "Active" }
+];
+
+export const demoEsignatureConfig = {
+  provider: "Leegality",
+  status: "Connected",
+  environment: "Production",
+  lastEvent: "2026-08-12 14:30:00",
+  webhookStatus: "Healthy",
+  errorState: null
+};
+
 export const demoSales: DemoSale[] = [
   {
     id: "SALE-1001",
