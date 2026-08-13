@@ -91,6 +91,31 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent className="scrollbar-thin">
+        <GlobalSearchOverlay open={searchOpen} onOpenChange={setSearchOpen} />
+        
+        {/* Search Trigger (Mobile/Sidebar) */}
+        <SidebarGroup className="py-2">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                onClick={() => setSearchOpen(true)}
+                className="h-10 gap-3 px-4 hover:bg-sidebar-accent/50 transition-all group border border-sidebar-border/30 mx-2 rounded-xl bg-sidebar-accent/5 shadow-sm"
+                tooltip="Global Search (⌘K)"
+              >
+                <Search className="size-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                {!collapsed && (
+                  <div className="flex flex-1 items-center justify-between">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Global Search</span>
+                    <div className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-sidebar-background border border-sidebar-border/40 text-[8px] font-black">
+                      <span className="opacity-40">⌘</span>K
+                    </div>
+                  </div>
+                )}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+
         {tree.map(({ group, modules }) => (
           <SidebarGroup key={group.id} className="py-2">
             <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.16em] text-sidebar-foreground/40 font-bold px-4">
