@@ -2,6 +2,7 @@ import os
 import base64
 import requests
 import json
+import time
 
 LOVABLE_API_KEY = os.environ.get("LOVABLE_API_KEY")
 GITHUB_API_KEY = os.environ.get("GITHUB_API_KEY")
@@ -15,24 +16,41 @@ def upload_file(path, content):
         "X-Connection-Api-Key": GITHUB_API_KEY,
         "Content-Type": "application/json"
     }
+    
+    # Get current file if it exists to get the SHA
+    sha = None
+    try:
+        get_response = requests.get(url, headers=headers)
+        if get_response.status_code == 200:
+            sha = get_response.json().get("sha")
+    except:
+        pass
+
     encoded_content = base64.b64encode(content.encode()).decode()
     data = {
         "message": f"Initial commit: {path}",
         "content": encoded_content,
         "branch": "main"
     }
-    response = requests.put(url, headers=headers, json=data)
-    if response.status_code in [201, 200]:
-        print(f"Successfully uploaded {path}")
-    else:
-        print(f"Failed to upload {path}: {response.status_code} {response.text}")
+    if sha:
+        data["sha"] = sha
+        
+    for attempt in range(3):
+        response = requests.put(url, headers=headers, json=data)
+        if response.status_code in [201, 200]:
+            print(f"Successfully uploaded {path}")
+            return
+        elif response.status_code == 503:
+            time.sleep(1)
+            continue
+        else:
+            print(f"Failed to upload {path}: {response.status_code} {response.text}")
+            return
 
-# List of critical files for the foundation
 files_to_upload = [
     "package.json",
     "tsconfig.json",
     "vite.config.ts",
-    "src/main.tsx",
     "src/router.tsx",
     "src/routes/__root.tsx",
     "src/routes/app.tsx",
