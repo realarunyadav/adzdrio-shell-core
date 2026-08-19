@@ -25,8 +25,8 @@ export const storageService = { getUploadUrl: (filename: string, category: strin
 
 export { leadsService } from "./crm.functions";
 export { salesPlanService, dealService, subscriptionService } from "./sales.functions";
-import { financeTransactions, financeInvoices } from "./finance.functions";
-export { financeTransactions, financeInvoices };
+import { financeTransactions, financeInvoices, getFinanceAnalytics, getInvoiceAnalytics } from "./finance.functions";
+export { financeTransactions, financeInvoices, getFinanceAnalytics, getInvoiceAnalytics };
 
 
 export const accountService = { getAll: (params?: { search?: string; status?: string }) => { const query = new URLSearchParams(); if (params?.search) query.set("search", params.search); if (params?.status) query.set("status", params.status); return api.get<any[]>(`/api/crm/accounts${query.toString() ? `?${query}` : ""}`); }, getById: (id: string) => api.get<any>(`/api/crm/accounts/${id}`), create: (data: any) => api.post("/api/crm/accounts", data), update: (id: string, data: any) => api.patch(`/api/crm/accounts/${id}`, data), remove: (id: string) => api.delete(`/api/crm/accounts/${id}`) };
@@ -44,6 +44,8 @@ export const financeService = {
   // New Live methods
   listTransactions: (params?: any) => financeTransactions.list(params),
   listInvoices: (params?: any) => financeInvoices.list(params),
+  getFinanceAnalytics: (params?: any) => getFinanceAnalytics(params),
+  getInvoiceAnalytics: (params?: any) => getInvoiceAnalytics(params),
 };
 export const auditService = {
   getLogs: () => api.get<any[]>("/api/audit-logs"),
