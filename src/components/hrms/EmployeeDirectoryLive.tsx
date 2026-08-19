@@ -135,13 +135,13 @@ export function EmployeeDirectoryLive() {
         profileId: form.profileId,
         organizationId: user.organizationId,
         employeeCode: form.employeeCode.trim(),
-        designation: form.designation.trim() || undefined,
-        department: form.department.trim() || undefined,
+        designation: form.designation.trim() || null,
+        department: form.department.trim() || null,
         businessId: form.businessId || null,
         reportsToId: form.reportsToId || null,
-        employmentStatus: form.employmentStatus || undefined,
-        joiningDate: form.joiningDate || undefined,
-        trainingStatus: form.trainingStatus || undefined,
+        employmentStatus: form.employmentStatus || null,
+        joiningDate: form.joiningDate || null,
+        trainingStatus: form.trainingStatus || null,
       };
       await hrService.createEmployee(payload);
       setCreateOpen(false);
@@ -385,7 +385,7 @@ export function EmployeeDirectoryLive() {
           department: selectedEmployee.department || "N/A",
           role: selectedEmployee.designation || "N/A",
           businessIds: selectedEmployee.businessId ? [selectedEmployee.businessId] : [],
-          session: null,
+          session: undefined,
           lastActive: "N/A"
         } : null}
         open={detailsOpen}

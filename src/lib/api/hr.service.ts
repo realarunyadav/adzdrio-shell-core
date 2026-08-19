@@ -29,13 +29,13 @@ export interface CreateEmployeePayload {
   organizationId: string;
   businessId?: string | null;
   employeeCode: string;
-  designation?: string;
-  department?: string;
+  designation?: string | null;
+  department?: string | null;
   reportsToId?: string | null;
-  employmentStatus?: string;
+  employmentStatus?: string | null;
   joiningDate?: string | null;
-  trainingStatus?: string;
-  metadata?: Record<string, any>;
+  trainingStatus?: string | null;
+  metadata?: Record<string, any> | null;
 }
 
 export type UpdateEmployeePayload = Partial<Omit<CreateEmployeePayload, "profileId" | "organizationId">>;
