@@ -70,7 +70,7 @@ export interface RapidLead {
   duration: number;
   devices: string[];
   referralCode?: string;
-  status: 'draft' | 'sent' | 'opened' | 'confirmed' | 'not_confirmed' | 'expired';
+  status: 'draft' | 'sent' | 'opened' | 'confirmed' | 'not_confirmed' | 'expired' | 'new';
   confirmationUrl: string;
   tcVersionAccepted?: string;
   refundPolicyVersionAccepted?: string;
@@ -79,7 +79,14 @@ export interface RapidLead {
   confirmedAt?: string;
   expiresAt: string;
   createdAt: string;
+  updatedAt?: string;
+  priority?: 'Low' | 'Normal' | 'High';
+  source?: string;
+  business?: string;
+  notes?: string;
+  assignedToName?: string;
 }
+
 
 export interface PolicyVersion {
   id: string;
