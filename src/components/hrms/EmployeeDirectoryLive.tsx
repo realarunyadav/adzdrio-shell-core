@@ -169,7 +169,7 @@ export function EmployeeDirectoryLive() {
       </div>
 
       <SectionCard title="Employees" description="Live employee records from the production HR service." contentClassName="p-0">
-        <div className="flex flex-col gap-3 border-b border-border/60 p-4 xl:flex-row xl:items-center xl:justify-between">
+        <div className="flex flex-col gap-3 border-b border-border/60 p-4 xl:flex-row xl:items-center xl:justify-between" onClick={(e) => e.stopPropagation()}>
           <div className="flex min-w-0 flex-1 flex-col gap-2 md:flex-row">
             <div className="relative min-w-0 flex-1 md:max-w-md">
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
