@@ -37,7 +37,7 @@ export const Route = createFileRoute("/app/crm/follow-ups")({
 
 function FollowUpsPage() {
   const [loading, setLoading] = React.useState(false);
-  const [selectedLead, setSelectedLead] = React.useState<DemoLead | null>(null);
+  const [selectedLead, setSelectedLead] = React.useState<RapidLead | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState("today");
 
@@ -49,26 +49,15 @@ function FollowUpsPage() {
     }, 1000);
   };
 
-  const openDetails = (lead: DemoLead) => {
+  const openDetails = (lead: RapidLead) => {
     setSelectedLead(lead);
     setIsDrawerOpen(true);
   };
 
-  const allFollowUps = demoLeads.filter(l => l.nextFollowUp);
+  const allFollowUps: RapidLead[] = [];
   
-  const filteredFollowUps = allFollowUps.filter(lead => {
-    if (!lead.nextFollowUp) return false;
-    const date = parseISO(lead.nextFollowUp);
-    
-    if (activeTab === 'completed') return lead.followUpStatus === 'Completed';
-    if (lead.followUpStatus === 'Completed') return false;
+  const filteredFollowUps = allFollowUps;
 
-    if (activeTab === 'today') return isToday(date);
-    if (activeTab === 'overdue') return isPast(date) && !isToday(date);
-    if (activeTab === 'upcoming') return !isPast(date) && !isToday(date);
-    
-    return true;
-  });
 
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-500">
