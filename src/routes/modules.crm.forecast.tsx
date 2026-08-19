@@ -31,7 +31,7 @@ function CrmForecastPage() {
     try {
       silent ? setRefreshing(true) : setLoading(true);
       const [dealData, pipelineData, userData] = await Promise.all([dealService.getAll(), dealService.getPipeline(), authService.getOrganizationUsers()]);
-      setDeals(dealData ?? []); setPipeline(pipelineData ?? []); setUsers(userData ?? []);
+      setDeals((dealData as any) ?? []); setPipeline(pipelineData ?? []); setUsers(userData ?? []);
     } catch (error: any) {
       toast.error(error?.message || "Unable to load sales forecast");
     } finally { setLoading(false); setRefreshing(false); }
