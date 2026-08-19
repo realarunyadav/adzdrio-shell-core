@@ -41,8 +41,8 @@ export const financeService = {
   getRefundRequests: () => api.get<RefundRequest[]>("/api/finance/refund-requests"),
   processRefund: (id: string, action: "approve" | "reject", data: any) => api.post(`/api/finance/refund-requests/${id}/${action}`, data),
   // New Live methods
-  listTransactions: (params?: any) => financeTransactions(params),
-  listInvoices: (params?: any) => financeInvoices(params),
+  listTransactions: (params?: any) => financeTransactions.list(params),
+  listInvoices: (params?: any) => financeInvoices.list(params),
 };
 export const auditService = {
   getLogs: () => api.get<any[]>("/api/audit-logs"),
