@@ -69,6 +69,16 @@ import { GlobalSearchOverlay } from "@/components/shared/GlobalSearchOverlay";
 
 
 export const Route = createFileRoute("/app")({
+  beforeLoad: ({ context }: any) => {
+    const user = context?.auth?.user;
+    const roles = user?.roles || [];
+    const isOwner = roles.some((r: string) => r.toUpperCase() === "OWNER");
+    
+    if (!isOwner) {
+      console.warn("Access denied to /app: User is not an OWNER");
+      throw redirect({ to: "/" });
+    }
+  },
   head: () => ({
     meta: [
       { title: "Owner Command Center — ABOS CRM" },
@@ -78,6 +88,7 @@ export const Route = createFileRoute("/app")({
       },
     ],
   }),
+});
   component: () => (
     <>
       <OwnerDashboard />
