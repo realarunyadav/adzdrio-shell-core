@@ -307,6 +307,99 @@ export type Database = {
           },
         ]
       }
+      finance_invoices: {
+        Row: {
+          amount: number
+          business_id: string
+          created_at: string
+          currency: string
+          customer_id: string
+          due_date: string | null
+          id: string
+          invoice_number: string
+          issue_date: string | null
+          metadata: Json
+          organization_id: string
+          paid_at: string | null
+          sale_id: string | null
+          status: string
+          subscription_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          business_id: string
+          created_at?: string
+          currency: string
+          customer_id: string
+          due_date?: string | null
+          id?: string
+          invoice_number: string
+          issue_date?: string | null
+          metadata?: Json
+          organization_id: string
+          paid_at?: string | null
+          sale_id?: string | null
+          status?: string
+          subscription_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          business_id?: string
+          created_at?: string
+          currency?: string
+          customer_id?: string
+          due_date?: string | null
+          id?: string
+          invoice_number?: string
+          issue_date?: string | null
+          metadata?: Json
+          organization_id?: string
+          paid_at?: string | null
+          sale_id?: string | null
+          status?: string
+          subscription_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "finance_invoices_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "finance_invoices_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "finance_invoices_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "finance_invoices_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "finance_invoices_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "sales_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       finance_transactions: {
         Row: {
           amount: number
