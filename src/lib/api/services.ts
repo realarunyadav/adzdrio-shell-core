@@ -44,9 +44,9 @@ export const financeService = {
   // New Live methods
   listTransactions: (params?: any) => financeTransactions.list(params),
   listInvoices: (params?: any) => financeInvoices.list(params),
-  getFinanceAnalytics: (params?: any) => getFinanceAnalytics(params),
-  getInvoiceAnalytics: (params?: any) => getInvoiceAnalytics(params),
-  getReconciliation: (params: { saleId?: string; invoiceId?: string }) => getReconciliation(params),
+  getFinanceAnalytics: (params?: any) => getFinanceAnalytics({ data: params }),
+  getInvoiceAnalytics: (params?: any) => getInvoiceAnalytics({ data: params }),
+  getReconciliation: (params: { saleId?: string; invoiceId?: string }) => getReconciliation({ data: params }),
 };
 export const auditService = {
   getLogs: () => api.get<any[]>("/api/audit-logs"),
