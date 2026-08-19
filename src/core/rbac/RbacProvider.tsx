@@ -35,7 +35,8 @@ export function RbacProvider({ children }: { children: ReactNode }) {
     return permissions.every(hasPermission);
   };
 
-  const isAdmin = hasRole('ADMIN');
+  const isAdmin = hasRole(['OWNER', 'ADMIN']);
+  const isOwner = hasRole('OWNER');
 
   return (
     <RbacContext.Provider 
