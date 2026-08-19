@@ -18,7 +18,10 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { demoSales, DemoSale } from "@/lib/mock/workspace.demo";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { dealService } from "@/lib/api/services";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -34,11 +37,17 @@ export const Route = createFileRoute("/app/sales/deals")({
 });
 
 function SalesDealsPage() {
+  const getSalesFn = useServerFn(dealService.getAll);
+  const { data: sales } = useSuspenseQuery({
+    queryKey: ["sales-deals"],
+    queryFn: () => getSalesFn(),
+  });
+
   const [isWizardOpen, setIsWizardOpen] = React.useState(false);
-  const [selectedSale, setSelectedSale] = React.useState<DemoSale | null>(null);
+  const [selectedSale, setSelectedSale] = React.useState<any | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
 
-  const openSaleDetails = (sale: DemoSale) => {
+  const openSaleDetails = (sale: any) => {
     setSelectedSale(sale);
     setIsDrawerOpen(true);
   };
@@ -78,7 +87,7 @@ function SalesDealsPage() {
               </Button>
               <div className="h-4 w-[1px] bg-border mx-1" />
               <p className="text-[10px] font-bold text-muted-foreground uppercase">
-                {demoSales.length} Total Deals
+                {sales?.length || 0} Total Deals
               </p>
             </div>
           </div>
@@ -98,7 +107,7 @@ function SalesDealsPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/40">
-                {demoSales.map((sale) => (
+                {sales?.map((sale: any) => (
                   <tr key={sale.id} className="hover:bg-muted/30 transition-colors group cursor-pointer" onClick={() => openSaleDetails(sale)}>
                     <td className="py-4 px-6">
                       <div className="flex flex-col">
@@ -176,7 +185,7 @@ function SalesDealsPage() {
           {/* Pagination */}
           <div className="flex items-center justify-between pt-4 border-t border-border/40">
             <p className="text-[10px] font-bold text-muted-foreground uppercase">
-              Showing 1-2 of {demoSales.length}
+              Showing 1-{sales?.length || 0} of {sales?.length || 0}
             </p>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="icon" className="h-8 w-8" disabled>
