@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Customer } from "@/lib/api/services.types";
 import { format } from "date-fns";
 import { StatusBadge } from "@/components/shared/StatusBadge";
+import { useQuery } from "@tanstack/react-query";
+import { customerService } from "@/lib/api/services";
 import { 
   Phone, 
   Mail, 
