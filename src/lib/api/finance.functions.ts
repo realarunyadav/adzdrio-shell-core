@@ -61,7 +61,7 @@ export const financeTransactions = {
         .from("finance_transactions")
         .select(`
           *,
-          crm_customers(full_name)
+          crm_customers!finance_transactions_customer_id_fkey(full_name)
         `);
 
       if (data.businessId) query = query.eq("business_id", data.businessId);
@@ -75,7 +75,7 @@ export const financeTransactions = {
       return (txns || []).map(t => ({
         ...t,
         customer_name: (t.crm_customers as any)?.full_name || 'Unknown'
-      })) as FinanceTransaction[];
+      })) as unknown as FinanceTransaction[];
     }),
 
   getById: createServerFn({ method: "GET" })
@@ -85,7 +85,7 @@ export const financeTransactions = {
         .from("finance_transactions")
         .select(`
           *,
-          crm_customers(full_name)
+          crm_customers!finance_transactions_customer_id_fkey(full_name)
         `)
         .eq("id", data.id)
         .single();
@@ -94,7 +94,7 @@ export const financeTransactions = {
       return {
         ...txn,
         customer_name: (txn.crm_customers as any)?.full_name || 'Unknown'
-      } as FinanceTransaction;
+      } as unknown as FinanceTransaction;
     })
 };
 
