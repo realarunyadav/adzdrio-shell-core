@@ -1,89 +1,34 @@
-# Phase 6: Finance Domain Foundation
+# Plan: ABOS CRM — Phase 9 Sales Service Layer Integration
 
-This plan implements the core database schema for the Finance domain, establishing the source of truth for revenue, collections, and financial auditing.
+Implement the service layer for the Sales domain, connecting the frontend UI to live Supabase data.
 
-## 1. Database Schema (Migration)
+## User Review Required
 
-### Step 1: Core Finance Tables
-Create the foundational tables for transactions, invoices, and payments.
+> [!IMPORTANT]
+> The implementation uses `sales_plans`, `sales`, and `sales_subscriptions` tables. UI components will transition from mock data to live TanStack Query hooks.
 
-```sql
--- 1. Financial Accounts (Internal ledgers/accounts)
-CREATE TABLE public.financial_accounts (
-    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    organization_id uuid NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
-    business_id uuid REFERENCES public.businesses(id) ON DELETE SET NULL,
-    name text NOT NULL,
-    type text NOT NULL CHECK (type IN ('asset', 'liability', 'equity', 'revenue', 'expense')),
-    currency text NOT NULL DEFAULT 'USD',
-    balance numeric NOT NULL DEFAULT 0,
-    metadata jsonb DEFAULT '{}'::jsonb,
-    created_at timestamptz DEFAULT now(),
-    updated_at timestamptz DEFAULT now()
-);
+- **Sales Plans**: Live catalog for the Create Sale Wizard.
+- **Deals/Sales**: Real-time pipeline and transaction tracking.
+- **Subscriptions**: Active service management and renewals.
 
--- 2. Invoices
-CREATE TABLE public.invoices (
-    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    organization_id uuid NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
-    business_id uuid REFERENCES public.businesses(id) ON DELETE SET NULL,
-    customer_id uuid NOT NULL, -- references external customer identity
-    invoice_number text UNIQUE NOT NULL,
-    amount numeric NOT NULL,
-    currency text NOT NULL DEFAULT 'USD',
-    status text NOT NULL CHECK (status IN ('draft', 'sent', 'paid', 'void', 'overdue')),
-    due_date date,
-    metadata jsonb DEFAULT '{}'::jsonb,
-    created_at timestamptz DEFAULT now(),
-    updated_at timestamptz DEFAULT now()
-);
+## Technical Details
 
--- 3. Payments (Collections)
-CREATE TABLE public.payments (
-    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    organization_id uuid NOT NULL REFERENCES public.organizations(id) ON DELETE CASCADE,
-    business_id uuid REFERENCES public.businesses(id) ON DELETE SET NULL,
-    invoice_id uuid REFERENCES public.invoices(id) ON DELETE SET NULL,
-    amount numeric NOT NULL,
-    currency text NOT NULL DEFAULT 'USD',
-    method text NOT NULL CHECK (method IN ('card', 'bank_transfer', 'cash', 'credit')),
-    status text NOT NULL CHECK (status IN ('pending', 'verified', 'failed', 'refunded')),
-    transaction_reference text,
-    metadata jsonb DEFAULT '{}'::jsonb,
-    created_at timestamptz DEFAULT now()
-);
-```
+### 1. API Service Layer
+Create `src/lib/api/sales.functions.ts` to implement:
+- `salesPlanService`: CRUD for `sales_plans`.
+- `dealService` (renamed/expanded): CRUD for `sales` table (Deals).
+- `subscriptionService`: CRUD for `sales_subscriptions`.
+- `salesService` (utility): Aggregates for dashboards and Customer 360.
 
-### Step 2: Grants and RLS
-Apply strict multi-tenant protection.
+### 2. Frontend Integration
+Update routes and components to use `useQuery` and `useMutation` via `useServerFn`:
+- `src/routes/app/sales/plans.tsx`: Fetch live plans.
+- `src/routes/app/sales/deals.tsx`: Fetch live transaction records.
+- `src/components/sales/CreateSaleWizard.tsx`: Fetch live plans for selection and implement `createSale` mutation.
+- `src/components/sales/SaleDetailsDrawer.tsx`: Fetch detailed sale/deal data.
+- `src/routes/app/sales/index.tsx`: Update Sales Command Center KPIs with live aggregates.
 
-```sql
-GRANT SELECT, INSERT, UPDATE ON public.financial_accounts TO authenticated;
-GRANT SELECT, INSERT, UPDATE ON public.invoices TO authenticated;
-GRANT SELECT, INSERT, UPDATE ON public.payments TO authenticated;
-
-ALTER TABLE public.financial_accounts ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.invoices ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
-
--- OWNER & ADMIN see everything in their org
-CREATE POLICY "Finance access for privileged roles" ON public.financial_accounts
-    FOR ALL TO authenticated
-    USING (
-        public.has_role(auth.uid(), 'OWNER') OR 
-        public.has_role(auth.uid(), 'ADMIN')
-    );
-
--- Repeat similar for invoices/payments
-```
-
-## 2. API Integration
-Update `src/lib/api/services.ts` to bridge these new tables via server functions (future step) or direct client calls where appropriate.
-
-## 3. Data Integrity Rules
-- **Multi-Currency**: Enforce no-sum across different `currency` fields.
-- **Audit**: Every financial record creation triggers an `audit_log` entry.
-
-## 4. Verification
-- Verify table creation and RLS policies.
-- Ensure `FinanceDashboard` can eventually consume this live data.
+### 3. Customer 360 Enhancements
+Update `customerService.get360` in `src/lib/api/crm.functions.ts` to include:
+- Associated sales/deals.
+- Active subscriptions.
