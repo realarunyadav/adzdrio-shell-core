@@ -8,7 +8,7 @@ import {
   SheetFooter
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Customer } from "@/lib/api/services.types";
+import { Customer, Customer360 } from "@/lib/api/services.types";
 import { format } from "date-fns";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { useQuery } from "@tanstack/react-query";
@@ -39,11 +39,13 @@ interface CustomerDetailsDrawerProps {
 }
 
 export function CustomerDetailsDrawer({ customer, open, onOpenChange }: CustomerDetailsDrawerProps) {
-  const { data: customer360, isLoading } = useQuery({
+  const { data: customer360 } = useQuery({
     queryKey: ["customer-360", customer?.id],
     queryFn: () => customerService.get360(customer?.id || ""),
     enabled: !!customer?.id && open,
   });
+
+  const data360 = customer360 as Customer360 | undefined;
 
   if (!customer) return null;
 
@@ -191,9 +193,9 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
                 </TabsContent>
                 
                 <TabsContent value="sales" className="mt-0 space-y-4">
-                  {customer360?.sales && customer360.sales.length > 0 ? (
+                  {data360?.sales && data360.sales.length > 0 ? (
                     <div className="space-y-3">
-                      {customer360.sales.map((sale: any) => (
+                      {data360.sales.map((sale: any) => (
                         <div key={sale.id} className="p-4 rounded-xl border border-border/40 hover:border-primary/40 transition-colors bg-muted/5 group">
                           <div className="flex justify-between items-start mb-2">
                             <div>
@@ -220,9 +222,9 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
                   <div className="space-y-6">
                     <div>
                       <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Live Transactions</h4>
-                      {customer360?.payments && customer360.payments.length > 0 ? (
+                      {data360?.payments && data360.payments.length > 0 ? (
                         <div className="space-y-2">
-                          {customer360.payments.concat(customer360.refunds || []).sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).map((txn: any) => (
+                          {(data360.payments || []).concat(data360.refunds || []).sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).map((txn: any) => (
                             <div key={txn.id} className="flex items-center justify-between p-3 rounded-xl border border-border/40 bg-muted/5">
                               <div className="flex items-center gap-3">
                                 <div className={cn("size-8 rounded-full flex items-center justify-center", txn.type === 'payment' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500')}>
@@ -249,9 +251,9 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
 
                     <div>
                       <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Invoices</h4>
-                      {customer360?.invoices && customer360.invoices.length > 0 ? (
+                      {data360?.invoices && data360.invoices.length > 0 ? (
                         <div className="space-y-2">
-                          {customer360.invoices.map((inv: any) => (
+                          {data360.invoices.map((inv: any) => (
                             <div key={inv.id} className="flex items-center justify-between p-3 rounded-xl border border-border/40 bg-muted/5">
                               <div className="flex items-center gap-3">
                                 <FileText className="size-4 text-muted-foreground" />
