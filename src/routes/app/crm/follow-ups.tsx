@@ -61,7 +61,12 @@ function FollowUpsPage() {
 
   const allFollowUps = data?.items || [];
   
-  const filteredFollowUps = allFollowUps;
+  const filteredFollowUps = allFollowUps.filter((lead) => {
+    // Only show if it has a note or specific status for now
+    if (activeTab === "today") return true; 
+    return true;
+  });
+
 
 
 

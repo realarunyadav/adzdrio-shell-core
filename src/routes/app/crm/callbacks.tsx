@@ -56,7 +56,11 @@ function CallbacksPage() {
 
   const allCallbacks = data?.items || [];
   
-  const filteredCallbacks = allCallbacks;
+  const filteredCallbacks = allCallbacks.filter((lead) => {
+    // Basic filter for now
+    return true;
+  });
+
 
 
 

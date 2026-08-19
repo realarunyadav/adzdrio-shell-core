@@ -38,11 +38,15 @@ const mapDbCustomer = (dbCustomer: any): Customer => {
     email: dbCustomer.email || "",
     phone: dbCustomer.phone || undefined,
     status: (dbCustomer.status || "active").toLowerCase() as Customer["status"],
+    business: dbCustomer.business_id ? "Active Business" : "Individual", // Placeholder until business name join
+    assignedToName: "Unassigned", // Placeholder until employee join
+    totalSales: "₹ 0", // Placeholder until sales join
     createdAt: dbCustomer.created_at,
     updatedAt: dbCustomer.updated_at,
     ...metadata,
   };
 };
+
 
 export const leadsService = {
   getAll: async (params?: Record<string, string | number | undefined>): Promise<RapidLead[]> => {
