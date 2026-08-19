@@ -7,16 +7,10 @@ import {
   RefreshCw, 
   Phone, 
   Clock, 
-  MoreHorizontal, 
-  CheckCircle2, 
-  Video,
-  AlertCircle,
-  Eye,
-  Calendar,
-  MoreVertical,
-  PhoneCall,
-  History,
-  MessageSquare
+  AlertCircle, 
+  Eye, 
+  PhoneCall, 
+  MoreVertical 
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
@@ -24,7 +18,7 @@ import { StatusBadge } from "@/components/shared/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { demoLeads, DemoLead } from "@/lib/mock/workspace.demo";
+import { RapidLead } from "@/lib/api/services.types";
 import { format, isPast, isToday, parseISO } from "date-fns";
 import { LeadDetailsDrawer } from "@/components/crm/LeadDetailsDrawer";
 import { toast } from "sonner";
@@ -32,6 +26,7 @@ import { SkeletonTable } from "@/components/shared/SkeletonLoader";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+
 
 export const Route = createFileRoute("/app/crm/callbacks")({
   component: CallbacksPage,
