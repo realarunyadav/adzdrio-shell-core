@@ -190,9 +190,88 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
                    </div>
                 </TabsContent>
                 
-                <TabsContent value="sales" className="mt-0 text-center py-12">
-                   <TrendingUp className="size-12 text-muted-foreground/20 mx-auto mb-4" />
-                   <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Historical sales data will appear here</p>
+                <TabsContent value="sales" className="mt-0 space-y-4">
+                  {customer360?.sales && customer360.sales.length > 0 ? (
+                    <div className="space-y-3">
+                      {customer360.sales.map((sale: any) => (
+                        <div key={sale.id} className="p-4 rounded-xl border border-border/40 hover:border-primary/40 transition-colors bg-muted/5 group">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <p className="text-xs font-black group-hover:text-primary transition-colors">{sale.planName}</p>
+                              <p className="text-[10px] text-muted-foreground font-medium uppercase">{format(new Date(sale.created), "MMM dd, yyyy")}</p>
+                            </div>
+                            <div className="flex flex-col items-end gap-1">
+                              <p className="text-xs font-black">{sale.currency} {sale.finalAmount.toLocaleString()}</p>
+                              <StatusBadge tone={sale.paymentStatus === 'Paid' ? 'success' : 'neutral'}>{sale.paymentStatus}</StatusBadge>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <TrendingUp className="size-12 text-muted-foreground/20 mx-auto mb-4" />
+                      <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">No historical sales data found</p>
+                    </div>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="finance" className="mt-0 space-y-6">
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Live Transactions</h4>
+                      {customer360?.payments && customer360.payments.length > 0 ? (
+                        <div className="space-y-2">
+                          {customer360.payments.concat(customer360.refunds || []).sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).map((txn: any) => (
+                            <div key={txn.id} className="flex items-center justify-between p-3 rounded-xl border border-border/40 bg-muted/5">
+                              <div className="flex items-center gap-3">
+                                <div className={cn("size-8 rounded-full flex items-center justify-center", txn.type === 'payment' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500')}>
+                                  {txn.type === 'payment' ? <CreditCard className="size-4" /> : <History className="size-4" />}
+                                </div>
+                                <div>
+                                  <p className="text-xs font-black capitalize">{txn.type}</p>
+                                  <p className="text-[10px] text-muted-foreground font-medium uppercase">{format(new Date(txn.created_at), "MMM dd, HH:mm")}</p>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <p className={cn("text-xs font-black", txn.type === 'payment' ? 'text-green-600' : 'text-red-600')}>
+                                  {txn.type === 'payment' ? '+' : '-'}{txn.currency} {txn.amount.toLocaleString()}
+                                </p>
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase">{txn.status}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-[10px] italic text-muted-foreground">No transaction history found.</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Invoices</h4>
+                      {customer360?.invoices && customer360.invoices.length > 0 ? (
+                        <div className="space-y-2">
+                          {customer360.invoices.map((inv: any) => (
+                            <div key={inv.id} className="flex items-center justify-between p-3 rounded-xl border border-border/40 bg-muted/5">
+                              <div className="flex items-center gap-3">
+                                <FileText className="size-4 text-muted-foreground" />
+                                <div>
+                                  <p className="text-xs font-black">Inv #{inv.invoice_number}</p>
+                                  <p className="text-[10px] text-muted-foreground font-medium uppercase">Due: {format(new Date(inv.due_date), "MMM dd, yyyy")}</p>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-xs font-black">{inv.currency} {inv.amount.toLocaleString()}</p>
+                                <StatusBadge tone={inv.status === 'Paid' ? 'success' : inv.status === 'Overdue' ? 'danger' : 'neutral'}>{inv.status}</StatusBadge>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-[10px] italic text-muted-foreground">No invoices found.</p>
+                      )}
+                    </div>
+                  </div>
                 </TabsContent>
               </div>
             </Tabs>
