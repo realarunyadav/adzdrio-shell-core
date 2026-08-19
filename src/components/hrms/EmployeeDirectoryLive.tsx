@@ -385,7 +385,6 @@ export function EmployeeDirectoryLive() {
           department: selectedEmployee.department || "N/A",
           role: selectedEmployee.designation || "N/A",
           businessIds: selectedEmployee.businessId ? [selectedEmployee.businessId] : [],
-          session: undefined,
           lastActive: "N/A"
         } : null}
         open={detailsOpen}
