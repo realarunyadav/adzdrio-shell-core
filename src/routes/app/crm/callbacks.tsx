@@ -34,7 +34,7 @@ export const Route = createFileRoute("/app/crm/callbacks")({
 
 function CallbacksPage() {
   const [loading, setLoading] = React.useState(false);
-  const [selectedLead, setSelectedLead] = React.useState<DemoLead | null>(null);
+  const [selectedLead, setSelectedLead] = React.useState<RapidLead | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState("today");
 
@@ -46,26 +46,15 @@ function CallbacksPage() {
     }, 1000);
   };
 
-  const openDetails = (lead: DemoLead) => {
+  const openDetails = (lead: RapidLead) => {
     setSelectedLead(lead);
     setIsDrawerOpen(true);
   };
 
-  const allCallbacks = demoLeads.filter(l => l.callbackDate);
+  const allCallbacks: RapidLead[] = [];
   
-  const filteredCallbacks = allCallbacks.filter(lead => {
-    if (!lead.callbackDate) return false;
-    const date = parseISO(lead.callbackDate);
-    
-    if (activeTab === 'completed') return lead.callbackStatus === 'Completed';
-    if (lead.callbackStatus === 'Completed') return false;
+  const filteredCallbacks = allCallbacks;
 
-    if (activeTab === 'today') return isToday(date);
-    if (activeTab === 'overdue') return isPast(date) && !isToday(date);
-    if (activeTab === 'upcoming') return !isPast(date) && !isToday(date);
-    
-    return true;
-  });
 
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-500">
