@@ -101,7 +101,7 @@ function FollowUpsPage() {
       </div>
       
       <SectionCard contentClassName="p-0">
-        {loading ? (
+        {isLoading ? (
           <div className="p-8"><SkeletonTable /></div>
         ) : (
           <Table>
