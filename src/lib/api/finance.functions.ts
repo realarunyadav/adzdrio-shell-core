@@ -147,3 +147,103 @@ export const financeInvoices = {
       } as unknown as FinanceInvoice;
     })
 };
+
+export const getFinanceAnalytics = createServerFn({ method: "GET" })
+  .inputValidator((data: unknown) => 
+    z.object({
+      businessId: z.string().optional(),
+    }).optional().parse(data || {})
+  )
+  .handler(async ({ data }) => {
+    // 1. Gross Revenue (from sales)
+    let salesQuery = supabase
+      .from("sales")
+      .select("final_amount, currency")
+      .eq("status", "Won");
+    if (data?.businessId) salesQuery = salesQuery.eq("business_id", data.businessId);
+    const { data: sales, error: salesErr } = await salesQuery;
+    if (salesErr) throw salesErr;
+
+    // 2. Collected Revenue (completed payment transactions)
+    let paymentsQuery = supabase
+      .from("finance_transactions")
+      .select("amount, currency")
+      .eq("type", "payment")
+      .eq("status", "completed");
+    if (data?.businessId) paymentsQuery = paymentsQuery.eq("business_id", data.businessId);
+    const { data: payments, error: paymentsErr } = await paymentsQuery;
+    if (paymentsErr) throw paymentsErr;
+
+    // 3. Refunds (completed refund transactions)
+    let refundsQuery = supabase
+      .from("finance_transactions")
+      .select("amount, currency")
+      .eq("type", "refund")
+      .eq("status", "completed");
+    if (data?.businessId) refundsQuery = refundsQuery.eq("business_id", data.businessId);
+    const { data: refunds, error: refundsErr } = await refundsQuery;
+    if (refundsErr) throw refundsErr;
+
+    // Aggregation Logic
+    const grossMap: Record<string, number> = {};
+    const collectedMap: Record<string, number> = {};
+    const refundMap: Record<string, number> = {};
+    const netMap: Record<string, number> = {};
+
+    (sales || []).forEach(s => {
+      grossMap[s.currency] = (grossMap[s.currency] || 0) + Number(s.final_amount);
+    });
+
+    (payments || []).forEach(p => {
+      collectedMap[p.currency] = (collectedMap[p.currency] || 0) + Number(p.amount);
+    });
+
+    (refunds || []).forEach(r => {
+      refundMap[r.currency] = (refundMap[r.currency] || 0) + Number(r.amount);
+    });
+
+    // Net Revenue = Gross - Refunds (per currency)
+    Object.keys(grossMap).forEach(curr => {
+      netMap[curr] = grossMap[curr] - (refundMap[curr] || 0);
+    });
+
+    return {
+      grossRevenue: Object.entries(grossMap).map(([currency, value]) => ({ currency, value })),
+      collectedRevenue: Object.entries(collectedMap).map(([currency, value]) => ({ currency, value })),
+      refunds: Object.entries(refundMap).map(([currency, value]) => ({ currency, value })),
+      netRevenue: Object.entries(netMap).map(([currency, value]) => ({ currency, value })),
+    };
+  });
+
+export const getInvoiceAnalytics = createServerFn({ method: "GET" })
+  .inputValidator((data: unknown) => 
+    z.object({
+      businessId: z.string().optional(),
+    }).optional().parse(data || {})
+  )
+  .handler(async ({ data }) => {
+    let query = supabase
+      .from("finance_invoices")
+      .select("amount, currency, status");
+    
+    if (data?.businessId) query = query.eq("business_id", data.businessId);
+
+    const { data: invoices, error } = await query;
+    if (error) throw error;
+
+    const counts = {
+      total: (invoices || []).length,
+      paid: (invoices || []).filter(i => i.status === 'paid').length,
+      overdue: (invoices || []).filter(i => i.status === 'overdue').length,
+    };
+
+    const outstandingMap: Record<string, number> = {};
+    (invoices || []).filter(i => ['sent', 'overdue'].includes(i.status)).forEach(i => {
+      outstandingMap[i.currency] = (outstandingMap[i.currency] || 0) + Number(i.amount);
+    });
+
+    return {
+      ...counts,
+      outstandingAmount: Object.entries(outstandingMap).map(([currency, value]) => ({ currency, value })),
+    };
+  });
