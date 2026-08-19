@@ -14,6 +14,53 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_logs: {
+        Row: {
+          action: string
+          actor_id: string
+          created_at: string | null
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          module: string | null
+          organization_id: string
+          severity: string | null
+          target: string | null
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          module?: string | null
+          organization_id: string
+          severity?: string | null
+          target?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          module?: string | null
+          organization_id?: string
+          severity?: string | null
+          target?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_logs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       businesses: {
         Row: {
           code: string
@@ -131,6 +178,57 @@ export type Database = {
             columns: ["reports_to_id"]
             isOneToOne: false
             referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kpi_snapshots: {
+        Row: {
+          business_id: string | null
+          created_at: string | null
+          currency: string | null
+          id: string
+          kpi_key: string
+          kpi_value: number
+          metadata: Json | null
+          organization_id: string
+          snapshot_date: string | null
+        }
+        Insert: {
+          business_id?: string | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          kpi_key: string
+          kpi_value: number
+          metadata?: Json | null
+          organization_id: string
+          snapshot_date?: string | null
+        }
+        Update: {
+          business_id?: string | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          kpi_key?: string
+          kpi_value?: number
+          metadata?: Json | null
+          organization_id?: string
+          snapshot_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kpi_snapshots_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kpi_snapshots_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]

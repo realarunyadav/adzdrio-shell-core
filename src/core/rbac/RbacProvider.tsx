@@ -9,6 +9,7 @@ interface RbacContextType {
   can: (permission: string, mode?: "all" | "any") => boolean;
   principal: any;
   roles: string[];
+  isOwner: boolean;
 }
 
 const RbacContext = createContext<RbacContextType | undefined>(undefined);
@@ -35,7 +36,8 @@ export function RbacProvider({ children }: { children: ReactNode }) {
     return permissions.every(hasPermission);
   };
 
-  const isAdmin = hasRole('ADMIN');
+  const isAdmin = hasRole(['OWNER', 'ADMIN']);
+  const isOwner = hasRole('OWNER');
 
   return (
     <RbacContext.Provider 
@@ -43,6 +45,7 @@ export function RbacProvider({ children }: { children: ReactNode }) {
         hasPermission, 
         hasRole, 
         isAdmin, 
+        isOwner,
         can, 
         principal: user,
         roles: user?.roles ?? []

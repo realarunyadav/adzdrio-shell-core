@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { 
   Building2, 
   Calendar, 
@@ -66,6 +66,15 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/modules/organization")({
+  beforeLoad: ({ context }: any) => {
+    const user = (context as any).auth?.user;
+    const roles = user?.roles || [];
+    const isOwner = roles.some((r: string) => r.toUpperCase() === 'OWNER');
+    
+    if (!isOwner) {
+      throw redirect({ to: "/" });
+    }
+  },
   component: OrganizationModule,
 });
 
