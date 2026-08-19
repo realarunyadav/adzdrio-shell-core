@@ -307,6 +307,90 @@ export type Database = {
           },
         ]
       }
+      finance_transactions: {
+        Row: {
+          amount: number
+          business_id: string
+          created_at: string
+          currency: string
+          customer_id: string
+          id: string
+          metadata: Json
+          organization_id: string
+          sale_id: string | null
+          status: string
+          subscription_id: string | null
+          type: Database["public"]["Enums"]["finance_type"]
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          business_id: string
+          created_at?: string
+          currency: string
+          customer_id: string
+          id?: string
+          metadata?: Json
+          organization_id: string
+          sale_id?: string | null
+          status: string
+          subscription_id?: string | null
+          type: Database["public"]["Enums"]["finance_type"]
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          business_id?: string
+          created_at?: string
+          currency?: string
+          customer_id?: string
+          id?: string
+          metadata?: Json
+          organization_id?: string
+          sale_id?: string | null
+          status?: string
+          subscription_id?: string | null
+          type?: Database["public"]["Enums"]["finance_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "finance_transactions_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "finance_transactions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "finance_transactions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "finance_transactions_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "finance_transactions_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "sales_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       kpi_snapshots: {
         Row: {
           business_id: string | null
@@ -734,6 +818,7 @@ export type Database = {
     }
     Enums: {
       app_role: "OWNER" | "ADMIN" | "MANAGER" | "SALES" | "SUPPORT" | "VIEWER"
+      finance_type: "payment" | "refund" | "adjustment"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -862,6 +947,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["OWNER", "ADMIN", "MANAGER", "SALES", "SUPPORT", "VIEWER"],
+      finance_type: ["payment", "refund", "adjustment"],
     },
   },
 } as const
