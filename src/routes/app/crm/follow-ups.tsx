@@ -118,7 +118,7 @@ function FollowUpsPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredFollowUps.map(lead => {
+              {filteredFollowUps.map((lead: RapidLead) => {
                 return (
                   <TableRow key={lead.id} className="border-border/40 group hover:bg-muted/30 transition-colors">
                     <TableCell className="px-6">

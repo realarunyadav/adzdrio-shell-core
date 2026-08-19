@@ -35,17 +35,18 @@ export const Route = createFileRoute("/app/crm/callbacks")({
 });
 
 function CallbacksPage() {
-  const [loading, setLoading] = React.useState(false);
   const [selectedLead, setSelectedLead] = React.useState<RapidLead | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState("today");
 
-  const handleRefresh = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Callbacks list refreshed");
-    }, 1000);
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["leads", "callbacks"],
+    queryFn: () => leadsService.list({ status: "confirmed" }),
+  });
+
+  const handleRefresh = async () => {
+    await refetch();
+    toast.success("Callbacks list refreshed");
   };
 
   const openDetails = (lead: RapidLead) => {
@@ -53,9 +54,10 @@ function CallbacksPage() {
     setIsDrawerOpen(true);
   };
 
-  const allCallbacks: RapidLead[] = [];
+  const allCallbacks = data?.items || [];
   
   const filteredCallbacks = allCallbacks;
+
 
 
   return (
@@ -65,9 +67,10 @@ function CallbacksPage() {
         description="Manage scheduled customer callbacks and callback requests."
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loading}>
-              <RefreshCw className={cn("mr-2 size-3.5", loading && "animate-spin")} /> Refresh
+            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
+              <RefreshCw className={cn("mr-2 size-3.5", isLoading && "animate-spin")} /> Refresh
             </Button>
+
             <Button size="sm" className="shadow-lg shadow-primary/20"><Plus className="mr-2 size-3.5" /> Add Callback</Button>
           </div>
         }
@@ -93,7 +96,7 @@ function CallbacksPage() {
       </div>
       
       <SectionCard contentClassName="p-0">
-        {loading ? (
+        {isLoading ? (
           <div className="p-8"><SkeletonTable /></div>
         ) : (
           <Table>
@@ -110,7 +113,7 @@ function CallbacksPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredCallbacks.map(lead => {
+              {filteredCallbacks.map((lead: RapidLead) => {
                 return (
                   <TableRow key={lead.id} className="border-border/40 group hover:bg-muted/30 transition-colors">
                     <TableCell className="px-6">
