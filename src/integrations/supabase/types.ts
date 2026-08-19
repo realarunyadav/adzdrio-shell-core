@@ -434,6 +434,246 @@ export type Database = {
           },
         ]
       }
+      sales: {
+        Row: {
+          assigned_employee_id: string | null
+          business_id: string
+          created_at: string
+          currency: string
+          customer_id: string
+          discount: number | null
+          final_amount: number
+          id: string
+          metadata: Json
+          organization_id: string
+          payment_status: string
+          plan_id: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_employee_id?: string | null
+          business_id: string
+          created_at?: string
+          currency: string
+          customer_id: string
+          discount?: number | null
+          final_amount: number
+          id?: string
+          metadata?: Json
+          organization_id: string
+          payment_status?: string
+          plan_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_employee_id?: string | null
+          business_id?: string
+          created_at?: string
+          currency?: string
+          customer_id?: string
+          discount?: number | null
+          final_amount?: number
+          id?: string
+          metadata?: Json
+          organization_id?: string
+          payment_status?: string
+          plan_id?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_assigned_employee_id_fkey"
+            columns: ["assigned_employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "sales_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales_plans: {
+        Row: {
+          billing_period: string
+          business_id: string
+          created_at: string
+          currency: string
+          features: Json
+          id: string
+          name: string
+          organization_id: string
+          price: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          billing_period: string
+          business_id: string
+          created_at?: string
+          currency: string
+          features?: Json
+          id?: string
+          name: string
+          organization_id: string
+          price: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          billing_period?: string
+          business_id?: string
+          created_at?: string
+          currency?: string
+          features?: Json
+          id?: string
+          name?: string
+          organization_id?: string
+          price?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_plans_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_plans_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales_subscriptions: {
+        Row: {
+          amount: number | null
+          auto_renew: boolean | null
+          business_id: string
+          created_at: string
+          currency: string
+          customer_id: string
+          end_date: string | null
+          id: string
+          organization_id: string
+          plan_id: string
+          purchase_date: string | null
+          renewal_policy: string | null
+          sale_id: string | null
+          start_date: string | null
+          status: string
+          term_months: number | null
+          updated_at: string
+        }
+        Insert: {
+          amount?: number | null
+          auto_renew?: boolean | null
+          business_id: string
+          created_at?: string
+          currency: string
+          customer_id: string
+          end_date?: string | null
+          id?: string
+          organization_id: string
+          plan_id: string
+          purchase_date?: string | null
+          renewal_policy?: string | null
+          sale_id?: string | null
+          start_date?: string | null
+          status?: string
+          term_months?: number | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number | null
+          auto_renew?: boolean | null
+          business_id?: string
+          created_at?: string
+          currency?: string
+          customer_id?: string
+          end_date?: string | null
+          id?: string
+          organization_id?: string
+          plan_id?: string
+          purchase_date?: string | null
+          renewal_policy?: string | null
+          sale_id?: string | null
+          start_date?: string | null
+          status?: string
+          term_months?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_subscriptions_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_subscriptions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_subscriptions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "sales_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_subscriptions_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           business_id: string | null
