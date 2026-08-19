@@ -22,13 +22,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { RapidLead } from "@/lib/api/services.types";
-import { format, isPast, isToday, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { LeadDetailsDrawer } from "@/components/crm/LeadDetailsDrawer";
 import { toast } from "sonner";
 import { SkeletonTable } from "@/components/shared/SkeletonLoader";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useQuery } from "@tanstack/react-query";
+import { leadsService } from "@/lib/api/services";
+
 
 
 export const Route = createFileRoute("/app/crm/follow-ups")({
