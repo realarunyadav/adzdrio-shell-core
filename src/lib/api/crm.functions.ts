@@ -67,12 +67,13 @@ export const leadsService = {
     if (params?.["assignedToMe"] === "true") {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        // Find employee ID for the current user
+        // Find employee ID for the current user via profile_id
         const { data: employee } = await supabase
           .from("employees")
           .select("id")
-          .eq("user_id", user.id)
+          .eq("profile_id", user.id)
           .single();
+
         
         if (employee) {
           query = query.eq("assigned_employee_id", employee.id);
