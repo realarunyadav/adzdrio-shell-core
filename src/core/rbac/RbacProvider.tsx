@@ -9,6 +9,7 @@ interface RbacContextType {
   can: (permission: string, mode?: "all" | "any") => boolean;
   principal: any;
   roles: string[];
+  isOwner: boolean;
 }
 
 const RbacContext = createContext<RbacContextType | undefined>(undefined);
