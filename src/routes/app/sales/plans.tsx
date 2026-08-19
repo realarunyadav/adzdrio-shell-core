@@ -14,7 +14,10 @@ import {
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { Button } from "@/components/ui/button";
-import { demoPlans } from "@/lib/mock/workspace.demo";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { salesPlanService } from "@/lib/api/services";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -28,6 +31,12 @@ export const Route = createFileRoute("/app/sales/plans")({
 });
 
 function SalesPlansPage() {
+  const getPlansFn = useServerFn(salesPlanService.getAll);
+  const { data: plans } = useSuspenseQuery({
+    queryKey: ["sales-plans"],
+    queryFn: () => getPlansFn(),
+  });
+
   return (
     <div className="flex flex-col gap-8 pb-20 animate-in fade-in duration-500">
       <PageHeader
@@ -43,7 +52,7 @@ function SalesPlansPage() {
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {demoPlans.map((plan) => (
+        {plans?.map((plan) => (
           <SectionCard key={plan.id} className="flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-4">

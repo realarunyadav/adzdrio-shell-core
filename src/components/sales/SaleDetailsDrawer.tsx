@@ -15,14 +15,15 @@ import {
   ExternalLink,
   Receipt,
   History,
-  MessageSquare
+  MessageSquare,
+  ShoppingBag
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DemoSale } from "@/lib/mock/workspace.demo";
+// DemoSale replaced by any for live data transition
 
 interface SaleDetailsDrawerProps {
-  sale: DemoSale | null;
+  sale: any | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -185,4 +186,3 @@ export function SaleDetailsDrawer({ sale, open, onOpenChange }: SaleDetailsDrawe
   );
 }
 
-import { ShoppingBag } from "lucide-react";

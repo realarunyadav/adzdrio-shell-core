@@ -80,9 +80,9 @@ function SalesCRMModule() {
   const filteredLeads = React.useMemo(() => filterRows(leads, search), [leads, search]);
   const filteredAccounts = React.useMemo(() => filterRows(accounts, search), [accounts, search]);
   const filteredContacts = React.useMemo(() => filterRows(contacts, search), [contacts, search]);
-  const wonDeals = deals.filter((deal) => /won|closed_won/i.test(String(deal.stage ?? deal.status ?? "")));
-  const pipelineValue = deals.reduce((sum, deal) => sum + Number(deal.amount ?? 0), 0);
-  const wonValue = wonDeals.reduce((sum, deal) => sum + Number(deal.amount ?? 0), 0);
+  const wonDeals = (deals as any[]).filter((deal) => /won|closed_won/i.test(String(deal.stage ?? deal.status ?? "")));
+  const pipelineValue = (deals as any[]).reduce((sum: number, deal: any) => sum + Number(deal.amount ?? 0), 0);
+  const wonValue = wonDeals.reduce((sum: number, deal: any) => sum + Number(deal.amount ?? 0), 0);
 
   const openModal = (kind: ModalState, item?: any) => { setEditing(item ?? null); setModal(kind); };
   const closeModal = () => { setModal(null); setEditing(null); };
@@ -92,7 +92,7 @@ function SalesCRMModule() {
       if (kind === "lead") await leadsService.remove(id);
       if (kind === "account") await accountService.remove(id);
       if (kind === "contact") await contactService.remove(id);
-      if (kind === "deal") await dealService.remove(id);
+      if (kind === "deal") await (dealService as any).remove(id);
       toast.success("Record deleted");
       await load(true);
     } catch (err: any) {
@@ -262,7 +262,7 @@ function RecordDialog({ kind, item, accounts, onClose, onSaved }: { kind: ModalS
       if (kind === "lead") item ? await leadsService.update(item.id, form) : await leadsService.create(form);
       if (kind === "account") item ? await accountService.update(item.id, form) : await accountService.create(form);
       if (kind === "contact") item ? await contactService.update(item.id, form) : await contactService.create(form);
-      if (kind === "deal") item ? await dealService.update(item.id, form) : await dealService.create(form);
+      if (kind === "deal") item ? await (dealService as any).update(item.id, form) : await (dealService as any).create(form);
       toast.success(`${title} saved successfully`);
       onSaved();
     } catch (err: any) {
