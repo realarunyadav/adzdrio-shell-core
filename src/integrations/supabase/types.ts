@@ -55,6 +55,86 @@ export type Database = {
           },
         ]
       }
+      employees: {
+        Row: {
+          business_id: string | null
+          created_at: string | null
+          department: string | null
+          designation: string | null
+          employee_code: string
+          employment_status: string
+          id: string
+          joining_date: string | null
+          metadata: Json | null
+          organization_id: string
+          profile_id: string
+          reports_to_id: string | null
+          training_status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          business_id?: string | null
+          created_at?: string | null
+          department?: string | null
+          designation?: string | null
+          employee_code: string
+          employment_status?: string
+          id?: string
+          joining_date?: string | null
+          metadata?: Json | null
+          organization_id: string
+          profile_id: string
+          reports_to_id?: string | null
+          training_status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          business_id?: string | null
+          created_at?: string | null
+          department?: string | null
+          designation?: string | null
+          employee_code?: string
+          employment_status?: string
+          id?: string
+          joining_date?: string | null
+          metadata?: Json | null
+          organization_id?: string
+          profile_id?: string
+          reports_to_id?: string | null
+          training_status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employees_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employees_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employees_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employees_reports_to_id_fkey"
+            columns: ["reports_to_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organizations: {
         Row: {
           created_at: string | null
