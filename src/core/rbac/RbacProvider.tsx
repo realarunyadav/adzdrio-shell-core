@@ -45,6 +45,7 @@ export function RbacProvider({ children }: { children: ReactNode }) {
         hasPermission, 
         hasRole, 
         isAdmin, 
+        isOwner,
         can, 
         principal: user,
         roles: user?.roles ?? []
