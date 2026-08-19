@@ -41,12 +41,14 @@ function FollowUpsPage() {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState("today");
 
-  const handleRefresh = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Follow-ups refreshed");
-    }, 1000);
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["leads", "follow-ups"],
+    queryFn: () => leadsService.list({ status: "confirmed" }), // confirmed leads might need follow-up
+  });
+
+  const handleRefresh = async () => {
+    await refetch();
+    toast.success("Follow-ups refreshed");
   };
 
   const openDetails = (lead: RapidLead) => {
@@ -54,9 +56,10 @@ function FollowUpsPage() {
     setIsDrawerOpen(true);
   };
 
-  const allFollowUps: RapidLead[] = [];
+  const allFollowUps = data?.items || [];
   
   const filteredFollowUps = allFollowUps;
+
 
 
   return (
