@@ -25,6 +25,8 @@ export const storageService = { getUploadUrl: (filename: string, category: strin
 
 export { leadsService } from "./crm.functions";
 export { salesPlanService, dealService, subscriptionService } from "./sales.functions";
+import { financeTransactions, financeInvoices } from "./finance.functions";
+export { financeTransactions, financeInvoices };
 
 
 export const accountService = { getAll: (params?: { search?: string; status?: string }) => { const query = new URLSearchParams(); if (params?.search) query.set("search", params.search); if (params?.status) query.set("status", params.status); return api.get<any[]>(`/api/crm/accounts${query.toString() ? `?${query}` : ""}`); }, getById: (id: string) => api.get<any>(`/api/crm/accounts/${id}`), create: (data: any) => api.post("/api/crm/accounts", data), update: (id: string, data: any) => api.patch(`/api/crm/accounts/${id}`, data), remove: (id: string) => api.delete(`/api/crm/accounts/${id}`) };
@@ -33,7 +35,16 @@ export const contactService = { getAll: (params?: { search?: string; accountId?:
 
 export const customerService = { getAll: () => api.get<Customer[]>("/api/customers"), getById: (id: string) => api.get<Customer>(`/api/customers/${id}`), get360: (id: string) => api.get<{ customer: Customer; subscriptions: Subscription[]; devices: Device[]; deviceGroups: DeviceGroup[]; rapidLeads: RapidLead[]; renewals: Renewal[]; referrals: any[]; refunds: RefundRequest[] }>(`/api/customers/${id}/360`), getDevices: (customerId: string) => api.get<Device[]>(`/api/customers/${customerId}/devices`), updateDeviceStatus: (deviceId: string, status: Device["status"]) => api.patch(`/api/devices/${deviceId}/status`, { status }), getReferralStatus: (customerId: string) => api.get<{ referralCode: string; successful: number; pending: number; rewards: ReferralReward[] }>(`/api/customers/${customerId}/referrals`) };
 
-export const financeService = { getStats: () => api.get<any>("/api/finance/stats"), getPayments: () => api.get<any[]>("/api/payments"), getInvoices: () => api.get<any[]>("/api/invoices"), getRefundRequests: () => api.get<RefundRequest[]>("/api/finance/refund-requests"), processRefund: (id: string, action: "approve" | "reject", data: any) => api.post(`/api/finance/refund-requests/${id}/${action}`, data) };
+export const financeService = {
+  getStats: () => api.get<any>("/api/finance/stats"),
+  getPayments: () => api.get<any[]>("/api/payments"),
+  getInvoices: () => api.get<any[]>("/api/invoices"),
+  getRefundRequests: () => api.get<RefundRequest[]>("/api/finance/refund-requests"),
+  processRefund: (id: string, action: "approve" | "reject", data: any) => api.post(`/api/finance/refund-requests/${id}/${action}`, data),
+  // New Live methods
+  listTransactions: (params?: any) => financeTransactions.list(params),
+  listInvoices: (params?: any) => financeInvoices.list(params),
+};
 export const auditService = {
   getLogs: () => api.get<any[]>("/api/audit-logs"),
   getActions: () => api.get<any[]>("/api/audit-logs/actions"),
