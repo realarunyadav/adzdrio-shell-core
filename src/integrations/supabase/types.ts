@@ -851,6 +851,256 @@ export type Database = {
           },
         ]
       }
+      support_articles: {
+        Row: {
+          category_id: string | null
+          content: string
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          status: string
+          title: string
+          updated_at: string | null
+          views: number | null
+        }
+        Insert: {
+          category_id?: string | null
+          content: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          status?: string
+          title: string
+          updated_at?: string | null
+          views?: number | null
+        }
+        Update: {
+          category_id?: string | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          status?: string
+          title?: string
+          updated_at?: string | null
+          views?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_articles_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "support_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_articles_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_categories: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          metadata: Json | null
+          name: string
+          organization_id: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          name: string
+          organization_id: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          name?: string
+          organization_id?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_categories_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_messages: {
+        Row: {
+          body: string
+          business_id: string
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          sender_employee_id: string | null
+          ticket_id: string
+          updated_at: string | null
+          visibility: string
+        }
+        Insert: {
+          body: string
+          business_id: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          sender_employee_id?: string | null
+          ticket_id: string
+          updated_at?: string | null
+          visibility?: string
+        }
+        Update: {
+          body?: string
+          business_id?: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          sender_employee_id?: string | null
+          ticket_id?: string
+          updated_at?: string | null
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_messages_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_messages_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_messages_sender_employee_id_fkey"
+            columns: ["sender_employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          assigned_employee_id: string | null
+          business_id: string
+          category_id: string | null
+          created_at: string | null
+          customer_id: string
+          due_time: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          priority: string
+          sla_status: string
+          status: string
+          subject: string
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_employee_id?: string | null
+          business_id: string
+          category_id?: string | null
+          created_at?: string | null
+          customer_id: string
+          due_time?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          priority: string
+          sla_status?: string
+          status?: string
+          subject: string
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_employee_id?: string | null
+          business_id?: string
+          category_id?: string | null
+          created_at?: string | null
+          customer_id?: string
+          due_time?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          priority?: string
+          sla_status?: string
+          status?: string
+          subject?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_tickets_assigned_employee_id_fkey"
+            columns: ["assigned_employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_tickets_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_tickets_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "support_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_tickets_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_tickets_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           business_id: string | null
