@@ -47,7 +47,7 @@ function RevenuePage() {
   // For charts, we use a single currency view or separate series.
   // Since we don't have historical data yet in Supabase for a timeline, we'll keep the bar data as is or show "No live historical data".
   const barData = [
-    { name: 'Live Data', gross: analytics?.grossRevenue[0]?.value || 0, net: analytics?.netRevenue[0]?.value || 0 },
+    { name: 'Live Data', gross: analytics?.grossRevenue?.[0]?.value || 0, net: analytics?.netRevenue?.[0]?.value || 0 },
   ];
 
   const pieData = (analytics?.grossRevenue || []).map((gr, idx) => ({
