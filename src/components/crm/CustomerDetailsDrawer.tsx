@@ -108,7 +108,7 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
             <Tabs defaultValue="overview" className="w-full">
               <div className="px-6 border-b border-border/40 bg-muted/5">
                 <TabsList className="h-12 bg-transparent p-0 gap-6">
-                  {["Overview", "Activity", "Sales", "Follow-ups", "Documents"].map(tab => (
+                  {["Overview", "Activity", "Sales", "Finance", "Follow-ups", "Documents"].map(tab => (
                     <TabsTrigger 
                       key={tab} 
                       value={tab.toLowerCase()} 
