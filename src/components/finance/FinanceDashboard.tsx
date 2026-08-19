@@ -20,26 +20,6 @@ import { financeService } from '@/lib/api/services';
 import { DashboardKpiCard } from '@/components/shared/DashboardKpiCard';
 import { useQuery } from '@tanstack/react-query';
 
-type Payment = {
-  id?: string;
-  amount?: number | string;
-  currency?: string;
-  status?: string;
-  createdAt?: string;
-};
-
-type Invoice = {
-  id?: string;
-  amount?: number | string;
-  currency?: string;
-  status?: string;
-  createdAt?: string;
-};
-
-const money = (value: number, currency = 'USD') =>
-  new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(value);
-
-const amountOf = (row: { amount?: number | string }) => Number(row.amount ?? 0) || 0;
 
 export function FinanceDashboard() {
   const { 
