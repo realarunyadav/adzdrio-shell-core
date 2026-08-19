@@ -112,78 +112,49 @@ function FollowUpsPage() {
             </TableHeader>
             <TableBody>
               {filteredFollowUps.map(lead => {
-                const dueDate = parseISO(lead.nextFollowUp!);
-                const isOverdue = isPast(dueDate) && !isToday(dueDate) && lead.followUpStatus !== 'Completed';
-
                 return (
                   <TableRow key={lead.id} className="border-border/40 group hover:bg-muted/30 transition-colors">
                     <TableCell className="px-6">
                       <button onClick={() => openDetails(lead)} className="text-left outline-none">
-                        <p className="text-xs font-black group-hover:text-primary transition-colors">{lead.name}</p>
+                        <p className="text-xs font-black group-hover:text-primary transition-colors">{lead.customerName}</p>
                         <p className="text-[10px] text-muted-foreground font-medium uppercase truncate max-w-[150px]">{lead.notes}</p>
                       </button>
                     </TableCell>
                     <TableCell className="text-[11px] font-bold text-muted-foreground uppercase">{lead.business}</TableCell>
                     <TableCell className="text-[11px] font-medium">{lead.assignedToName}</TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1.5 text-[11px] font-bold">
-                        {lead.followUpType === 'Call' && <Phone className="size-3 text-blue-500" />}
-                        {lead.followUpType === 'Email' && <Mail className="size-3 text-orange-500" />}
-                        {lead.followUpType === 'Meeting' && <Calendar className="size-3 text-purple-500" />}
-                        {lead.followUpType === 'WhatsApp' && <MessageSquare className="size-3 text-green-500" />}
-                        {lead.followUpType}
+                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
+                        No Type
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className={cn(
-                        "flex flex-col gap-0.5 text-[11px] font-bold",
-                        isOverdue ? "text-red-500" : "text-foreground"
-                      )}>
+                      <div className="flex flex-col gap-0.5 text-[11px] font-bold">
                         <span className="flex items-center gap-1.5">
-                          {isOverdue && <AlertTriangle className="size-3" />}
-                          {format(dueDate, "MMM dd, yyyy")}
-                        </span>
-                        <span className="text-[9px] text-muted-foreground uppercase opacity-70 flex items-center gap-1">
-                          <Clock className="size-2.5" /> {format(dueDate, "hh:mm a")}
+                          {format(new Date(lead.createdAt), "MMM dd, yyyy")}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <StatusBadge tone={lead.priority === 'High' ? 'danger' : lead.priority === 'Medium' ? 'warning' : 'neutral'}>
-                        {lead.priority}
+                      <StatusBadge tone={lead.priority === 'High' ? 'danger' : 'neutral'}>
+                        {lead.priority || 'Normal'}
                       </StatusBadge>
                     </TableCell>
                     <TableCell>
-                      <StatusBadge tone={lead.followUpStatus === 'Completed' ? 'success' : isOverdue ? 'danger' : 'warning'}>
-                        {lead.followUpStatus || 'Pending'}
+                      <StatusBadge tone="warning">
+                        Pending
                       </StatusBadge>
                     </TableCell>
                     <TableCell className="text-right px-6">
                       <div className="flex items-center justify-end gap-1">
-                         {lead.followUpStatus !== 'Completed' && (
-                           <Button variant="ghost" size="icon" className="size-7 text-green-600 hover:text-green-700 hover:bg-green-50" title="Complete">
-                             <Check className="size-3.5" />
-                           </Button>
-                         )}
                          <Button variant="ghost" size="icon" className="size-7" onClick={() => openDetails(lead)}>
                            <Eye className="size-3.5" />
                          </Button>
-                         <DropdownMenu>
-                           <DropdownMenuTrigger asChild>
-                             <Button variant="ghost" size="icon" className="size-7">
-                               <MoreVertical className="size-3.5" />
-                             </Button>
-                           </DropdownMenuTrigger>
-                           <DropdownMenuContent align="end" className="w-40">
-                             <DropdownMenuItem className="text-[11px] font-bold uppercase tracking-widest">Edit Follow-up</DropdownMenuItem>
-                             <DropdownMenuItem className="text-[11px] font-bold uppercase tracking-widest text-red-600">Cancel</DropdownMenuItem>
-                           </DropdownMenuContent>
-                         </DropdownMenu>
                       </div>
                     </TableCell>
                   </TableRow>
                 );
               })}
+
               {filteredFollowUps.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={8} className="h-64 text-center">
