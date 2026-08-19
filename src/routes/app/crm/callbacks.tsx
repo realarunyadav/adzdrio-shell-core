@@ -7,16 +7,10 @@ import {
   RefreshCw, 
   Phone, 
   Clock, 
-  MoreHorizontal, 
-  CheckCircle2, 
-  Video,
-  AlertCircle,
-  Eye,
-  Calendar,
-  MoreVertical,
-  PhoneCall,
-  History,
-  MessageSquare
+  AlertCircle, 
+  Eye, 
+  PhoneCall, 
+  MoreVertical 
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
@@ -24,53 +18,51 @@ import { StatusBadge } from "@/components/shared/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { demoLeads, DemoLead } from "@/lib/mock/workspace.demo";
-import { format, isPast, isToday, parseISO } from "date-fns";
+import { RapidLead } from "@/lib/api/services.types";
+import { format } from "date-fns";
 import { LeadDetailsDrawer } from "@/components/crm/LeadDetailsDrawer";
 import { toast } from "sonner";
 import { SkeletonTable } from "@/components/shared/SkeletonLoader";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useQuery } from "@tanstack/react-query";
+import { leadsService } from "@/lib/api/services";
+
+
 
 export const Route = createFileRoute("/app/crm/callbacks")({
   component: CallbacksPage,
 });
 
 function CallbacksPage() {
-  const [loading, setLoading] = React.useState(false);
-  const [selectedLead, setSelectedLead] = React.useState<DemoLead | null>(null);
+  const [selectedLead, setSelectedLead] = React.useState<RapidLead | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState("today");
 
-  const handleRefresh = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Callbacks list refreshed");
-    }, 1000);
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["leads", "callbacks"],
+    queryFn: () => leadsService.list({ status: "confirmed" }),
+  });
+
+  const handleRefresh = async () => {
+    await refetch();
+    toast.success("Callbacks list refreshed");
   };
 
-  const openDetails = (lead: DemoLead) => {
+  const openDetails = (lead: RapidLead) => {
     setSelectedLead(lead);
     setIsDrawerOpen(true);
   };
 
-  const allCallbacks = demoLeads.filter(l => l.callbackDate);
+  const allCallbacks = data?.items || [];
   
-  const filteredCallbacks = allCallbacks.filter(lead => {
-    if (!lead.callbackDate) return false;
-    const date = parseISO(lead.callbackDate);
-    
-    if (activeTab === 'completed') return lead.callbackStatus === 'Completed';
-    if (lead.callbackStatus === 'Completed') return false;
-
-    if (activeTab === 'today') return isToday(date);
-    if (activeTab === 'overdue') return isPast(date) && !isToday(date);
-    if (activeTab === 'upcoming') return !isPast(date) && !isToday(date);
-    
+  const filteredCallbacks = allCallbacks.filter((lead) => {
+    // Basic filter for now
     return true;
   });
+
+
+
 
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-500">
@@ -79,9 +71,10 @@ function CallbacksPage() {
         description="Manage scheduled customer callbacks and callback requests."
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loading}>
-              <RefreshCw className={cn("mr-2 size-3.5", loading && "animate-spin")} /> Refresh
+            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
+              <RefreshCw className={cn("mr-2 size-3.5", isLoading && "animate-spin")} /> Refresh
             </Button>
+
             <Button size="sm" className="shadow-lg shadow-primary/20"><Plus className="mr-2 size-3.5" /> Add Callback</Button>
           </div>
         }
@@ -107,7 +100,7 @@ function CallbacksPage() {
       </div>
       
       <SectionCard contentClassName="p-0">
-        {loading ? (
+        {isLoading ? (
           <div className="p-8"><SkeletonTable /></div>
         ) : (
           <Table>
@@ -124,44 +117,31 @@ function CallbacksPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredCallbacks.map(lead => {
-                const callbackDate = parseISO(lead.callbackDate!);
-                const isOverdue = isPast(callbackDate) && !isToday(callbackDate) && lead.callbackStatus !== 'Completed';
-
+              {filteredCallbacks.map((lead: RapidLead) => {
                 return (
                   <TableRow key={lead.id} className="border-border/40 group hover:bg-muted/30 transition-colors">
                     <TableCell className="px-6">
                       <button onClick={() => openDetails(lead)} className="text-left outline-none">
-                        <p className="text-xs font-black group-hover:text-primary transition-colors">{lead.name}</p>
-                        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">{lead.callbackReason || 'General Inquiry'}</p>
+                        <p className="text-xs font-black group-hover:text-primary transition-colors">{lead.customerName}</p>
+                        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">{lead.notes || 'General Inquiry'}</p>
                       </button>
                     </TableCell>
                     <TableCell className="text-[11px] font-bold text-muted-foreground uppercase">{lead.business}</TableCell>
-                    <TableCell className="text-xs font-bold">{lead.phone}</TableCell>
+                    <TableCell className="text-xs font-bold">{lead.customerPhone}</TableCell>
                     <TableCell className="text-[11px] font-medium">{lead.assignedToName || 'Unassigned'}</TableCell>
                     <TableCell>
-                       <StatusBadge tone="neutral" className="text-[9px]">{lead.requestedBy || 'System'}</StatusBadge>
+                       <StatusBadge tone="neutral" className="text-[9px]">System</StatusBadge>
                     </TableCell>
                     <TableCell>
-                      <div className={cn(
-                        "flex flex-col gap-0.5 text-[11px] font-bold",
-                        isOverdue ? "text-red-500" : "text-foreground"
-                      )}>
+                      <div className="flex flex-col gap-0.5 text-[11px] font-bold">
                         <span className="flex items-center gap-1.5">
-                          {isOverdue && <AlertCircle className="size-3" />}
-                          {format(callbackDate, "MMM dd, yyyy")}
-                        </span>
-                        <span className="text-[9px] text-muted-foreground uppercase opacity-70 flex items-center gap-1">
-                          <Clock className="size-2.5" /> {format(callbackDate, "hh:mm a")}
+                          {format(new Date(lead.createdAt), "MMM dd, yyyy")}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <StatusBadge 
-                        tone={lead.callbackStatus === 'Completed' ? 'success' : isOverdue ? 'danger' : 'info'} 
-                        className={cn(lead.callbackStatus === 'Requested' && !isOverdue && "animate-pulse")}
-                      >
-                        {lead.callbackStatus || 'Requested'}
+                      <StatusBadge tone="info">
+                        Requested
                       </StatusBadge>
                     </TableCell>
                     <TableCell className="text-right px-6">
@@ -172,23 +152,12 @@ function CallbacksPage() {
                          <Button variant="ghost" size="icon" className="size-7" onClick={() => openDetails(lead)}>
                            <Eye className="size-3.5" />
                          </Button>
-                         <DropdownMenu>
-                           <DropdownMenuTrigger asChild>
-                             <Button variant="ghost" size="icon" className="size-7">
-                               <MoreVertical className="size-3.5" />
-                             </Button>
-                           </DropdownMenuTrigger>
-                           <DropdownMenuContent align="end" className="w-40">
-                             <DropdownMenuItem className="text-[11px] font-bold uppercase tracking-widest">Reschedule</DropdownMenuItem>
-                             <DropdownMenuItem className="text-[11px] font-bold uppercase tracking-widest">Mark Completed</DropdownMenuItem>
-                             <DropdownMenuItem className="text-[11px] font-bold uppercase tracking-widest text-red-600">Cancel Request</DropdownMenuItem>
-                           </DropdownMenuContent>
-                         </DropdownMenu>
                       </div>
                     </TableCell>
                   </TableRow>
                 );
               })}
+
               {filteredCallbacks.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={8} className="h-64 text-center">

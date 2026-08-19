@@ -8,7 +8,7 @@ import {
   SheetFooter
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { DemoLead } from "@/lib/mock/workspace.demo";
+import { Customer } from "@/lib/api/services.types";
 import { format } from "date-fns";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { 
@@ -31,7 +31,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 interface CustomerDetailsDrawerProps {
-  customer: DemoLead | null;
+  customer: Customer | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -41,10 +41,11 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
 
   const summary = [
     { label: "Total Sales", value: customer.totalSales || "₹ 0", icon: TrendingUp },
-    { label: "Pending Payment", value: customer.pendingPayment || "₹ 0", icon: CreditCard, alert: (customer.pendingPayment && customer.pendingPayment !== "₹ 0") },
-    { label: "Last Activity", value: format(new Date(customer.lastActivity), "MMM dd"), icon: History },
-    { label: "Customer Since", value: customer.customerSince ? format(new Date(customer.customerSince), "MMM yyyy") : "N/A", icon: Calendar },
+    { label: "Status", value: customer.status, icon: History },
+    { label: "Added Date", value: format(new Date(customer.createdAt), "MMM dd, yyyy"), icon: Calendar },
+    { label: "Updated", value: format(new Date(customer.updatedAt), "MMM dd, yyyy"), icon: Clock },
   ];
+
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -55,8 +56,8 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <StatusBadge tone="success">Active Customer</StatusBadge>
-                <StatusBadge tone={customer.priority === 'High' ? 'danger' : 'neutral'}>{customer.priority}</StatusBadge>
               </div>
+
               <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
                 ID: {customer.id.toUpperCase()}
               </div>
@@ -85,14 +86,15 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
               {summary.map((item, i) => (
                 <div key={i} className="bg-background p-4 flex flex-col gap-1">
                   <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-tighter text-muted-foreground">
-                    <item.icon className={cn("size-3", item.alert && "text-red-500")} />
+                    <item.icon className="size-3" />
                     {item.label}
                   </div>
-                  <div className={cn("text-sm font-black", item.alert && "text-red-600")}>
+                  <div className="text-sm font-black">
                     {item.value}
                   </div>
                 </div>
               ))}
+
             </div>
 
             <Tabs defaultValue="overview" className="w-full">
@@ -131,8 +133,9 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
                   <div className="space-y-4">
                     <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Engagement Notes</h4>
                     <div className="p-4 rounded-xl bg-orange-500/5 border border-orange-500/10 italic text-xs leading-relaxed text-foreground/80">
-                      "{customer.notes || "No significant engagement notes for this customer yet."}"
+                      "No significant engagement notes for this customer yet."
                     </div>
+
                   </div>
 
                   <div className="space-y-4">

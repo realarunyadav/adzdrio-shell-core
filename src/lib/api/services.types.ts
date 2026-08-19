@@ -10,9 +10,13 @@ export interface Customer {
   status: 'active' | 'inactive' | 'pending' | 'blocked';
   referralCode?: string;
   referredById?: string;
+  business?: string;
+  assignedToName?: string;
+  totalSales?: string;
   createdAt: string;
   updatedAt: string;
 }
+
 
 export interface Subscription {
   id: string;
@@ -70,7 +74,7 @@ export interface RapidLead {
   duration: number;
   devices: string[];
   referralCode?: string;
-  status: 'draft' | 'sent' | 'opened' | 'confirmed' | 'not_confirmed' | 'expired';
+  status: 'draft' | 'sent' | 'opened' | 'confirmed' | 'not_confirmed' | 'expired' | 'new';
   confirmationUrl: string;
   tcVersionAccepted?: string;
   refundPolicyVersionAccepted?: string;
@@ -79,7 +83,14 @@ export interface RapidLead {
   confirmedAt?: string;
   expiresAt: string;
   createdAt: string;
+  updatedAt?: string;
+  priority?: 'Low' | 'Normal' | 'High';
+  source?: string;
+  business?: string;
+  notes?: string;
+  assignedToName?: string;
 }
+
 
 export interface PolicyVersion {
   id: string;
@@ -139,3 +150,16 @@ export interface RefundRequest {
   approvedBy?: string;
   createdAt: string;
 }
+
+export interface LeadListResponse {
+  items: RapidLead[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+}
+

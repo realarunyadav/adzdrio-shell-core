@@ -6,15 +6,11 @@ import {
   Filter, 
   RefreshCw, 
   Download, 
-  MoreHorizontal, 
   Eye, 
   Phone, 
-  MessageSquare,
-  UserPlus,
-  ArrowRight,
+  UserPlus, 
   MoreVertical,
   Mail,
-  Calendar,
   Building2
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -23,46 +19,48 @@ import { StatusBadge } from "@/components/shared/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { demoLeads, DemoLead } from "@/lib/mock/workspace.demo";
-import { format } from "date-fns";
+import { Customer } from "@/lib/api/services.types";
 import { CustomerDetailsDrawer } from "@/components/crm/CustomerDetailsDrawer";
 import { toast } from "sonner";
 import { SkeletonTable } from "@/components/shared/SkeletonLoader";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useQuery } from "@tanstack/react-query";
+import { customerService } from "@/lib/api/services";
+
 
 export const Route = createFileRoute("/app/crm/customers")({
   component: CustomersPage,
 });
 
 function CustomersPage() {
-  const [loading, setLoading] = React.useState(false);
   const [search, setSearch] = React.useState("");
-  const [selectedCustomer, setSelectedCustomer] = React.useState<DemoLead | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = React.useState<Customer | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
 
-  const handleRefresh = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Customers list refreshed");
-    }, 1000);
+  const { data: customers = [], isLoading, refetch } = useQuery({
+    queryKey: ["customers"],
+    queryFn: () => customerService.getAll(),
+  });
+
+  const handleRefresh = async () => {
+    await refetch();
+    toast.success("Customers list refreshed");
   };
 
-  const openDetails = (customer: DemoLead) => {
+  const openDetails = (customer: Customer) => {
     setSelectedCustomer(customer);
     setIsDrawerOpen(true);
   };
 
-  const customers = demoLeads.filter(l => l.status === 'Converted');
-
   const filteredCustomers = customers.filter(c => 
     c.name.toLowerCase().includes(search.toLowerCase()) || 
     c.email.toLowerCase().includes(search.toLowerCase()) ||
-    c.business.toLowerCase().includes(search.toLowerCase())
+    (c.business || "").toLowerCase().includes(search.toLowerCase())
   );
+
 
   const toggleAll = () => {
     if (selectedRows.length === filteredCustomers.length) {
@@ -78,6 +76,7 @@ function CustomersPage() {
     );
   };
 
+
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-500 pb-20">
       <PageHeader
@@ -85,9 +84,10 @@ function CustomersPage() {
         description="Customers and converted accounts managed across the CRM."
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loading}>
-              <RefreshCw className={cn("mr-2 size-3.5", loading && "animate-spin")} /> Refresh
+            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
+              <RefreshCw className={cn("mr-2 size-3.5", isLoading && "animate-spin")} /> Refresh
             </Button>
+
             <Button variant="outline" size="sm" className="hidden lg:flex"><Download className="mr-2 size-3.5" /> Export</Button>
             <Button size="sm" className="shadow-lg shadow-primary/20"><Plus className="mr-2 size-3.5" /> Add Customer</Button>
           </div>
@@ -133,7 +133,7 @@ function CustomersPage() {
            )}
         </div>
 
-        {loading ? (
+        {isLoading ? (
           <div className="p-8"><SkeletonTable /></div>
         ) : (
           <Table>

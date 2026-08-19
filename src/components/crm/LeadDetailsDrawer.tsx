@@ -8,32 +8,36 @@ import {
   SheetFooter
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { DemoLead } from "@/lib/mock/workspace.demo";
+import { RapidLead } from "@/lib/api/services.types";
 import { format } from "date-fns";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { Phone, Mail, Globe, Clock, Calendar, CheckCircle2, UserCheck, MessageSquare } from "lucide-react";
 
 interface LeadDetailsDrawerProps {
-  lead: DemoLead | null;
+  lead: RapidLead | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onClaim?: (lead: DemoLead) => void;
+  onClaim?: (lead: RapidLead) => void;
 }
 
 export function LeadDetailsDrawer({ lead, open, onOpenChange, onClaim }: LeadDetailsDrawerProps) {
   if (!lead) return null;
+
+  const createdAtDate = lead.createdAt ? new Date(lead.createdAt) : new Date();
+  const lastActivityDate = lead.updatedAt ? new Date(lead.updatedAt) : createdAtDate;
+
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-md overflow-y-auto">
         <SheetHeader className="pb-6 border-b border-border/40">
           <div className="flex items-center gap-3 mb-2">
-            <StatusBadge tone={lead.status === 'New' ? 'info' : 'premium'}>{lead.status}</StatusBadge>
-            <StatusBadge tone={lead.priority === 'High' ? 'danger' : 'neutral'}>{lead.priority}</StatusBadge>
+            <StatusBadge tone={lead.status === 'new' ? 'info' : 'premium'}>{lead.status}</StatusBadge>
+            <StatusBadge tone={lead.priority === 'High' ? 'danger' : 'neutral'}>{lead.priority || 'Normal'}</StatusBadge>
           </div>
-          <SheetTitle className="text-2xl font-black">{lead.name}</SheetTitle>
+          <SheetTitle className="text-2xl font-black">{lead.customerName}</SheetTitle>
           <SheetDescription className="text-xs">
-            Lead source: <span className="font-bold text-foreground">{lead.source}</span> · Added {format(new Date(lead.addedDate), "MMM dd, yyyy")}
+            Lead source: <span className="font-bold text-foreground">{lead.source}</span> · Added {format(createdAtDate, "MMM dd, yyyy")}
           </SheetDescription>
         </SheetHeader>
 
@@ -46,7 +50,7 @@ export function LeadDetailsDrawer({ lead, open, onOpenChange, onClaim }: LeadDet
                 <Phone className="size-4 text-primary" />
                 <div className="flex-1">
                   <p className="text-[10px] font-bold text-muted-foreground uppercase">Phone</p>
-                  <p className="text-sm font-bold">{lead.phone}</p>
+                  <p className="text-sm font-bold">{lead.customerPhone || 'N/A'}</p>
                 </div>
                 <Button variant="ghost" size="icon" className="size-8"><MessageSquare className="size-3.5" /></Button>
               </div>
@@ -54,7 +58,7 @@ export function LeadDetailsDrawer({ lead, open, onOpenChange, onClaim }: LeadDet
                 <Mail className="size-4 text-primary" />
                 <div className="flex-1">
                   <p className="text-[10px] font-bold text-muted-foreground uppercase">Email</p>
-                  <p className="text-sm font-bold">{lead.email}</p>
+                  <p className="text-sm font-bold">{lead.customerEmail}</p>
                 </div>
               </div>
             </div>
@@ -75,7 +79,7 @@ export function LeadDetailsDrawer({ lead, open, onOpenChange, onClaim }: LeadDet
                 <p className="text-[10px] font-bold text-muted-foreground uppercase">Last Activity</p>
                 <div className="flex items-center gap-1.5 font-bold text-xs">
                   <Clock className="size-3.5 text-muted-foreground" />
-                  {format(new Date(lead.lastActivity), "MMM dd, HH:mm")}
+                  {format(lastActivityDate, "MMM dd, HH:mm")}
                 </div>
               </div>
             </div>
@@ -103,11 +107,12 @@ export function LeadDetailsDrawer({ lead, open, onOpenChange, onClaim }: LeadDet
         </div>
 
         <SheetFooter className="mt-8 flex-col gap-2 sm:flex-col pt-6 border-t border-border/40">
-          {!lead.assignedTo && onClaim && (
+          {!lead.salespersonId && onClaim && (
             <Button className="w-full font-black uppercase tracking-widest text-[11px] h-11" onClick={() => onClaim(lead)}>
               Claim Lead
             </Button>
           )}
+
           <div className="grid grid-cols-2 gap-2 w-full">
             <Button variant="outline" className="text-[11px] font-bold uppercase tracking-widest gap-2">
               <Calendar className="size-3.5" /> Follow-up
