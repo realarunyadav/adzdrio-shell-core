@@ -1,5 +1,7 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { ArrowLeft, Building2, CalendarDays, Mail, MapPin, Phone, ShieldCheck } from "lucide-react";
+import { Link, createFileRoute, useSearch } from "@tanstack/react-router";
+import { ArrowLeft, Building2, CalendarDays, Mail, MapPin, Phone, ShieldCheck, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { z } from "zod";
 
 import {
   AIEmployeeCoach,
@@ -13,11 +15,11 @@ import {
   statusTone,
 } from "@/components/hrms/HrmsPanels";
 import {
-  EMPLOYEES,
   EMPLOYEE_AUDIT,
   EMPLOYEE_COMMENTS,
   EMPLOYEE_TIMELINE,
 } from "@/components/hrms/hrms-data";
+import { hrService, type EmployeeRecord } from "@/lib/api/hr.service";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { StatusBadge } from "@/components/shared/StatusBadge";
@@ -30,7 +32,12 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+const employeeSearchSchema = z.object({
+  id: z.string().optional(),
+});
+
 export const Route = createFileRoute("/modules/hrms/employee")({
+  validateSearch: employeeSearchSchema,
   head: () => ({
     meta: [
       { title: "Employee 360 — ABOS HRMS" },
@@ -63,7 +70,55 @@ function slug(tab: string) {
 }
 
 function EmployeeProfilePage() {
-  const employee = EMPLOYEES[0]!;
+  const { id } = useSearch({ from: "/modules/hrms/employee" });
+  const [employee, setEmployee] = useState<EmployeeRecord | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!id) {
+      setError("No employee ID provided.");
+      setLoading(false);
+      return;
+    }
+
+    const fetchEmployee = async () => {
+      setLoading(true);
+      try {
+        const data = await hrService.getEmployee(id);
+        setEmployee(data);
+      } catch (err: any) {
+        setError(err.message || "Failed to load employee details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void fetchEmployee();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <Loader2 className="size-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error || !employee) {
+    return (
+      <div className="flex flex-col gap-6 p-8">
+        <Button asChild variant="ghost" size="sm" className="w-fit">
+          <Link to="/modules/hrms">
+            <ArrowLeft className="mr-2 size-4" /> Back to HRMS
+          </Link>
+        </Button>
+        <SectionCard title="Error" description="We couldn't load this employee record.">
+          <p className="text-sm text-destructive">{error || "Employee not found."}</p>
+        </SectionCard>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-8 pb-12 animate-in fade-in duration-500">
@@ -77,11 +132,11 @@ function EmployeeProfilePage() {
 
       <PageHeader
         eyebrow="Employee 360"
-        title={employee.name}
-        description={`${employee.designation} · ${employee.department} · ${employee.code}`}
+        title={employee.userName}
+        description={`${employee.designation || "No Designation"} · ${employee.department || "No Department"} · ${employee.employeeCode}`}
         actions={
           <div className="flex flex-wrap items-center gap-2">
-            <StatusBadge tone={statusTone(employee.status)}>{employee.status}</StatusBadge>
+            <StatusBadge tone={statusTone(employee.employmentStatus)}>{employee.employmentStatus}</StatusBadge>
             <Button variant="outline" size="sm" className="glass-surface">Edit Profile</Button>
             <Button size="sm" className="shadow-elevated">Run Review</Button>
           </div>
@@ -117,14 +172,14 @@ function EmployeeProfilePage() {
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <SectionCard className="xl:col-span-2" title="Employment Profile" description="Core identity and reporting details">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <InfoRow icon={Mail} label="Work Email" value={employee.email} />
-                <InfoRow icon={Phone} label="Contact" value={employee.phone} />
-                <InfoRow icon={Building2} label="Department" value={employee.department} />
-                <InfoRow icon={ShieldCheck} label="Reports To" value={employee.reportsTo} />
-                <InfoRow icon={MapPin} label="Work Location" value={employee.location} />
-                <InfoRow icon={CalendarDays} label="Date of Joining" value={employee.joinedOn} />
-                <InfoRow icon={ShieldCheck} label="Employment Type" value={employee.employmentType} />
-                <InfoRow icon={CalendarDays} label="Shift" value={employee.shift} />
+                <InfoRow icon={Mail} label="Work Email" value={employee.userEmail} />
+                <InfoRow icon={Phone} label="Contact" value="Not Provided" />
+                <InfoRow icon={Building2} label="Department" value={employee.department || "N/A"} />
+                <InfoRow icon={ShieldCheck} label="Reports To" value={employee.managerName || "Direct to CEO/Owner"} />
+                <InfoRow icon={MapPin} label="Work Location" value={employee.businessName || "Global"} />
+                <InfoRow icon={CalendarDays} label="Date of Joining" value={employee.joiningDate || "N/A"} />
+                <InfoRow icon={ShieldCheck} label="Employment Type" value="Full Time" />
+                <InfoRow icon={CalendarDays} label="Shift" value="General" />
               </div>
               <div className="flex flex-wrap gap-2 mt-5">
                 <UniversalTag label="Top Performer" color="emerald" />
