@@ -231,7 +231,7 @@ export const getFinanceAnalytics = createServerFn({ method: "GET" })
       collectedRevenue: Object.entries(collectedMap).map(([currency, value]) => ({ currency, value })),
       refunds: Object.entries(refundMap).map(([currency, value]) => ({ currency, value })),
       netRevenue: Object.entries(netMap).map(([currency, value]) => ({ currency, value })),
-    };
+    } as FinanceAnalytics;
   });
 
 export const getInvoiceAnalytics = createServerFn({ method: "GET" })
@@ -264,5 +264,5 @@ export const getInvoiceAnalytics = createServerFn({ method: "GET" })
     return {
       ...counts,
       outstandingAmount: Object.entries(outstandingMap).map(([currency, value]) => ({ currency, value })),
-    };
+    } as InvoiceAnalytics;
   });
