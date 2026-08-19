@@ -133,8 +133,9 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
                   <div className="space-y-4">
                     <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Engagement Notes</h4>
                     <div className="p-4 rounded-xl bg-orange-500/5 border border-orange-500/10 italic text-xs leading-relaxed text-foreground/80">
-                      "{customer.notes || "No significant engagement notes for this customer yet."}"
+                      "No significant engagement notes for this customer yet."
                     </div>
+
                   </div>
 
                   <div className="space-y-4">
