@@ -139,3 +139,16 @@ export interface RefundRequest {
   approvedBy?: string;
   createdAt: string;
 }
+
+export interface LeadListResponse {
+  items: RapidLead[];
+  pagination: {
+    page: number;
+    pageSize: number;
+    total: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+}
+
