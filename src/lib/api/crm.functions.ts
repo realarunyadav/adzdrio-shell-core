@@ -9,21 +9,21 @@ import { Json } from "@/integrations/supabase/types";
 
 // Helper for mapping Supabase Lead to RapidLead type
 const mapDbLead = (dbLead: any): RapidLead => {
-  const leadData = (dbLead.lead_data as Record<string, any>) || {};
+  const leadData = (dbLead.lead_data as any) || {};
   return {
     id: dbLead.id,
     salespersonId: dbLead.assigned_employee_id || "",
-    customerName: leadData.customerName || leadData.full_name || "Unnamed Lead",
-    customerEmail: leadData.email || leadData.customerEmail || "",
-    customerPhone: leadData.phone || leadData.customerPhone || "",
-    selectedPlanId: leadData.selectedPlanId || "standard",
-    price: Number(leadData.price || 0),
-    duration: Number(leadData.duration || 0),
-    devices: Array.isArray(leadData.devices) ? leadData.devices : [],
+    customerName: leadData["customerName"] || leadData["full_name"] || "Unnamed Lead",
+    customerEmail: leadData["email"] || leadData["customerEmail"] || "",
+    customerPhone: leadData["phone"] || leadData["customerPhone"] || "",
+    selectedPlanId: leadData["selectedPlanId"] || "standard",
+    price: Number(leadData["price"] || 0),
+    duration: Number(leadData["duration"] || 0),
+    devices: Array.isArray(leadData["devices"]) ? leadData["devices"] : [],
     status: (dbLead.status || "new").toLowerCase() as RapidLead["status"],
-    confirmationUrl: leadData.confirmationUrl || "",
+    confirmationUrl: leadData["confirmationUrl"] || "",
     createdAt: dbLead.created_at,
-    expiresAt: leadData.expiresAt || dbLead.created_at,
+    expiresAt: leadData["expiresAt"] || dbLead.created_at,
     // Merge existing lead_data for UI compatibility
     ...leadData,
   };
@@ -31,7 +31,7 @@ const mapDbLead = (dbLead: any): RapidLead => {
 
 // Helper for mapping Supabase Customer to Customer type
 const mapDbCustomer = (dbCustomer: any): Customer => {
-  const metadata = (dbCustomer.metadata as Record<string, any>) || {};
+  const metadata = (dbCustomer.metadata as any) || {};
   return {
     id: dbCustomer.id,
     name: dbCustomer.full_name,
@@ -76,16 +76,17 @@ export const leadsService = {
   },
 
   create: async (data: Partial<RapidLead> & Record<string, any>) => {
-    if (!data.organization_id || !data.business_id) {
+    if (!data["organization_id"] || !data["business_id"]) {
       throw new Error("organization_id and business_id are required for lead creation");
     }
 
     const { data: lead, error } = await supabase
       .from("crm_leads")
       .insert({
-        organization_id: data.organization_id,
-        business_id: data.business_id,
-        source: data.source || "Manual",
+        organization_id: data["organization_id"],
+        business_id: data["business_id"],
+        source: data["source"] || "Manual",
+
         status: data.status || "New",
         lead_data: data as unknown as Json,
       })
