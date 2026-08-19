@@ -91,8 +91,9 @@ function LeadPoolPage() {
         description="Shared company leads available for authorized employees."
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loading}>
-              <RefreshCw className={cn("mr-2 size-3.5", loading && "animate-spin")} /> Refresh
+            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
+              <RefreshCw className={cn("mr-2 size-3.5", isLoading && "animate-spin")} /> Refresh
+
             </Button>
             <Button variant="outline" size="sm" className="hidden sm:flex" onClick={() => setIsImportDrawerOpen(true)}>
               <Upload className="mr-2 size-3.5" /> Import Leads
