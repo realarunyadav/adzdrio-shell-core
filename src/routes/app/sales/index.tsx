@@ -18,7 +18,10 @@ import {
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { DashboardKpiCard } from "@/components/shared/DashboardKpiCard";
-import { demoSales, demoPayments, DemoSale } from "@/lib/mock/workspace.demo";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { dealService } from "@/lib/api/services";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { CreateSaleWizard } from "@/components/sales/CreateSaleWizard";
 import { SaleDetailsDrawer } from "@/components/sales/SaleDetailsDrawer";
@@ -29,7 +32,7 @@ export const Route = createFileRoute("/app/sales/")({
 
 function SalesModuleLayout() {
   const [isWizardOpen, setIsWizardOpen] = React.useState(false);
-  const [selectedSale, setSelectedSale] = React.useState<DemoSale | null>(null);
+  const [selectedSale, setSelectedSale] = React.useState<any | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
 
   const openSaleDetails = (sale: DemoSale) => {
