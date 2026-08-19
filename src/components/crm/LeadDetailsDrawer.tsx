@@ -8,20 +8,24 @@ import {
   SheetFooter
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { DemoLead } from "@/lib/mock/workspace.demo";
+import { RapidLead } from "@/lib/api/services.types";
 import { format } from "date-fns";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { Phone, Mail, Globe, Clock, Calendar, CheckCircle2, UserCheck, MessageSquare } from "lucide-react";
 
 interface LeadDetailsDrawerProps {
-  lead: DemoLead | null;
+  lead: RapidLead | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onClaim?: (lead: DemoLead) => void;
+  onClaim?: (lead: RapidLead) => void;
 }
 
 export function LeadDetailsDrawer({ lead, open, onOpenChange, onClaim }: LeadDetailsDrawerProps) {
   if (!lead) return null;
+
+  const createdAtDate = lead.createdAt ? new Date(lead.createdAt) : new Date();
+  const lastActivityDate = lead.updatedAt ? new Date(lead.updatedAt) : createdAtDate;
+
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
