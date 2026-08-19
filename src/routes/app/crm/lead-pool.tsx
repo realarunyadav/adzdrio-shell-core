@@ -25,52 +25,63 @@ export const Route = createFileRoute("/app/crm/lead-pool")({
 });
 
 function LeadPoolPage() {
-  const [leads, setLeads] = React.useState<DemoLead[]>(demoLeads);
-  const [loading, setLoading] = React.useState(false);
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [search, setSearch] = React.useState("");
-  const [selectedLead, setSelectedLead] = React.useState<DemoLead | null>(null);
+  const [selectedLead, setSelectedLead] = React.useState<RapidLead | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [isClaimModalOpen, setIsClaimModalOpen] = React.useState(false);
   const [isImportDrawerOpen, setIsImportDrawerOpen] = React.useState(false);
 
-  const handleRefresh = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Lead pool refreshed");
-    }, 1000);
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["leads", "pool"],
+    queryFn: () => leadsService.list({ status: "New" }),
+  });
+
+  const claimMutation = useMutation({
+    mutationFn: async (leadId: string) => {
+      if (!user?.id) throw new Error("Not authenticated");
+      return leadsService.assign([leadId], [user.id], "Manual");
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["leads"] });
+      toast.success("Lead successfully claimed");
+      setIsClaimModalOpen(false);
+      setIsDrawerOpen(false);
+    },
+    onError: (error: any) => {
+      toast.error(`Failed to claim lead: ${error.message}`);
+    },
+  });
+
+  const handleRefresh = async () => {
+    await refetch();
+    toast.success("Lead pool refreshed");
   };
 
-  const openDetails = (lead: DemoLead) => {
+  const openDetails = (lead: RapidLead) => {
     setSelectedLead(lead);
     setIsDrawerOpen(true);
   };
 
-  const handleClaimInitiate = (lead: DemoLead) => {
+  const handleClaimInitiate = (lead: RapidLead) => {
     setSelectedLead(lead);
     setIsClaimModalOpen(true);
   };
 
   const handleClaimConfirm = () => {
     if (!selectedLead) return;
-    
-    // Prototype only: update local state
-    setLeads(prev => prev.map(l => 
-      l.id === selectedLead.id 
-        ? { ...l, assignedTo: 'user-1', assignedToName: 'Me' } 
-        : l
-    ));
-    
-    setIsClaimModalOpen(false);
-    setIsDrawerOpen(false);
-    toast.success(`${selectedLead.name} successfully claimed`);
+    claimMutation.mutate(selectedLead.id);
   };
 
-  const filteredLeads = leads.filter(l => 
-    l.name.toLowerCase().includes(search.toLowerCase()) || 
-    l.email.toLowerCase().includes(search.toLowerCase()) ||
-    l.business.toLowerCase().includes(search.toLowerCase())
+  const leads = data?.items || [];
+
+  const filteredLeads = leads.filter(
+    (l) =>
+      l.customerName.toLowerCase().includes(search.toLowerCase()) ||
+      l.customerEmail.toLowerCase().includes(search.toLowerCase())
   );
+
 
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-500">
