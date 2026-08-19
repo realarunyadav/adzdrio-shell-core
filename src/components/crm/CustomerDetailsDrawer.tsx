@@ -56,8 +56,8 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
                 <StatusBadge tone="success">Active Customer</StatusBadge>
-                <StatusBadge tone={customer.priority === 'High' ? 'danger' : 'neutral'}>{customer.priority}</StatusBadge>
               </div>
+
               <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
                 ID: {customer.id.toUpperCase()}
               </div>
