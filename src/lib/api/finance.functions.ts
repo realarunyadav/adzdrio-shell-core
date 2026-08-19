@@ -266,3 +266,61 @@ export const getInvoiceAnalytics = createServerFn({ method: "GET" })
       outstandingAmount: Object.entries(outstandingMap).map(([currency, value]) => ({ currency, value })),
     } as InvoiceAnalytics;
   });
+
+export interface ReconciliationData {
+  currency: string;
+  totalAmount: number;
+  collected: number;
+  refunded: number;
+  netCollected: number;
+  outstanding: number;
+}
+
+export const getReconciliation = createServerFn({ method: "GET" })
+  .inputValidator((data: unknown) => 
+    z.object({
+      saleId: z.string().optional().nullable(),
+      invoiceId: z.string().optional().nullable(),
+    }).parse(data)
+  )
+  .handler(async ({ data }) => {
+    let targetCurrency = "";
+    let targetAmount = 0;
+
+    if (data.saleId) {
+      const { data: sale } = await supabase.from("sales").select("final_amount, currency").eq("id", data.saleId).single();
+      if (sale) {
+        targetCurrency = sale.currency;
+        targetAmount = Number(sale.final_amount);
+      }
+    } else if (data.invoiceId) {
+      const { data: inv } = await supabase.from("finance_invoices").select("amount, currency").eq("id", data.invoiceId).single();
+      if (inv) {
+        targetCurrency = inv.currency;
+        targetAmount = Number(inv.amount);
+      }
+    }
+
+    if (!targetCurrency) throw new Error("Target record not found or currency missing");
+
+    const { data: txns } = await supabase
+      .from("finance_transactions")
+      .select("amount, type, status")
+      .or(`sale_id.eq.${data.saleId || 'null'}, metadata->>invoice_id.eq.${data.invoiceId || 'null'}`)
+      .eq("currency", targetCurrency)
+      .eq("status", "completed");
+
+    const collected = (txns || []).filter(t => t.type === 'payment').reduce((sum, t) => sum + Number(t.amount), 0);
+    const refunded = (txns || []).filter(t => t.type === 'refund').reduce((sum, t) => sum + Number(t.amount), 0);
+    const netCollected = collected - refunded;
+    const outstanding = targetAmount - netCollected;
+
+    return {
+      currency: targetCurrency,
+      totalAmount: targetAmount,
+      collected,
+      refunded,
+      netCollected,
+      outstanding: Math.max(0, outstanding),
+    } as ReconciliationData;
+  });

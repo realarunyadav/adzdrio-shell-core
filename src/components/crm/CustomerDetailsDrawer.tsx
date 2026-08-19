@@ -8,10 +8,14 @@ import {
   SheetFooter
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Customer } from "@/lib/api/services.types";
+import { Customer, Customer360 } from "@/lib/api/services.types";
 import { format } from "date-fns";
 import { StatusBadge } from "@/components/shared/StatusBadge";
+import { useQuery } from "@tanstack/react-query";
+import { customerService, financeService } from "@/lib/api/services";
+import { ReconciliationDisplay } from "@/components/finance/FinanceReconciliationUI";
 import { 
+
   Phone, 
   Mail, 
   Globe, 
@@ -37,6 +41,14 @@ interface CustomerDetailsDrawerProps {
 }
 
 export function CustomerDetailsDrawer({ customer, open, onOpenChange }: CustomerDetailsDrawerProps) {
+  const { data: customer360 } = useQuery({
+    queryKey: ["customer-360", customer?.id],
+    queryFn: () => customerService.get360(customer?.id || ""),
+    enabled: !!customer?.id && open,
+  });
+
+  const data360 = customer360 as Customer360 | undefined;
+
   if (!customer) return null;
 
   const summary = [
@@ -100,7 +112,7 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
             <Tabs defaultValue="overview" className="w-full">
               <div className="px-6 border-b border-border/40 bg-muted/5">
                 <TabsList className="h-12 bg-transparent p-0 gap-6">
-                  {["Overview", "Activity", "Sales", "Follow-ups", "Documents"].map(tab => (
+                  {["Overview", "Activity", "Sales", "Finance", "Follow-ups", "Documents"].map(tab => (
                     <TabsTrigger 
                       key={tab} 
                       value={tab.toLowerCase()} 
@@ -182,9 +194,102 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
                    </div>
                 </TabsContent>
                 
-                <TabsContent value="sales" className="mt-0 text-center py-12">
-                   <TrendingUp className="size-12 text-muted-foreground/20 mx-auto mb-4" />
-                   <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">Historical sales data will appear here</p>
+                <TabsContent value="sales" className="mt-0 space-y-4">
+                  {data360?.sales && data360.sales.length > 0 ? (
+                    <div className="space-y-3">
+                      {data360.sales.map((sale: any) => (
+                        <div key={sale.id} className="p-4 rounded-xl border border-border/40 hover:border-primary/40 transition-colors bg-muted/5 group">
+                          <div className="flex justify-between items-start mb-2">
+                            <div>
+                              <p className="text-xs font-black group-hover:text-primary transition-colors">{sale.planName}</p>
+                              <p className="text-[10px] text-muted-foreground font-medium uppercase">{format(new Date(sale.created), "MMM dd, yyyy")}</p>
+                            </div>
+                            <div className="flex flex-col items-end gap-1">
+                              <p className="text-xs font-black">{sale.currency} {sale.finalAmount.toLocaleString()}</p>
+                              <StatusBadge tone={sale.paymentStatus === 'Paid' ? 'success' : 'neutral'}>{sale.paymentStatus}</StatusBadge>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <TrendingUp className="size-12 text-muted-foreground/20 mx-auto mb-4" />
+                      <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">No historical sales data found</p>
+                    </div>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="finance" className="mt-0 space-y-6">
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Financial Reconciliation</h4>
+                      {data360?.sales && data360.sales.length > 0 ? (
+                        <div className="space-y-4">
+                          {data360.sales.map((sale: any) => (
+                            <ReconciliationDisplay key={sale.id} saleId={sale.id} className="mb-4" />
+                          ))}
+                        </div>
+                      ) : (
+                         <p className="text-[10px] italic text-muted-foreground mb-6">No active sales for reconciliation.</p>
+                      )}
+                    </div>
+
+                    <div>
+
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Live Transactions</h4>
+                      {data360?.payments && data360.payments.length > 0 ? (
+                        <div className="space-y-2">
+                          {(data360.payments || []).concat(data360.refunds || []).sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).map((txn: any) => (
+                            <div key={txn.id} className="flex items-center justify-between p-3 rounded-xl border border-border/40 bg-muted/5">
+                              <div className="flex items-center gap-3">
+                                <div className={cn("size-8 rounded-full flex items-center justify-center", txn.type === 'payment' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500')}>
+                                  {txn.type === 'payment' ? <CreditCard className="size-4" /> : <History className="size-4" />}
+                                </div>
+                                <div>
+                                  <p className="text-xs font-black capitalize">{txn.type}</p>
+                                  <p className="text-[10px] text-muted-foreground font-medium uppercase">{format(new Date(txn.created_at), "MMM dd, HH:mm")}</p>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <p className={cn("text-xs font-black", txn.type === 'payment' ? 'text-green-600' : 'text-red-600')}>
+                                  {txn.type === 'payment' ? '+' : '-'}{txn.currency} {txn.amount.toLocaleString()}
+                                </p>
+                                <p className="text-[9px] font-bold text-muted-foreground uppercase">{txn.status}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-[10px] italic text-muted-foreground">No transaction history found.</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Invoices</h4>
+                      {data360?.invoices && data360.invoices.length > 0 ? (
+                        <div className="space-y-2">
+                          {data360.invoices.map((inv: any) => (
+                            <div key={inv.id} className="flex items-center justify-between p-3 rounded-xl border border-border/40 bg-muted/5">
+                              <div className="flex items-center gap-3">
+                                <FileText className="size-4 text-muted-foreground" />
+                                <div>
+                                  <p className="text-xs font-black">Inv #{inv.invoice_number}</p>
+                                  <p className="text-[10px] text-muted-foreground font-medium uppercase">Due: {format(new Date(inv.due_date), "MMM dd, yyyy")}</p>
+                                </div>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-xs font-black">{inv.currency} {inv.amount.toLocaleString()}</p>
+                                <StatusBadge tone={inv.status === 'Paid' ? 'success' : inv.status === 'Overdue' ? 'danger' : 'neutral'}>{inv.status}</StatusBadge>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-[10px] italic text-muted-foreground">No invoices found.</p>
+                      )}
+                    </div>
+                  </div>
                 </TabsContent>
               </div>
             </Tabs>

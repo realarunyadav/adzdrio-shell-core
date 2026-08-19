@@ -208,10 +208,23 @@ export const customerService = {
   get360: async (id: string) => {
     const customer = await customerService.getById(id);
     
-    // Fetch live related data from sales module
+    // Fetch live related data from sales and finance modules
     const subscriptions = await subscriptionService.getAll({ data: { customerId: id } });
-    const sales = await dealService.getAll(); // Ideally filtered by customerId in future
-    const customerSales = (sales as any[]).filter(s => s.customerId === id);
+    
+    const { data: sales, error: salesErr } = await supabase
+      .from("sales")
+      .select("*, sales_plans(name), employees(id)")
+      .eq("customer_id", id);
+    
+    const { data: invoices, error: invErr } = await supabase
+      .from("finance_invoices")
+      .select("*")
+      .eq("customer_id", id);
+
+    const { data: transactions, error: txnErr } = await supabase
+      .from("finance_transactions")
+      .select("*")
+      .eq("customer_id", id);
 
     return {
       customer,
@@ -221,8 +234,16 @@ export const customerService = {
       rapidLeads: [] as RapidLead[],
       renewals: [] as Renewal[],
       referrals: [] as any[],
-      refunds: [] as RefundRequest[],
-      sales: customerSales,
+      refunds: (transactions || []).filter(t => t.type === 'refund'),
+      sales: (sales || []).map(s => ({
+        ...s,
+        customerName: customer.name,
+        planName: (s.sales_plans as any)?.name || "Manual Sale",
+        amount: Number(s.final_amount) + (Number(s.discount) || 0),
+        finalAmount: Number(s.final_amount),
+      })),
+      invoices: invoices || [],
+      payments: (transactions || []).filter(t => t.type === 'payment'),
     };
   },
 
