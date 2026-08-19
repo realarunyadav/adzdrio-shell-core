@@ -1,4 +1,4 @@
-import { createFileRoute, Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useRouterState, redirect } from "@tanstack/react-router";
 import * as React from "react";
 import { 
   TrendingUp, 
