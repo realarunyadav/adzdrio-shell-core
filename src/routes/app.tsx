@@ -88,7 +88,6 @@ export const Route = createFileRoute("/app")({
       },
     ],
   }),
-});
   component: () => (
     <>
       <OwnerDashboard />
