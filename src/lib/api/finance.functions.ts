@@ -7,6 +7,25 @@ import { z } from "zod";
  * Handles Transactions and Invoices with multi-tenant scoping.
  */
 
+export interface CurrencyValue {
+  currency: string;
+  value: number;
+}
+
+export interface FinanceAnalytics {
+  grossRevenue: CurrencyValue[];
+  collectedRevenue: CurrencyValue[];
+  refunds: CurrencyValue[];
+  netRevenue: CurrencyValue[];
+}
+
+export interface InvoiceAnalytics {
+  total: number;
+  paid: number;
+  overdue: number;
+  outstandingAmount: CurrencyValue[];
+}
+
 export interface FinanceTransaction {
   id: string;
   organization_id: string;
