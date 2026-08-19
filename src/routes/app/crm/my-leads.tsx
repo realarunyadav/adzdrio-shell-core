@@ -64,8 +64,9 @@ function MyLeadsPage() {
         description="Active leads currently assigned to you for management."
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loading}>
-              <RefreshCw className={cn("mr-2 size-3.5", loading && "animate-spin")} /> Sync
+            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
+              <RefreshCw className={cn("mr-2 size-3.5", isLoading && "animate-spin")} /> Sync
+
             </Button>
             <Button variant="outline" size="sm" onClick={() => setIsImportDrawerOpen(true)}>
               <Upload className="mr-2 size-3.5" /> Import
