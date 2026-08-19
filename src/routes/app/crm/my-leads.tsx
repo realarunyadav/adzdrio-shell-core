@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import * as React from "react";
-import { Search, Plus, Filter, RefreshCw, Phone, MessageSquare, MoreHorizontal, Eye, Calendar, Clock, ArrowRight, Upload } from "lucide-react";
+import { Search, Plus, Filter, RefreshCw, Phone, MessageSquare, ArrowRight, Upload, Calendar, Clock } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { SectionCard } from "@/components/shared/SectionCard";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { demoLeads, DemoLead } from "@/lib/mock/workspace.demo";
+import { RapidLead } from "@/lib/api/services.types";
 import { format } from "date-fns";
 import { LeadDetailsDrawer } from "@/components/crm/LeadDetailsDrawer";
 import { ImportLeadsDrawer } from "@/components/crm/ImportLeadsDrawer";
@@ -15,6 +15,10 @@ import { toast } from "sonner";
 import { SkeletonTable } from "@/components/shared/SkeletonLoader";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { leadsService } from "@/lib/api/services";
+import { useAuth } from "@/lib/auth/AuthProvider";
+
 
 export const Route = createFileRoute("/app/crm/my-leads")({ 
   component: MyLeadsPage 
