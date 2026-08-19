@@ -262,7 +262,7 @@ function RecordDialog({ kind, item, accounts, onClose, onSaved }: { kind: ModalS
       if (kind === "lead") item ? await leadsService.update(item.id, form) : await leadsService.create(form);
       if (kind === "account") item ? await accountService.update(item.id, form) : await accountService.create(form);
       if (kind === "contact") item ? await contactService.update(item.id, form) : await contactService.create(form);
-      if (kind === "deal") item ? await dealService.update(item.id, form) : await dealService.create(form);
+      if (kind === "deal") item ? await (dealService as any).update(item.id, form) : await (dealService as any).create(form);
       toast.success(`${title} saved successfully`);
       onSaved();
     } catch (err: any) {
