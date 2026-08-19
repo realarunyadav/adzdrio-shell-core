@@ -121,7 +121,7 @@ function LeadPoolPage() {
            </div>
         </div>
 
-        {loading ? (
+        {isLoading ? (
           <div className="p-8"><SkeletonTable /></div>
         ) : (
           <Table>
@@ -142,23 +142,23 @@ function LeadPoolPage() {
                 <TableRow key={lead.id} className="border-border/40 group hover:bg-muted/30 transition-colors">
                   <TableCell className="px-6">
                     <button onClick={() => openDetails(lead)} className="text-left outline-none">
-                      <p className="text-xs font-black group-hover:text-primary transition-colors">{lead.name}</p>
-                      <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">{lead.email}</p>
+                      <p className="text-xs font-black group-hover:text-primary transition-colors">{lead.customerName}</p>
+                      <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">{lead.customerEmail}</p>
                     </button>
                   </TableCell>
                   <TableCell className="text-xs font-medium">{lead.source}</TableCell>
                   <TableCell className="text-xs font-medium">{lead.business}</TableCell>
                   <TableCell>
-                    <StatusBadge tone={lead.status === 'New' ? 'info' : 'neutral'}>{lead.status}</StatusBadge>
+                    <StatusBadge tone={lead.status === 'new' ? 'info' : 'neutral'}>{lead.status}</StatusBadge>
                   </TableCell>
                   <TableCell>
-                    <StatusBadge tone={lead.priority === 'High' ? 'danger' : 'neutral'}>{lead.priority}</StatusBadge>
+                    <StatusBadge tone={lead.priority === 'High' ? 'danger' : 'neutral'}>{lead.priority || 'Normal'}</StatusBadge>
                   </TableCell>
-                  <TableCell className="text-[11px] text-muted-foreground font-medium">{format(new Date(lead.addedDate), "MMM dd, yyyy")}</TableCell>
+                  <TableCell className="text-[11px] text-muted-foreground font-medium">{format(new Date(lead.createdAt), "MMM dd, yyyy")}</TableCell>
                   <TableCell>
-                    {lead.assignedTo ? (
+                    {lead.salespersonId ? (
                       <div className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
-                        <UserPlus className="size-3" /> {lead.assignedToName}
+                        <UserPlus className="size-3" /> {lead.assignedToName || 'Assigned'}
                       </div>
                     ) : (
                       <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 italic">Unassigned</span>
@@ -166,7 +166,7 @@ function LeadPoolPage() {
                   </TableCell>
                   <TableCell className="text-right px-6">
                     <div className="flex items-center justify-end gap-2">
-                       {!lead.assignedTo && (
+                       {!lead.salespersonId && (
                          <Button variant="secondary" size="sm" className="h-7 px-3 text-[9px] font-black uppercase tracking-widest shadow-sm" onClick={() => handleClaimInitiate(lead)}>
                            Claim
                          </Button>
@@ -188,6 +188,7 @@ function LeadPoolPage() {
                   </TableCell>
                 </TableRow>
               )}
+
             </TableBody>
           </Table>
         )}
