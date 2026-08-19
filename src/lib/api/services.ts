@@ -46,7 +46,7 @@ export const financeService = {
   listInvoices: (params?: any) => financeInvoices.list(params),
   getFinanceAnalytics: (params?: any) => getFinanceAnalytics({ data: params }),
   getInvoiceAnalytics: (params?: any) => getInvoiceAnalytics({ data: params }),
-  getReconciliation: (params: { saleId?: string; invoiceId?: string }) => getReconciliation({ data: params }),
+  getReconciliation: (params: { saleId?: string | null; invoiceId?: string | null }) => getReconciliation({ data: params }),
 };
 export const auditService = {
   getLogs: () => api.get<any[]>("/api/audit-logs"),

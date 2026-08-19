@@ -279,8 +279,8 @@ export interface ReconciliationData {
 export const getReconciliation = createServerFn({ method: "GET" })
   .inputValidator((data: unknown) => 
     z.object({
-      saleId: z.string().optional(),
-      invoiceId: z.string().optional(),
+      saleId: z.string().optional().nullable(),
+      invoiceId: z.string().optional().nullable(),
     }).parse(data)
   )
   .handler(async ({ data }) => {

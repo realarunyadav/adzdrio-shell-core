@@ -27,8 +27,8 @@ export function ReconciliationDisplay({ saleId, invoiceId, className }: Reconcil
   const { data: recon, isLoading, error } = useQuery({
     queryKey: ["reconciliation", { saleId, invoiceId }],
     queryFn: () => financeService.getReconciliation({ 
-      saleId: saleId || undefined, 
-      invoiceId: invoiceId || undefined 
+      saleId: saleId ?? null, 
+      invoiceId: invoiceId ?? null 
     }),
     enabled: !!(saleId || invoiceId),
   });
