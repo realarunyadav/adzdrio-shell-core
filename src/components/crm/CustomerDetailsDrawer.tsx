@@ -86,14 +86,15 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
               {summary.map((item, i) => (
                 <div key={i} className="bg-background p-4 flex flex-col gap-1">
                   <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-tighter text-muted-foreground">
-                    <item.icon className={cn("size-3", item.alert && "text-red-500")} />
+                    <item.icon className="size-3" />
                     {item.label}
                   </div>
-                  <div className={cn("text-sm font-black", item.alert && "text-red-600")}>
+                  <div className="text-sm font-black">
                     {item.value}
                   </div>
                 </div>
               ))}
+
             </div>
 
             <Tabs defaultValue="overview" className="w-full">
