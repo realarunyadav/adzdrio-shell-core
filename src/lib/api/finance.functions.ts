@@ -204,7 +204,7 @@ export const getFinanceAnalytics = createServerFn({ method: "GET" })
 
     // Net Revenue = Gross - Refunds (per currency)
     Object.keys(grossMap).forEach(curr => {
-      netMap[curr] = grossMap[curr] - (refundMap[curr] || 0);
+      netMap[curr] = (grossMap[curr] || 0) - (refundMap[curr] || 0);
     });
 
     return {
