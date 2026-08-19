@@ -5,7 +5,7 @@ import { LucideIcon } from "lucide-react";
 
 interface DashboardKpiCardProps {
   title: string;
-  value: string;
+  value: string | Array<{ currency: string; value: string | number }>;
   trend: string;
   icon: LucideIcon;
   trendNeutral?: boolean;
@@ -26,7 +26,14 @@ export function DashboardKpiCard({ title, value, trend, icon: Icon, trendNeutral
         </div>
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/80">{title}</p>
-          <p className="text-2xl font-black tracking-tighter mt-1 text-foreground">{value}</p>
+          <div className="text-2xl font-black tracking-tighter mt-1 text-foreground">
+            {typeof value === 'string' ? value : value.map((v, i) => (
+              <div key={i} className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">{v.currency}</span>
+                <span>{typeof v.value === 'number' ? new Intl.NumberFormat(undefined, { style: 'currency', currency: v.currency }).format(v.value) : v.value}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </CardContent>
     </Card>
