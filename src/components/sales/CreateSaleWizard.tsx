@@ -16,7 +16,10 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { demoBusinesses, demoPlans } from "@/lib/mock/workspace.demo";
+import { useSuspenseQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { salesPlanService, dealService } from "@/lib/api/services";
+import { toast } from "sonner";
 import { Check, ChevronRight, ChevronLeft, CreditCard, ShoppingBag, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -26,11 +29,36 @@ interface CreateSaleWizardProps {
 }
 
 export function CreateSaleWizard({ open, onOpenChange }: CreateSaleWizardProps) {
+  const getPlansFn = useServerFn(salesPlanService.getAll);
+  const createSaleFn = useServerFn(dealService.create);
+  const queryClient = useQueryClient();
+
+  const { data: plans } = useSuspenseQuery({
+    queryKey: ["sales-plans-wizard"],
+    queryFn: () => getPlansFn(),
+  });
+
+  const mutation = useMutation({
+    mutationFn: (data: any) => createSaleFn({ data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["sales-deals"] });
+      queryClient.invalidateQueries({ queryKey: ["sales-deals-dashboard"] });
+      toast.success("Sale created successfully");
+      onOpenChange(false);
+      setStep(1);
+    },
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to create sale");
+    }
+  });
+
   const [step, setStep] = React.useState(1);
   const [formData, setFormData] = React.useState({
+    customerId: "", // Added
     customerName: "",
     phone: "",
     email: "",
+    businessId: "", // Added
     business: "",
     isExisting: "new",
     planId: "",
@@ -40,15 +68,29 @@ export function CreateSaleWizard({ open, onOpenChange }: CreateSaleWizardProps) 
     paymentMethod: "upi",
   });
 
-  const selectedPlan = demoPlans.find(p => p.id === formData.planId);
+  const selectedPlan = plans?.find(p => p.id === formData.planId);
   const finalAmount = Math.max(0, (Number(formData.amount) || 0) - (Number(formData.discount) || 0));
 
   const nextStep = () => setStep(s => s + 1);
   const prevStep = () => setStep(s => s - 1);
 
   const handleComplete = () => {
-    onOpenChange(false);
-    setStep(1);
+    // In a real scenario, we'd need to resolve organization_id and business_id
+    // For this prototype/phase, we'll use placeholders if not present
+    mutation.mutate({
+      customer_id: formData.customerId || "00000000-0000-0000-0000-000000000000",
+      plan_id: formData.planId,
+      final_amount: finalAmount,
+      discount: Number(formData.discount) || 0,
+      payment_status: "Pending",
+      status: "Won",
+      organization_id: "00000000-0000-0000-0000-000000000000", // Will be scoped by RLS/Trigger
+      business_id: formData.businessId || "00000000-0000-0000-0000-000000000000",
+      metadata: {
+        paymentMethod: formData.paymentMethod,
+        salesEmployee: formData.salesEmployee
+      }
+    });
   };
 
   return (
@@ -93,9 +135,9 @@ export function CreateSaleWizard({ open, onOpenChange }: CreateSaleWizardProps) 
                       <SelectValue placeholder="Select business" />
                     </SelectTrigger>
                     <SelectContent>
-                      {demoBusinesses.map(b => (
-                        <SelectItem key={b.id} value={b.name}>{b.name}</SelectItem>
-                      ))}
+                      {/* Should fetch live businesses here, for now keeping as name input or simplified select */}
+                      <SelectItem value="Retail Core">Retail Core</SelectItem>
+                      <SelectItem value="Enterprise Suite">Enterprise Suite</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -128,7 +170,7 @@ export function CreateSaleWizard({ open, onOpenChange }: CreateSaleWizardProps) 
                 <Select 
                   value={formData.planId} 
                   onValueChange={v => {
-                    const plan = demoPlans.find(p => p.id === v);
+                    const plan = plans?.find(p => p.id === v);
                     setFormData({...formData, planId: v, amount: plan?.price.toString() || ""});
                   }}
                 >
@@ -136,7 +178,7 @@ export function CreateSaleWizard({ open, onOpenChange }: CreateSaleWizardProps) 
                     <SelectValue placeholder="Choose a plan" />
                   </SelectTrigger>
                   <SelectContent>
-                    {demoPlans.map(p => (
+                    {plans?.map(p => (
                       <SelectItem key={p.id} value={p.id}>{p.name} - ₹{p.price}</SelectItem>
                     ))}
                   </SelectContent>
