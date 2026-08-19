@@ -205,8 +205,9 @@ function LeadPoolPage() {
         open={isClaimModalOpen}
         onOpenChange={setIsClaimModalOpen}
         onConfirm={handleClaimConfirm}
-        leadName={selectedLead?.name || ""}
+        leadName={selectedLead?.customerName || ""}
       />
+
 
       <ImportLeadsDrawer 
         open={isImportDrawerOpen}
