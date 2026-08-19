@@ -10,9 +10,13 @@ export interface Customer {
   status: 'active' | 'inactive' | 'pending' | 'blocked';
   referralCode?: string;
   referredById?: string;
+  business?: string;
+  assignedToName?: string;
+  totalSales?: string;
   createdAt: string;
   updatedAt: string;
 }
+
 
 export interface Subscription {
   id: string;
