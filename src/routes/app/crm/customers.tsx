@@ -35,26 +35,25 @@ export const Route = createFileRoute("/app/crm/customers")({
 });
 
 function CustomersPage() {
-  const [loading, setLoading] = React.useState(false);
   const [search, setSearch] = React.useState("");
-  const [selectedCustomer, setSelectedCustomer] = React.useState<DemoLead | null>(null);
+  const [selectedCustomer, setSelectedCustomer] = React.useState<Customer | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [selectedRows, setSelectedRows] = React.useState<string[]>([]);
 
-  const handleRefresh = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Customers list refreshed");
-    }, 1000);
+  const { data: customers = [], isLoading, refetch } = useQuery({
+    queryKey: ["customers"],
+    queryFn: () => customerService.getAll(),
+  });
+
+  const handleRefresh = async () => {
+    await refetch();
+    toast.success("Customers list refreshed");
   };
 
-  const openDetails = (customer: DemoLead) => {
+  const openDetails = (customer: Customer) => {
     setSelectedCustomer(customer);
     setIsDrawerOpen(true);
   };
-
-  const customers = demoLeads.filter(l => l.status === 'Converted');
 
   const filteredCustomers = customers.filter(c => 
     c.name.toLowerCase().includes(search.toLowerCase()) || 
@@ -75,6 +74,7 @@ function CustomersPage() {
       prev.includes(id) ? prev.filter(rowId => rowId !== id) : [...prev, id]
     );
   };
+
 
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-500 pb-20">
