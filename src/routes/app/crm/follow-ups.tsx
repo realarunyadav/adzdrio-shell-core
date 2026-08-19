@@ -72,9 +72,10 @@ function FollowUpsPage() {
         description="Manage scheduled customer and lead follow-ups."
         actions={
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={loading}>
-              <RefreshCw className={cn("mr-2 size-3.5", loading && "animate-spin")} /> Refresh
+            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isLoading}>
+              <RefreshCw className={cn("mr-2 size-3.5", isLoading && "animate-spin")} /> Refresh
             </Button>
+
             <Button size="sm" className="shadow-lg shadow-primary/20"><Plus className="mr-2 size-3.5" /> Add Follow-up</Button>
           </div>
         }
