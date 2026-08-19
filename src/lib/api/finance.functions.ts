@@ -66,8 +66,8 @@ export const financeTransactions = {
 
       if (data.businessId) query = query.eq("business_id", data.businessId);
       if (data.customerId) query = query.eq("customer_id", data.customerId);
-      if (data.type) query = query.eq("type", data.type);
-      if (data.status) query = query.eq("status", data.status);
+      if (data.type) query = query.eq("type", data.type as any);
+      if (data.status) query = query.eq("status", data.status as any);
 
       const { data: txns, error } = await query.order('created_at', { ascending: false });
       if (error) throw error;
@@ -112,12 +112,12 @@ export const financeInvoices = {
         .from("finance_invoices")
         .select(`
           *,
-          crm_customers(full_name)
+          crm_customers!finance_invoices_customer_id_fkey(full_name)
         `);
 
       if (data.businessId) query = query.eq("business_id", data.businessId);
       if (data.customerId) query = query.eq("customer_id", data.customerId);
-      if (data.status) query = query.eq("status", data.status);
+      if (data.status) query = query.eq("status", data.status as any);
 
       const { data: invs, error } = await query.order('issue_date', { ascending: false });
       if (error) throw error;
@@ -125,7 +125,7 @@ export const financeInvoices = {
       return (invs || []).map(i => ({
         ...i,
         customer_name: (i.crm_customers as any)?.full_name || 'Unknown'
-      })) as FinanceInvoice[];
+      })) as unknown as FinanceInvoice[];
     }),
 
   getById: createServerFn({ method: "GET" })
@@ -135,7 +135,7 @@ export const financeInvoices = {
         .from("finance_invoices")
         .select(`
           *,
-          crm_customers(full_name)
+          crm_customers!finance_invoices_customer_id_fkey(full_name)
         `)
         .eq("id", data.id)
         .single();
@@ -144,6 +144,6 @@ export const financeInvoices = {
       return {
         ...inv,
         customer_name: (inv.crm_customers as any)?.full_name || 'Unknown'
-      } as FinanceInvoice;
+      } as unknown as FinanceInvoice;
     })
 };
