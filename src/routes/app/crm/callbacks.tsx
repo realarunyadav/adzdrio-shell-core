@@ -109,43 +109,30 @@ function CallbacksPage() {
             </TableHeader>
             <TableBody>
               {filteredCallbacks.map(lead => {
-                const callbackDate = parseISO(lead.callbackDate!);
-                const isOverdue = isPast(callbackDate) && !isToday(callbackDate) && lead.callbackStatus !== 'Completed';
-
                 return (
                   <TableRow key={lead.id} className="border-border/40 group hover:bg-muted/30 transition-colors">
                     <TableCell className="px-6">
                       <button onClick={() => openDetails(lead)} className="text-left outline-none">
-                        <p className="text-xs font-black group-hover:text-primary transition-colors">{lead.name}</p>
-                        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">{lead.callbackReason || 'General Inquiry'}</p>
+                        <p className="text-xs font-black group-hover:text-primary transition-colors">{lead.customerName}</p>
+                        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">{lead.notes || 'General Inquiry'}</p>
                       </button>
                     </TableCell>
                     <TableCell className="text-[11px] font-bold text-muted-foreground uppercase">{lead.business}</TableCell>
-                    <TableCell className="text-xs font-bold">{lead.phone}</TableCell>
+                    <TableCell className="text-xs font-bold">{lead.customerPhone}</TableCell>
                     <TableCell className="text-[11px] font-medium">{lead.assignedToName || 'Unassigned'}</TableCell>
                     <TableCell>
-                       <StatusBadge tone="neutral" className="text-[9px]">{lead.requestedBy || 'System'}</StatusBadge>
+                       <StatusBadge tone="neutral" className="text-[9px]">System</StatusBadge>
                     </TableCell>
                     <TableCell>
-                      <div className={cn(
-                        "flex flex-col gap-0.5 text-[11px] font-bold",
-                        isOverdue ? "text-red-500" : "text-foreground"
-                      )}>
+                      <div className="flex flex-col gap-0.5 text-[11px] font-bold">
                         <span className="flex items-center gap-1.5">
-                          {isOverdue && <AlertCircle className="size-3" />}
-                          {format(callbackDate, "MMM dd, yyyy")}
-                        </span>
-                        <span className="text-[9px] text-muted-foreground uppercase opacity-70 flex items-center gap-1">
-                          <Clock className="size-2.5" /> {format(callbackDate, "hh:mm a")}
+                          {format(new Date(lead.createdAt), "MMM dd, yyyy")}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <StatusBadge 
-                        tone={lead.callbackStatus === 'Completed' ? 'success' : isOverdue ? 'danger' : 'info'} 
-                        className={cn(lead.callbackStatus === 'Requested' && !isOverdue && "animate-pulse")}
-                      >
-                        {lead.callbackStatus || 'Requested'}
+                      <StatusBadge tone="info">
+                        Requested
                       </StatusBadge>
                     </TableCell>
                     <TableCell className="text-right px-6">
@@ -156,23 +143,12 @@ function CallbacksPage() {
                          <Button variant="ghost" size="icon" className="size-7" onClick={() => openDetails(lead)}>
                            <Eye className="size-3.5" />
                          </Button>
-                         <DropdownMenu>
-                           <DropdownMenuTrigger asChild>
-                             <Button variant="ghost" size="icon" className="size-7">
-                               <MoreVertical className="size-3.5" />
-                             </Button>
-                           </DropdownMenuTrigger>
-                           <DropdownMenuContent align="end" className="w-40">
-                             <DropdownMenuItem className="text-[11px] font-bold uppercase tracking-widest">Reschedule</DropdownMenuItem>
-                             <DropdownMenuItem className="text-[11px] font-bold uppercase tracking-widest">Mark Completed</DropdownMenuItem>
-                             <DropdownMenuItem className="text-[11px] font-bold uppercase tracking-widest text-red-600">Cancel Request</DropdownMenuItem>
-                           </DropdownMenuContent>
-                         </DropdownMenu>
                       </div>
                     </TableCell>
                   </TableRow>
                 );
               })}
+
               {filteredCallbacks.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={8} className="h-64 text-center">
