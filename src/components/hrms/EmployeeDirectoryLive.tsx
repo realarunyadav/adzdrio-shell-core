@@ -377,15 +377,16 @@ export function EmployeeDirectoryLive() {
       <EmployeeDetailsDrawer 
         employee={selectedEmployee ? {
           id: selectedEmployee.id,
-          code: selectedEmployee.employee_code,
+          code: selectedEmployee.employeeCode,
           name: selectedEmployee.userName,
           email: selectedEmployee.userEmail,
-          phone: "N/A", // Not stored in employees table currently
-          status: selectedEmployee.employment_status as any,
+          phone: "N/A",
+          status: selectedEmployee.employmentStatus as any,
           department: selectedEmployee.department || "N/A",
           role: selectedEmployee.designation || "N/A",
           businessIds: selectedEmployee.businessId ? [selectedEmployee.businessId] : [],
-          session: null // Live session check not implemented yet
+          session: null,
+          lastActive: "N/A"
         } : null}
         open={detailsOpen}
         onOpenChange={setDetailsOpen}
