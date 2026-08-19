@@ -25,30 +25,36 @@ export const Route = createFileRoute("/app/crm/my-leads")({
 });
 
 function MyLeadsPage() {
-  const [leads, setLeads] = React.useState<DemoLead[]>(demoLeads.filter(l => l.assignedTo));
-  const [loading, setLoading] = React.useState(false);
+  const { user } = useAuth();
   const [search, setSearch] = React.useState("");
-  const [selectedLead, setSelectedLead] = React.useState<DemoLead | null>(null);
+  const [selectedLead, setSelectedLead] = React.useState<RapidLead | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
   const [isImportDrawerOpen, setIsImportDrawerOpen] = React.useState(false);
 
-  const handleRefresh = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Lead data synchronized");
-    }, 800);
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["leads", "my-leads", user?.id],
+    queryFn: () => leadsService.list({ assignedToMe: "true" }),
+    enabled: !!user?.id,
+  });
+
+  const handleRefresh = async () => {
+    await refetch();
+    toast.success("Lead data synchronized");
   };
 
-  const openDetails = (lead: DemoLead) => {
+  const openDetails = (lead: RapidLead) => {
     setSelectedLead(lead);
     setIsDrawerOpen(true);
   };
 
-  const filteredLeads = leads.filter(l => 
-    l.name.toLowerCase().includes(search.toLowerCase()) || 
-    l.email.toLowerCase().includes(search.toLowerCase())
+  const leads = data?.items || [];
+
+  const filteredLeads = leads.filter(
+    (l) =>
+      l.customerName.toLowerCase().includes(search.toLowerCase()) ||
+      l.customerEmail.toLowerCase().includes(search.toLowerCase())
   );
+
 
   return (
     <div className="flex flex-col gap-6 animate-in fade-in duration-500">
