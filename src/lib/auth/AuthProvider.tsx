@@ -90,8 +90,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.warn('API session check failed, using prototype bypass', e);
         response = {
           user: {
-            id: 'mock_user_1',
-            displayName: 'Admin User',
+            id: 'mock_admin_1',
+            displayName: 'Technical Admin',
             email: 'admin@abos.com',
             role: 'ADMIN',
             roles: ['ADMIN'],
