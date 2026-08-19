@@ -12,8 +12,10 @@ import { Customer, Customer360 } from "@/lib/api/services.types";
 import { format } from "date-fns";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { useQuery } from "@tanstack/react-query";
-import { customerService } from "@/lib/api/services";
+import { customerService, financeService } from "@/lib/api/services";
+import { ReconciliationDisplay } from "@/components/finance/FinanceReconciliationUI";
 import { 
+
   Phone, 
   Mail, 
   Globe, 
@@ -221,6 +223,20 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
                 <TabsContent value="finance" className="mt-0 space-y-6">
                   <div className="space-y-6">
                     <div>
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Financial Reconciliation</h4>
+                      {data360?.sales && data360.sales.length > 0 ? (
+                        <div className="space-y-4">
+                          {data360.sales.map((sale: any) => (
+                            <ReconciliationDisplay key={sale.id} saleId={sale.id} className="mb-4" />
+                          ))}
+                        </div>
+                      ) : (
+                         <p className="text-[10px] italic text-muted-foreground mb-6">No active sales for reconciliation.</p>
+                      )}
+                    </div>
+
+                    <div>
+
                       <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-4">Live Transactions</h4>
                       {data360?.payments && data360.payments.length > 0 ? (
                         <div className="space-y-2">
