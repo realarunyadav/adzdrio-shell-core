@@ -64,6 +64,23 @@ export const leadsService = {
       query = query.eq("status", String(params["status"]));
     }
 
+    if (params?.["assignedToMe"] === "true") {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        // Find employee ID for the current user
+        const { data: employee } = await supabase
+          .from("employees")
+          .select("id")
+          .eq("user_id", user.id)
+          .single();
+        
+        if (employee) {
+          query = query.eq("assigned_employee_id", employee.id);
+        }
+      }
+    }
+
+
     const { data, error, count } = await query;
     if (error) throw error;
 
