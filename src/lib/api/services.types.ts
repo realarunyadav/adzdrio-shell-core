@@ -163,3 +163,17 @@ export interface LeadListResponse {
   };
 }
 
+export interface Customer360 {
+  customer: Customer;
+  subscriptions: Subscription[];
+  devices: Device[];
+  deviceGroups: DeviceGroup[];
+  rapidLeads: RapidLead[];
+  renewals: Renewal[];
+  referrals: any[];
+  refunds: any[];
+  sales: any[];
+  invoices: any[];
+  payments: any[];
+}
+
