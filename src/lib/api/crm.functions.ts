@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Customer, RapidLead, Renewal, RefundRequest, Subscription, Device, DeviceGroup, ReferralReward, LeadListResponse } from "./services.types";
+import { subscriptionService, dealService } from "./sales.functions";
 import { Json } from "@/integrations/supabase/types";
 
 /**
@@ -206,16 +207,22 @@ export const customerService = {
 
   get360: async (id: string) => {
     const customer = await customerService.getById(id);
+    
+    // Fetch live related data from sales module
+    const subscriptions = await subscriptionService.getAll({ customerId: id });
+    const sales = await dealService.getAll(); // Ideally filtered by customerId in future
+    const customerSales = (sales as any[]).filter(s => s.customerId === id);
 
     return {
       customer,
-      subscriptions: [] as Subscription[],
+      subscriptions: subscriptions as Subscription[],
       devices: [] as Device[],
       deviceGroups: [] as DeviceGroup[],
       rapidLeads: [] as RapidLead[],
       renewals: [] as Renewal[],
       referrals: [] as any[],
       refunds: [] as RefundRequest[],
+      sales: customerSales,
     };
   },
 
