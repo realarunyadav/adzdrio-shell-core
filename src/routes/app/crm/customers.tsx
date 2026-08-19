@@ -133,7 +133,7 @@ function CustomersPage() {
            )}
         </div>
 
-        {loading ? (
+        {isLoading ? (
           <div className="p-8"><SkeletonTable /></div>
         ) : (
           <Table>
