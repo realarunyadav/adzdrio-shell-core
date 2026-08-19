@@ -35,7 +35,7 @@ function SalesModuleLayout() {
   const [selectedSale, setSelectedSale] = React.useState<any | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
 
-  const openSaleDetails = (sale: DemoSale) => {
+  const openSaleDetails = (sale: any) => {
     setSelectedSale(sale);
     setIsDrawerOpen(true);
   };
@@ -52,19 +52,24 @@ function SalesModuleLayout() {
 
 interface SalesDashboardProps {
   onOpenWizard: () => void;
-  onOpenSale: (sale: DemoSale) => void;
+  onOpenSale: (sale: any) => void;
 }
 
 function SalesDashboard({ onOpenWizard, onOpenSale }: SalesDashboardProps) {
   const { location } = useRouterState();
+  const getSalesFn = useServerFn(dealService.getAll);
+  const { data: sales } = useSuspenseQuery({
+    queryKey: ["sales-deals-dashboard"],
+    queryFn: () => getSalesFn(),
+  });
   
   // Only show the dashboard if we are exactly at /app/sales or /app/sales/
   if (location.pathname !== "/app/sales" && location.pathname !== "/app/sales/") {
     return null;
   }
 
-  const totalSalesValue = demoSales.reduce((acc, sale) => acc + sale.finalAmount, 0);
-  const paidSalesValue = demoPayments.filter(p => p.status === 'Paid').reduce((acc, p) => acc + p.amount, 0);
+  const totalSalesValue = (sales as any[]).reduce((acc: number, sale: any) => acc + (sale.finalAmount || 0), 0);
+  const paidSalesValue = (sales as any[]).filter(s => s.paymentStatus === 'Paid').reduce((acc: number, s: any) => acc + (s.finalAmount || 0), 0);
   const pendingPaymentsValue = totalSalesValue - paidSalesValue;
 
   return (
@@ -132,8 +137,8 @@ function SalesDashboard({ onOpenWizard, onOpenSale }: SalesDashboardProps) {
           <SectionCard title="Sales Pipeline" description="Current deal distribution across stages.">
             <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 py-4">
               {['New', 'Qualified', 'Proposal', 'Negotiation', 'Won', 'Lost'].map((stage) => {
-                const count = demoSales.filter(s => s.status === (stage as any)).length;
-                const value = demoSales.filter(s => s.status === (stage as any)).reduce((acc, s) => acc + s.finalAmount, 0);
+                const count = (sales as any[]).filter(s => s.status === (stage as any)).length;
+                const value = (sales as any[]).filter(s => s.status === (stage as any)).reduce((acc: number, s: any) => acc + (s.finalAmount || 0), 0);
                 return (
                   <div key={stage} className="flex flex-col gap-1 p-3 rounded-lg border border-border/40 bg-muted/20">
                     <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">{stage}</p>
@@ -158,7 +163,7 @@ function SalesDashboard({ onOpenWizard, onOpenSale }: SalesDashboardProps) {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/40">
-                  {demoSales.map((sale) => (
+                  {(sales as any[]).map((sale) => (
                     <tr key={sale.id} className="hover:bg-muted/30 transition-colors cursor-pointer group" onClick={() => onOpenSale(sale)}>
                       <td className="py-3 px-4">
                         <div className="flex flex-col">
