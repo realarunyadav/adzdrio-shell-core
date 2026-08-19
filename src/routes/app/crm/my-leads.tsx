@@ -97,7 +97,7 @@ function MyLeadsPage() {
            </div>
         </div>
 
-        {loading ? (
+        {isLoading ? (
           <div className="p-8"><SkeletonTable /></div>
         ) : (
           <Table>
@@ -106,9 +106,8 @@ function MyLeadsPage() {
                 <TableHead className="text-[10px] font-black uppercase tracking-widest px-6">Customer / Lead</TableHead>
                 <TableHead className="text-[10px] font-black uppercase tracking-widest">Status</TableHead>
                 <TableHead className="text-[10px] font-black uppercase tracking-widest">Priority</TableHead>
-                <TableHead className="text-[10px] font-black uppercase tracking-widest">Last Activity</TableHead>
+                <TableHead className="text-[10px] font-black uppercase tracking-widest">Added Date</TableHead>
                 <TableHead className="text-[10px] font-black uppercase tracking-widest">Next Follow-up</TableHead>
-                <TableHead className="text-[10px] font-black uppercase tracking-widest">Callback</TableHead>
                 <TableHead className="text-[10px] font-black uppercase tracking-widest text-right px-6">Engagement</TableHead>
               </TableRow>
             </TableHeader>
@@ -117,11 +116,11 @@ function MyLeadsPage() {
                 <TableRow key={lead.id} className="border-border/40 group hover:bg-muted/30 transition-colors">
                   <TableCell className="px-6">
                     <button onClick={() => openDetails(lead)} className="text-left outline-none">
-                      <p className="text-xs font-black group-hover:text-primary transition-colors">{lead.name}</p>
+                      <p className="text-xs font-black group-hover:text-primary transition-colors">{lead.customerName}</p>
                       <div className="flex items-center gap-2 mt-0.5">
                         <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest">{lead.business}</span>
                         <div className="size-0.5 rounded-full bg-border" />
-                        <span className="text-[10px] text-muted-foreground/70 font-medium">{lead.email}</span>
+                        <span className="text-[10px] text-muted-foreground/70 font-medium">{lead.customerEmail}</span>
                       </div>
                     </button>
                   </TableCell>
@@ -129,33 +128,16 @@ function MyLeadsPage() {
                     <StatusBadge tone="premium">{lead.status}</StatusBadge>
                   </TableCell>
                   <TableCell>
-                    <StatusBadge tone={lead.priority === 'High' ? 'danger' : 'neutral'}>{lead.priority}</StatusBadge>
+                    <StatusBadge tone={lead.priority === 'High' ? 'danger' : 'neutral'}>{lead.priority || 'Normal'}</StatusBadge>
                   </TableCell>
                   <TableCell className="text-[11px] text-muted-foreground font-medium">
                     <div className="flex items-center gap-1.5">
                       <Clock className="size-3 text-muted-foreground/40" />
-                      {format(new Date(lead.lastActivity), "MMM dd, HH:mm")}
+                      {format(new Date(lead.createdAt), "MMM dd, HH:mm")}
                     </div>
                   </TableCell>
                   <TableCell>
-                    {lead.nextFollowUp ? (
-                      <div className="flex items-center gap-1.5 text-[11px] font-black text-primary">
-                        <Calendar className="size-3" />
-                        {format(new Date(lead.nextFollowUp), "MMM dd, HH:mm")}
-                      </div>
-                    ) : (
-                      <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/30">—</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {lead.callbackDate ? (
-                      <div className="flex items-center gap-1.5 text-[11px] font-black text-amber-600">
-                        <Phone className="size-3" />
-                        {format(new Date(lead.callbackDate), "MMM dd, HH:mm")}
-                      </div>
-                    ) : (
-                      <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/30">—</span>
-                    )}
+                    <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/30">—</span>
                   </TableCell>
                   <TableCell className="text-right px-6">
                     <div className="flex items-center justify-end gap-1.5">
@@ -174,11 +156,12 @@ function MyLeadsPage() {
               ))}
               {filteredLeads.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={7} className="h-48 text-center text-muted-foreground italic text-xs">
+                  <TableCell colSpan={6} className="h-48 text-center text-muted-foreground italic text-xs">
                     You have no active leads matching this search.
                   </TableCell>
                 </TableRow>
               )}
+
             </TableBody>
           </Table>
         )}
