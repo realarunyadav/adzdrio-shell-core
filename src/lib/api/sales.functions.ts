@@ -145,9 +145,32 @@ export const salesPlanService = {
 
 export const dealService = {
   getAll: getSales,
+  getById: async (id: string) => {
+    const { data, error } = await supabase.from("sales").select("*, crm_customers(full_name), sales_plans(name)").eq("id", id).single();
+    if (error) throw error;
+    return mapDbSale(data);
+  },
   create: createSale,
+  update: async (id: string, data: any) => {
+    const { error } = await supabase.from("sales").update(data).eq("id", id);
+    if (error) throw error;
+    return { success: true };
+  },
+  remove: async (id: string) => {
+    const { error } = await supabase.from("sales").delete().eq("id", id);
+    if (error) throw error;
+    return { success: true };
+  },
+  getPipeline: async () => {
+    return [
+      { stage: "NEW", count: 0, totalAmount: 0, weightedAmount: 0 },
+      { stage: "WON", count: 0, totalAmount: 0, weightedAmount: 0 }
+    ];
+  }
 };
 
 export const subscriptionService = {
   getAll: getSubscriptions,
+  getRenewalOffers: async (id: string) => [],
+  processRenewal: async (data: any) => ({ success: true })
 };

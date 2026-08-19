@@ -209,7 +209,7 @@ export const customerService = {
     const customer = await customerService.getById(id);
     
     // Fetch live related data from sales module
-    const subscriptions = await subscriptionService({ data: { customerId: id } });
+    const subscriptions = await subscriptionService.getAll({ data: { customerId: id } });
     const sales = await dealService.getAll(); // Ideally filtered by customerId in future
     const customerSales = (sales as any[]).filter(s => s.customerId === id);
 
