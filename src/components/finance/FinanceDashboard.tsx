@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
   TrendingUp,
   Receipt,
@@ -9,12 +9,16 @@ import {
   Activity,
   RefreshCw,
   AlertCircle,
+  ArrowDownRight,
+  DollarSign,
 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { financeService } from '@/lib/api/services';
+import { DashboardKpiCard } from '@/components/shared/DashboardKpiCard';
+import { useQuery } from '@tanstack/react-query';
 
 type Payment = {
   id?: string;
@@ -38,64 +42,61 @@ const money = (value: number, currency = 'USD') =>
 const amountOf = (row: { amount?: number | string }) => Number(row.amount ?? 0) || 0;
 
 export function FinanceDashboard() {
-  const [payments, setPayments] = useState<Payment[]>([]);
-  const [invoices, setInvoices] = useState<Invoice[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { 
+    data: analytics, 
+    isLoading: analyticsLoading, 
+    error: analyticsError, 
+    refetch: refetchAnalytics 
+  } = useQuery({
+    queryKey: ['finance-analytics'],
+    queryFn: () => financeService.getFinanceAnalytics(),
+  });
 
-  const load = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const [paymentRows, invoiceRows] = await Promise.all([
-        financeService.getPayments(),
-        financeService.getInvoices(),
-      ]);
-      setPayments(Array.isArray(paymentRows) ? paymentRows : []);
-      setInvoices(Array.isArray(invoiceRows) ? invoiceRows : []);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unable to load finance data');
-    } finally {
-      setLoading(false);
-    }
+  const { 
+    data: invoices, 
+    isLoading: invoicesLoading, 
+    error: invoicesError,
+    refetch: refetchInvoices
+  } = useQuery({
+    queryKey: ['invoice-analytics'],
+    queryFn: () => financeService.getInvoiceAnalytics(),
+  });
+
+  const {
+    data: transactions,
+    isLoading: transactionsLoading,
+    error: transactionsError,
+    refetch: refetchTransactions
+  } = useQuery({
+    queryKey: ['finance-transactions'],
+    queryFn: () => financeService.listTransactions(),
+  });
+
+  const isLoading = analyticsLoading || invoicesLoading || transactionsLoading;
+  const error = analyticsError || invoicesError || transactionsError;
+
+  const refetchAll = () => {
+    refetchAnalytics();
+    refetchInvoices();
+    refetchTransactions();
   };
 
-  useEffect(() => {
-    void load();
-  }, []);
-
-  const verifiedPayments = useMemo(
-    () => payments.filter((p) => String(p.status ?? '').toUpperCase() === 'VERIFIED'),
-    [payments],
-  );
-  const pendingPayments = useMemo(
-    () => payments.filter((p) => String(p.status ?? '').toUpperCase() === 'PENDING'),
-    [payments],
-  );
-  const paidInvoices = useMemo(
-    () => invoices.filter((i) => String(i.status ?? '').toUpperCase() === 'PAID'),
-    [invoices],
-  );
-
-  const currency = verifiedPayments[0]?.currency || invoices[0]?.currency || 'USD';
-  const revenue = verifiedPayments.reduce((sum, p) => sum + amountOf(p), 0);
-  const pending = pendingPayments.reduce((sum, p) => sum + amountOf(p), 0);
-  const invoiced = invoices.reduce((sum, i) => sum + amountOf(i), 0);
-  const collections = paidInvoices.reduce((sum, i) => sum + amountOf(i), 0);
-  const collectionRate = invoiced > 0 ? Math.min(100, Math.round((collections / invoiced) * 100)) : 0;
+  const collectionRate = invoices?.total && invoices.total > 0 
+    ? Math.min(100, Math.round((invoices.paid / invoices.total) * 100)) 
+    : 0;
 
   const stats = [
-    { label: 'Verified Revenue', value: money(revenue, currency), icon: TrendingUp },
-    { label: 'Pending Payments', value: money(pending, currency), icon: CreditCard },
-    { label: 'Total Invoiced', value: money(invoiced, currency), icon: Receipt },
-    { label: 'Paid Invoices', value: String(paidInvoices.length), icon: BarChart3 },
-    { label: 'MRR', value: '—', icon: Activity },
-    { label: 'ARR', value: '—', icon: TrendingUp },
-    { label: 'Collections', value: money(collections, currency), icon: Wallet },
-    { label: 'Outstanding', value: money(Math.max(invoiced - collections, 0), currency), icon: CreditCard },
+    { label: 'Gross Revenue', value: analytics?.grossRevenue || [], icon: DollarSign },
+    { label: 'Collected Revenue', value: analytics?.collectedRevenue || [], icon: TrendingUp },
+    { label: 'Refunds', value: analytics?.refunds || [], icon: ArrowDownRight },
+    { label: 'Net Revenue', value: analytics?.netRevenue || [], icon: Wallet },
+    { label: 'Total Invoiced', value: String(invoices?.total || 0), icon: Receipt },
+    { label: 'Paid Invoices', value: String(invoices?.paid || 0), icon: BarChart3 },
+    { label: 'Overdue Invoices', value: String(invoices?.overdue || 0), icon: AlertCircle },
+    { label: 'Outstanding Amount', value: invoices?.outstandingAmount || [], icon: CreditCard },
   ];
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {Array.from({ length: 8 }).map((_, i) => (
@@ -111,8 +112,8 @@ export function FinanceDashboard() {
         <div className="flex flex-col items-center text-center gap-3">
           <AlertCircle className="w-8 h-8 text-destructive" />
           <h3 className="font-black">Finance data unavailable</h3>
-          <p className="text-sm text-muted-foreground">{error}</p>
-          <Button onClick={() => void load()} variant="outline">
+          <p className="text-sm text-muted-foreground">{error instanceof Error ? error.message : 'Unable to load finance data'}</p>
+          <Button onClick={refetchAll} variant="outline">
             <RefreshCw className="w-4 h-4 mr-2" /> Retry
           </Button>
         </div>
@@ -123,49 +124,44 @@ export function FinanceDashboard() {
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <Button variant="outline" size="sm" onClick={() => void load()}>
+        <Button variant="outline" size="sm" onClick={refetchAll}>
           <RefreshCw className="w-4 h-4 mr-2" /> Refresh
         </Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {stats.map((stat) => (
-          <Card key={stat.label} className="p-5 border-none surface-card surface-card-hover group">
-            <div className="flex justify-between items-start">
-              <div className="p-2 rounded-lg bg-muted group-hover:scale-110 transition-transform duration-300">
-                <stat.icon className="w-5 h-5 text-primary" />
-              </div>
-              <Badge variant="outline" className="text-[10px] font-bold">
-                Live
-              </Badge>
-            </div>
-            <div className="mt-4">
-              <div className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">{stat.label}</div>
-              <div className="text-2xl font-black tracking-tight">{stat.value}</div>
-            </div>
-          </Card>
+          <DashboardKpiCard 
+            key={stat.label} 
+            title={stat.label} 
+            value={stat.value} 
+            trend="Live" 
+            icon={stat.icon} 
+          />
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <Card className="lg:col-span-2 border-none surface-card p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">Recent Payments</h3>
-            <Badge variant="outline">{payments.length} records</Badge>
+            <h3 className="text-sm font-black uppercase tracking-widest text-muted-foreground">Recent Transactions</h3>
+            <Badge variant="outline">{transactions?.length || 0} records</Badge>
           </div>
-          {payments.length === 0 ? (
-            <div className="h-[260px] flex items-center justify-center text-sm text-muted-foreground">No payment data available yet.</div>
+          {(!transactions || transactions.length === 0) ? (
+            <div className="h-[260px] flex items-center justify-center text-sm text-muted-foreground">No transaction data available yet.</div>
           ) : (
             <div className="space-y-3">
-              {payments.slice(0, 8).map((payment, index) => (
-                <div key={payment.id ?? index} className="flex items-center justify-between rounded-xl border p-3">
+              {transactions.slice(0, 8).map((txn, index) => (
+                <div key={txn.id || index} className="flex items-center justify-between rounded-xl border p-3">
                   <div>
-                    <div className="text-xs font-bold">{payment.id ?? 'Payment'}</div>
-                    <div className="text-[10px] text-muted-foreground">{payment.createdAt ? new Date(payment.createdAt).toLocaleString() : 'Date unavailable'}</div>
+                    <div className="text-xs font-bold">{txn.type.toUpperCase()} - {txn.customer_name}</div>
+                    <div className="text-[10px] text-muted-foreground">{new Date(txn.created_at).toLocaleString()}</div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm font-black">{money(amountOf(payment), payment.currency || currency)}</div>
-                    <Badge variant="outline" className="text-[10px]">{payment.status ?? 'UNKNOWN'}</Badge>
+                    <div className="text-sm font-black">
+                      {new Intl.NumberFormat(undefined, { style: 'currency', currency: txn.currency }).format(txn.amount)}
+                    </div>
+                    <Badge variant="outline" className="text-[10px]">{txn.status.toUpperCase()}</Badge>
                   </div>
                 </div>
               ))}
@@ -182,8 +178,8 @@ export function FinanceDashboard() {
             </div>
             <Progress value={collectionRate} className="h-2" />
             <div className="pt-4 border-t text-sm">
-              <div className="flex justify-between mb-2"><span className="text-muted-foreground">Invoiced</span><span className="font-bold">{money(invoiced, currency)}</span></div>
-              <div className="flex justify-between"><span className="text-muted-foreground">Collected</span><span className="font-bold">{money(collections, currency)}</span></div>
+              <div className="flex justify-between mb-2"><span className="text-muted-foreground">Invoiced (Count)</span><span className="font-bold">{invoices?.total || 0}</span></div>
+              <div className="flex justify-between"><span className="text-muted-foreground">Paid (Count)</span><span className="font-bold">{invoices?.paid || 0}</span></div>
             </div>
             <div className="text-xs text-muted-foreground bg-muted/30 rounded-xl p-4">
               MRR, ARR, expense and GST figures are shown only when their corresponding backend data is available; no demo values are used.
