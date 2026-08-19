@@ -102,6 +102,131 @@ export type Database = {
           },
         ]
       }
+      crm_customers: {
+        Row: {
+          business_id: string
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          metadata: Json
+          organization_id: string
+          phone: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          business_id: string
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          metadata?: Json
+          organization_id: string
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          business_id?: string
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          metadata?: Json
+          organization_id?: string
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_customers_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_customers_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crm_leads: {
+        Row: {
+          assigned_employee_id: string | null
+          business_id: string
+          converted_at: string | null
+          converted_customer_id: string | null
+          created_at: string
+          id: string
+          lead_data: Json
+          organization_id: string
+          source: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_employee_id?: string | null
+          business_id: string
+          converted_at?: string | null
+          converted_customer_id?: string | null
+          created_at?: string
+          id?: string
+          lead_data?: Json
+          organization_id: string
+          source?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_employee_id?: string | null
+          business_id?: string
+          converted_at?: string | null
+          converted_customer_id?: string | null
+          created_at?: string
+          id?: string
+          lead_data?: Json
+          organization_id?: string
+          source?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_leads_assigned_employee_id_fkey"
+            columns: ["assigned_employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_leads_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_leads_converted_customer_id_fkey"
+            columns: ["converted_customer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crm_leads_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       employees: {
         Row: {
           business_id: string | null
