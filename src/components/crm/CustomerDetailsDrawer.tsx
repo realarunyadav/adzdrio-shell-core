@@ -8,7 +8,7 @@ import {
   SheetFooter
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { DemoLead } from "@/lib/mock/workspace.demo";
+import { Customer } from "@/lib/api/services.types";
 import { format } from "date-fns";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { 
@@ -31,7 +31,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
 interface CustomerDetailsDrawerProps {
-  customer: DemoLead | null;
+  customer: Customer | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
@@ -41,10 +41,11 @@ export function CustomerDetailsDrawer({ customer, open, onOpenChange }: Customer
 
   const summary = [
     { label: "Total Sales", value: customer.totalSales || "₹ 0", icon: TrendingUp },
-    { label: "Pending Payment", value: customer.pendingPayment || "₹ 0", icon: CreditCard, alert: (customer.pendingPayment && customer.pendingPayment !== "₹ 0") },
-    { label: "Last Activity", value: format(new Date(customer.lastActivity), "MMM dd"), icon: History },
-    { label: "Customer Since", value: customer.customerSince ? format(new Date(customer.customerSince), "MMM yyyy") : "N/A", icon: Calendar },
+    { label: "Status", value: customer.status, icon: History },
+    { label: "Added Date", value: format(new Date(customer.createdAt), "MMM dd, yyyy"), icon: Calendar },
+    { label: "Updated", value: format(new Date(customer.updatedAt), "MMM dd, yyyy"), icon: Clock },
   ];
+
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
