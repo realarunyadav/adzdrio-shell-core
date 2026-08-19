@@ -37,6 +37,12 @@ interface CustomerDetailsDrawerProps {
 }
 
 export function CustomerDetailsDrawer({ customer, open, onOpenChange }: CustomerDetailsDrawerProps) {
+  const { data: customer360, isLoading } = useQuery({
+    queryKey: ["customer-360", customer?.id],
+    queryFn: () => customerService.get360(customer?.id || ""),
+    enabled: !!customer?.id && open,
+  });
+
   if (!customer) return null;
 
   const summary = [
