@@ -58,8 +58,9 @@ function CustomersPage() {
   const filteredCustomers = customers.filter(c => 
     c.name.toLowerCase().includes(search.toLowerCase()) || 
     c.email.toLowerCase().includes(search.toLowerCase()) ||
-    c.business.toLowerCase().includes(search.toLowerCase())
+    (c.business || "").toLowerCase().includes(search.toLowerCase())
   );
+
 
   const toggleAll = () => {
     if (selectedRows.length === filteredCustomers.length) {
