@@ -6,15 +6,11 @@ import {
   Filter, 
   RefreshCw, 
   Download, 
-  MoreHorizontal, 
   Eye, 
   Phone, 
-  MessageSquare,
-  UserPlus,
-  ArrowRight,
+  UserPlus, 
   MoreVertical,
   Mail,
-  Calendar,
   Building2
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
@@ -23,14 +19,16 @@ import { StatusBadge } from "@/components/shared/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { demoLeads, DemoLead } from "@/lib/mock/workspace.demo";
-import { format } from "date-fns";
+import { Customer } from "@/lib/api/services.types";
 import { CustomerDetailsDrawer } from "@/components/crm/CustomerDetailsDrawer";
 import { toast } from "sonner";
 import { SkeletonTable } from "@/components/shared/SkeletonLoader";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useQuery } from "@tanstack/react-query";
+import { customerService } from "@/lib/api/services";
+
 
 export const Route = createFileRoute("/app/crm/customers")({
   component: CustomersPage,
