@@ -133,7 +133,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         response = {
           accessToken: 'mock_token_' + Date.now(),
           user: {
-            id: 'mock_user_1',
+            id: 'mock_admin_1',
             displayName: credentials.email.split('@')[0],
             email: credentials.email,
             role: 'ADMIN',
