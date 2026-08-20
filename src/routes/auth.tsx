@@ -25,7 +25,8 @@ function AuthPage() {
     try {
       await login({ email, password });
       toast.success("Welcome back to ABOS");
-      navigate({ to: "/app" });
+      // navigate({ to: "/app" }); // Remove premature redirect; let AuthProvider finish and index route handle it
+
     } catch (err: any) {
       toast.error(err.message || "Authentication failed. Please check your credentials.");
     } finally {

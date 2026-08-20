@@ -130,9 +130,8 @@ function InnerRoot() {
     if (status === "unauthenticated" && location.pathname !== "/auth") {
       navigate({ to: "/auth", replace: true });
     }
-    if (status === "authenticated" && location.pathname === "/auth") {
-      navigate({ to: "/app", replace: true });
-    }
+    // Post-login destination is now handled by index route or AuthPage directly
+    // to avoid competing with AuthProvider's role resolution.
   }, [status, location.pathname, navigate]);
 
   if (status === "loading") {
