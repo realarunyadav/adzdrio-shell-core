@@ -82,7 +82,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const checkSession = async () => {
     const token = localStorage.getItem('abos_auth_token');
     
-    // Add a safety timeout for initialization
     const timeoutId = setTimeout(() => {
       if (status === 'loading') {
         console.warn('Authentication initialization timed out, falling back to unauthenticated');
@@ -97,66 +96,75 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      // Standard session check
-      let response;
-      try {
-        // Only attempt legacy API check if we have a token that looks like a legacy one
-        // and a base URL is configured. Supabase tokens are usually much longer (> 500 chars).
-        const baseUrl = (import.meta as any).env['VITE_API_BASE_URL'];
+      let resolvedUser: User | null = null;
+      
+      // 1. Supabase Session Check
+      const { data: { session }, error: sbError } = await supabase.auth.getSession();
+      
+      if (sbError) throw sbError;
+      
+      if (session?.user) {
+        const userId = session.user.id;
         
-        if (baseUrl && token.length < 500) {
-          response = await authService.getCurrentSession();
-        } else {
-          // If no base URL or long token, force Supabase verification path
-          throw new Error('Supabase token detected or API not configured, skipping legacy check');
+        // 2. Fetch User Roles from public.user_roles
+        const { data: userRoles, error: rolesError } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', userId);
+          
+        if (rolesError) {
+          console.error('Error fetching user roles:', rolesError);
         }
-      } catch (e: any) {
-        // Fall back to Supabase session check if legacy API fails or is not configured
-        console.warn('Legacy API session check bypassed or failed, attempting Supabase verification', e.message);
-        const { data: { session }, error: sbError } = await supabase.auth.getSession();
+
+        const roles = userRoles?.map(r => r.role.toUpperCase()) || [];
         
-        if (sbError) throw sbError;
-        
-        if (session?.user) {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
-            
-          const { data: employee } = await supabase
-            .from('employees')
-            .select('*')
-            .eq('profile_id', session.user.id)
-            .single();
-            
-          if (profile) {
-            response = {
-              user: {
-                id: session.user.id,
-                displayName: profile.display_name || session.user.email?.split('@')[0] || 'User',
-                email: session.user.email || profile.email || '',
-                role: (profile.metadata as any)?.role || 'VIEWER',
-                roles: [(profile.metadata as any)?.role || 'VIEWER'],
-                permissions: [],
-                organizationId: employee?.organization_id,
-                organizationScope: employee?.organization_id,
-              }
-            };
-          } else {
-            console.error('No profile found for Supabase user:', session.user.id);
-            throw new Error('User profile not found');
-          }
+        // 3. Fetch Profile and Employee Context
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .single();
+          
+        const { data: employee } = await supabase
+          .from('employees')
+          .select('*')
+          .eq('profile_id', userId)
+          .single();
+          
+        if (profile) {
+          resolvedUser = {
+            id: userId,
+            displayName: profile.display_name || session.user.email?.split('@')[0] || 'User',
+            email: session.user.email || profile.email || '',
+            role: roles[0] || 'VIEWER',
+            roles: roles.length > 0 ? roles : ['VIEWER'],
+            permissions: [],
+            organizationId: employee?.organization_id,
+            organizationScope: employee?.organization_id,
+          };
         } else {
-          console.warn('No active Supabase session found');
-          throw e; // Rethrow original error if no Supabase session
+          console.error('No profile found for Supabase user:', userId);
+          throw new Error('User profile not found');
+        }
+      } else {
+        // Fallback to legacy API if no Supabase session and base URL exists
+        const baseUrl = (import.meta as any).env['VITE_API_BASE_URL'];
+        if (baseUrl && token.length < 500) {
+          const response = await authService.getCurrentSession();
+          const userData = response?.user ?? response;
+          resolvedUser = mapBackendUser(userData);
+        } else {
+          throw new Error('No active session found');
         }
       }
       
-      const userData = response?.user ?? response;
-      setUser(mapBackendUser(userData));
-      setStatus('authenticated');
-      setError(null);
+      if (resolvedUser) {
+        setUser(resolvedUser);
+        setStatus('authenticated');
+        setError(null);
+      } else {
+        throw new Error('Failed to resolve user');
+      }
     } catch (err: any) {
       console.error('Session validation failed:', err);
       localStorage.removeItem('abos_auth_token');
@@ -196,14 +204,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           .eq('profile_id', data.session.user.id)
           .single();
 
+        const { data: userRoles } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', data.session.user.id);
+
+        const roles = userRoles?.map(r => r.role.toUpperCase()) || [];
+
         response = {
           accessToken: data.session.access_token,
           user: {
             id: data.session.user.id,
             displayName: profile?.display_name || data.session.user.email?.split('@')[0] || 'User',
             email: data.session.user.email || profile?.email || '',
-            role: (profile?.metadata as any)?.role || 'VIEWER',
-            roles: [(profile?.metadata as any)?.role || 'VIEWER'],
+            role: roles[0] || 'VIEWER',
+            roles: roles.length > 0 ? roles : ['VIEWER'],
             permissions: [],
             organizationId: employee?.organization_id,
           }

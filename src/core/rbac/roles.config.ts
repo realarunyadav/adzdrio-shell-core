@@ -6,6 +6,13 @@ import type { RoleDefinition } from "./types";
  */
 export const roleDefinitions: RoleDefinition[] = [
   {
+    id: "OWNER",
+    name: "OWNER",
+    description: "Highest authority. Full platform and organization ownership.",
+    permissions: ["*"],
+    rank: 110,
+  },
+  {
     id: "ADMIN",
     name: "ADMIN",
     description: "Full enterprise administrative control.",
