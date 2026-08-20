@@ -389,9 +389,9 @@ function DocumentManagementWorkspace() {
       />
       
       <DocumentDetailsDrawer 
-        document={selectedDoc}
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
+        documentId={selectedDoc?.id || null} 
+        open={drawerOpen} 
+        onOpenChange={setDrawerOpen} 
       />
     </div>
   );

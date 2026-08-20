@@ -1,6 +1,4 @@
 import * as React from "react";
-import { adminService, PolicyVersion } from "@/lib/api/services";
-import { SectionCard } from "@/components/shared/SectionCard";
 import { 
   ShieldCheck, 
   History, 
@@ -31,47 +29,63 @@ import { toast } from "sonner";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { SectionCard } from "@/components/shared/SectionCard";
+import { legalService } from "@/lib/api/services";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { LegalVersion, LegalTemplate } from "@/lib/api/legal.types";
+import { SkeletonTable } from "@/components/shared/SkeletonLoader";
 
 export function PolicyManager() {
-  const [activeTab, setActiveTab] = React.useState<PolicyVersion['type']>('terms_and_conditions');
-  const [policies, setPolicies] = React.useState<PolicyVersion[]>([]);
-  const [loading, setLoading] = React.useState(true);
+  const [activeTab, setActiveTab] = React.useState<string>('terms_and_conditions');
   const [showNewDialog, setShowNewDialog] = React.useState(false);
-  const [previewPolicy, setPreviewPolicy] = React.useState<PolicyVersion | null>(null);
+  const [previewPolicy, setPreviewPolicy] = React.useState<LegalVersion | null>(null);
+  const queryClient = useQueryClient();
 
   const [newVersion, setNewVersion] = React.useState('');
   const [newContent, setNewContent] = React.useState('');
 
-  React.useEffect(() => {
-    async function fetchPolicies() {
-      try {
-        setLoading(true);
-        const data = await adminService.getPolicyVersions(activeTab);
-        setPolicies(data);
-      } catch (err: any) {
-        console.error("Failed to fetch policies", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchPolicies();
-  }, [activeTab]);
+  // Find the template corresponding to the active tab
+  const { data: templates = [] } = useQuery({
+    queryKey: ['legal', 'templates'],
+    queryFn: () => legalService.listTemplates()
+  });
 
-  const handleCreate = async () => {
-    if (!newVersion || !newContent) {
-      toast.error("Please provide version and content");
-      return;
-    }
-    try {
-      await adminService.updatePolicy(activeTab, newContent);
+  const activeTemplate = templates.find(t => 
+    t.name.toLowerCase().includes(activeTab.replace(/_/g, ' ')) || 
+    t.type.toLowerCase().includes(activeTab.replace(/_/g, ' '))
+  );
+
+  const { data: policies = [], isLoading } = useQuery({
+    queryKey: ['legal', 'versions', activeTemplate?.id],
+    queryFn: () => legalService.listVersions(activeTemplate!.id),
+    enabled: !!activeTemplate?.id
+  });
+
+  const createVersionMutation = useMutation({
+    mutationFn: (data: any) => legalService.createVersion(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['legal', 'versions', activeTemplate?.id] });
       toast.success("New policy version created");
       setShowNewDialog(false);
-      // Refresh list
-      const data = await adminService.getPolicyVersions(activeTab);
-      setPolicies(data);
-    } catch (err) {
-      toast.error("Failed to create policy version");
+      setNewVersion('');
+      setNewContent('');
+    },
+    onError: () => toast.error("Failed to create policy version")
+  });
+
+  const handleCreate = async () => {
+    if (!newVersion || !newContent || !activeTemplate) {
+      toast.error("Please provide version, content, and ensure template is selected");
+      return;
     }
+    
+    createVersionMutation.mutate({
+      template_id: activeTemplate.id,
+      version: newVersion,
+      content: newContent,
+      status: 'Active',
+      effective_from: new Date().toISOString()
+    });
   };
 
   return (
@@ -116,17 +130,22 @@ export function PolicyManager() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {loading ? (
+                  {isLoading ? (
                     <TableRow>
-                      <TableCell colSpan={4} className="h-40 text-center animate-pulse">
-                        <Loader2 className="size-6 mx-auto mb-2 animate-spin text-primary opacity-20" />
-                        Accessing Historical Vault...
+                      <TableCell colSpan={4} className="p-0 overflow-hidden">
+                        <SkeletonTable />
+                      </TableCell>
+                    </TableRow>
+                  ) : !activeTemplate ? (
+                    <TableRow>
+                      <TableCell colSpan={4} className="h-40 text-center text-muted-foreground italic">
+                        Please select or create a template for this policy type first.
                       </TableCell>
                     </TableRow>
                   ) : policies.length === 0 ? (
                     <TableRow>
                       <TableCell colSpan={4} className="h-40 text-center text-muted-foreground italic">
-                        No historical versions found for this policy type.
+                        No historical versions found for this policy.
                       </TableCell>
                     </TableRow>
                   ) : (
@@ -138,20 +157,20 @@ export function PolicyManager() {
                             <span className="text-xs font-black">v{p.version}</span>
                           </div>
                         </TableCell>
-                        <TableCell className="text-xs font-medium">{new Date(p.effectiveDate).toLocaleDateString()}</TableCell>
+                        <TableCell className="text-xs font-medium">{new Date(p.effective_from).toLocaleDateString()}</TableCell>
                         <TableCell>
                           <Badge className={cn(
                             "text-[8px] font-black uppercase tracking-widest px-2 h-5",
-                            p.isActive ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-muted text-muted-foreground border-border/40"
+                            p.status === 'Active' ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-muted text-muted-foreground border-border/40"
                           )} variant="outline">
-                            {p.isActive ? 'Active' : 'Archived'}
+                            {p.status}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-right space-x-2">
                           <Button variant="ghost" size="sm" className="h-7 text-[9px] font-black uppercase tracking-widest" onClick={() => setPreviewPolicy(p)}>
                             <Eye className="size-3 mr-1.5" /> Preview
                           </Button>
-                          {p.isActive && (
+                          {p.status === 'Active' && (
                             <Badge variant="secondary" className="text-[8px] font-black uppercase bg-slate-100 border-slate-200">
                               <Lock className="size-2 mr-1" /> Immutable
                             </Badge>
@@ -209,7 +228,7 @@ export function PolicyManager() {
               Preview: v{previewPolicy?.version}
             </DialogTitle>
             <DialogDescription className="text-[10px] font-bold uppercase tracking-widest opacity-60">
-              Effective Date: {previewPolicy && new Date(previewPolicy.effectiveDate).toLocaleDateString()}
+              Effective Date: {previewPolicy && new Date(previewPolicy.effective_from).toLocaleDateString()}
             </DialogDescription>
           </DialogHeader>
           <ScrollArea className="max-h-[500px] p-6 bg-slate-50/50 rounded-xl border border-border/40">

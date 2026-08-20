@@ -27,9 +27,11 @@ import {
   ShieldAlert,
   Search
 } from "lucide-react";
-import { LegalTemplate, demoProhibitedTerms } from "@/lib/mock/workspace.demo";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { LegalTemplate } from "@/lib/api/legal.types";
+import { useQuery } from "@tanstack/react-query";
+import { legalService } from "@/lib/api/services";
 
 interface LegalTemplateModalProps {
   open: boolean;
@@ -43,11 +45,15 @@ export function LegalTemplateModal({ open, onOpenChange, template, onSave }: Leg
   const [formData, setFormData] = React.useState<Partial<LegalTemplate>>({
     name: "",
     type: "Service Agreement",
-    business: "Acme India",
-    applicableTo: "Enterprise Plan",
     status: "Draft",
     content: "",
-    variables: []
+    variables: [],
+    metadata: {}
+  });
+
+  const { data: complianceRules = [] } = useQuery({
+    queryKey: ['legal', 'compliance-rules'],
+    queryFn: () => legalService.listComplianceRules()
   });
 
   const [validationResult, setValidationResult] = React.useState<{
@@ -62,11 +68,10 @@ export function LegalTemplateModal({ open, onOpenChange, template, onSave }: Leg
       setFormData({
         name: "",
         type: "Service Agreement",
-        business: "Acme India",
-        applicableTo: "Enterprise Plan",
         status: "Draft",
         content: "",
-        variables: []
+        variables: [],
+        metadata: {}
       });
     }
     setValidationResult(null);
@@ -74,7 +79,7 @@ export function LegalTemplateModal({ open, onOpenChange, template, onSave }: Leg
   }, [template, open]);
 
   const runValidation = () => {
-    const findings = demoProhibitedTerms
+    const findings = complianceRules
       .filter(t => t.status === 'Active' && formData.content?.toLowerCase().includes(t.term.toLowerCase()))
       .map(t => ({ term: t.term, severity: t.severity }));
 
@@ -171,25 +176,20 @@ export function LegalTemplateModal({ open, onOpenChange, template, onSave }: Leg
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Target Brand/Business</Label>
-                    <Select value={formData.business || "Acme India"} onValueChange={v => setFormData({...formData, business: v})}>
-                      <SelectTrigger className="bg-accent/20 border-border/40 font-bold">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="glass-surface border-border/40">
-                        <SelectItem value="Acme India">Acme India</SelectItem>
-                        <SelectItem value="Vertex Tech">Vertex Tech</SelectItem>
-                        <SelectItem value="Blue Harbour">Blue Harbour</SelectItem>
-                        <SelectItem value="Global">Global / Platform-wide</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Target Brand/Business ID</Label>
+                    <Input 
+                      placeholder="e.g. biz-a" 
+                      value={formData.business_id || ""} 
+                      onChange={e => setFormData({...formData, business_id: e.target.value})}
+                      className="bg-accent/20 border-border/40 font-bold"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Applicable Plan/Process</Label>
                     <Input 
                       placeholder="e.g. All Plans, Enterprise Only" 
-                      value={formData.applicableTo} 
-                      onChange={e => setFormData({...formData, applicableTo: e.target.value})}
+                      value={formData.metadata?.['applicableTo'] || ""} 
+                      onChange={e => setFormData({...formData, metadata: { ...formData.metadata, applicableTo: e.target.value }})}
                       className="bg-accent/20 border-border/40 font-bold"
                     />
                   </div>
