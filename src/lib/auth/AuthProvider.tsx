@@ -109,10 +109,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             response = {
               user: {
                 id: session.user.id,
-                displayName: profile.full_name || session.user.email?.split('@')[0] || 'User',
+                displayName: profile.display_name || session.user.email?.split('@')[0] || 'User',
                 email: session.user.email || profile.email || '',
-                role: profile.role || 'VIEWER',
-                roles: [profile.role || 'VIEWER'],
+                role: (profile.metadata as any)?.role || 'VIEWER',
+                roles: [(profile.metadata as any)?.role || 'VIEWER'],
                 permissions: [],
                 organizationId: employee?.organization_id,
                 organizationScope: employee?.organization_id,
