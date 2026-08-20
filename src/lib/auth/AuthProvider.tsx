@@ -160,6 +160,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(null);
       setStatus('unauthenticated');
       setError(err.message || null);
+    } finally {
+      clearTimeout(timeoutId);
     }
   };
 
