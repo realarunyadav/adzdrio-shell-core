@@ -220,7 +220,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             role: roles[0] || 'VIEWER',
             roles: roles.length > 0 ? roles : ['VIEWER'],
             permissions: [],
-            organizationId: employee?.organization_id,
+            organizationId: employee?.organization_id || null,
           }
         };
       }
