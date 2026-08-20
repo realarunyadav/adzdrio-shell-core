@@ -80,8 +80,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const checkSession = async () => {
-    const token = localStorage.getItem('abos_auth_token');
-    
     const timeoutId = setTimeout(() => {
       if (status === 'loading') {
         console.warn('Authentication initialization timed out, falling back to unauthenticated');
@@ -89,24 +87,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     }, 5000);
 
-    if (!token) {
-      clearTimeout(timeoutId);
-      setStatus('unauthenticated');
-      return;
-    }
-
     try {
       let resolvedUser: User | null = null;
       
-      // 1. Supabase Session Check
+      // 1. Authoritative Supabase Session Check
       const { data: { session }, error: sbError } = await supabase.auth.getSession();
       
-      if (sbError) throw sbError;
+      if (sbError) {
+        console.error('Supabase session fetch error:', sbError);
+      }
       
       if (session?.user) {
         const userId = session.user.id;
         
-        // 2. Fetch User Roles from public.user_roles
+        // 2. Fetch User Roles from public.user_roles (authoritative RBAC)
         const { data: userRoles, error: rolesError } = await supabase
           .from('user_roles')
           .select('role')
@@ -131,8 +125,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           .eq('profile_id', userId)
           .single();
           
-        // A profile may legitimately not exist yet for the very first
-        // authenticated user, before one-time system initialization runs.
         resolvedUser = {
           id: userId,
           displayName: profile?.display_name || session.user.email?.split('@')[0] || 'User',
@@ -144,26 +136,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           organizationScope: employee?.organization_id || profile?.organization_id || null,
         };
 
-      } else {
-        // Fallback to legacy API if no Supabase session and base URL exists
-        const baseUrl = (import.meta as any).env['VITE_API_BASE_URL'];
-        if (baseUrl && token.length < 500) {
-          const response = await authService.getCurrentSession();
-          const userData = response?.user ?? response;
-          resolvedUser = mapBackendUser(userData);
-        } else {
-          throw new Error('No active session found');
-        }
-      }
-      
-      if (resolvedUser) {
         setUser(resolvedUser);
         setError(null);
-        // CRITICAL: Only set authenticated status AFTER user, roles, and profile are fully resolved.
-        // This prevents the routing race where guards see a partial or fallback "authenticated" state.
+        // CRITICAL: Only set authenticated status AFTER all Supabase-based RBAC/Profile data is resolved.
         setStatus('authenticated');
       } else {
-        throw new Error('Failed to resolve user');
+        // No Supabase session - check legacy token as a secondary fallback only
+        const token = localStorage.getItem('abos_auth_token');
+        const baseUrl = (import.meta as any).env['VITE_API_BASE_URL'];
+        
+        if (token && baseUrl && token.length < 500) {
+          try {
+            const response = await authService.getCurrentSession();
+            const userData = response?.user ?? response;
+            resolvedUser = mapBackendUser(userData);
+            
+            if (resolvedUser) {
+              setUser(resolvedUser);
+              setError(null);
+              setStatus('authenticated');
+            } else {
+              throw new Error('Failed to map legacy user');
+            }
+          } catch (apiErr) {
+            console.warn('Legacy API session check failed/unavailable:', apiErr);
+            localStorage.removeItem('abos_auth_token');
+            setStatus('unauthenticated');
+          }
+        } else {
+          // No authoritative session and no valid legacy fallback
+          setStatus('unauthenticated');
+        }
       }
     } catch (err: any) {
       console.error('Session validation failed:', err);
