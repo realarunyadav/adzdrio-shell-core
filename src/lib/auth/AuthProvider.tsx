@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { authService } from '@/lib/api/services';
 
 export interface User {
@@ -86,18 +87,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       let response;
       try {
         response = await authService.getCurrentSession();
-      } catch (e) {
-        console.warn('API session check failed, using prototype bypass', e);
-        response = {
-          user: {
-            id: 'mock_admin_1',
-            displayName: 'Technical Admin',
-            email: 'admin@abos.com',
-            role: 'ADMIN',
-            roles: ['ADMIN'],
-            permissions: ['*']
+      } catch (e: any) {
+        // Fall back to Supabase session check if legacy API fails or is not configured
+        console.warn('Legacy API session check failed, attempting Supabase verification', e);
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session?.user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+            
+          const { data: employee } = await supabase
+            .from('employees')
+            .select('*')
+            .eq('profile_id', session.user.id)
+            .single();
+            
+          if (profile) {
+            response = {
+              user: {
+                id: session.user.id,
+                displayName: profile.full_name || session.user.email?.split('@')[0] || 'User',
+                email: session.user.email || profile.email || '',
+                role: profile.role || 'VIEWER',
+                roles: [profile.role || 'VIEWER'],
+                permissions: [],
+                organizationId: employee?.organization_id,
+                organizationScope: employee?.organization_id,
+              }
+            };
+          } else {
+            throw e; // Rethrow if no profile found either
           }
-        };
+        } else {
+          throw e; // Rethrow original error if no Supabase session
+        }
       }
 
       
