@@ -41,12 +41,14 @@ export interface SupportMessage {
   sender_employee_id: string | null;
   body: string;
   visibility: string;
+  is_internal: boolean;
   metadata: any;
   created_at: string | null;
   updated_at: string | null;
   // Join fields
   sender_name?: string;
 }
+
 
 export interface SupportArticle {
   id: string;
