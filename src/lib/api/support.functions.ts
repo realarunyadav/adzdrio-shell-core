@@ -5,9 +5,7 @@ import {
   SupportCategory, 
   SupportTicket, 
   SupportMessage, 
-  SupportArticle,
-  SupportTicketFilters,
-  SupportArticleFilters
+  SupportArticle
 } from "./support.types";
 
 /**
@@ -27,7 +25,7 @@ export const supportCategories = {
         .order("name");
 
       if (error) throw error;
-      return data as SupportCategory[];
+      return (data || []) as unknown as SupportCategory[];
     }),
 
   getById: createServerFn({ method: "GET" })
@@ -40,7 +38,7 @@ export const supportCategories = {
         .single();
 
       if (error) throw error;
-      return category as SupportCategory;
+      return category as unknown as SupportCategory;
     }),
 
   create: createServerFn({ method: "POST" })
@@ -53,7 +51,7 @@ export const supportCategories = {
         .single();
 
       if (error) throw error;
-      return category as SupportCategory;
+      return category as unknown as SupportCategory;
     }),
 
   update: createServerFn({ method: "POST" })
@@ -72,7 +70,7 @@ export const supportCategories = {
         .single();
 
       if (error) throw error;
-      return category as SupportCategory;
+      return category as unknown as SupportCategory;
     })
 };
 
@@ -99,7 +97,6 @@ export const supportTickets = {
         .select(`
           *,
           crm_customers(full_name),
-          employees(profile_id),
           support_categories(name),
           businesses(name)
         `, { count: 'exact' });
@@ -111,7 +108,7 @@ export const supportTickets = {
       if (data.assigned_employee_id) query = query.eq("assigned_employee_id", data.assigned_employee_id);
       if (data.business_id) query = query.eq("business_id", data.business_id);
       if (data.search) {
-        query = query.or(`subject.ilike.%${data.search}%,ticket_number.ilike.%${data.search}%`);
+        query = query.or(`subject.ilike.%${data.search}%`);
       }
 
       const from = (data.page - 1) * data.pageSize;
@@ -129,7 +126,6 @@ export const supportTickets = {
           customer_name: (t.crm_customers as any)?.full_name,
           category_name: (t.support_categories as any)?.name,
           business_name: (t.businesses as any)?.name,
-          // Employee name would need a separate profile join or handled by RLS/Frontend display logic
         })) as unknown as SupportTicket[],
         total: count || 0
       };
@@ -143,7 +139,6 @@ export const supportTickets = {
         .select(`
           *,
           crm_customers(full_name, email, phone),
-          employees(profile_id),
           support_categories(name),
           businesses(name)
         `)
@@ -170,7 +165,7 @@ export const supportTickets = {
         .single();
 
       if (error) throw error;
-      return ticket as SupportTicket;
+      return ticket as unknown as SupportTicket;
     }),
 
   update: createServerFn({ method: "POST" })
@@ -189,7 +184,7 @@ export const supportTickets = {
         .single();
 
       if (error) throw error;
-      return ticket as SupportTicket;
+      return ticket as unknown as SupportTicket;
     })
 };
 
@@ -202,18 +197,14 @@ export const supportMessages = {
       const { data: messages, error } = await supabase
         .from("support_messages")
         .select(`
-          *,
-          employees(profile_id)
+          *
         `)
         .eq("ticket_id", data.ticketId)
         .order("created_at", { ascending: true });
 
       if (error) throw error;
 
-      return (messages || []).map(m => ({
-        ...m,
-        // sender_name would be resolved via profile link
-      })) as unknown as SupportMessage[];
+      return (messages || []) as unknown as SupportMessage[];
     }),
 
   create: createServerFn({ method: "POST" })
@@ -226,7 +217,7 @@ export const supportMessages = {
         .single();
 
       if (error) throw error;
-      return message as SupportMessage;
+      return message as unknown as SupportMessage;
     })
 };
 
@@ -238,7 +229,6 @@ export const supportArticles = {
       z.object({
         category_id: z.string().optional(),
         status: z.string().optional(),
-        is_internal: z.boolean().optional(),
         search: z.string().optional(),
         page: z.number().default(1),
         pageSize: z.number().default(20),
@@ -254,7 +244,6 @@ export const supportArticles = {
 
       if (data.category_id) query = query.eq("category_id", data.category_id);
       if (data.status) query = query.eq("status", data.status);
-      if (data.is_internal !== undefined) query = query.eq("is_internal", data.is_internal);
       if (data.search) {
         query = query.or(`title.ilike.%${data.search}%,content.ilike.%${data.search}%`);
       }
@@ -307,7 +296,7 @@ export const supportArticles = {
         .single();
 
       if (error) throw error;
-      return article as SupportArticle;
+      return article as unknown as SupportArticle;
     }),
 
   update: createServerFn({ method: "POST" })
@@ -326,6 +315,6 @@ export const supportArticles = {
         .single();
 
       if (error) throw error;
-      return article as SupportArticle;
+      return article as unknown as SupportArticle;
     })
 };

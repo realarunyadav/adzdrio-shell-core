@@ -39,23 +39,24 @@ export const customerService = { getAll: () => api.get<Customer[]>("/api/custome
 
 export const supportService = {
   // Proxies to server functions
-  listCategories: () => supportCategories.list(),
-  getCategoryById: (id: string) => supportCategories.getById({ id }),
-  createCategory: (data: any) => supportCategories.create(data),
-  updateCategory: (id: string, data: any) => supportCategories.update({ id, data }),
+  listCategories: () => supportCategories({ data: undefined }),
+  getCategoryById: (id: string) => supportCategories.getById({ data: { id } }),
+  createCategory: (data: any) => supportCategories.create({ data }),
+  updateCategory: (id: string, data: any) => supportCategories.update({ data: { id, data } }),
   
-  listTickets: (filters?: any) => supportTickets.list(filters),
-  getTicketById: (id: string) => supportTickets.getById({ id }),
-  createTicket: (data: any) => supportTickets.create(data),
-  updateTicket: (id: string, data: any) => supportTickets.update({ id, data }),
+  listTickets: (filters?: any) => supportTickets({ data: filters }),
+  getTicketById: (id: string) => supportTickets.getById({ data: { id } }),
+  createTicket: (data: any) => supportTickets.create({ data }),
+  updateTicket: (id: string, data: any) => supportTickets.update({ data: { id, data } }),
   
-  listMessages: (ticketId: string) => supportMessages.list({ ticketId }),
-  createMessage: (data: any) => supportMessages.create(data),
+  listMessages: (ticketId: string) => supportMessages({ data: { ticketId } }),
+  createMessage: (data: any) => supportMessages.create({ data }),
   
-  listArticles: (filters?: any) => supportArticles.list(filters),
-  getArticleById: (id: string) => supportArticles.getById({ id }),
-  createArticle: (data: any) => supportArticles.create(data),
-  updateArticle: (id: string, data: any) => supportArticles.update({ id, data }),
+  listArticles: (filters?: any) => supportArticles({ data: filters }),
+  getArticleById: (id: string) => supportArticles.getById({ data: { id } }),
+  createArticle: (data: any) => supportArticles.create({ data }),
+  updateArticle: (id: string, data: any) => supportArticles.update({ data: { id, data } }),
+
 };
 
 export const financeService = {
