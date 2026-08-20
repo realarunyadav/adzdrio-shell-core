@@ -1145,6 +1145,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      bootstrap_first_owner: {
+        Args: { _org_name: string; _org_slug: string }
+        Returns: string
+      }
       can_access_business: {
         Args: { _business_id: string; _user_id: string }
         Returns: boolean
@@ -1163,6 +1167,7 @@ export type Database = {
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       is_owner: { Args: { _user_id: string }; Returns: boolean }
+      is_system_initialized: { Args: never; Returns: boolean }
       support_message_write_ok: {
         Args: { _biz: string; _org: string; _sender: string; _ticket: string }
         Returns: boolean
