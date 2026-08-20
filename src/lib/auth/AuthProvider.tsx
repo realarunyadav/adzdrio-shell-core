@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { authService } from '@/lib/api/services';
 
 export interface User {
@@ -60,8 +61,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [status, setStatus] = useState<'loading' | 'authenticated' | 'unauthenticated' | 'connection_error'>('loading');
   const [error, setError] = useState<string | null>(null);
+  const isInitialized = useRef(false);
 
   useEffect(() => {
+    if (isInitialized.current) return;
+    isInitialized.current = true;
+
     void checkSession();
 
     const handleUnauthorized = () => {
@@ -76,7 +81,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkSession = async () => {
     const token = localStorage.getItem('abos_auth_token');
+    
+    // Add a safety timeout for initialization
+    const timeoutId = setTimeout(() => {
+      if (status === 'loading') {
+        console.warn('Authentication initialization timed out, falling back to unauthenticated');
+        setStatus('unauthenticated');
+      }
+    }, 5000);
+
     if (!token) {
+      clearTimeout(timeoutId);
       setStatus('unauthenticated');
       return;
     }
@@ -85,60 +100,112 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Standard session check
       let response;
       try {
-        response = await authService.getCurrentSession();
-      } catch (e) {
-        console.warn('API session check failed, using prototype bypass', e);
-        response = {
-          user: {
-            id: 'mock_admin_1',
-            displayName: 'Technical Admin',
-            email: 'admin@abos.com',
-            role: 'ADMIN',
-            roles: ['ADMIN'],
-            permissions: ['*']
+        // Only attempt legacy API check if we have a token that looks like a legacy one
+        // and a base URL is configured. Supabase tokens are usually much longer (> 500 chars).
+        const baseUrl = (import.meta as any).env['VITE_API_BASE_URL'];
+        
+        if (baseUrl && token.length < 500) {
+          response = await authService.getCurrentSession();
+        } else {
+          // If no base URL or long token, force Supabase verification path
+          throw new Error('Supabase token detected or API not configured, skipping legacy check');
+        }
+      } catch (e: any) {
+        // Fall back to Supabase session check if legacy API fails or is not configured
+        console.warn('Legacy API session check bypassed or failed, attempting Supabase verification', e.message);
+        const { data: { session }, error: sbError } = await supabase.auth.getSession();
+        
+        if (sbError) throw sbError;
+        
+        if (session?.user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
+            
+          const { data: employee } = await supabase
+            .from('employees')
+            .select('*')
+            .eq('profile_id', session.user.id)
+            .single();
+            
+          if (profile) {
+            response = {
+              user: {
+                id: session.user.id,
+                displayName: profile.display_name || session.user.email?.split('@')[0] || 'User',
+                email: session.user.email || profile.email || '',
+                role: (profile.metadata as any)?.role || 'VIEWER',
+                roles: [(profile.metadata as any)?.role || 'VIEWER'],
+                permissions: [],
+                organizationId: employee?.organization_id,
+                organizationScope: employee?.organization_id,
+              }
+            };
+          } else {
+            console.error('No profile found for Supabase user:', session.user.id);
+            throw new Error('User profile not found');
           }
-        };
+        } else {
+          console.warn('No active Supabase session found');
+          throw e; // Rethrow original error if no Supabase session
+        }
       }
-
       
       const userData = response?.user ?? response;
       setUser(mapBackendUser(userData));
       setStatus('authenticated');
       setError(null);
     } catch (err: any) {
-      if (err.status === 401) {
-        localStorage.removeItem('abos_auth_token');
-        setStatus('unauthenticated');
-      } else if (err.status === 0 || err.status >= 500) {
-        setStatus('connection_error');
-      } else {
-        localStorage.removeItem('abos_auth_token');
-        setStatus('unauthenticated');
-      }
+      console.error('Session validation failed:', err);
+      localStorage.removeItem('abos_auth_token');
       setUser(null);
+      setStatus('unauthenticated');
       setError(err.message || null);
+    } finally {
+      clearTimeout(timeoutId);
     }
-
   };
 
   const login = async (credentials: { email: string; password: string }) => {
     try {
       setError(null);
-      // For visual prototype, we simulate a successful login if the API fails
       let response;
       try {
         response = await authService.login(credentials);
-      } catch (e) {
-        console.warn('API login failed, using prototype bypass', e);
+      } catch (e: any) {
+        console.warn('Legacy API login failed, attempting Supabase Auth', e);
+        const { data, error: sbError } = await supabase.auth.signInWithPassword({
+          email: credentials.email,
+          password: credentials.password,
+        });
+
+        if (sbError) throw sbError;
+        if (!data.session) throw new Error('Authentication failed');
+
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', data.session.user.id)
+          .single();
+
+        const { data: employee } = await supabase
+          .from('employees')
+          .select('*')
+          .eq('profile_id', data.session.user.id)
+          .single();
+
         response = {
-          accessToken: 'mock_token_' + Date.now(),
+          accessToken: data.session.access_token,
           user: {
-            id: 'mock_admin_1',
-            displayName: credentials.email.split('@')[0],
-            email: credentials.email,
-            role: 'ADMIN',
-            roles: ['ADMIN'],
-            permissions: ['*']
+            id: data.session.user.id,
+            displayName: profile?.display_name || data.session.user.email?.split('@')[0] || 'User',
+            email: data.session.user.email || profile?.email || '',
+            role: (profile?.metadata as any)?.role || 'VIEWER',
+            roles: [(profile?.metadata as any)?.role || 'VIEWER'],
+            permissions: [],
+            organizationId: employee?.organization_id,
           }
         };
       }

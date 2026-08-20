@@ -19,21 +19,15 @@ export class ApiError extends Error {
   }
 }
 
-function getApiBaseUrl(): string {
+function getApiBaseUrl(): string | null {
+  // Use a fallback if VITE_API_BASE_URL is not provided to prevent fatal bootstrap errors
+  // while still throwing errors during actual requests if configuration is missing.
   const configured = String((import.meta as ImportMeta & { env: Record<string, string | undefined> }).env['VITE_API_BASE_URL'] ?? '').trim();
-
-  if (!configured) {
-    throw new ApiError(
-      0,
-      'ABOS API is not configured. Configure VITE_API_BASE_URL in Lovable environment variables.'
-    );
-  }
-
-  return configured.replace(/\/+$/, '');
+  return configured ? configured.replace(/\/+$/, '') : null;
 }
 
 class ApiClient {
-  private get baseUrl(): string {
+  private get baseUrl(): string | null {
     return getApiBaseUrl();
   }
 
@@ -84,6 +78,9 @@ class ApiClient {
     options: RequestInit = {},
     timeoutMs = 30000
   ): Promise<T> {
+    if (!this.baseUrl) {
+      throw new ApiError(0, 'ABOS API is not configured. Legacy service unavailable.');
+    }
     const url = `${this.baseUrl}${path.startsWith('/') ? '' : '/'}${path}`;
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeoutMs);
