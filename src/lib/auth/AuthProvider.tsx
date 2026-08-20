@@ -131,21 +131,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           .eq('profile_id', userId)
           .single();
           
-        if (profile) {
-          resolvedUser = {
-            id: userId,
-            displayName: profile.display_name || session.user.email?.split('@')[0] || 'User',
-            email: session.user.email || profile.email || '',
-            role: roles[0] || 'VIEWER',
-            roles: roles.length > 0 ? roles : ['VIEWER'],
-            permissions: [],
-            organizationId: employee?.organization_id || null,
-            organizationScope: employee?.organization_id || null,
-          };
-        } else {
-          console.error('No profile found for Supabase user:', userId);
-          throw new Error('User profile not found');
-        }
+        // A profile may legitimately not exist yet for the very first
+        // authenticated user, before one-time system initialization runs.
+        resolvedUser = {
+          id: userId,
+          displayName: profile?.display_name || session.user.email?.split('@')[0] || 'User',
+          email: session.user.email || profile?.email || '',
+          role: roles[0] || 'VIEWER',
+          roles: roles.length > 0 ? roles : ['VIEWER'],
+          permissions: [],
+          organizationId: employee?.organization_id || profile?.organization_id || null,
+          organizationScope: employee?.organization_id || profile?.organization_id || null,
+        };
+
       } else {
         // Fallback to legacy API if no Supabase session and base URL exists
         const baseUrl = (import.meta as any).env['VITE_API_BASE_URL'];

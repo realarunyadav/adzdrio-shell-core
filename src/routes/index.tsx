@@ -1,4 +1,4 @@
-import { createFileRoute, Navigate } from "@tanstack/react-router";
+import { createFileRoute, Navigate, Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth/AuthProvider";
 
 export const Route = createFileRoute("/")({
@@ -23,12 +23,17 @@ function Index() {
     }
     
     // Non-owner authenticated users stay on home or go to their respective modules
-    // For now, we render the root content (or empty if none exists yet)
     return (
       <div className="flex min-h-screen items-center justify-center bg-navy p-6">
         <div className="text-center space-y-4">
           <h1 className="text-2xl font-black text-white uppercase tracking-tighter">ABOS Home</h1>
           <p className="text-sm text-primary/60 font-medium">Select a module from the command palette (⌘K) to begin.</p>
+          <Link
+            to="/setup"
+            className="inline-block text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 hover:text-primary transition-colors"
+          >
+            System initialization
+          </Link>
         </div>
       </div>
     );

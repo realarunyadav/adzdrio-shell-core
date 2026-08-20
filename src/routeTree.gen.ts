@@ -14,6 +14,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CommunicationRouteImport } from './routes/communication'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SetupRouteImport } from './routes/setup'
 import { Route as CustomerPortalRouteImport } from './routes/customer.portal'
 import { Route as ModulesModuleIdRouteImport } from './routes/modules.$moduleId'
 import { Route as ModulesActivationRouteImport } from './routes/modules.activation'
@@ -120,6 +121,11 @@ const CommunicationRoute = CommunicationRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SetupRoute = SetupRouteImport.update({
+  id: '/setup',
+  path: '/setup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CustomerPortalRoute = CustomerPortalRouteImport.update({
@@ -543,6 +549,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/communication': typeof CommunicationRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/setup': typeof SetupRoute
   '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
@@ -632,6 +639,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/communication': typeof CommunicationRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/setup': typeof SetupRoute
   '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
@@ -722,6 +730,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/communication': typeof CommunicationRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/setup': typeof SetupRoute
   '/customer/portal': typeof CustomerPortalRoute
   '/modules/$moduleId': typeof ModulesModuleIdRoute
   '/modules/activation': typeof ModulesActivationRoute
@@ -813,6 +822,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/communication'
     | '/settings'
+    | '/setup'
     | '/customer/portal'
     | '/modules/$moduleId'
     | '/modules/activation'
@@ -902,6 +912,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/communication'
     | '/settings'
+    | '/setup'
     | '/customer/portal'
     | '/modules/$moduleId'
     | '/modules/activation'
@@ -991,6 +1002,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/communication'
     | '/settings'
+    | '/setup'
     | '/customer/portal'
     | '/modules/$moduleId'
     | '/modules/activation'
@@ -1081,6 +1093,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CommunicationRoute: typeof CommunicationRoute
   SettingsRoute: typeof SettingsRouteWithChildren
+  SetupRoute: typeof SetupRoute
   CustomerPortalRoute: typeof CustomerPortalRoute
   ModulesModuleIdRoute: typeof ModulesModuleIdRoute
   ModulesActivationRoute: typeof ModulesActivationRoute
@@ -1141,6 +1154,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/setup': {
+      id: '/setup'
+      path: '/setup'
+      fullPath: '/setup'
+      preLoaderRoute: typeof SetupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/customer/portal': {
@@ -1892,6 +1912,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CommunicationRoute: CommunicationRoute,
   SettingsRoute: SettingsRouteWithChildren,
+  SetupRoute: SetupRoute,
   CustomerPortalRoute: CustomerPortalRoute,
   ModulesModuleIdRoute: ModulesModuleIdRoute,
   ModulesActivationRoute: ModulesActivationRoute,
