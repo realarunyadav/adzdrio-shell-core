@@ -139,7 +139,7 @@ function LegalManagement() {
                     <TableCell className="text-[9px] uppercase font-black text-muted-foreground">{t.type}</TableCell>
                     <TableCell className="text-[10px] font-black uppercase tracking-tight text-center">{t.business_id || 'Global'}</TableCell>
                     <TableCell className="text-[10px] font-black text-center">
-                      <Badge variant="outline" className="h-5 text-[9px] px-2 border-border/60">v{t.metadata?.version || '1.0.0'}</Badge>
+                      <Badge variant="outline" className="h-5 text-[9px] px-2 border-border/60">v{t.metadata?.['version'] || '1.0.0'}</Badge>
                     </TableCell>
                     <TableCell className="text-center">
                       <StatusBadge tone={t.status === 'Active' ? 'success' : t.status === 'Draft' ? 'warning' : 'neutral'} className="h-5 text-[8px]">

@@ -188,7 +188,7 @@ export function LegalTemplateModal({ open, onOpenChange, template, onSave }: Leg
                     <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Applicable Plan/Process</Label>
                     <Input 
                       placeholder="e.g. All Plans, Enterprise Only" 
-                      value={formData.metadata?.applicableTo || ""} 
+                      value={formData.metadata?.['applicableTo'] || ""} 
                       onChange={e => setFormData({...formData, metadata: { ...formData.metadata, applicableTo: e.target.value }})}
                       className="bg-accent/20 border-border/40 font-bold"
                     />
