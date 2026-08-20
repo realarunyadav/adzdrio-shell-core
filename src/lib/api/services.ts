@@ -31,6 +31,10 @@ export { financeTransactions, financeInvoices, getFinanceAnalytics, getInvoiceAn
 import { supportCategories, supportTickets, supportMessages, supportArticles } from "./support.functions";
 export { supportCategories, supportTickets, supportMessages, supportArticles };
 
+import { legalTemplates, legalVersions, legalDocuments, legalSignatures, complianceRules } from "./legal.functions";
+export { legalTemplates, legalVersions, legalDocuments, legalSignatures, complianceRules };
+
+
 export const accountService = { getAll: (params?: { search?: string; status?: string }) => { const query = new URLSearchParams(); if (params?.search) query.set("search", params.search); if (params?.status) query.set("status", params.status); return api.get<any[]>(`/api/crm/accounts${query.toString() ? `?${query}` : ""}`); }, getById: (id: string) => api.get<any>(`/api/crm/accounts/${id}`), create: (data: any) => api.post("/api/crm/accounts", data), update: (id: string, data: any) => api.patch(`/api/crm/accounts/${id}`, data), remove: (id: string) => api.delete(`/api/crm/accounts/${id}`) };
 export const contactService = { getAll: (params?: { search?: string; accountId?: string; status?: string }) => { const query = new URLSearchParams(); if (params?.search) query.set("search", params.search); if (params?.accountId) query.set("accountId", params.accountId); if (params?.status) query.set("status", params.status); return api.get<any[]>(`/api/crm/contacts${query.toString() ? `?${query}` : ""}`); }, getById: (id: string) => api.get<any>(`/api/crm/contacts/${id}`), create: (data: any) => api.post("/api/crm/contacts", data), update: (id: string, data: any) => api.patch(`/api/crm/contacts/${id}`, data), remove: (id: string) => api.delete(`/api/crm/contacts/${id}`) };
 
@@ -56,9 +60,37 @@ export const supportService = {
   getArticleById: (id: string) => supportArticles.getById({ data: { id } }),
   createArticle: (data: any) => supportArticles.create({ data }),
   updateArticle: (id: string, data: any) => supportArticles.update({ data: { id, data } }),
-
-
 };
+
+export const legalService = {
+  // Templates
+  listTemplates: (filters?: any) => legalTemplates.list({ data: filters }),
+  getTemplateById: (id: string) => legalTemplates.getById({ data: { id } }),
+  createTemplate: (data: any) => legalTemplates.create({ data }),
+  updateTemplate: (id: string, data: any) => legalTemplates.update({ data: { id, data } }),
+  
+  // Versions
+  listVersions: (templateId: string) => legalVersions.list({ data: { templateId } }),
+  getVersionById: (id: string) => legalVersions.getById({ data: { id } }),
+  createVersion: (data: any) => legalVersions.create({ data }),
+  
+  // Documents
+  listDocuments: (filters?: any) => legalDocuments.list({ data: filters }),
+  getDocumentById: (id: string) => legalDocuments.getById({ data: { id } }),
+  createDocument: (data: any) => legalDocuments.create({ data }),
+  updateDocument: (id: string, data: any) => legalDocuments.update({ data: { id, data } }),
+  
+  // Signatures
+  listSignatures: (documentId: string) => legalSignatures.list({ data: { documentId } }),
+  getSignatureById: (id: string) => legalSignatures.getById({ data: { id } }),
+  
+  // Compliance Rules
+  listComplianceRules: (filters?: any) => complianceRules.list({ data: filters }),
+  getComplianceRuleById: (id: string) => complianceRules.getById({ data: { id } }),
+  createComplianceRule: (data: any) => complianceRules.create({ data }),
+  updateComplianceRule: (id: string, data: any) => complianceRules.update({ data: { id, data } }),
+};
+
 
 export const financeService = {
   getStats: () => api.get<any>("/api/finance/stats"),
