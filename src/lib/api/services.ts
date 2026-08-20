@@ -28,12 +28,35 @@ export { salesPlanService, dealService, subscriptionService } from "./sales.func
 import { financeTransactions, financeInvoices, getFinanceAnalytics, getInvoiceAnalytics, getReconciliation } from "./finance.functions";
 export { financeTransactions, financeInvoices, getFinanceAnalytics, getInvoiceAnalytics, getReconciliation };
 
+import { supportCategories, supportTickets, supportMessages, supportArticles } from "./support.functions";
+export { supportCategories, supportTickets, supportMessages, supportArticles };
 
 export const accountService = { getAll: (params?: { search?: string; status?: string }) => { const query = new URLSearchParams(); if (params?.search) query.set("search", params.search); if (params?.status) query.set("status", params.status); return api.get<any[]>(`/api/crm/accounts${query.toString() ? `?${query}` : ""}`); }, getById: (id: string) => api.get<any>(`/api/crm/accounts/${id}`), create: (data: any) => api.post("/api/crm/accounts", data), update: (id: string, data: any) => api.patch(`/api/crm/accounts/${id}`, data), remove: (id: string) => api.delete(`/api/crm/accounts/${id}`) };
 export const contactService = { getAll: (params?: { search?: string; accountId?: string; status?: string }) => { const query = new URLSearchParams(); if (params?.search) query.set("search", params.search); if (params?.accountId) query.set("accountId", params.accountId); if (params?.status) query.set("status", params.status); return api.get<any[]>(`/api/crm/contacts${query.toString() ? `?${query}` : ""}`); }, getById: (id: string) => api.get<any>(`/api/crm/contacts/${id}`), create: (data: any) => api.post("/api/crm/contacts", data), update: (id: string, data: any) => api.patch(`/api/crm/contacts/${id}`, data), remove: (id: string) => api.delete(`/api/crm/contacts/${id}`) };
 
 
 export const customerService = { getAll: () => api.get<Customer[]>("/api/customers"), getById: (id: string) => api.get<Customer>(`/api/customers/${id}`), get360: (id: string) => api.get<import("./services.types").Customer360>(`/api/customers/${id}/360`), getDevices: (customerId: string) => api.get<Device[]>(`/api/customers/${customerId}/devices`), updateDeviceStatus: (deviceId: string, status: Device["status"]) => api.patch(`/api/devices/${deviceId}/status`, { status }), getReferralStatus: (customerId: string) => api.get<{ referralCode: string; successful: number; pending: number; rewards: ReferralReward[] }>(`/api/customers/${customerId}/referrals`) };
+
+export const supportService = {
+  // Proxies to server functions
+  listCategories: () => supportCategories.list(),
+  getCategoryById: (id: string) => supportCategories.getById({ id }),
+  createCategory: (data: any) => supportCategories.create(data),
+  updateCategory: (id: string, data: any) => supportCategories.update({ id, data }),
+  
+  listTickets: (filters?: any) => supportTickets.list(filters),
+  getTicketById: (id: string) => supportTickets.getById({ id }),
+  createTicket: (data: any) => supportTickets.create(data),
+  updateTicket: (id: string, data: any) => supportTickets.update({ id, data }),
+  
+  listMessages: (ticketId: string) => supportMessages.list({ ticketId }),
+  createMessage: (data: any) => supportMessages.create(data),
+  
+  listArticles: (filters?: any) => supportArticles.list(filters),
+  getArticleById: (id: string) => supportArticles.getById({ id }),
+  createArticle: (data: any) => supportArticles.create(data),
+  updateArticle: (id: string, data: any) => supportArticles.update({ id, data }),
+};
 
 export const financeService = {
   getStats: () => api.get<any>("/api/finance/stats"),
@@ -48,6 +71,7 @@ export const financeService = {
   getInvoiceAnalytics: (params?: any) => getInvoiceAnalytics({ data: params }),
   getReconciliation: (params: { saleId?: string | null; invoiceId?: string | null }) => getReconciliation({ data: params }),
 };
+
 export const auditService = {
   getLogs: () => api.get<any[]>("/api/audit-logs"),
   getActions: () => api.get<any[]>("/api/audit-logs/actions"),
