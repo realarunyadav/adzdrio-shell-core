@@ -119,11 +119,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           .eq('id', userId)
           .single();
           
-        const { data: employee } = await supabase
+        const { data: employee, error: empError } = await supabase
           .from('employees')
           .select('*')
           .eq('profile_id', userId)
-          .single();
+          .maybeSingle();
+          
+        if (empError) {
+          console.error('Error fetching employee context:', empError);
+        }
           
         resolvedUser = {
           id: userId,
