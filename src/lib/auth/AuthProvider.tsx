@@ -49,11 +49,11 @@ function mapBackendUser(raw: any): User {
     role: normalizedRoles[0] || 'VIEWER',
     roles: normalizedRoles,
     permissions: normalizeList(raw?.permissions),
-    organizationId: raw?.organizationId,
-    organizationScope: raw?.organizationScope,
-    brandScope: raw?.brandScope,
-    departmentScope: raw?.departmentScope,
-    teamScope: raw?.teamScope,
+    organizationId: raw?.organizationId || null,
+    organizationScope: raw?.organizationScope || null,
+    brandScope: raw?.brandScope || null,
+    departmentScope: raw?.departmentScope || null,
+    teamScope: raw?.teamScope || null,
   };
 }
 
