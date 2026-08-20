@@ -9,11 +9,11 @@ export interface User {
   role: string;
   roles: string[];
   permissions: string[];
-  organizationId?: string;
-  organizationScope?: string;
-  brandScope?: string;
-  departmentScope?: string;
-  teamScope?: string;
+  organizationId?: string | null;
+  organizationScope?: string | null;
+  brandScope?: string | null;
+  departmentScope?: string | null;
+  teamScope?: string | null;
 }
 
 interface AuthContextType {
