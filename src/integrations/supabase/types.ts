@@ -1149,6 +1149,11 @@ export type Database = {
         Args: { _business_id: string; _user_id: string }
         Returns: boolean
       }
+      can_access_ticket: {
+        Args: { _ticket_id: string; _user_id: string }
+        Returns: boolean
+      }
+      current_employee_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -1158,6 +1163,21 @@ export type Database = {
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
       is_owner: { Args: { _user_id: string }; Returns: boolean }
+      support_message_write_ok: {
+        Args: { _biz: string; _org: string; _sender: string; _ticket: string }
+        Returns: boolean
+      }
+      support_ticket_write_ok: {
+        Args: {
+          _biz: string
+          _category: string
+          _customer: string
+          _employee: string
+          _org: string
+        }
+        Returns: boolean
+      }
+      user_org: { Args: { _user_id: string }; Returns: string }
     }
     Enums: {
       app_role: "OWNER" | "ADMIN" | "MANAGER" | "SALES" | "SUPPORT" | "VIEWER"
