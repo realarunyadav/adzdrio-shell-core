@@ -86,11 +86,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Standard session check
       let response;
       try {
-        response = await authService.getCurrentSession();
+        // Only attempt legacy API check if we have an abos_auth_token and it's not a supabase token
+        // Supabase tokens are usually much longer than legacy tokens
+        if (token.length < 500) {
+          response = await authService.getCurrentSession();
+        } else {
+          throw new Error('Supabase token detected, skipping legacy API');
+        }
       } catch (e: any) {
         // Fall back to Supabase session check if legacy API fails or is not configured
-        console.warn('Legacy API session check failed, attempting Supabase verification', e);
-        const { data: { session } } = await supabase.auth.getSession();
+        console.warn('Legacy API session check bypassed or failed, attempting Supabase verification', e);
+        const { data: { session }, error: sbError } = await supabase.auth.getSession();
+        
+        if (sbError) throw sbError;
         
         if (session?.user) {
           const { data: profile } = await supabase
@@ -119,9 +127,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               }
             };
           } else {
-            throw e; // Rethrow if no profile found either
+            console.error('No profile found for Supabase user:', session.user.id);
+            throw new Error('User profile not found');
           }
         } else {
+          console.warn('No active Supabase session found');
           throw e; // Rethrow original error if no Supabase session
         }
       }
