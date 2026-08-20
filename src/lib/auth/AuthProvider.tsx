@@ -125,46 +125,58 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           throw e; // Rethrow original error if no Supabase session
         }
       }
-
       
       const userData = response?.user ?? response;
       setUser(mapBackendUser(userData));
       setStatus('authenticated');
       setError(null);
     } catch (err: any) {
-      if (err.status === 401) {
-        localStorage.removeItem('abos_auth_token');
-        setStatus('unauthenticated');
-      } else if (err.status === 0 || err.status >= 500) {
-        setStatus('connection_error');
-      } else {
-        localStorage.removeItem('abos_auth_token');
-        setStatus('unauthenticated');
-      }
+      console.error('Session validation failed:', err);
+      localStorage.removeItem('abos_auth_token');
       setUser(null);
+      setStatus('unauthenticated');
       setError(err.message || null);
     }
-
   };
 
   const login = async (credentials: { email: string; password: string }) => {
     try {
       setError(null);
-      // For visual prototype, we simulate a successful login if the API fails
       let response;
       try {
         response = await authService.login(credentials);
-      } catch (e) {
-        console.warn('API login failed, using prototype bypass', e);
+      } catch (e: any) {
+        console.warn('Legacy API login failed, attempting Supabase Auth', e);
+        const { data, error: sbError } = await supabase.auth.signInWithPassword({
+          email: credentials.email,
+          password: credentials.password,
+        });
+
+        if (sbError) throw sbError;
+        if (!data.session) throw new Error('Authentication failed');
+
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', data.session.user.id)
+          .single();
+
+        const { data: employee } = await supabase
+          .from('employees')
+          .select('*')
+          .eq('profile_id', data.session.user.id)
+          .single();
+
         response = {
-          accessToken: 'mock_token_' + Date.now(),
+          accessToken: data.session.access_token,
           user: {
-            id: 'mock_admin_1',
-            displayName: credentials.email.split('@')[0],
-            email: credentials.email,
-            role: 'ADMIN',
-            roles: ['ADMIN'],
-            permissions: ['*']
+            id: data.session.user.id,
+            displayName: profile?.display_name || data.session.user.email?.split('@')[0] || 'User',
+            email: data.session.user.email || profile?.email || '',
+            role: (profile?.metadata as any)?.role || 'VIEWER',
+            roles: [(profile?.metadata as any)?.role || 'VIEWER'],
+            permissions: [],
+            organizationId: employee?.organization_id,
           }
         };
       }
