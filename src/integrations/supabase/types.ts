@@ -102,6 +102,60 @@ export type Database = {
           },
         ]
       }
+      compliance_rules: {
+        Row: {
+          business_id: string | null
+          category: string | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          severity: string
+          status: string
+          term: string
+          updated_at: string | null
+        }
+        Insert: {
+          business_id?: string | null
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          severity: string
+          status?: string
+          term: string
+          updated_at?: string | null
+        }
+        Update: {
+          business_id?: string | null
+          category?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          severity?: string
+          status?: string
+          term?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_rules_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "compliance_rules_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crm_customers: {
         Row: {
           business_id: string
@@ -531,6 +585,347 @@ export type Database = {
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legal_documents: {
+        Row: {
+          business_id: string
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          customer_id: string | null
+          id: string
+          metadata: Json | null
+          name: string
+          organization_id: string
+          owner_employee_id: string | null
+          related_entity_id: string | null
+          related_entity_type: string | null
+          status: string
+          template_id: string | null
+          type: string
+          updated_at: string | null
+          version: string | null
+          version_id: string | null
+        }
+        Insert: {
+          business_id: string
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          customer_id?: string | null
+          id?: string
+          metadata?: Json | null
+          name: string
+          organization_id: string
+          owner_employee_id?: string | null
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          status?: string
+          template_id?: string | null
+          type: string
+          updated_at?: string | null
+          version?: string | null
+          version_id?: string | null
+        }
+        Update: {
+          business_id?: string
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          customer_id?: string | null
+          id?: string
+          metadata?: Json | null
+          name?: string
+          organization_id?: string
+          owner_employee_id?: string | null
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          status?: string
+          template_id?: string | null
+          type?: string
+          updated_at?: string | null
+          version?: string | null
+          version_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legal_documents_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_documents_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_documents_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_documents_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_documents_owner_employee_id_fkey"
+            columns: ["owner_employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_documents_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "legal_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_documents_version_id_fkey"
+            columns: ["version_id"]
+            isOneToOne: false
+            referencedRelation: "legal_versions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legal_signatures: {
+        Row: {
+          business_id: string
+          created_at: string | null
+          document_id: string
+          id: string
+          metadata: Json | null
+          organization_id: string
+          provider: string | null
+          provider_reference: string | null
+          requested_at: string | null
+          signed_at: string | null
+          signer_customer_id: string | null
+          signer_employee_id: string | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          business_id: string
+          created_at?: string | null
+          document_id: string
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          provider?: string | null
+          provider_reference?: string | null
+          requested_at?: string | null
+          signed_at?: string | null
+          signer_customer_id?: string | null
+          signer_employee_id?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          business_id?: string
+          created_at?: string | null
+          document_id?: string
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          provider?: string | null
+          provider_reference?: string | null
+          requested_at?: string | null
+          signed_at?: string | null
+          signer_customer_id?: string | null
+          signer_employee_id?: string | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legal_signatures_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_signatures_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "legal_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_signatures_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_signatures_signer_customer_id_fkey"
+            columns: ["signer_customer_id"]
+            isOneToOne: false
+            referencedRelation: "crm_customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_signatures_signer_employee_id_fkey"
+            columns: ["signer_employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legal_templates: {
+        Row: {
+          business_id: string | null
+          content: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          metadata: Json | null
+          name: string
+          organization_id: string
+          status: string
+          type: string
+          updated_at: string | null
+          variables: Json | null
+        }
+        Insert: {
+          business_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          metadata?: Json | null
+          name: string
+          organization_id: string
+          status?: string
+          type: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
+        Update: {
+          business_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          metadata?: Json | null
+          name?: string
+          organization_id?: string
+          status?: string
+          type?: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legal_templates_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_templates_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_templates_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legal_versions: {
+        Row: {
+          business_id: string | null
+          content: string | null
+          created_at: string | null
+          created_by: string | null
+          effective_from: string | null
+          effective_to: string | null
+          id: string
+          metadata: Json | null
+          organization_id: string
+          status: string
+          template_id: string
+          version: string
+        }
+        Insert: {
+          business_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          effective_from?: string | null
+          effective_to?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id: string
+          status?: string
+          template_id: string
+          version: string
+        }
+        Update: {
+          business_id?: string | null
+          content?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          effective_from?: string | null
+          effective_to?: string | null
+          id?: string
+          metadata?: Json | null
+          organization_id?: string
+          status?: string
+          template_id?: string
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legal_versions_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_versions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_versions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "legal_versions_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "legal_templates"
             referencedColumns: ["id"]
           },
         ]
