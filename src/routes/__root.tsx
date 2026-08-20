@@ -137,7 +137,7 @@ function InnerRoot() {
 
   if (status === "loading") {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-navy">
+      <div className="flex min-h-screen items-center justify-center bg-navy" data-auth-status="loading">
         <div className="flex flex-col items-center gap-4">
           <div className="size-12 rounded-xl bg-primary flex items-center justify-center animate-pulse"><ShieldCheck className="size-7 text-primary-foreground" /></div>
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/60">Initializing ABOS</span>
