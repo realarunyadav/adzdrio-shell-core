@@ -100,16 +100,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Standard session check
       let response;
       try {
-        // Only attempt legacy API check if we have an abos_auth_token and it's not a supabase token
-        // Supabase tokens are usually much longer than legacy tokens
-        if (token.length < 500) {
+        // Only attempt legacy API check if we have a token that looks like a legacy one
+        // and a base URL is configured. Supabase tokens are usually much longer (> 500 chars).
+        const baseUrl = (import.meta as any).env['VITE_API_BASE_URL'];
+        
+        if (baseUrl && token.length < 500) {
           response = await authService.getCurrentSession();
         } else {
-          throw new Error('Supabase token detected, skipping legacy API');
+          // If no base URL or long token, force Supabase verification path
+          throw new Error('Supabase token detected or API not configured, skipping legacy check');
         }
       } catch (e: any) {
         // Fall back to Supabase session check if legacy API fails or is not configured
-        console.warn('Legacy API session check bypassed or failed, attempting Supabase verification', e);
+        console.warn('Legacy API session check bypassed or failed, attempting Supabase verification', e.message);
         const { data: { session }, error: sbError } = await supabase.auth.getSession();
         
         if (sbError) throw sbError;

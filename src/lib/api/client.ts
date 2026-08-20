@@ -20,6 +20,8 @@ export class ApiError extends Error {
 }
 
 function getApiBaseUrl(): string | null {
+  // Use a fallback if VITE_API_BASE_URL is not provided to prevent fatal bootstrap errors
+  // while still throwing errors during actual requests if configuration is missing.
   const configured = String((import.meta as ImportMeta & { env: Record<string, string | undefined> }).env['VITE_API_BASE_URL'] ?? '').trim();
   return configured ? configured.replace(/\/+$/, '') : null;
 }
