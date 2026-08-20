@@ -60,9 +60,37 @@ export const supportService = {
   getArticleById: (id: string) => supportArticles.getById({ data: { id } }),
   createArticle: (data: any) => supportArticles.create({ data }),
   updateArticle: (id: string, data: any) => supportArticles.update({ data: { id, data } }),
-
-
 };
+
+export const legalService = {
+  // Templates
+  listTemplates: (filters?: any) => legalTemplates.list({ data: filters }),
+  getTemplateById: (id: string) => legalTemplates.getById({ data: { id } }),
+  createTemplate: (data: any) => legalTemplates.create({ data }),
+  updateTemplate: (id: string, data: any) => legalTemplates.update({ data: { id, data } }),
+  
+  // Versions
+  listVersions: (templateId: string) => legalVersions.list({ data: { templateId } }),
+  getVersionById: (id: string) => legalVersions.getById({ data: { id } }),
+  createVersion: (data: any) => legalVersions.create({ data }),
+  
+  // Documents
+  listDocuments: (filters?: any) => legalDocuments.list({ data: filters }),
+  getDocumentById: (id: string) => legalDocuments.getById({ data: { id } }),
+  createDocument: (data: any) => legalDocuments.create({ data }),
+  updateDocument: (id: string, data: any) => legalDocuments.update({ data: { id, data } }),
+  
+  // Signatures
+  listSignatures: (documentId: string) => legalSignatures.list({ data: { documentId } }),
+  getSignatureById: (id: string) => legalSignatures.getById({ data: { id } }),
+  
+  // Compliance Rules
+  listComplianceRules: (filters?: any) => complianceRules.list({ data: filters }),
+  getComplianceRuleById: (id: string) => complianceRules.getById({ data: { id } }),
+  createComplianceRule: (data: any) => complianceRules.create({ data }),
+  updateComplianceRule: (id: string, data: any) => complianceRules.update({ data: { id, data } }),
+};
+
 
 export const financeService = {
   getStats: () => api.get<any>("/api/finance/stats"),
