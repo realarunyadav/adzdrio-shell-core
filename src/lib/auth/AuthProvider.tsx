@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { authService } from '@/lib/api/services';
 
@@ -61,8 +61,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [status, setStatus] = useState<'loading' | 'authenticated' | 'unauthenticated' | 'connection_error'>('loading');
   const [error, setError] = useState<string | null>(null);
+  const isInitialized = useRef(false);
 
   useEffect(() => {
+    if (isInitialized.current) return;
+    isInitialized.current = true;
+
     void checkSession();
 
     const handleUnauthorized = () => {
@@ -77,7 +81,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkSession = async () => {
     const token = localStorage.getItem('abos_auth_token');
+    
+    // Add a safety timeout for initialization
+    const timeoutId = setTimeout(() => {
+      if (status === 'loading') {
+        console.warn('Authentication initialization timed out, falling back to unauthenticated');
+        setStatus('unauthenticated');
+      }
+    }, 5000);
+
     if (!token) {
+      clearTimeout(timeoutId);
       setStatus('unauthenticated');
       return;
     }
