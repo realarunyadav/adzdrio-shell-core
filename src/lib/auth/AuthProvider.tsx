@@ -158,8 +158,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       if (resolvedUser) {
         setUser(resolvedUser);
-        setStatus('authenticated');
         setError(null);
+        // CRITICAL: Only set authenticated status AFTER user, roles, and profile are fully resolved.
+        // This prevents the routing race where guards see a partial or fallback "authenticated" state.
+        setStatus('authenticated');
       } else {
         throw new Error('Failed to resolve user');
       }
