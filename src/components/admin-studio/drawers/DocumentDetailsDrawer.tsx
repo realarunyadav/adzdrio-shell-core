@@ -37,6 +37,8 @@ import { useQuery } from "@tanstack/react-query";
 import { legalService } from "@/lib/api/services";
 import { LegalDocument, LegalSignature, LegalVersion } from "@/lib/api/legal.types";
 import { SkeletonLoader } from "@/components/shared/SkeletonLoader";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface DocumentDetailsDrawerProps {
   documentId: string | null;
@@ -283,15 +285,15 @@ export function DocumentDetailsDrawer({ documentId, open, onOpenChange }: Docume
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Global Classification</h4>
-                  <StatusBadge tone={document.accessLevel === 'Confidential' ? 'danger' : document.accessLevel === 'Public' ? 'neutral' : 'info'}>
-                    {document.accessLevel || 'Internal'}
+                  <StatusBadge tone={document.metadata?.['accessLevel'] === 'Confidential' ? 'danger' : document.metadata?.['accessLevel'] === 'Public' ? 'neutral' : 'info'}>
+                    {document.metadata?.['accessLevel'] || 'Internal'}
                   </StatusBadge>
                 </div>
                 
                 <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20 flex items-start gap-3">
                   <Shield className="size-5 text-primary shrink-0" />
                   <p className="text-[10px] font-medium leading-relaxed">
-                    This document is marked as <span className="font-black">{document.accessLevel || 'Internal'}</span>. 
+                    This document is marked as <span className="font-black">{document.metadata?.['accessLevel'] || 'Internal'}</span>. 
                     Access is strictly governed by the business role hierarchy and scope of {document.business_id}.
                   </p>
                 </div>
