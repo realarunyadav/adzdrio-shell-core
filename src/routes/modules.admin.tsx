@@ -16,7 +16,26 @@ import { GlobalSearchOverlay } from "@/components/shared/GlobalSearchOverlay";
 import { Link as RouterLink, useLocation } from "@tanstack/react-router";
 
 
+import { redirect } from "@tanstack/react-router";
+import { roleMap } from "@/core/rbac/roles.config";
+
 export const Route = createFileRoute("/modules/admin")({
+  beforeLoad: ({ context }: any) => {
+    const user = context?.auth?.user;
+    const roles = user?.roles || [];
+    
+    // Check if user has OWNER or ADMIN role (Rank >= 100)
+    const isAdminOrOwner = roles.some((r: string) => {
+      const roleName = r.toUpperCase();
+      const definition = roleMap[roleName];
+      return definition && definition.rank >= 100;
+    });
+
+    if (!isAdminOrOwner) {
+      console.warn("Access denied to /modules/admin: Rank 100 required");
+      throw redirect({ to: "/" });
+    }
+  },
   component: AdminStudioModule,
 });
 
