@@ -78,7 +78,7 @@ class ApiClient {
     options: RequestInit = {},
     timeoutMs = 30000
   ): Promise<T> {
-    if (!this.baseUrl) {
+    if (!this.baseUrl && path !== '/api/auth/me') {
       throw new ApiError(0, 'ABOS API is not configured. Legacy service unavailable.');
     }
     const url = `${this.baseUrl}${path.startsWith('/') ? '' : '/'}${path}`;
